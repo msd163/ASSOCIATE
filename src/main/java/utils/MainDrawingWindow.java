@@ -18,7 +18,7 @@ public class MainDrawingWindow extends Canvas {
     @Override
     public void update(Graphics g) {
 
-       // System.out.printf("\n:::");
+        // System.out.printf("\n:::");
 
         g.clearRect(0, 0, getWidth(), getHeight());
 

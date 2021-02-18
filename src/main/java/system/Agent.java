@@ -290,7 +290,7 @@ public class Agent {
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && cap.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
         if (isCapCandid || isSimConfigShowWatchRadius()) {
-            g.setColor(isCapCandid ? Color.cyan : simConfigTraceable ? Color.GREEN : Color.lightGray);
+            g.setColor(isCapCandid ? (profile.getIsHonest() ? Color.GREEN : Color.RED) : simConfigTraceable ? Color.CYAN : Color.lightGray);
             g.drawOval(
                     loc_x - cap.getWatchRadius(),
                     loc_y - cap.getWatchRadius(),
@@ -307,7 +307,7 @@ public class Agent {
             }
         }
 
-        if (simConfigShowRequestedService) {
+        if (simConfigShowRequestedService && requestedServices.size() > 0) {
             Service service = requestedServices.get(requestedServices.size() - 1);
             if (service != null) {
                 g.setStroke(stroke3);

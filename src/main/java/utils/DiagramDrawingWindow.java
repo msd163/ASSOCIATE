@@ -41,24 +41,24 @@ public class DiagramDrawingWindow extends Canvas {
             //============================ Bound Rectangle
             //g.drawRect(0, 0, world.getWidth(), world.getHeight());
             g2.setColor(Color.WHITE);
-            g2.fillOval(axisX, history.getTotalServiceCount()/200, 5, 5);
+            g2.fillOval(axisX, history.getTotalServiceCount() / 200, 5, 5);
             //============================
             g2.setColor(Color.GREEN);
-            g2.fillOval(axisX, history.getHonestServiceCount()/200, 5, 5);
+            g2.fillOval(axisX, history.getHonestServiceCount() / 200, 5, 5);
             //============================
             g2.setColor(Color.RED);
-            g2.fillOval(axisX, history.getDishonestServiceCount()/200, 5, 5);
+            g2.fillOval(axisX, history.getDishonestServiceCount() / 200, 5, 5);
             //============================
 
             g2.setColor(Color.WHITE);
             g2.translate(0, 700);
-            g2.drawLine(0,0,getWidth(),0);
+            g2.drawLine(0, 0, getWidth(), 0);
 
             g2.setColor(Color.GREEN);
-            g2.fillOval(axisX, (int)(history.getHonestServiceRatio()*500), 5, 5);
+            g2.fillOval(axisX, (int) (history.getHonestServiceRatio() * 1000), 5, 5);
 
             g2.setColor(Color.RED);
-            g2.fillOval(axisX, (int)(history.getDishonestServiceRatio()*500), 5, 5);
+            g2.fillOval(axisX, (int) (history.getDishonestServiceRatio() * 1000), 5, 5);
 
             g2.translate(0, -700);
         }

@@ -32,10 +32,10 @@ public class Config {
     public static final boolean TRUST_LEVEL_RECORD_ACTIVITIES_OF_OTHERS = true;
     public static final boolean TRUST_LEVEL_RECORD_EXPERIENCES_OF_OTHERS = true;
 
-    public static final boolean DO_REQUEST_SERVICE_BY_DISHONEST_AGENT = true;  // Whether a dishonest agent can request a service?
+    public static final boolean DO_REQUEST_SERVICE_BY_DISHONEST_AGENT = false;      // Whether a dishonest agent can request a service?
 
 
     public static final boolean DRAWING_SHOW_POWERFUL_AGENTS_RADIUS = true;
-    public static final int DRAWING_POWERFUL_AGENTS_THRESHOLD = 50 ; // [1,100]
+    public static final int DRAWING_POWERFUL_AGENTS_THRESHOLD = 50 ;                // [1,100]
 
 }
