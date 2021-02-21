@@ -1,6 +1,7 @@
 package utils;
 
-import _type.TtHonestStrategy;
+import _type.TtBehaviorStrategy;
+import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {
 
@@ -24,13 +25,15 @@ public class Config {
     public static final float WORLD_MAX_VELOCITY_RATIO_X = 0.05f;  // [0-1] percent of WORLD_MAX_HEIGHT
     public static final float WORLD_MAX_VELOCITY_RATIO_Y = 0.05f;  // [0-1] percent of WORLD_MAX_WIDTH
 
-    public static final TtHonestStrategy TRUST_HONEST_STRATEGY = TtHonestStrategy.Discrete;
+    public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
     public static final int TRUST_HONEST_DISCRETE_PERCENT = 50;   // if TtHonestStrategy.Discrete selected, this defines the percentage of honest agents
 
     // TRUST LEVEL
     public static final boolean TRUST_LEVEL_RECORD_ACTIVITIES_OF_ITSELF = true;
     public static final boolean TRUST_LEVEL_RECORD_ACTIVITIES_OF_OTHERS = true;
     public static final boolean TRUST_LEVEL_RECORD_EXPERIENCES_OF_OTHERS = true;
+
+    public static final TtTrustReplaceHistoryMethod TRUST_REPLACE_HISTORY_METHOD = TtTrustReplaceHistoryMethod.Sequential_Circular;
 
     public static final boolean DO_REQUEST_SERVICE_BY_DISHONEST_AGENT = false;      // Whether a dishonest agent can request a service?
 

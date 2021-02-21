@@ -1,23 +1,23 @@
 package system;
 
-import _type.TtHonestStrategy;
+import _type.TtBehaviorStrategy;
 import utils.Config;
 import utils.Globals;
 
-public class AgentProfile {
+public class AgentBehavior {
 
-    public AgentProfile() {
-        switch (Config.TRUST_HONEST_STRATEGY) {
+    public AgentBehavior() {
+        switch (Config.TRUST_BEHAVIOR_STRATEGY) {
             case OnlyHonest:
                 honestDegree = 1.0f;
                 break;
             case OnlyDishonest:
                 honestDegree = 0.0f;
             case Discrete:
-                honestDegree = Globals.random.nextInt(100) < Config.TRUST_HONEST_DISCRETE_PERCENT ? 1.0f : 0.0f;
+                honestDegree = Globals.RANDOM.nextInt(100) < Config.TRUST_HONEST_DISCRETE_PERCENT ? 1.0f : 0.0f;
                 break;
             case Fuzzy:
-                honestDegree = Globals.random.nextFloat();
+                honestDegree = Globals.RANDOM.nextFloat();
                 break;
         }
     }
@@ -27,8 +27,8 @@ public class AgentProfile {
 
     //============================//============================//============================
     public boolean updateHonestState() {
-        if (Config.TRUST_HONEST_STRATEGY == TtHonestStrategy.Fuzzy) {
-            honestState = Globals.random.nextFloat() < honestDegree;
+        if (Config.TRUST_BEHAVIOR_STRATEGY == TtBehaviorStrategy.Fuzzy) {
+            honestState = Globals.RANDOM.nextFloat() < honestDegree;
             return honestState;
         }
         honestState = honestDegree == 1.f;

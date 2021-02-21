@@ -1,6 +1,6 @@
 package _type;
 
-public enum TtHonestStrategy {
+public enum TtBehaviorStrategy {
     OnlyDishonest,
     OnlyHonest,
     Discrete,

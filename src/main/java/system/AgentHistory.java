@@ -1,6 +1,6 @@
 package system;
 
-import java.util.Date;
+import utils.Globals;
 
 public class AgentHistory {
 
@@ -10,8 +10,7 @@ public class AgentHistory {
 
         serviceMetaInfos = new ServiceMetaInfo[maxServiceCap];
 
-        trustScore = 0;
-        createTime = new Date().getTime();
+        createTime = Globals.WORLD_TIME;
         serviceIndex = -1;
     }
 
@@ -21,10 +20,9 @@ public class AgentHistory {
     private int serviceCap;
     private int serviceIndex;
     private int serviceSize;
-    private long createTime;                    // time of creating
-    private long lastUpdateTime;                // time of the latest service addition
+    private int createTime;                    // time of creating
+    private int lastUpdateTime;                // time of the latest service addition
 
-    private float trustScore;
     //============================//============================//============================
 
     public int addToHistory(Service service, Agent publisher, boolean isExperience) {
@@ -49,15 +47,11 @@ public class AgentHistory {
             serviceIndex = 0;
         }
         //todo: [policy] : Coefficient of serviceMetaInfo have to be calculated
-        ServiceMetaInfo info = new ServiceMetaInfo(service, publisher, isExperience ? 0.5f : 1.0f);
+        ServiceMetaInfo info = new ServiceMetaInfo(service, publisher, isExperience ? 0.5f : 1.0f, serviceCap);
 
         serviceMetaInfos[serviceIndex] = info;
 
-        // calculating trust score
-        //todo: [policy] : defining accurate function to calculate the trust score
-        trustScore += service.getResult();
-
-        lastUpdateTime = new Date().getTime();
+        lastUpdateTime = Globals.WORLD_TIME;
 
         return serviceIndex;
     }
@@ -66,7 +60,6 @@ public class AgentHistory {
 
     public AgentHistory clone() {
         AgentHistory history = new AgentHistory(doerAgent, serviceCap);
-        history.trustScore = this.trustScore;
         history.serviceMetaInfos = serviceMetaInfos;
         history.serviceIndex = this.serviceIndex;
         history.serviceSize = this.serviceSize;
@@ -81,7 +74,19 @@ public class AgentHistory {
         return serviceMetaInfos;
     }
 
-    public float getTrustScore() {
-        return trustScore;
+    public float getEffectiveTrustLevel() {
+
+        float tl = 0;
+
+        for (ServiceMetaInfo info : serviceMetaInfos) {
+            if (info != null) {
+                tl += info.getEffectiveTrustScore();
+            }
+        }
+        return tl;
+    }
+
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
     }
 }
