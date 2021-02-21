@@ -23,10 +23,18 @@ public class ServiceMetaInfo {
 
     //============================//============================//============================
     private float getForgottenValue() {
-        return (float) (Globals.WORLD_TIME - time) / forgottenBound;
+        float v = (float) (Globals.WORLD_TIME - time) / forgottenBound;
+        return v > 1 ? 1 : v;
     }
 
     public float getEffectiveTrustScore() {
+//        if (service.getDoer().getId() == 1) {
+//            System.out.println("!!! ---------- service: " + service.getId());
+//            System.out.println("!!! time:" + time);
+//            System.out.println("!!! worldTime: " + Globals.WORLD_TIME);
+//            System.out.println("!!! fg: " + getForgottenValue());
+//            System.out.println("!!! coeff: " + coefficient);
+//        }
         return correctnessLevel * coefficient * (1 - getForgottenValue());
     }
 

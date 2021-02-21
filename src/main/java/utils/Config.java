@@ -17,8 +17,8 @@ public class Config {
     public static final int WORLD_MIN_WIDTH = 2500;
     public static final int WORLD_MAX_WIDTH = 2500;
 
-    public static final int WORLD_MIN_AGENT = 100;         //Min number of agents (nodes) in the world
-    public static final int WORLD_MAX_AGENT = 100;         //Max number of agents (nodes) in the world
+    public static final int WORLD_MIN_AGENT = 200;         //Min number of agents (nodes) in the world
+    public static final int WORLD_MAX_AGENT = 300;         //Max number of agents (nodes) in the world
 
     public static final int WORLD_SERVICES_COUNT = 1;
 

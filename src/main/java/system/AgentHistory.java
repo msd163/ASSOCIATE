@@ -77,13 +77,17 @@ public class AgentHistory {
     public float getEffectiveTrustLevel() {
 
         float tl = 0;
-
+        int cnt = 0;
         for (ServiceMetaInfo info : serviceMetaInfos) {
             if (info != null) {
                 tl += info.getEffectiveTrustScore();
+                cnt++;
             }
         }
-        return tl;
+        if (cnt > 0) {
+            return tl / cnt;
+        }
+        return 0f;
     }
 
     public long getLastUpdateTime() {

@@ -27,13 +27,16 @@ public class AgentCapacity {
 
         watchListCapacity = (int) (capCoeff * worldAC);
 
-        concurrentDoingServiceCap = watchListCapacity / 10;
+        concurrentDoingServiceCap = watchListCapacity / 5;
+        if (concurrentDoingServiceCap < 1 && watchListCapacity > 2) {
+            concurrentDoingServiceCap = 1;
+        }
 
         historyCap = watchListCapacity * 2;
         historyServiceRecordCap = watchListCapacity;
 
         System.out.println(
-                         " | capCoeff: " + capCoeff
+                " | capCoeff: " + capCoeff
                         + " | watchRadius: " + watchRadius
                         + " | watchListCap: " + watchListCapacity
                         + " | concurrentDoSerCap: " + concurrentDoingServiceCap

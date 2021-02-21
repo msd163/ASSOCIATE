@@ -218,8 +218,8 @@ public class World {
             System.out.println("  totalServiceCount    : " + totalServiceCount);
             System.out.println("  honestServiceCount   : " + honestServiceCount + " >  " + (float) honestServiceCount / totalServiceCount);
             System.out.println("  dishonestServiceCount: " + dishonestServiceCount + " >  " + (float) dishonestServiceCount / totalServiceCount);
+            System.out.println("  dontDoneServices     : " + dontDoneServices + " >  " + (float) dontDoneServices / totalServiceCount);
             System.out.println("  recordedService      : " + recordedServices);
-            System.out.println("  dontDoneServices     : " + dontDoneServices);
 
             histories.add(new WorldHistory(totalServiceCount, dishonestServiceCount, honestServiceCount));
 
