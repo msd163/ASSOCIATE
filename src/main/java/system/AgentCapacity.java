@@ -11,13 +11,13 @@ public class AgentCapacity {
         int worldAC = parentAgent.getWorld().getAgentsCount();
 
         int randPowerFactor;
-        int i = Globals.random.nextInt(100);
+        int i = Globals.RANDOM.nextInt(100);
         // %70 : 1-20
         // %20 : 21-50
         // %10 : 51-100
         i = i < 70 ? 20 : i < 90 ? 50 : 100;
 
-        randPowerFactor = Globals.random.nextInt(i) + 1;
+        randPowerFactor = Globals.RANDOM.nextInt(i) + 1;
 
         capPower = randPowerFactor;
 
@@ -27,13 +27,16 @@ public class AgentCapacity {
 
         watchListCapacity = (int) (capCoeff * worldAC);
 
-        concurrentDoingServiceCap = watchListCapacity / 10;
+        concurrentDoingServiceCap = watchListCapacity / 5;
+        if (concurrentDoingServiceCap < 1 && watchListCapacity > 2) {
+            concurrentDoingServiceCap = 1;
+        }
 
         historyCap = watchListCapacity * 2;
         historyServiceRecordCap = watchListCapacity;
 
         System.out.println(
-                         " | capCoeff: " + capCoeff
+                " | capCoeff: " + capCoeff
                         + " | watchRadius: " + watchRadius
                         + " | watchListCap: " + watchListCapacity
                         + " | concurrentDoSerCap: " + concurrentDoingServiceCap

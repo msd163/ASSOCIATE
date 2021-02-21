@@ -43,11 +43,11 @@ public class Agent {
     private World world;
     //============================
 
-    private AgentCapacity cap;
+    private AgentCapacity capacity;
 
     private AgentTrust trust;
 
-    private AgentProfile profile;
+    private AgentBehavior behavior;
 
     // agents that are watched by this agent
     private List<Agent> watchedAgents;
@@ -68,12 +68,12 @@ public class Agent {
 
 
     public void init() {
-        cap = new AgentCapacity(this);
-        trust = new AgentTrust(this, cap.getHistoryCap(), cap.getHistoryServiceRecordCap());
-        profile = new AgentProfile();
+        capacity = new AgentCapacity(this);
+        trust = new AgentTrust(this, capacity.getHistoryCap(), capacity.getHistoryServiceRecordCap());
+        behavior = new AgentBehavior();
         watchedAgents = new ArrayList<Agent>();
-        loc_x = Globals.random.nextInt(world.getWidth());
-        loc_y = Globals.random.nextInt(world.getHeight());
+        loc_x = Globals.RANDOM.nextInt(world.getWidth());
+        loc_y = Globals.RANDOM.nextInt(world.getHeight());
 
         //todo: [policy] : assigning requested services
         requestingServiceTypes = new ArrayList<ServiceType>();
@@ -131,14 +131,14 @@ public class Agent {
 
         //todo: [policy] : define all kinds of updating velocity
 
-        velocity_x = Globals.random.nextInt(world.getMaxVelocityOfAgents_x()) - (world.getMaxVelocityOfAgents_x() / 2);
-        velocity_y = Globals.random.nextInt(world.getMaxVelocityOfAgents_y()) - (world.getMaxVelocityOfAgents_y() / 2);
+        velocity_x = Globals.RANDOM.nextInt(world.getMaxVelocityOfAgents_x()) - (world.getMaxVelocityOfAgents_x() / 2);
+        velocity_y = Globals.RANDOM.nextInt(world.getMaxVelocityOfAgents_y()) - (world.getMaxVelocityOfAgents_y() / 2);
 
     }
 
     public void updateProfile() {
 
-        profile.updateHonestState();
+        behavior.updateHonestState();
     }
 
     public void resetParams() {
@@ -152,7 +152,7 @@ public class Agent {
 
         Agent[] agents = world.getAgents();
         for (int i = 0; i < agents.length; i++) {
-            if (watchedAgents.size() >= cap.getWatchListCapacity()) {
+            if (watchedAgents.size() >= capacity.getWatchListCapacity()) {
                 break;
             }
             if (canWatch(agents[i]) && agents[i].getId() != this.id) {
@@ -164,7 +164,7 @@ public class Agent {
 
 
     public boolean canWatch(int x, int y) {
-        return Math.sqrt(Math.pow((double) x - (double) loc_x, 2) + Math.pow((double) y - (double) loc_y, 2)) < (double) cap.getWatchRadius();
+        return Math.sqrt(Math.pow((double) x - (double) loc_x, 2) + Math.pow((double) y - (double) loc_y, 2)) < (double) capacity.getWatchRadius();
     }
 
 
@@ -176,7 +176,7 @@ public class Agent {
 
     public Service selectRequestedService() {
 
-        ServiceType st = requestingServiceTypes.get(Globals.random.nextInt(requestingServiceTypes.size()));
+        ServiceType st = requestingServiceTypes.get(Globals.RANDOM.nextInt(requestingServiceTypes.size()));
 
         Service rs = new Service();
         rs.setRequester(this);
@@ -204,7 +204,7 @@ public class Agent {
                 if (history != null
                         && history.getDoerAgent().getId() == watchedAgent.getId()  // if the watched agent is in history
                         //todo: [policy] : set threshold to trustee selection
-                        && history.getTrustScore() > 0  // if the watched agent is not dishonest
+                        && history.getEffectiveTrustLevel() > 0  // if the watched agent is not dishonest
                 ) {
 
                     boolean serviceAcceptance = watchedAgent.canDoService(this, service);
@@ -221,7 +221,7 @@ public class Agent {
         int tryCount = 0;
 
         while (++tryCount < 10) {
-            i = Globals.random.nextInt(watchSize);
+            i = Globals.RANDOM.nextInt(watchSize);
             if (trust.getTrustScore(watchedAgents.get(i)) >= 0) {
                 return watchedAgents.get(i);
             }
@@ -237,7 +237,7 @@ public class Agent {
     public boolean canDoService(Agent requester, Service service) {
 
         //todo: adding limit to count of concurrent doing service
-        if (currentDoingServiceSize < cap.getConcurrentDoingServiceCap() && watchedAgents.contains(requester)) {
+        if (currentDoingServiceSize < capacity.getConcurrentDoingServiceCap() && watchedAgents.contains(requester)) {
             if (doingServiceTypes.contains(service.getServiceType())) {
                 //todo: [policy] : bidirectional trust
                 return true;
@@ -252,7 +252,7 @@ public class Agent {
 
         service.setDoer(this);
         /*Globals.random.nextFloat() * */
-        float res = cap.getCapPower() * (profile.getIsHonest() ? 0.1f : -0.1f);
+        float res = capacity.getCapPower() * (behavior.getIsHonest() ? 0.1f : -0.1f);
         service.setResult(res);
 
         doneServices.add(service);
@@ -286,16 +286,16 @@ public class Agent {
     private boolean isCapCandid = false;
 
     public void draw(Graphics2D g) {
-        honestColor = profile.getIsHonest() ? Color.GREEN : Color.RED;
-        isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && cap.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
+        honestColor = behavior.getIsHonest() ? Color.GREEN : Color.RED;
+        isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
         if (isCapCandid || isSimConfigShowWatchRadius()) {
-            g.setColor(isCapCandid ? (profile.getIsHonest() ? Color.GREEN : Color.RED) : simConfigTraceable ? Color.CYAN : Color.lightGray);
+            g.setColor(isCapCandid ? (behavior.getIsHonest() ? Color.GREEN : Color.RED) : simConfigTraceable ? Color.CYAN : Color.lightGray);
             g.drawOval(
-                    loc_x - cap.getWatchRadius(),
-                    loc_y - cap.getWatchRadius(),
-                    cap.getWatchRadius() * 2,
-                    cap.getWatchRadius() * 2
+                    loc_x - capacity.getWatchRadius(),
+                    loc_y - capacity.getWatchRadius(),
+                    capacity.getWatchRadius() * 2,
+                    capacity.getWatchRadius() * 2
             );
         }
 
@@ -312,7 +312,7 @@ public class Agent {
             if (service != null) {
                 g.setStroke(stroke3);
                 if (service.getDoer() != null) {
-                    g.setColor(service.getDoer().getProfile().getIsHonest() ? Color.GREEN : Color.RED);
+                    g.setColor(service.getDoer().getBehavior().getIsHonest() ? Color.GREEN : Color.RED);
                     g.drawLine(loc_x, loc_y, service.getDoer().getLoc_x(), service.getDoer().getLoc_y());
                 } else {
                     g.setColor(Color.GREEN);
@@ -325,7 +325,7 @@ public class Agent {
         // Set color of node with honest strategy
         g.setColor(honestColor);
         // Draw node according to it's capacity
-        int agentBound = cap.getCapPower() / 5;
+        int agentBound = capacity.getCapPower() / 5;
         g.fillOval(loc_x - agentBound, loc_y - agentBound, agentBound * 2, agentBound * 2);
 
 
@@ -333,7 +333,7 @@ public class Agent {
         g.setFont(font);
 
         // Set color of node with honest strategy
-        g.drawString(id + "", loc_x, loc_y + cap.getCapPower() + 10);
+        g.drawString(id + "", loc_x, loc_y + capacity.getCapPower() + 10);
 
     }
     //============================//============================//============================
@@ -352,9 +352,9 @@ public class Agent {
                 ", \n\tvelocity_x=" + velocity_x +
                 ", \n\tvelocity_y=" + velocity_y +
                 ", \n\tcurrentDoingServiceSize=" + currentDoingServiceSize +
-                ", \n\tcap=" + cap.toString() +
+                ", \n\tcap=" + capacity.toString() +
                 ", \n\ttrust=" + trust.toString() +
-                ", \n\tprofile=" + profile.toString() +
+                ", \n\tprofile=" + behavior.toString() +
                 '}';
     }
 
@@ -382,8 +382,8 @@ public class Agent {
         return world;
     }
 
-    public AgentCapacity getCap() {
-        return cap;
+    public AgentCapacity getCapacity() {
+        return capacity;
     }
 
     public List<Agent> getWatchedAgents() {
@@ -435,12 +435,12 @@ public class Agent {
         this.doingServiceTypes = doingServiceTypes;
     }
 
-    public AgentProfile getProfile() {
-        return profile;
+    public AgentBehavior getBehavior() {
+        return behavior;
     }
 
-    public void setProfile(AgentProfile profile) {
-        this.profile = profile;
+    public void setBehavior(AgentBehavior behavior) {
+        this.behavior = behavior;
     }
 
     public AgentTrust getTrust() {

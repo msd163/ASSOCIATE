@@ -1,24 +1,41 @@
 package system;
 
-import java.util.Date;
+import utils.Globals;
 
 public class ServiceMetaInfo {
 
-    public ServiceMetaInfo(Service service, Agent publisher, float coefficient) {
+    public ServiceMetaInfo(Service service, Agent publisher, float coefficient, int forgottenBound) {
         this.service = service;
         this.publisher = publisher;   // watcher of the service
         this.coefficient = coefficient;
-        this.time = new Date().getTime();
+        this.time = Globals.WORLD_TIME;
+        this.forgottenBound = forgottenBound > 0 ? forgottenBound : 1;
+        //todo: [policy] : correctness level have to be calculated
+        this.correctnessLevel = 1;
     }
 
     private Service service;
     private Agent publisher;
     private float coefficient;
-    private long time;
+    private float correctnessLevel;
+    private int time;
+    private int forgottenBound;
 
     //============================//============================//============================
     private float getForgottenValue() {
-        return (float) time /new Date().getTime();
+        float v = (float) (Globals.WORLD_TIME - time) / forgottenBound;
+        return v > 1 ? 1 : v;
+    }
+
+    public float getEffectiveTrustScore() {
+//        if (service.getDoer().getId() == 1) {
+//            System.out.println("!!! ---------- service: " + service.getId());
+//            System.out.println("!!! time:" + time);
+//            System.out.println("!!! worldTime: " + Globals.WORLD_TIME);
+//            System.out.println("!!! fg: " + getForgottenValue());
+//            System.out.println("!!! coeff: " + coefficient);
+//        }
+        return correctnessLevel * coefficient * (1 - getForgottenValue());
     }
 
     //============================//============================//============================
@@ -46,11 +63,4 @@ public class ServiceMetaInfo {
         this.coefficient = coefficient;
     }
 
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
 }

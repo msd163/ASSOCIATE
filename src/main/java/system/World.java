@@ -20,7 +20,6 @@ public class World {
     private int height;
     private int maxVelocityOfAgents_x;
     private int maxVelocityOfAgents_y;
-    private int currentRunTime;
     private int bignessFactor;
     private Agent[] agents;
     private int agentsCount;
@@ -45,21 +44,21 @@ public class World {
 
         traceAgentIds = new int[]{1, 4, 9, 10, 11, 12, 13};
 
-        currentRunTime = 0;
+        Globals.WORLD_TIME = 0;
 
         histories = new ArrayList<WorldHistory>();
 
         //============================
 
-        width = Globals.random.nextInt(Config.WORLD_MAX_WIDTH - Config.WORLD_MIN_WIDTH + 1) + Config.WORLD_MIN_WIDTH;
-        height = Globals.random.nextInt(Config.WORLD_MAX_HEIGHT - Config.WORLD_MIN_HEIGHT + 1) + Config.WORLD_MIN_HEIGHT;
+        width = Globals.RANDOM.nextInt(Config.WORLD_MAX_WIDTH - Config.WORLD_MIN_WIDTH + 1) + Config.WORLD_MIN_WIDTH;
+        height = Globals.RANDOM.nextInt(Config.WORLD_MAX_HEIGHT - Config.WORLD_MIN_HEIGHT + 1) + Config.WORLD_MIN_HEIGHT;
 
         bignessFactor = Math.max(width, height);
 
         maxVelocityOfAgents_x = (int) (width * Config.WORLD_MAX_VELOCITY_RATIO_X);
         maxVelocityOfAgents_y = (int) (height * Config.WORLD_MAX_VELOCITY_RATIO_Y);
 
-        agentsCount = Globals.random.nextInt(Config.WORLD_MAX_AGENT - Config.WORLD_MIN_AGENT + 1) + Config.WORLD_MIN_AGENT;
+        agentsCount = Globals.RANDOM.nextInt(Config.WORLD_MAX_AGENT - Config.WORLD_MIN_AGENT + 1) + Config.WORLD_MIN_AGENT;
         agents = new Agent[agentsCount];
 
         //============================ Services
@@ -132,7 +131,7 @@ public class World {
 
 
         // Main loop of run in a world
-        for (; currentRunTime < Config.WORLD_RUN_TIME; currentRunTime++) {
+        for (; Globals.WORLD_TIME < Config.WORLD_RUN_TIME; Globals.WORLD_TIME++) {
 
             for (Agent agent : agents) {
                 agent.updateLocation();
@@ -149,7 +148,7 @@ public class World {
             for (Agent requesterAgent : agents) {
 
                 // Ignoring requests of dishonest agents
-                if (!Config.DO_REQUEST_SERVICE_BY_DISHONEST_AGENT && !requesterAgent.getProfile().getIsHonest()) {
+                if (!Config.DO_REQUEST_SERVICE_BY_DISHONEST_AGENT && !requesterAgent.getBehavior().getIsHonest()) {
                     continue;
                 }
 
@@ -215,12 +214,12 @@ public class World {
                 recordedServices += agent.getTrust().getHistorySize();
             }
 
-            System.out.println("-------------------------\t\t\t\t\tcurrentTime: " + currentRunTime);
+            System.out.println("-------------------------\t\t\t\t\tcurrentTime: " + Globals.WORLD_TIME);
             System.out.println("  totalServiceCount    : " + totalServiceCount);
             System.out.println("  honestServiceCount   : " + honestServiceCount + " >  " + (float) honestServiceCount / totalServiceCount);
             System.out.println("  dishonestServiceCount: " + dishonestServiceCount + " >  " + (float) dishonestServiceCount / totalServiceCount);
+            System.out.println("  dontDoneServices     : " + dontDoneServices + " >  " + (float) dontDoneServices / totalServiceCount);
             System.out.println("  recordedService      : " + recordedServices);
-            System.out.println("  dontDoneServices     : " + dontDoneServices);
 
             histories.add(new WorldHistory(totalServiceCount, dishonestServiceCount, honestServiceCount));
 
@@ -295,10 +294,6 @@ public class World {
         return agents;
     }
 
-    public int getCurrentRunTime() {
-        return currentRunTime;
-    }
-
     public ServiceType[] getServiceTypes() {
         return serviceTypes;
     }
@@ -318,4 +313,5 @@ public class World {
     public int getAgentsCount() {
         return agentsCount;
     }
+
 }

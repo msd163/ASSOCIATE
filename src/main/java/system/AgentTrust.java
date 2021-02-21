@@ -1,5 +1,7 @@
 package system;
 
+import utils.Config;
+
 import java.util.Arrays;
 
 public class AgentTrust {
@@ -29,6 +31,7 @@ public class AgentTrust {
 
     // all services received by this agent across world run
     private AgentHistory[] histories;
+    // An array of history indic that are sorted based on trustScore
     private int[] historiesSortedIndex;
     private int historyCap;
     private int historyIndex;
@@ -59,7 +62,7 @@ public class AgentTrust {
                 if (
                         (histories[bubble] != null
                                 && histories[historiesSortedIndex[i + 1]] != null
-                                && histories[bubble].getTrustScore() < histories[historiesSortedIndex[i + 1]].getTrustScore()
+                                && histories[bubble].getEffectiveTrustLevel() < histories[historiesSortedIndex[i + 1]].getEffectiveTrustLevel()
                         ) || (
                                 histories[bubble] == null
                                         && histories[historiesSortedIndex[i + 1]] != null
@@ -118,10 +121,36 @@ public class AgentTrust {
             if (historySize < historyCap) {
                 historySize++;
             }
-            //todo: instead of circular insertion, using an optimized algorithm to remove the history that is referred before others: selecting the OLDEST history
-            historyIndex++;
-            if (historyIndex >= historyCap) {
-                historyIndex = 0;
+
+            // Replacing new history item with an exist one according selected method.
+            switch (Config.TRUST_REPLACE_HISTORY_METHOD) {
+
+                case Sequential_Circular:
+                    historyIndex++;
+                    if (historyIndex >= historyCap) {
+                        historyIndex = 0;
+                    }
+                    break;
+
+                case RemoveLastUpdated:
+                    AgentHistory oldHistory = histories[0];
+                    if (oldHistory == null) {
+                        historyIndex = 0;
+                    } else {
+                        for (int i = 1, historiesLength = histories.length; i < historiesLength; i++) {
+                            AgentHistory history = histories[i];
+
+                            if (history == null) {
+                                historyIndex = i;
+                                break;
+                            }
+                            if (oldHistory.getLastUpdateTime() > history.getLastUpdateTime()) {
+                                historyIndex = i;
+                                oldHistory = history;
+                            }
+                        }
+                    }
+                    break;
             }
             selectedHistoryIndex = historyIndex;
             histories[selectedHistoryIndex] = new AgentHistory(doer, historyServiceRecordCap);
@@ -139,7 +168,7 @@ public class AgentTrust {
     public float getTrustScore(Agent agent) {
         for (AgentHistory history : histories) {
             if (history != null && history.getDoerAgent().getId() == agent.getId()) {
-                return history.getTrustScore();
+                return history.getEffectiveTrustLevel();
             }
         }
 
