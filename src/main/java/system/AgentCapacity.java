@@ -10,13 +10,34 @@ public class AgentCapacity {
         int worldBF = parentAgent.getWorld().getBignessFactor() / 4;
         int worldAC = parentAgent.getWorld().getAgentsCount();
 
+//        int randPowerFactor;
+//        int i = Globals.RANDOM.nextInt(100);
+//        // %70 : 1-20
+//        // %20 : 21-50
+//        // %10 : 51-100
+//        i = i < 70 ? 20 : i < 90 ? 50 : 100;
         int randPowerFactor;
-        int i = Globals.RANDOM.nextInt(100);
+        int policyCount = 4;
+        int policyProb [][] = new  int[policyCount][2] ;
+        int i  = Globals.RANDOM.nextInt(100);
         // %70 : 1-20
         // %20 : 21-50
         // %10 : 51-100
-        i = i < 70 ? 20 : i < 90 ? 50 : 100;
+        policyProb[0][0] = 0;  policyProb[0][1] = 0;
+        policyProb[1][0] = 70; policyProb[1][1] = 20;
+        policyProb[2][0] = 20; policyProb[2][1] = 50;
+        policyProb[3][0] = 10; policyProb[3][1] =100;
+        for (int j = 1; j < policyCount ; j ++)
+        {
+            if(i<policyProb[j][0])
+            {
+                i = Globals.RANDOM.nextInt(policyProb[j][1]-policyProb[j-1][1]) + policyProb[j-1][1];
+                break;
+            }
+        }
+//        i = i < 70 ? 20 : i < 90 ? 50 : 100;
 
+        randPowerFactor = i; //Globals.random.nextInt(i) + 1;
         randPowerFactor = Globals.RANDOM.nextInt(i) + 1;
 
         capPower = randPowerFactor;
