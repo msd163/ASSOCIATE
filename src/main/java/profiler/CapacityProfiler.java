@@ -1,16 +1,15 @@
 package main.java.profiler;
 
+import static main.java.profiler.EeCapacityParameter.*;
 import main.java.utils.DefParameter;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
 enum EeCapacityParameter{
     WatchCount,
-    WatchHistory,
-    CapacityCount
+    WatchHistoryDepth,
+    CapacityParameterCount
 };
 
 public class CapacityProfiler {
@@ -18,24 +17,35 @@ public class CapacityProfiler {
 
     public void LoadCapacityProfile(String fileName)
     {
+        //todo: file read procedure should be completed.
+
         InputStream capFile = new InputStream(fileName);
+        BunchOfIndividualsCapacity.clear();
         while (!capFile.end())
         {
-            LoadCapacityProfileOfSingleBunch(capFile.readLine());
+            BunchOfIndividualsCapacity.add(
+                    LoadCapacityProfileOfSingleBunch(capFile.readLine()
+                    );
         }
     }
-    private void LoadCapacityProfileOfSingleBunch(String SingleLineOfFile)
+    private List<DefParameter> LoadCapacityProfileOfSingleBunch(String SingleLineOfFile)
     {
         List<DefParameter> SingleBunch = null;
         DefParameter temp;
         String[] cap = SingleLineOfFile.split(" ");
-        for (int p=0;p < EeCapacityParameter.CapacityCount;p++)
+        SingleBunch.clear();
+        for (int p = 0; p < CapacityParameterCount; p++)
         {
             SingleBunch.add(new DefParameter(cap[p]));
         }
-        BunchOfIndividualsCapacity.add(SingleBunch);
+
+        return SingleBunch;
     }
 
+    public int getCapNextValue(int BunchNumber,int CapNumber)
+    {
+        return BunchOfIndividualsCapacity.get(BunchNumber).get(CapNumber).nextValue();
+    }
 
 
 }
