@@ -1,4 +1,4 @@
-package utils;
+package main.java.utils;
 import static utils.Globals.*;
 
 enum EeParamType
@@ -8,6 +8,8 @@ enum EeParamType
    Range,
    Rand
 };
+
+
 public class DefParameter {
     public EeParamType paramType;
     public int value ; // this variable store parameter value.

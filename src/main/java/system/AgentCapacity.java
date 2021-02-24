@@ -38,7 +38,7 @@ public class AgentCapacity {
 //        i = i < 70 ? 20 : i < 90 ? 50 : 100;
 
         randPowerFactor = i; //Globals.random.nextInt(i) + 1;
-        randPowerFactor = Globals.RANDOM.nextInt(i) + 1;
+//        randPowerFactor = Globals.RANDOM.nextInt(i) + 1;
 
         capPower = randPowerFactor;
 
