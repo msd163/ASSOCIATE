@@ -23,11 +23,12 @@ public class CapacityProfiler {
         try {
             capFile = new FileInputStream(fileName);
         } catch (FileNotFoundException e) {
+            System.out.println(fileName);
             e.printStackTrace();
             return;
         }
         Scanner sc = new Scanner(capFile);
-        BunchOfIndividualsCapacity.clear();
+//        BunchOfIndividualsCapacity.clear();
         while (sc.hasNextLine())
         {
             BunchOfIndividualsCapacity.add(
@@ -40,7 +41,7 @@ public class CapacityProfiler {
         List<DefParameter> SingleBunch = null;
         DefParameter temp;
         String[] cap = SingleLineOfFile.split(" ");
-        SingleBunch.clear();
+//        SingleBunch.clear();
         for (int p = 0; p < CapacityParameterCount.ordinal(); p++)
         {
             SingleBunch.add(new DefParameter(cap[p]));
