@@ -1,16 +1,16 @@
 package main.java.profiler;
 
-import static main.java.profiler.EeCapacityParameter.*;
+import main.java._type.TtCapacityProfiler;
+import static main.java._type.TtCapacityProfiler.*;
+
 import main.java.utils.DefParameter;
 
-import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Scanner;
 
-enum EeCapacityParameter{
-    WatchCount,
-    WatchHistoryDepth,
-    CapacityParameterCount
-};
+
 
 public class CapacityProfiler {
     List<List<DefParameter>> BunchOfIndividualsCapacity;
@@ -19,12 +19,19 @@ public class CapacityProfiler {
     {
         //todo: file read procedure should be completed.
 
-        InputStream capFile = new InputStream(fileName);
+        FileInputStream capFile = null;
+        try {
+            capFile = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        Scanner sc = new Scanner(capFile);
         BunchOfIndividualsCapacity.clear();
-        while (!capFile.end())
+        while (sc.hasNextLine())
         {
             BunchOfIndividualsCapacity.add(
-                    LoadCapacityProfileOfSingleBunch(capFile.readLine()
+                    LoadCapacityProfileOfSingleBunch(sc.nextLine())
                     );
         }
     }
@@ -34,7 +41,7 @@ public class CapacityProfiler {
         DefParameter temp;
         String[] cap = SingleLineOfFile.split(" ");
         SingleBunch.clear();
-        for (int p = 0; p < CapacityParameterCount; p++)
+        for (int p = 0; p < CapacityParameterCount.ordinal(); p++)
         {
             SingleBunch.add(new DefParameter(cap[p]));
         }
@@ -42,10 +49,13 @@ public class CapacityProfiler {
         return SingleBunch;
     }
 
-    public int getCapNextValue(int BunchNumber,int CapNumber)
+    public int getCapNextValue(int BunchNumber, TtCapacityProfiler CapNumber)
     {
-        return BunchOfIndividualsCapacity.get(BunchNumber).get(CapNumber).nextValue();
+        return BunchOfIndividualsCapacity.get(BunchNumber).get(CapNumber.ordinal()).nextValue();
     }
 
 
+    public int bunchCount() {
+        return BunchOfIndividualsCapacity.size();
+    }
 }
