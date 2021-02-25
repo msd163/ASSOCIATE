@@ -8,6 +8,7 @@ import static utils.Globals.*;
 public class DefParameter {
     public TtParamType paramType;
     public int value ; // this variable store parameter value.
+    public int randRange ; // this variable store maximum number of random vars.
     public int upperBound ; // in range parameters upper bound will be stored here, of course result of range will be stored in value
     public int lowerBound ; // in range parameters lower bound will be stored here, of course result of range will be stored in value
     public int percent_ref_value; // in percent parameters this is reference value
@@ -23,19 +24,25 @@ public class DefParameter {
         switch (decision)
         {
             case '?': // this means this parameter has random variable
-                paramFromTxtFile.substring(1,paramFromTxtFile.length());
-                value = RANDOM.nextInt(Integer.parseInt(paramFromTxtFile));
+                String sub1 = paramFromTxtFile.substring(1, paramFromTxtFile.length());
+                randRange = RANDOM.nextInt(Integer.parseInt(sub1));
                 paramType = TtParamType.Rand;
                 break;
             case '#': // this means this parameter is range parameter.
-                paramFromTxtFile.substring(1,paramFromTxtFile.length());
-                String[] desired_ranges = paramFromTxtFile.split(".^2");
-                range(Integer.parseInt(desired_ranges[0]),Integer.parseInt(desired_ranges[1]));
+//                System.out.println(paramFromTxtFile);
+                String[] desired_ranges = paramFromTxtFile
+//                        .substring(1)
+                        .replace("..",".")
+                        .split("[.#]+");
+//                System.out.println("["+desired_ranges[1]+"] ["+desired_ranges[2]+"]");
+                range( Integer.parseInt(desired_ranges[1])
+                      ,Integer.parseInt(desired_ranges[2]));
                 paramType = TtParamType.Range;
                 break;
             case '%':// percent fraction of other parameter.
-                String substring = paramFromTxtFile.substring(1, paramFromTxtFile.length());
-                String[] desired_var = substring.split("@");
+                String[] desired_var = paramFromTxtFile
+                                            .substring(1, paramFromTxtFile.length())
+                                            .split("@");
                 percentage(Integer.parseInt(desired_var[0]),Integer.parseInt(desired_var[1]));
                 paramType = TtParamType.Percent;
                 break;
@@ -47,6 +54,7 @@ public class DefParameter {
     }
     public void range(int low, int high)
     {
+//        System.out.println(low + " " + high);
         upperBound = high;
         lowerBound = low;
     }
@@ -58,7 +66,7 @@ public class DefParameter {
     public int nextValue() {
         switch (paramType) {
             case Rand:
-                value = RANDOM.nextInt();
+                value = RANDOM.nextInt(randRange);
                 break;
             case Const:
                 value = value;

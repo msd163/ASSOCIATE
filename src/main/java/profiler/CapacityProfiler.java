@@ -42,13 +42,12 @@ public class CapacityProfiler {
     {
         List<DefParameter> SingleBunch = new ArrayList<DefParameter>();
         DefParameter temp;
-        String[] cap = SingleLineOfFile.split(" *");
+        String[] cap = SingleLineOfFile.split("\\s+");
 //        SingleBunch.clear();
 
-        for (int p = 0; p < CapacityParameterCount.ordinal(); p++)
+        for (int p = 0; p < cap.length ; p++) //CapacityParameterCount.ordinal()
         {
-            if(cap[p].trim().length()>0)
-                SingleBunch.add(new DefParameter(cap[p]));
+            SingleBunch.add(new DefParameter(cap[p]));
         }
 
         return SingleBunch;
