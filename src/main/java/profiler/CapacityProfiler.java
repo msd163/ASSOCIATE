@@ -7,6 +7,7 @@ import main.java.utils.DefParameter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,6 +29,7 @@ public class CapacityProfiler {
             return;
         }
         Scanner sc = new Scanner(capFile);
+        BunchOfIndividualsCapacity = new ArrayList<List<DefParameter>>();
 //        BunchOfIndividualsCapacity.clear();
         while (sc.hasNextLine())
         {
@@ -38,13 +40,15 @@ public class CapacityProfiler {
     }
     private List<DefParameter> LoadCapacityProfileOfSingleBunch(String SingleLineOfFile)
     {
-        List<DefParameter> SingleBunch = null;
+        List<DefParameter> SingleBunch = new ArrayList<DefParameter>();
         DefParameter temp;
-        String[] cap = SingleLineOfFile.split(" ");
+        String[] cap = SingleLineOfFile.split(" *");
 //        SingleBunch.clear();
+
         for (int p = 0; p < CapacityParameterCount.ordinal(); p++)
         {
-            SingleBunch.add(new DefParameter(cap[p]));
+            if(cap[p].trim().length()>0)
+                SingleBunch.add(new DefParameter(cap[p]));
         }
 
         return SingleBunch;
