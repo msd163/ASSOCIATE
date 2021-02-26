@@ -113,28 +113,41 @@ public class World {
 
     public void run() {
 
+        boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;
+        boolean showDiagramWindow = Config.DRAWING_SHOW_DIAGRAM_WINDOW;
+
         //============================ Initializing Main Drawing Windows
         MainDrawingWindow mainWindow = new MainDrawingWindow(this);
-        JFrame mainFrame = new JFrame();
-        mainFrame.add(mainWindow);
-        mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        mainFrame.setMinimumSize(new Dimension(this.width, this.height));
-        mainFrame.setVisible(true);
 
+        if (showMainWindow) {
+            JFrame mainFrame = new JFrame();
+            mainFrame.add(mainWindow);
+            mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            mainFrame.setMinimumSize(new Dimension(this.width, this.height));
+            mainFrame.setVisible(true);
+        }
         //============================ Initializing Diagram Drawing Windows
         DiagramDrawingWindow diagramWindow = new DiagramDrawingWindow(this);
-        JFrame diagramFrame = new JFrame();
-        diagramFrame.add(diagramWindow);
-        diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        diagramFrame.setMinimumSize(new Dimension(this.width, this.height));
-        diagramFrame.setVisible(true);
-
+        if (showDiagramWindow) {
+            JFrame diagramFrame = new JFrame();
+            diagramFrame.add(diagramWindow);
+            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            diagramFrame.setMinimumSize(new Dimension(this.width, this.height));
+            diagramFrame.setVisible(true);
+        }
 
         // Main loop of run in a world
-        for (; Globals.WORLD_TIME < Config.WORLD_RUN_TIME; Globals.WORLD_TIME++) {
+        for (; Globals.WORLD_TIME < Config.WORLD_LIFE_TIME; Globals.WORLD_TIME++) {
 
             for (Agent agent : agents) {
-                agent.updateLocation();
+                switch (Config.MOVEMENT_MODE) {
+                    case FreeMovement:
+                        agent.updateLocation();
+                        break;
+                    case TravelBasedOnMap:
+                        agent.travel();
+                        break;
+                }
             }
 
             for (Agent agent : agents) {
@@ -223,19 +236,22 @@ public class World {
 
             histories.add(new WorldHistory(totalServiceCount, dishonestServiceCount, honestServiceCount));
 
-            mainWindow.repaint();
+            if (showMainWindow) {
+                mainWindow.repaint();
+            }
 
-            diagramWindow.repaint();
-
+            if (showDiagramWindow) {
+                diagramWindow.repaint();
+            }
             try {
-                Thread.sleep(500);
+                Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
