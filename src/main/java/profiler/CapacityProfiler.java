@@ -1,9 +1,7 @@
-package main.java.profiler;
+package profiler;
 
-import main.java._type.TtCapacityProfiler;
-import static main.java._type.TtCapacityProfiler.*;
-
-import main.java.utils.DefParameter;
+import _type.TtCapacityProfiler;
+import utils.DefParameter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

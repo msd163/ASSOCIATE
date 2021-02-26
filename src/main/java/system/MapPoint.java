@@ -17,7 +17,7 @@ public class MapPoint {
 
     //============================//============================//============================
 
-    public void modify() {
+    public void fix() {
         int xMode = x % Config.MAP_TILE_SIZE;
         int yMode = y % Config.MAP_TILE_SIZE;
 

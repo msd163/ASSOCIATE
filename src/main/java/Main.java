@@ -1,8 +1,6 @@
-import main.java._type.TtCapacityProfiler;
-import main.java.profiler.CapacityProfiler;
+import profiler.CapacityProfiler;
 
 public class Main {
-
 
     public static void init() {
 

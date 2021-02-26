@@ -8,7 +8,7 @@ public class ServiceMetaInfo {
         this.service = service;
         this.publisher = publisher;   // watcher of the service
         this.coefficient = coefficient;
-        this.time = Globals.WORLD_TIME;
+        this.time = Globals.WORLD_TIMER;
         this.forgottenBound = forgottenBound > 0 ? forgottenBound : 1;
         //todo: [policy] : correctness level have to be calculated
         this.correctnessLevel = 1;
@@ -23,7 +23,7 @@ public class ServiceMetaInfo {
 
     //============================//============================//============================
     private float getForgottenValue() {
-        float v = (float) (Globals.WORLD_TIME - time) / forgottenBound;
+        float v = (float) (Globals.WORLD_TIMER - time) / forgottenBound;
         return v > 1 ? 1 : v;
     }
 

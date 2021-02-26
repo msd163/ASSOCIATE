@@ -34,6 +34,7 @@ public class Agent {
     private int id;
 
     private MapPoint goal;
+    private TravelPlan travelPlan;
     private MapPoint location;
 
     private int velocity_x;
@@ -81,13 +82,13 @@ public class Agent {
                 Globals.RANDOM.nextInt(world.getHeight()));
 
         if (Config.MOVEMENT_MODE == TtMovementMode.TravelBasedOnMap) {
-            location.modify();
+            location.fix();
 
             goal = new MapPoint(
                     Globals.RANDOM.nextInt(world.getWidth()),
                     Globals.RANDOM.nextInt(world.getHeight()));
 
-            goal.modify();
+            goal.fix();
 
         }
 

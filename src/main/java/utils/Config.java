@@ -9,10 +9,11 @@ public class Config {
     public static int SIMULATION_WORLD_COUNT = 1;
 
     //============================ MAP
-    public static final int MAP_TILE_SIZE = 10;            // Size of each tile in the map
-    public static final TtMovementMode MOVEMENT_MODE = TtMovementMode.FreeMovement;
+    public static final int MAP_TILE_SIZE = 10;                                            // Size of each tile in the map
+    public static final TtMovementMode MOVEMENT_MODE = TtMovementMode.TravelBasedOnMap;     // Defining the mode of movement
+
     //============================ World
-    public static int WORLD_LIFE_TIME = 1000;                 // time of execution in each world
+    public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
 
 
@@ -45,10 +46,10 @@ public class Config {
     //============================ Drawing Windows
 
     public static final boolean DRAWING_SHOW_MAIN_WINDOW = true;
-    public static final boolean DRAWING_SHOW_DIAGRAM_WINDOW = true;
+    public static final boolean DRAWING_SHOW_DIAGRAM_WINDOW = false;
 
     public static final boolean DRAWING_SHOW_POWERFUL_AGENTS_RADIUS = true;
-    public static final int DRAWING_POWERFUL_AGENTS_THRESHOLD = 50;                // [1,100]
+    public static final int DRAWING_POWERFUL_AGENTS_THRESHOLD = 95;                // [1,100]
 
 
 }
