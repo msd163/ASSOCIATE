@@ -10,7 +10,7 @@ public class AgentHistory {
 
         serviceMetaInfos = new ServiceMetaInfo[maxServiceCap];
 
-        createTime = Globals.WORLD_TIME;
+        createTime = Globals.WORLD_TIMER;
         serviceIndex = -1;
     }
 
@@ -51,7 +51,7 @@ public class AgentHistory {
 
         serviceMetaInfos[serviceIndex] = info;
 
-        lastUpdateTime = Globals.WORLD_TIME;
+        lastUpdateTime = Globals.WORLD_TIMER;
 
         return serviceIndex;
     }

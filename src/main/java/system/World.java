@@ -16,19 +16,17 @@ public class World {
         init();
     }
 
-    private int width;
-    private int height;
-    private int maxVelocityOfAgents_x;
+    private int width;                      // The width of this world. it will defined randomly in Initializing time of the world.
+    private int height;                     // The height of this world. it will defined randomly in Initializing time of the world.
+    private int maxVelocityOfAgents_x;      //
     private int maxVelocityOfAgents_y;
     private int bignessFactor;
     private Agent[] agents;
     private int agentsCount;
 
-    //services that are accessible in this world
-    private ServiceType[] serviceTypes;
+    private ServiceType[] serviceTypes;     // The services that are accessible in this world
 
-    // ids that will be traced in simulation time
-    private int[] traceAgentIds;
+    private int[] traceAgentIds;            // Ids that will be traced in simulation time, in the MainDiagram window
 
     private List<WorldHistory> histories;
 
@@ -42,9 +40,11 @@ public class World {
                                         truePositive = 0;
         //============================
 
+        // Identifying the agents that we want to trace in Main diagram.
         traceAgentIds = new int[]{1, 4, 9, 10, 11, 12, 13};
 
-        Globals.WORLD_TIME = 0;
+        // Resetting the timer of the world.
+        Globals.WORLD_TIMER = 0;
 
         histories = new ArrayList<WorldHistory>();
 
@@ -75,15 +75,14 @@ public class World {
                         + " | agentsCount: " + agentsCount
 
         );
-        int id = 0;
-        for (int i = 0, agentsLength = agents.length; i < agentsLength; i++) {
-            agents[i] = new Agent(this, ++id);
+        for (int agentId = 0, agentsLength = agents.length; agentId < agentsLength; agentId++) {
+            agents[agentId] = new Agent(this, agentId);
 
-            agents[i].init();
+            agents[agentId].init();
 
-            // trace
-            if (isTraceable(i)) {
-                agents[i].setAsTraceable();
+            // if agentId is in 'traceAgentIds', it will set as traceable
+            if (isTraceable(agentId)) {
+                agents[agentId].setAsTraceable();
             }
         }
     }
@@ -113,8 +112,8 @@ public class World {
 
     public void run() {
 
-        boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;
-        boolean showDiagramWindow = Config.DRAWING_SHOW_DIAGRAM_WINDOW;
+        boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;           // Whether show MainWindow or not.
+        boolean showDiagramWindow = Config.DRAWING_SHOW_DIAGRAM_WINDOW;     // Whether show DrawingWindow or not.
 
         //============================ Initializing Main Drawing Windows
         MainDrawingWindow mainWindow = new MainDrawingWindow(this);
@@ -136,8 +135,8 @@ public class World {
             diagramFrame.setVisible(true);
         }
 
-        // Main loop of run in a world
-        for (; Globals.WORLD_TIME < Config.WORLD_LIFE_TIME; Globals.WORLD_TIME++) {
+        // Main loop of running in a world
+        for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
             for (Agent agent : agents) {
                 switch (Config.MOVEMENT_MODE) {
@@ -227,7 +226,7 @@ public class World {
                 recordedServices += agent.getTrust().getHistorySize();
             }
 
-            System.out.println("-------------------------\t\t\t\t\tcurrentTime: " + Globals.WORLD_TIME);
+            System.out.println("-------------------------\t\t\t\t\tcurrentTime: " + Globals.WORLD_TIMER);
             System.out.println("  totalServiceCount    : " + totalServiceCount);
             System.out.println("  honestServiceCount   : " + honestServiceCount + " >  " + (float) honestServiceCount / totalServiceCount);
             System.out.println("  dishonestServiceCount: " + dishonestServiceCount + " >  " + (float) dishonestServiceCount / totalServiceCount);
