@@ -1,5 +1,6 @@
 package main.java.utils;
 import main.java._type.TtParamType;
+import utils.Globals;
 import static utils.Globals.*;
 
 
@@ -30,6 +31,7 @@ public class DefParameter {
                 String sub1 = paramFromTxtFile.substring(1, paramFromTxtFile.length());
                 randRange = RANDOM.nextInt(Integer.parseInt(sub1));
                 paramType = TtParamType.Rand;
+                System.out.println("random:" + randRange);
                 break;
             case '#': // this means this parameter is range parameter.
 //                System.out.println(paramFromTxtFile);

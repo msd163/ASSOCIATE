@@ -1,46 +1,58 @@
 package profiler;
 
 
-public class PopulationBunch {
-    public main.java.utils.DefParameter BunchCount;
-    public main.java.utils.DefParameter HistoryServiceRecordCap;
-    public main.java.utils.DefParameter historyCap;
-    public main.java.utils.DefParameter watchListCapacity;
-    public main.java.utils.DefParameter watchRadius;
-    public main.java.utils.DefParameter concurrentDoingServiceCap;
+import main.java.utils.DefParameter;
 
-    public void setBunchCount(String p)
+public class PopulationBunch {
+    public String BunchCount;
+    public String HistoryServiceRecordCap;
+    public String historyCap;
+    public String watchListCapacity;
+    public String watchRadius;
+    public String concurrentDoingServiceCap;
+
+    public void initDefParams()
     {
-        BunchCount.setParameter(p);
+        X_BunchCount = new DefParameter(BunchCount);
+        X_HistoryServiceRecordCap = new DefParameter(HistoryServiceRecordCap);
+        X_historyCap = new DefParameter(historyCap);
+        X_watchListCapacity = new DefParameter(watchListCapacity);
+        X_watchRadius = new DefParameter(watchRadius);
+        X_concurrentDoingServiceCap = new DefParameter(concurrentDoingServiceCap);
     }
+
     public int getBunchCount()
     {
-        return BunchCount.nextValue();
+        return X_BunchCount.nextValue();
     }
 
     public int getHistoryServiceRecordCap()
     {
-        return HistoryServiceRecordCap.nextValue();
-    }
-    public void setHistoryServiceRecordCap(String p)
-    {
-        HistoryServiceRecordCap.setParameter(p);
+        return X_HistoryServiceRecordCap.nextValue();
     }
 
     public int getHistoryCap()
     {
-        return historyCap.nextValue();
+        return X_historyCap.nextValue();
     }
     public int getWatchListCapacity()
     {
-        return watchListCapacity.nextValue();
+        return X_watchListCapacity.nextValue();
     }
     public int getWatchRadius()
     {
-        return watchRadius.nextValue();
+        return X_watchRadius.nextValue();
     }
     public int getConcurrentDoingServiceCap()
     {
-        return concurrentDoingServiceCap.nextValue();
+        return X_concurrentDoingServiceCap.nextValue();
     }
+
+    private DefParameter X_BunchCount;
+    private DefParameter X_HistoryServiceRecordCap;
+    private DefParameter X_historyCap;
+    private DefParameter X_watchListCapacity;
+    private DefParameter X_watchRadius;
+    private DefParameter X_concurrentDoingServiceCap;
+
 }

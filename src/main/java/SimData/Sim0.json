@@ -1,5 +1,6 @@
 {
   "populationCount":1000,
+  "simulationRound": 1,
   "BunchOfIndividualsCapacity": [
     {
       "BunchCount": "%10@1000",

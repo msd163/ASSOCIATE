@@ -5,8 +5,6 @@ import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {
 
-    public static int SIMULATION_WORLD_COUNT = 1;
-
     //============================ World
     public static int WORLD_RUN_TIME = 100; // time of execution in each world
 
