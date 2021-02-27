@@ -7,9 +7,6 @@ public class CapacityProfiler {
     public int simulationRound;
     public ArrayList<PopulationBunch> BunchOfIndividualsCapacity;
 
-
-
-
     public CapacityProfiler()
     {
         currentBunch = 0;
@@ -47,8 +44,6 @@ public class CapacityProfiler {
     {
         currentBunch = 0;
     }
-
-
 
     private int currentBunch;
 }

@@ -20,9 +20,8 @@ public class Simulator {
         init();
 
         for (World world : worlds) {
-
+            Globals.profiler.ResetBunch();
             world.run();
-
         }
 
     }
