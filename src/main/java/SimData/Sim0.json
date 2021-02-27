@@ -1,0 +1,21 @@
+{
+  "populationCount":1000,
+  "BunchOfIndividualsCapacity": [
+    {
+      "BunchCount": "%10@1000",
+      "HistoryServiceRecordCap": "15",
+      "historyCap": "#100..2500",
+      "watchListCapacity": "?125",
+      "watchRadius": "320",
+      "concurrentDoingServiceCap": "?10"
+    },
+    {
+      "BunchCount": "%10@1000",
+      "HistoryServiceRecordCap": "15",
+      "historyCap": "#100..2500",
+      "watchListCapacity": "?125",
+      "watchRadius": "320",
+      "concurrentDoingServiceCap": "?10"
+    }
+  ]
+}

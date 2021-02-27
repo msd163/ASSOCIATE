@@ -19,7 +19,10 @@ public class DefParameter {
     }
     public DefParameter(String paramFromTxtFile)
     {
-
+        setParameter(paramFromTxtFile);
+    }
+    public void setParameter(String paramFromTxtFile)
+    {
         char decision = paramFromTxtFile.charAt(0);
         switch (decision)
         {
