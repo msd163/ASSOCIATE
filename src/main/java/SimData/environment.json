@@ -1,0 +1,20 @@
+{
+  "stateCount": 2,
+  "actionCount": 2,
+  "transitionCount": 4,
+  "initialState": 0,
+  "states": [
+    {"ID":0,"Name": "st1"},
+    {"ID":1,"Name": "st2"}
+  ],
+  "actions": [
+    {"ID":0,"Name": "act1"},
+    {"ID":1,"Name": "act2"}
+  ],
+  "transitions": [
+    { "st_one_idx": 0, "st_two_idx": 1, "act_idx": 0 },
+    { "st_one_idx": 0, "st_two_idx": 0, "act_idx": 1 },
+    { "st_one_idx": 1, "st_two_idx": 0, "act_idx": 0 },
+    { "st_one_idx": 1, "st_two_idx": 1, "act_idx": 1 }
+  ]
+}

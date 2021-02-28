@@ -1,7 +1,6 @@
 package profiler;
 
-
-import main.java.utils.DefParameter;
+import utils.DefParameter;
 
 public class PopulationBunch {
     public String BunchCount;
