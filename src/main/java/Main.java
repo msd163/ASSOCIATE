@@ -1,4 +1,9 @@
+import com.google.gson.Gson;
 import profiler.CapacityProfiler;
+import utils.Globals;
+
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Main {
 
@@ -7,7 +12,7 @@ public class Main {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.print("\n");
         System.out.print("  _________________________");
         System.out.print("\n");
@@ -19,8 +24,21 @@ public class Main {
         System.out.print("\n");
         System.out.print("\n");
 
-        CapacityProfiler profiler = new CapacityProfiler();
-        profiler.LoadCapacityProfile("D:\\01-Project\\34-selfDrivingCars\\02-V2VNetwork\\src\\main\\java\\SimData\\Sim0.txt");//"../src/main/java/SimData/Sim0.txt");
+        String capFileName = "D:\\01-Project\\34-selfDrivingCars\\02-V2VNetwork\\src\\main\\java\\SimData\\Sim0.json";
+        Gson gson = new Gson();
+
+        FileReader reader = new FileReader(capFileName);
+        Globals.profiler = gson.fromJson(reader, CapacityProfiler.class);
+
+        Globals.profiler.init();
+
+        System.out.println("popCount:"+Globals.profiler.populationCount);
+        System.out.println("bunch:"+Globals.profiler.bunchCount());
+        System.out.println("sim Round:"+Globals.profiler.simulationRound);
+
+
+
+//        profiler.LoadCapacityProfile("D:\\01-Project\\34-selfDrivingCars\\02-V2VNetwork\\src\\main\\java\\SimData\\Sim0.txt");//"../src/main/java/SimData/Sim0.txt");
 //        for (int b = 0; b < profiler.bunchCount() ; b++)
 //        {
 //            System.out.println("this is new bunch");

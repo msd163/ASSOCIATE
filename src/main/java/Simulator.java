@@ -1,5 +1,6 @@
 import system.World;
 import utils.Config;
+import utils.Globals;
 
 public class Simulator {
 
@@ -7,8 +8,7 @@ public class Simulator {
 
 
     private void init() {
-        worlds = new World[Config.SIMULATION_WORLD_COUNT];
-
+        worlds = new World[Globals.profiler.simulationRound];
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
            worlds[i] = new World();
         }
@@ -20,9 +20,8 @@ public class Simulator {
         init();
 
         for (World world : worlds) {
-
+            Globals.profiler.ResetBunch();
             world.run();
-
         }
 
     }

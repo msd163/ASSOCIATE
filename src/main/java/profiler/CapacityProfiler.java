@@ -1,63 +1,55 @@
 package profiler;
 
+
 import _type.TtCapacityProfiler;
 import utils.DefParameter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 
 
 public class CapacityProfiler {
-    List<List<DefParameter>> BunchOfIndividualsCapacity;
+    public int populationCount;
+    public int simulationRound;
+    public ArrayList<PopulationBunch> BunchOfIndividualsCapacity;
 
-    public void LoadCapacityProfile(String fileName)
+    public CapacityProfiler()
     {
-        //todo: file read procedure should be completed.
-
-        FileInputStream capFile = null;
-        try {
-            capFile = new FileInputStream(fileName);
-        } catch (FileNotFoundException e) {
-            System.out.println(fileName);
-            e.printStackTrace();
-            return;
-        }
-        Scanner sc = new Scanner(capFile);
-        BunchOfIndividualsCapacity = new ArrayList<List<DefParameter>>();
-//        BunchOfIndividualsCapacity.clear();
-        while (sc.hasNextLine())
+        currentBunch = 0;
+    }
+    public void init()
+    {
+        for(int i=0;i<bunchCount();i++)
         {
-            BunchOfIndividualsCapacity.add(
-                    LoadCapacityProfileOfSingleBunch(sc.nextLine())
-                    );
+            BunchOfIndividualsCapacity.get(i).initDefParams();
         }
     }
-    private List<DefParameter> LoadCapacityProfileOfSingleBunch(String SingleLineOfFile)
-    {
-        List<DefParameter> SingleBunch = new ArrayList<DefParameter>();
-        DefParameter temp;
-        String[] cap = SingleLineOfFile.split("\\s+");
-//        SingleBunch.clear();
-
-        for (int p = 0; p < cap.length ; p++) //CapacityParameterCount.ordinal()
-        {
-            SingleBunch.add(new DefParameter(cap[p]));
-        }
-
-        return SingleBunch;
-    }
-
-    public int getCapNextValue(int BunchNumber, TtCapacityProfiler CapNumber)
-    {
-        return BunchOfIndividualsCapacity.get(BunchNumber).get(CapNumber.ordinal()).nextValue();
-    }
-
 
     public int bunchCount() {
         return BunchOfIndividualsCapacity.size();
     }
+
+    public PopulationBunch CurrentBunch()
+    {
+        return BunchOfIndividualsCapacity.get(currentBunch);
+    }
+
+    public void NextBunch()
+    {
+        currentBunch++;
+        if(currentBunch >= BunchOfIndividualsCapacity.size())
+            currentBunch = 0;
+    }
+    public void PrevBunch()
+    {
+        currentBunch--;
+        if(currentBunch<0)
+            currentBunch = BunchOfIndividualsCapacity.size()-1;
+    }
+    public void ResetBunch()
+    {
+        currentBunch = 0;
+    }
+
+    private int currentBunch;
 }

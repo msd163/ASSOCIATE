@@ -33,6 +33,7 @@ public class World {
     //============================//============================//============================
     private void init() {
 
+
         totalServiceCount =
                 falseNegative =
                         falsePositive =
@@ -58,7 +59,7 @@ public class World {
         maxVelocityOfAgents_x = (int) (width * Config.WORLD_MAX_VELOCITY_RATIO_X);
         maxVelocityOfAgents_y = (int) (height * Config.WORLD_MAX_VELOCITY_RATIO_Y);
 
-        agentsCount = Globals.RANDOM.nextInt(Config.WORLD_MAX_AGENT - Config.WORLD_MIN_AGENT + 1) + Config.WORLD_MIN_AGENT;
+        agentsCount = Globals.profiler.populationCount;
         agents = new Agent[agentsCount];
 
         //============================ Services
@@ -75,9 +76,15 @@ public class World {
                         + " | agentsCount: " + agentsCount
 
         );
-        for (int agentId = 0, agentsLength = agents.length; agentId < agentsLength; agentId++) {
-            agents[agentId] = new Agent(this, agentId);
-
+        int id = 0;
+        int thisBunchFinished = Globals.profiler.bunchCount();
+        for (int i = 0, agentsLength = agents.length; i < agentsLength; i++) {
+            if(i >= thisBunchFinished)
+            {
+                Globals.profiler.NextBunch();
+                thisBunchFinished+=Globals.profiler.bunchCount();
+            }
+            agents[i] = new Agent(this, ++id);
             agents[agentId].init();
 
             // if agentId is in 'traceAgentIds', it will set as traceable
