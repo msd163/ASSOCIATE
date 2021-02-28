@@ -79,11 +79,11 @@ public class World {
 
         int id = 0;
         int thisBunchFinished = Globals.profiler.CurrentBunch().getBunchCount();
-        for (int i = 0, agentsLength = agents.length; i < agentsLength; i++) {
+        for (int i = 0 ; i < Globals.profiler.populationCount; i++) {
             if(i >= thisBunchFinished)
             {
                 Globals.profiler.NextBunch();
-                thisBunchFinished+=Globals.profiler.CurrentBunch().getBunchCount()
+                thisBunchFinished = thisBunchFinished + Globals.profiler.CurrentBunch().getBunchCount();
             }
             agents[i] = new Agent(this, ++id);
             agents[i].init();
