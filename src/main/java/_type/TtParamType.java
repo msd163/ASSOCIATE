@@ -1,4 +1,4 @@
-package main.java._type;
+package _type;
 
 public enum TtParamType
 {

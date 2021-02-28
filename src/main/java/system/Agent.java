@@ -1,5 +1,6 @@
 package system;
 
+import _type.TtMovementMode;
 import utils.Config;
 import utils.Globals;
 
@@ -18,6 +19,8 @@ public class Agent {
                 simConfigShowWatchRadius =
                         simConfigShowRequestedService =
                                 simConfigLinkToWatchedAgents = false;
+
+
     }
 
     //============================
@@ -30,8 +33,9 @@ public class Agent {
 
     private int id;
 
-    private int loc_x;
-    private int loc_y;
+    private MapPoint goal;
+    private TravelPlan travelPlan;
+    private MapPoint location;
 
     private int velocity_x;
     private int velocity_y;
@@ -72,8 +76,21 @@ public class Agent {
         trust = new AgentTrust(this, capacity.getHistoryCap(), capacity.getHistoryServiceRecordCap());
         behavior = new AgentBehavior();
         watchedAgents = new ArrayList<Agent>();
-        loc_x = Globals.RANDOM.nextInt(world.getWidth());
-        loc_y = Globals.RANDOM.nextInt(world.getHeight());
+
+        location = new MapPoint(
+                Globals.RANDOM.nextInt(world.getWidth()),
+                Globals.RANDOM.nextInt(world.getHeight()));
+
+        if (Config.MOVEMENT_MODE == TtMovementMode.TravelBasedOnMap) {
+            location.fix();
+
+            goal = new MapPoint(
+                    Globals.RANDOM.nextInt(world.getWidth()),
+                    Globals.RANDOM.nextInt(world.getHeight()));
+
+            goal.fix();
+
+        }
 
         //todo: [policy] : assigning requested services
         requestingServiceTypes = new ArrayList<ServiceType>();
@@ -103,20 +120,20 @@ public class Agent {
         // System.out.println("  current loc : "+ loc_x+","+ loc_y);
 
         //todo: [policy] : Considering nonlinear movement of nodes
-        loc_x += velocity_x;
-        loc_y += velocity_y;
+        location.changeX(velocity_x);
+        location.changeY(velocity_y);
 
-        if (loc_x > world.getWidth()) {
-            loc_x = world.getWidth();
+        if (location.getX() > world.getWidth()) {
+            location.setX(world.getWidth());
         }
-        if (loc_y > world.getHeight()) {
-            loc_y = world.getHeight();
+        if (location.getY() > world.getHeight()) {
+            location.setY(world.getHeight());
         }
-        if (loc_x < 0) {
-            loc_x = 0;
+        if (location.getX() < 0) {
+            location.setX(0);
         }
-        if (loc_y < 0) {
-            loc_y = 0;
+        if (location.getY() < 0) {
+            location.setY(0);
         }
        /* System.out.println(world.getCurrentRunTime() + "]  ===============\nAgent [" + id + "]  velocity: "
                 + velocity_x + "," + velocity_y
@@ -145,6 +162,67 @@ public class Agent {
         currentDoingServiceSize = 0;
     }
 
+    //============================ Routing
+    public MapPoint travel() {
+       /* location.print(id + " | Current Location: ");
+        goal.print(id + " | Goal: ");*/
+        if (!isInGoal()) {
+            int yDiff = goal.getY() - location.getY();
+            int xDiff = goal.getX() - location.getX();
+            if (Math.abs(yDiff) > Math.abs(xDiff)) {
+                if (yDiff > 0) {
+                    goBottom();
+                } else {
+                    goTop();
+                }
+            } else {
+                if (xDiff > 0) {
+                    goRight();
+                } else {
+                    goLeft();
+                }
+            }
+
+        }
+        return location;
+    }
+
+    public boolean isInGoal() {
+        return location.isEquals(goal);
+    }
+
+    private boolean goTop() {
+        if (location.getY() >= Config.MAP_TILE_SIZE) {
+            location.minusY();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean goBottom() {
+        if (location.getY() <= world.getHeight() - Config.MAP_TILE_SIZE) {
+            location.addY();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean goLeft() {
+        if (location.getX() >= Config.MAP_TILE_SIZE) {
+            location.minusX();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean goRight() {
+        if (location.getX() <= world.getWidth() - Config.MAP_TILE_SIZE) {
+            location.addX();
+            return true;
+        }
+        return false;
+    }
+
     //============================ Watching
 
     public void updateWatchList() {
@@ -164,7 +242,7 @@ public class Agent {
 
 
     public boolean canWatch(int x, int y) {
-        return Math.sqrt(Math.pow((double) x - (double) loc_x, 2) + Math.pow((double) y - (double) loc_y, 2)) < (double) capacity.getWatchRadius();
+        return Math.sqrt(Math.pow((double) x - (double) location.getX(), 2) + Math.pow((double) y - (double) location.getY(), 2)) < (double) capacity.getWatchRadius();
     }
 
 
@@ -286,6 +364,12 @@ public class Agent {
     private boolean isCapCandid = false;
 
     public void draw(Graphics2D g) {
+
+        int loc_x;
+        int loc_y;
+
+        loc_x = location.getX();
+        loc_y = location.getY();
         honestColor = behavior.getIsHonest() ? Color.GREEN : Color.RED;
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
@@ -347,8 +431,8 @@ public class Agent {
                 ", \n\tsimConfigTraceable=" + simConfigTraceable +
                 ", \n\tsimConfigShowRequestedService=" + simConfigShowRequestedService +
                 ", \n\tid=" + id +
-                ", \n\tloc_x=" + loc_x +
-                ", \n\tloc_y=" + loc_y +
+                ", \n\tloc_x=" + location.getX() +
+                ", \n\tloc_y=" + location.getY() +
                 ", \n\tvelocity_x=" + velocity_x +
                 ", \n\tvelocity_y=" + velocity_y +
                 ", \n\tcurrentDoingServiceSize=" + currentDoingServiceSize +
@@ -363,11 +447,11 @@ public class Agent {
     }
 
     public int getLoc_x() {
-        return loc_x;
+        return location.getX();
     }
 
     public int getLoc_y() {
-        return loc_y;
+        return location.getY();
     }
 
     public int getVelocity_x() {

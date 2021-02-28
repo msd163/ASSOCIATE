@@ -1,10 +1,9 @@
+
 package main.java.utils;
 import main.java._type.TtParamType;
 import utils.Globals;
+
 import static utils.Globals.*;
-
-
-
 
 public class DefParameter {
     public TtParamType paramType;

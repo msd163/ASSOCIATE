@@ -1,6 +1,12 @@
 package profiler;
 
-import java.util.ArrayList;
+
+import _type.TtCapacityProfiler;
+import utils.DefParameter;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 
 public class CapacityProfiler {
     public int populationCount;
