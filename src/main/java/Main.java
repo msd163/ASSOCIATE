@@ -44,16 +44,6 @@ public class Main {
         System.out.println("actionCount:"+Globals.environment.getActionCount());
         System.out.println("transitionCount:"+Globals.environment.getTransitionCount());
 
-
-//        profiler.LoadCapacityProfile("D:\\01-Project\\34-selfDrivingCars\\02-V2VNetwork\\src\\main\\java\\SimData\\Sim0.txt");//"../src/main/java/SimData/Sim0.txt");
-//        for (int b = 0; b < profiler.bunchCount() ; b++)
-//        {
-//            System.out.println("this is new bunch");
-//            for (int c = 0 ; c < TtCapacityProfiler.CapacityParameterCount.ordinal() ; c++)
-//                System.out.print(profiler.getCapNextValue(b, TtCapacityProfiler.values()[c]) + " " );
-//
-//        }
-
         Simulator simulator = new Simulator();
         simulator.simulate();
 
