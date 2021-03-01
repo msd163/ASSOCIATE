@@ -44,4 +44,11 @@ public class Environment {
         transitions = new DefTransition[transitionCount];
         this.transitionCount = transitionCount;
     }
+
+    public DefState getStartState(int transitionID) {
+        return states[transitions[ transitionID ].getSt_one_idx()];
+    }
+    public DefState getEndState(int transitionID) {
+        return states[transitions[ transitionID ].getSt_two_idx()];
+    }
 }

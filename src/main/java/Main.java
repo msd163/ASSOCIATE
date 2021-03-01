@@ -1,10 +1,12 @@
 import com.google.gson.Gson;
 import profiler.CapacityProfiler;
+import stateTransition.DefState;
 import stateTransition.Environment;
 import utils.Globals;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Stack;
 
 public class Main {
 
@@ -43,6 +45,27 @@ public class Main {
         System.out.println("stateCount:"+Globals.environment.getStateCount());
         System.out.println("actionCount:"+Globals.environment.getActionCount());
         System.out.println("transitionCount:"+Globals.environment.getTransitionCount());
+
+        int x = 20;
+        int y = 20;
+
+        for (int pop = 0; pop < Globals.environment.getTransitionCount() ; pop++)
+        {
+            DefState startState = Globals.environment.getStartState(pop);
+            DefState endState = Globals.environment.getEndState(pop);
+            startState.incOutDegree();
+            endState.incInDegree();
+            if(startState.hasLocation() == false)
+            {
+                Globals.environment.getStartState(pop).setLocation(x,y);
+            }
+
+            if(endState.hasLocation() == false)
+            {
+                endState.setLocation(startState.getX()+40,startState.getY()+startState.getInDegree()*15);
+            }
+
+        }
 
         Simulator simulator = new Simulator();
         simulator.simulate();

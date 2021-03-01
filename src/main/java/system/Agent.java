@@ -1,6 +1,7 @@
 package system;
 
 import _type.TtMovementMode;
+import stateTransition.DefState;
 import utils.Config;
 import utils.Globals;
 
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Agent {
+    public DefState agent_Current_State;
 
     public Agent(World parentWorld, int id) {
         this.world = parentWorld;
