@@ -67,4 +67,9 @@ public class DefState {
     public int getInDegree() {
         return inDeg;
     }
+
+    public int getOutDegree() {
+        return outDeg;
+
+    }
 }

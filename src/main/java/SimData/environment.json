@@ -5,7 +5,8 @@
   "initialState": 0,
   "states": [
     {"ID":0,"Name": "st1"},
-    {"ID":1,"Name": "st2"}
+    {"ID":1,"Name": "st2"},
+    {"ID":2,"Name": "st3"}
   ],
   "actions": [
     {"ID":0,"Name": "act1"},
@@ -14,7 +15,9 @@
   "transitions": [
     { "st_one_idx": 0, "st_two_idx": 1, "act_idx": 0 },
     { "st_one_idx": 0, "st_two_idx": 0, "act_idx": 1 },
+    { "st_one_idx": 0, "st_two_idx": 2, "act_idx": 1 },
     { "st_one_idx": 1, "st_two_idx": 0, "act_idx": 0 },
-    { "st_one_idx": 1, "st_two_idx": 1, "act_idx": 1 }
+    { "st_one_idx": 1, "st_two_idx": 1, "act_idx": 1 },
+    { "st_one_idx": 1, "st_two_idx": 2, "act_idx": 0 }
   ]
 }

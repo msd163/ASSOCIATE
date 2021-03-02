@@ -6,6 +6,7 @@ import utils.Globals;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Main {
@@ -52,23 +53,30 @@ public class Main {
         for (int pop = 0; pop < Globals.environment.getTransitionCount() ; pop++)
         {
             DefState startState = Globals.environment.getStartState(pop);
-            DefState endState = Globals.environment.getEndState(pop);
-            startState.incOutDegree();
-            endState.incInDegree();
+            ArrayList<DefState> endState = Globals.environment.getTransitionFrom(startState);
+            System.out.println("size " + endState.size() + " " + startState.getInDegree());
+
+
+
+
             if(startState.hasLocation() == false)
             {
                 Globals.environment.getStartState(pop).setLocation(x,y);
             }
-
-            if(endState.hasLocation() == false)
-            {
-                endState.setLocation(startState.getX()+40,startState.getY()+startState.getInDegree()*15);
-            }
-
+            int inDegree = -startState.getInDegree()/2;
+            int XX = startState.getX();
+            int YY = startState.getY();
+            for (int en = 0 ; en < endState.size() ; en++)
+                if( endState.get(en).hasLocation() == false )
+                {
+                    endState.get(en).setLocation(XX + 40,
+                                                YY + (inDegree+en)*15);
+                }
+            x = XX + 40;
         }
 
         Simulator simulator = new Simulator();
-        simulator.simulate();
+//        simulator.simulate();
 
 
     }
