@@ -9,6 +9,9 @@ public class DefTransition {
     private int state_idx;
     private ArrayList<Integer> final_idx;
 
+
+
+
     public DefTransition()
     {
         hasLoc = false;

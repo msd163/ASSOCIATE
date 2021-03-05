@@ -1,5 +1,7 @@
 package stateTransition;
 
+import utils.Globals;
+
 import java.util.ArrayList;
 
 public class Environment {
@@ -10,6 +12,23 @@ public class Environment {
     public int getStateCount() {
         return stateCount;
     }
+
+    public ArrayList<Integer> getMyWatchList(int depth , int pop)
+    {
+        ArrayList<Integer> to = new ArrayList<Integer>();
+
+        if(depth >= 1)
+        {
+            ArrayList<Integer> final_idx = transitions[pop].getFinal_idx();
+            for (int i=0;i<final_idx.size();i++)
+            {
+                to.add(final_idx.get(i));
+                to.addAll ( getMyWatchList(depth-1,final_idx.get(i)) );
+            }
+        }
+        return  to;
+    }
+
 
     public void setStateCount(int stateCount) {
         transitions = new DefTransition[stateCount];
