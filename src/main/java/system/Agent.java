@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Agent {
-    public DefState agent_Current_State;
+    public int agent_Current_State;
 
     public Agent(World parentWorld, int id) {
         this.world = parentWorld;

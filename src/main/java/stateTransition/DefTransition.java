@@ -1,37 +1,42 @@
 package stateTransition;
 
+import com.sun.javafx.geom.Point2D;
 import utils.Globals;
 
+import java.util.ArrayList;
+
 public class DefTransition {
-    private int st_one_idx;
-    private int st_two_idx;
-    private int act_idx;
+    private int state_idx;
+    private ArrayList<Integer> final_idx;
 
-    public int getSt_one_idx() {
-        return st_one_idx;
+    public DefTransition()
+    {
+        hasLoc = false;
+    }
+    public int getState_idx() {
+        return state_idx;
     }
 
-    public void setSt_one_idx(int st_one_idx) {
-        this.st_one_idx = st_one_idx;
-        Globals.environment.states[st_one_idx].incInDegree();
+    public void setState_idx(int state_idx) {
+        this.state_idx = state_idx;
     }
 
-    public int getSt_two_idx() {
-        return st_two_idx;
+    public ArrayList<Integer> getFinal_idx() {
+        return final_idx;
     }
 
-    public void setSt_two_idx(int st_two_idx) {
-        this.st_two_idx = st_two_idx;
-        Globals.environment.states[st_two_idx].incOutDegree();
+    public void setFinal_idx(ArrayList<Integer> final_idx) {
+        this.final_idx = final_idx;
     }
-
-    public int getAct_idx() {
-        return act_idx;
+    public boolean hasLoc;
+    private Point2D myLoc;
+    public Point2D getLocaiton()
+    {
+        return myLoc;
     }
-
-    public void setAct_idx(int act_idx) {
-        this.act_idx = act_idx;
+    public void setLocaiton(Point2D lc)
+    {
+        myLoc = lc;
+        hasLoc =true;
     }
-
-
 }

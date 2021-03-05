@@ -4,20 +4,7 @@ import java.util.ArrayList;
 
 public class Environment {
     private int stateCount;
-    private int actionCount;
-    private int transitionCount;
-    private int initialState;
 
-    public int getInitialState() {
-        return initialState;
-    }
-
-    public void setInitialState(int initialState) {
-        this.initialState = initialState;
-    }
-
-    public DefState states[];
-    public DefAction actions[];
     public DefTransition transitions[];
 
     public int getStateCount() {
@@ -25,44 +12,33 @@ public class Environment {
     }
 
     public void setStateCount(int stateCount) {
-        states = new DefState[stateCount];
+        transitions = new DefTransition[stateCount];
         this.stateCount = stateCount;
     }
 
-    public int getActionCount() {
-        return actionCount;
-    }
-
-    public void setActionCount(int actionCount) {
-        actions = new DefAction[actionCount];
-        this.actionCount = actionCount;
-    }
-
-    public int getTransitionCount() {
-        return transitionCount;
-    }
-
-    public void setTransitionCount(int transitionCount) {
-        transitions = new DefTransition[transitionCount];
-        this.transitionCount = transitionCount;
-    }
-
-    public DefState getStartState(int transitionID) {
-        return states[transitions[ transitionID ].getSt_one_idx()];
-    }
-    public DefState getEndState(int transitionID) {
-        return states[transitions[ transitionID ].getSt_two_idx()];
-    }
-
-    public ArrayList<DefState> getTransitionFrom(DefState startState) {
-        ArrayList<DefState> to = new ArrayList<DefState>();
+    public ArrayList<Integer> getTransitionFrom(int startState) {
+        ArrayList<Integer> to = new ArrayList<Integer>();
 
         for (int i=0;i<stateCount;i++) {
-            if (transitions[i].getSt_one_idx() == startState.getID())
-                to.add(states[transitions[i].getSt_two_idx()]);
-            if(to.size() == states[startState.getID()].getInDegree())
+            if (transitions[i].getState_idx() == startState) {
+                {
+                    int size = transitions[i].getFinal_idx().size();
+                    ArrayList<Integer> final_idx = transitions[i].getFinal_idx();
+                    for (int j = 0; j < size; j++)
+                        to.add(final_idx.get(j));
+                }
                 break;
+            }
         }
         return to;
     }
+
+    public DefTransition getTransition(int pop) {
+        return transitions[pop];
+    }
+
+    public int getTransitionOutDegree(int pop) {
+        return transitions[pop].getFinal_idx().size();
+    }
+
 }

@@ -1,6 +1,10 @@
 import com.google.gson.Gson;
+import com.sun.javafx.geom.Point2D;
+import static java.lang.Math.*;
+import static java.lang.Math.sin;
 import profiler.CapacityProfiler;
 import stateTransition.DefState;
+import stateTransition.DefTransition;
 import stateTransition.Environment;
 import utils.Globals;
 
@@ -44,39 +48,52 @@ public class Main {
         Globals.environment = gson.fromJson(envReader, Environment.class);
 
         System.out.println("stateCount:"+Globals.environment.getStateCount());
-        System.out.println("actionCount:"+Globals.environment.getActionCount());
-        System.out.println("transitionCount:"+Globals.environment.getTransitionCount());
 
-        int x = 20;
-        int y = 20;
 
-        for (int pop = 0; pop < Globals.environment.getTransitionCount() ; pop++)
+        int r = 1;
+        double theta = 0;
+        for (int pop = 0; pop < Globals.environment.getStateCount() ; pop++)
         {
-            DefState startState = Globals.environment.getStartState(pop);
-            ArrayList<DefState> endState = Globals.environment.getTransitionFrom(startState);
-            System.out.println("size " + endState.size() + " " + startState.getInDegree());
+            DefTransition curTran = Globals.environment.getTransition(pop);
+            ArrayList<Integer> endState = Globals.environment.getTransitionFrom(pop);
+            ArrayList<Integer> final_idx = curTran.getFinal_idx();
+            int size =  final_idx.size();
 
-
-
-
-            if(startState.hasLocation() == false)
+            System.out.println("state " + pop + " have out degree " + Globals.environment.getTransitionOutDegree(pop));
+            if(curTran.hasLoc == false)
             {
-                Globals.environment.getStartState(pop).setLocation(x,y);
-            }
-            int inDegree = -startState.getInDegree()/2;
-            int XX = startState.getX();
-            int YY = startState.getY();
-            for (int en = 0 ; en < endState.size() ; en++)
-                if( endState.get(en).hasLocation() == false )
-                {
-                    endState.get(en).setLocation(XX + 40,
-                                                YY + (inDegree+en)*15);
+                curTran.setLocaiton(new Point2D((float)(r * 80 * sin(theta) ),
+                                                (float)(r * 80 * cos(theta))));
+                theta = theta + (3.14159 / 12.0);
+                if(theta > (2.0 * 3.14159)) {
+                    theta = 0.0;
+                    r++;
                 }
-            x = XX + 40;
+            }
+
+            DefTransition final_temp;
+            Integer x;
+            for (int i=0;i<size;i++)
+            {
+                x = final_idx.get(i);
+                final_temp = Globals.environment.getTransition(x);
+                if( final_temp.hasLoc == false )
+                {
+                    final_temp.setLocaiton(
+                            new Point2D(
+                                    (float)(r * 80 * sin(theta) + curTran.getLocaiton().x),
+                                    (float)(r * 80 * cos(theta))+ curTran.getLocaiton().y));
+                    theta = theta + (3.14159 / 12.0);
+                    if(theta > (2.0 * 3.14159)) {
+                        theta = 0.0;
+                        r++;
+                    }
+                }
+            }
         }
 
         Simulator simulator = new Simulator();
-//        simulator.simulate();
+        simulator.simulate();
 
 
     }
