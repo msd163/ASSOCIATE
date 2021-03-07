@@ -263,11 +263,13 @@ public class Agent {
 
 
     public boolean canWatch(int x, int y) {
+//        TODO: here should be updated.
         return Math.sqrt(Math.pow((double) x - (double) location.getX(), 2) + Math.pow((double) y - (double) location.getY(), 2)) < (double) capacity.getWatchRadius();
     }
 
 
     public boolean canWatch(Agent agent) {
+//        TODO: here should be updated.
         return canWatch(agent.getLoc_x(), agent.getLoc_y());
     }
 
