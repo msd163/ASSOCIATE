@@ -56,8 +56,8 @@ public class World {
 
         bignessFactor = Math.max(width, height);
 
-        maxVelocityOfAgents_x = (int) (width * Config.WORLD_MAX_VELOCITY_RATIO_X);
-        maxVelocityOfAgents_y = (int) (height * Config.WORLD_MAX_VELOCITY_RATIO_Y);
+        maxVelocityOfAgents_x = Globals.profiler.maxVelocityX.nextValue();
+        maxVelocityOfAgents_y = Globals.profiler.maxVelocityY.nextValue();
 
         agentsCount = Globals.profiler.populationCount;
         agents = new Agent[agentsCount];

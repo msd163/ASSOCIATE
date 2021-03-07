@@ -166,10 +166,8 @@ public class Agent {
     private void updateVelocity() {
 
         //todo: [policy] : define all kinds of updating velocity
-
-        velocity_x = Globals.RANDOM.nextInt(world.getMaxVelocityOfAgents_x()) - (world.getMaxVelocityOfAgents_x() / 2);
-        velocity_y = Globals.RANDOM.nextInt(world.getMaxVelocityOfAgents_y()) - (world.getMaxVelocityOfAgents_y() / 2);
-
+        velocity_x = Globals.profiler.maxVelocityX.nextValue();
+        velocity_y = Globals.profiler.maxVelocityY.nextValue();
     }
 
     public void updateProfile() {

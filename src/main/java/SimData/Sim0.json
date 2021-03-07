@@ -1,6 +1,8 @@
 {
   "populationCount":5,
   "world_width": "#2500..2550",
+  "maxVelocityX": "#2..5",
+  "maxVelocityY": "#2..5",
   "simulationRound": 2,
   "BunchOfIndividualsCapacity": [
     {

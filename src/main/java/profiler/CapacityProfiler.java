@@ -7,6 +7,8 @@ public class CapacityProfiler {
     public int populationCount;
     public int simulationRound;
     public DefParameter world_width;
+    public DefParameter maxVelocityX;
+    public DefParameter maxVelocityY;
     public ArrayList<PopulationBunch> BunchOfIndividualsCapacity;
 
     public CapacityProfiler()
