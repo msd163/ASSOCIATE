@@ -13,13 +13,13 @@ public class Environment {
         return stateCount;
     }
 
-    public ArrayList<Integer> getMyWatchList(int depth , int pop)
+    public ArrayList<Integer> getMyWatchList(int depth , int stat)
     {
         ArrayList<Integer> to = new ArrayList<Integer>();
 
         if(depth >= 1)
         {
-            ArrayList<Integer> final_idx = transitions[pop].getFinal_idx();
+            ArrayList<Integer> final_idx = transitions[stat].getFinal_idx();
             for (int i=0;i<final_idx.size();i++)
             {
                 to.add(final_idx.get(i));

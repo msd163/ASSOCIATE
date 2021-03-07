@@ -244,17 +244,21 @@ public class Agent {
 
     public void updateWatchList() {
         watchedAgents.clear();
-
+        ArrayList<Integer> seenStates = Globals.environment.getMyWatchList(capacity.getWatchRadius(), agent_Current_State);
         Agent[] agents = world.getAgents();
-        for (int i = 0; i < agents.length; i++) {
-            if (watchedAgents.size() >= capacity.getWatchListCapacity()) {
-                break;
-            }
-            if (canWatch(agents[i]) && agents[i].getId() != this.id) {
-                watchedAgents.add(agents[i]);
+
+        for (int i = 0 ; i < seenStates.size() ; i++)
+        {
+            ArrayList<Integer> who_is = Globals.environment.transitions[seenStates.get(i)].getWho_is_here();
+            for (int k = 0 ; k < who_is.size() ; k++)
+            {
+                if (watchedAgents.size() >= capacity.getWatchListCapacity() &&
+                        agents[i].my_national_code !=  who_is.get(k))
+                {
+                    watchedAgents.add( agents[ who_is.get(k) ] ) ;
+                }
             }
         }
-
     }
 
 

@@ -85,4 +85,8 @@ public class DefTransition {
     {
         return who_is_here.size();
     }
+    public ArrayList<Integer> getWho_is_here()
+    {
+        return who_is_here;
+    }
 }
