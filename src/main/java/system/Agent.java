@@ -11,7 +11,23 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Agent {
-    public int agent_Current_State;
+    private int agent_Current_State;
+    public int my_national_code;
+
+    public int getAgent_Current_State() {
+        return agent_Current_State;
+    }
+
+    public void setAgent_Current_State(int agent_next_State) {
+        if(Globals.environment.transitions[agent_next_State].I_am_in(my_national_code) == true) {
+            if(agent_Current_State != -1)
+            {
+                Globals.environment.transitions[agent_Current_State].I_am_out(my_national_code);
+            }
+            this.agent_Current_State = agent_next_State;
+        }
+
+    }
 
     public Agent(World parentWorld, int id) {
         this.world = parentWorld;
@@ -21,6 +37,7 @@ public class Agent {
                 simConfigShowWatchRadius =
                         simConfigShowRequestedService =
                                 simConfigLinkToWatchedAgents = false;
+        agent_Current_State = -1;
 
 
     }

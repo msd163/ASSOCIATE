@@ -1,9 +1,12 @@
 package profiler;
+import utils.DefParameter;
+
 import java.util.ArrayList;
 
 public class CapacityProfiler {
     public int populationCount;
     public int simulationRound;
+    public DefParameter world_width;
     public ArrayList<PopulationBunch> BunchOfIndividualsCapacity;
 
     public CapacityProfiler()

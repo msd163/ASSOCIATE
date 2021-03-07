@@ -3,7 +3,6 @@ import com.sun.javafx.geom.Point2D;
 import static java.lang.Math.*;
 import static java.lang.Math.sin;
 import profiler.CapacityProfiler;
-import stateTransition.DefState;
 import stateTransition.DefTransition;
 import stateTransition.Environment;
 import utils.Globals;
@@ -11,7 +10,6 @@ import utils.Globals;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Main {
 
@@ -62,7 +60,7 @@ public class Main {
             System.out.println("state " + pop + " have out degree " + Globals.environment.getTransitionOutDegree(pop));
             if(curTran.hasLoc == false)
             {
-                curTran.setLocaiton(new Point2D((float)(r * 80 * sin(theta) ),
+                curTran.setLocation(new Point2D((float)(r * 80 * sin(theta) ),
                                                 (float)(r * 80 * cos(theta))));
                 theta = theta + (3.14159 / 12.0);
                 if(theta > (2.0 * 3.14159)) {
@@ -79,10 +77,10 @@ public class Main {
                 final_temp = Globals.environment.getTransition(x);
                 if( final_temp.hasLoc == false )
                 {
-                    final_temp.setLocaiton(
+                    final_temp.setLocation(
                             new Point2D(
-                                    (float)(r * 80 * sin(theta) + curTran.getLocaiton().x),
-                                    (float)(r * 80 * cos(theta))+ curTran.getLocaiton().y));
+                                    (float)(r * 80 * sin(theta) + curTran.getLocation().x),
+                                    (float)(r * 80 * cos(theta))+ curTran.getLocation().y));
                     theta = theta + (3.14159 / 12.0);
                     if(theta > (2.0 * 3.14159)) {
                         theta = 0.0;

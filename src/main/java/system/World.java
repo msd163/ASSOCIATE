@@ -51,8 +51,8 @@ public class World {
 
         //============================
 
-        width = Globals.RANDOM.nextInt(Config.WORLD_MAX_WIDTH - Config.WORLD_MIN_WIDTH + 1) + Config.WORLD_MIN_WIDTH;
-        height = Globals.RANDOM.nextInt(Config.WORLD_MAX_HEIGHT - Config.WORLD_MIN_HEIGHT + 1) + Config.WORLD_MIN_HEIGHT;
+        width = Globals.profiler.world_width.nextValue();
+        height = Globals.profiler.world_width.nextValue();
 
         bignessFactor = Math.max(width, height);
 
@@ -79,6 +79,7 @@ public class World {
 
         int id = 0;
         int thisBunchFinished = Globals.profiler.CurrentBunch().getBunchCount();
+        int stateCount = Globals.environment.getStateCount();
         for (int i = 0 ; i < Globals.profiler.populationCount; i++) {
             if(i >= thisBunchFinished)
             {
@@ -92,6 +93,8 @@ public class World {
             if (isTraceable(i)) {
                 agents[i].setAsTraceable();
             }
+            agents[i].my_national_code = i;
+            agents[i].setAgent_Current_State( Globals.RANDOM.nextInt(stateCount) );
         }
     }
 

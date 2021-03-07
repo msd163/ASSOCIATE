@@ -1,5 +1,6 @@
 {
   "populationCount":5,
+  "world_width": "#2500..2550",
   "simulationRound": 2,
   "BunchOfIndividualsCapacity": [
     {

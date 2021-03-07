@@ -3,7 +3,6 @@ package utils;
 import com.sun.javafx.geom.Point2D;
 import stateTransition.DefState;
 import stateTransition.DefTransition;
-import system.Agent;
 import system.World;
 
 import java.awt.*;
@@ -45,14 +44,14 @@ public class MainDrawingWindow extends Canvas {
         for (int x = 0 ; x < Globals.environment.getStateCount() ; x++)
         {
             DefTransition start = Globals.environment.transitions[x];
-            Point2D xx = start.getLocaiton();
+            Point2D xx = start.getLocation();
             ArrayList<Integer> final_idx = start.getFinal_idx();
             g.drawRect((int)xx.x, (int)xx.y, 5, 5);
             for (int i = 0 ; i < final_idx.size() ; i++)
             {
                 g.drawLine((int)xx.x,(int)xx.y,
-                        (int)Globals.environment.transitions[final_idx.get(i)].getLocaiton().x,
-                        (int)Globals.environment.transitions[final_idx.get(i)].getLocaiton().y);
+                        (int)Globals.environment.transitions[final_idx.get(i)].getLocation().x,
+                        (int)Globals.environment.transitions[final_idx.get(i)].getLocation().y);
             }
         }
 
