@@ -35,12 +35,13 @@ public class Main {
         Gson gson = new Gson();
 
         FileReader prfReader = new FileReader(capFileName);
-        Globals.profiler = gson.fromJson(prfReader, CapacityProfiler.class);
+        Globals.profiler = gson.fromJson( prfReader , CapacityProfiler.class);
         Globals.profiler.init();
 
-        System.out.println("popCount:"+Globals.profiler.populationCount);
+        System.out.println("popCount:"+Globals.profiler.getPopulationCount());
+
         System.out.println("bunch:"+Globals.profiler.bunchCount());
-        System.out.println("sim Round:"+Globals.profiler.simulationRound);
+        System.out.println("sim Round:"+Globals.profiler.getSimulationRound());
 
         FileReader envReader = new FileReader(envFileName);
         Globals.environment = gson.fromJson(envReader, Environment.class);

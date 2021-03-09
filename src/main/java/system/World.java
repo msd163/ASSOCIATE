@@ -51,15 +51,14 @@ public class World {
 
         //============================
 
-        width = Globals.profiler.world_width.nextValue();
-        height = Globals.profiler.world_width.nextValue();
+        width = Globals.profiler.getWorld_width();
+        height = Globals.profiler.getWorld_width();
 
         bignessFactor = Math.max(width, height);
 
-        maxVelocityOfAgents_x = Globals.profiler.maxVelocityX.nextValue();
-        maxVelocityOfAgents_y = Globals.profiler.maxVelocityY.nextValue();
+        maxVelocityOfAgents_x = Globals.profiler.getMaxVelocityX();
 
-        agentsCount = Globals.profiler.populationCount;
+        agentsCount = Globals.profiler.getPopulationCount();
         agents = new Agent[agentsCount];
 
         //============================ Services
@@ -80,7 +79,7 @@ public class World {
         int id = 0;
         int thisBunchFinished = Globals.profiler.CurrentBunch().getBunchCount();
         int stateCount = Globals.environment.getStateCount();
-        for (int i = 0 ; i < Globals.profiler.populationCount; i++) {
+        for (int i = 0 ; i < Globals.profiler.getPopulationCount(); i++) {
             if(i >= thisBunchFinished)
             {
                 Globals.profiler.NextBunch();

@@ -166,8 +166,8 @@ public class Agent {
     private void updateVelocity() {
 
         //todo: [policy] : define all kinds of updating velocity
-        velocity_x = Globals.profiler.maxVelocityX.nextValue();
-        velocity_y = Globals.profiler.maxVelocityY.nextValue();
+        velocity_x = Globals.profiler.getMaxVelocityX();
+        velocity_y = Globals.profiler.getMaxVelocityY();
     }
 
     public void updateProfile() {
@@ -262,15 +262,20 @@ public class Agent {
     }
 
 
-    public boolean canWatch(int x, int y) {
-//        TODO: here should be updated.
-        return Math.sqrt(Math.pow((double) x - (double) location.getX(), 2) + Math.pow((double) y - (double) location.getY(), 2)) < (double) capacity.getWatchRadius();
-    }
+//    public boolean canWatch(int x, int y) {
+////        TODO: here should be updated.
+//        return Math.sqrt(Math.pow((double) x - (double) location.getX(), 2) + Math.pow((double) y - (double) location.getY(), 2)) < (double) capacity.getWatchRadius();
+//    }
 
 
     public boolean canWatch(Agent agent) {
-//        TODO: here should be updated.
-        return canWatch(agent.getLoc_x(), agent.getLoc_y());
+        for (int i = 0; i < watchedAgents.size(); i++) {
+            if (watchedAgents.get(i).my_national_code == agent.my_national_code)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     //============================ Requesting

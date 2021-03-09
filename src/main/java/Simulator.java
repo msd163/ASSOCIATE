@@ -8,7 +8,7 @@ public class Simulator {
 
 
     private void init() {
-        worlds = new World[Globals.profiler.simulationRound];
+        worlds = new World[Globals.profiler.getSimulationRound()];
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
            worlds[i] = new World();
         }
