@@ -149,14 +149,7 @@ public class World {
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
             for (Agent agent : agents) {
-                switch (Config.MOVEMENT_MODE) {
-                    case FreeMovement:
-                        agent.updateLocation();
-                        break;
-                    case TravelBasedOnMap:
-                        agent.travel();
-                        break;
-                }
+                agent.updateCurrentState();
             }
 
             for (Agent agent : agents) {

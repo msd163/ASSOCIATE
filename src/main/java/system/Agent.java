@@ -52,12 +52,6 @@ public class Agent {
 
     private int id;
 
-    private MapPoint goal;
-    private TravelPlan travelPlan;
-    private MapPoint location;
-
-    private int velocity_x;
-    private int velocity_y;
 
     //============================ processing variables
     private int currentDoingServiceSize;
@@ -96,20 +90,6 @@ public class Agent {
         behavior = new AgentBehavior();
         watchedAgents = new ArrayList<Agent>();
 
-        location = new MapPoint(
-                Globals.RANDOM.nextInt(world.getWidth()),
-                Globals.RANDOM.nextInt(world.getHeight()));
-
-        if (Config.MOVEMENT_MODE == TtMovementMode.TravelBasedOnMap) {
-            location.fix();
-
-            goal = new MapPoint(
-                    Globals.RANDOM.nextInt(world.getWidth()),
-                    Globals.RANDOM.nextInt(world.getHeight()));
-
-            goal.fix();
-
-        }
 
         //todo: [policy] : assigning requested services
         requestingServiceTypes = new ArrayList<ServiceType>();
@@ -132,43 +112,9 @@ public class Agent {
         simConfigShowRequestedService = true;
     }
 
-    public final void updateLocation() {
+   
 
-        updateVelocity();
 
-        // System.out.println("  current loc : "+ loc_x+","+ loc_y);
-
-        //todo: [policy] : Considering nonlinear movement of nodes
-        location.changeX(velocity_x);
-        location.changeY(velocity_y);
-
-        if (location.getX() > world.getWidth()) {
-            location.setX(world.getWidth());
-        }
-        if (location.getY() > world.getHeight()) {
-            location.setY(world.getHeight());
-        }
-        if (location.getX() < 0) {
-            location.setX(0);
-        }
-        if (location.getY() < 0) {
-            location.setY(0);
-        }
-       /* System.out.println(world.getCurrentRunTime() + "]  ===============\nAgent [" + id + "]  velocity: "
-                + velocity_x + "," + velocity_y
-                + "  current loc : " + loc_x + "," + loc_y
-        );
-*/
-        //System.out.println("  current loc : "+ loc_x+","+ loc_y);
-
-    }
-
-    private void updateVelocity() {
-
-        //todo: [policy] : define all kinds of updating velocity
-        velocity_x = Globals.profiler.getMaxVelocityX();
-        velocity_y = Globals.profiler.getMaxVelocityY();
-    }
 
     public void updateProfile() {
 
@@ -179,66 +125,7 @@ public class Agent {
         currentDoingServiceSize = 0;
     }
 
-    //============================ Routing
-    public MapPoint travel() {
-       /* location.print(id + " | Current Location: ");
-        goal.print(id + " | Goal: ");*/
-        if (!isInGoal()) {
-            int yDiff = goal.getY() - location.getY();
-            int xDiff = goal.getX() - location.getX();
-            if (Math.abs(yDiff) > Math.abs(xDiff)) {
-                if (yDiff > 0) {
-                    goBottom();
-                } else {
-                    goTop();
-                }
-            } else {
-                if (xDiff > 0) {
-                    goRight();
-                } else {
-                    goLeft();
-                }
-            }
 
-        }
-        return location;
-    }
-
-    public boolean isInGoal() {
-        return location.isEquals(goal);
-    }
-
-    private boolean goTop() {
-        if (location.getY() >= Config.MAP_TILE_SIZE) {
-            location.minusY();
-            return true;
-        }
-        return false;
-    }
-
-    private boolean goBottom() {
-        if (location.getY() <= world.getHeight() - Config.MAP_TILE_SIZE) {
-            location.addY();
-            return true;
-        }
-        return false;
-    }
-
-    private boolean goLeft() {
-        if (location.getX() >= Config.MAP_TILE_SIZE) {
-            location.minusX();
-            return true;
-        }
-        return false;
-    }
-
-    private boolean goRight() {
-        if (location.getX() <= world.getWidth() - Config.MAP_TILE_SIZE) {
-            location.addX();
-            return true;
-        }
-        return false;
-    }
 
     //============================ Watching
 
@@ -396,8 +283,8 @@ public class Agent {
         int loc_x;
         int loc_y;
 
-        loc_x = location.getX();
-        loc_y = location.getY();
+        loc_x = (int) Globals.environment.transitions[agent_Current_State].getLocation().x;
+        loc_y = (int) Globals.environment.transitions[agent_Current_State].getLocation().y;
         honestColor = behavior.getIsHonest() ? Color.GREEN : Color.RED;
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
@@ -459,10 +346,10 @@ public class Agent {
                 ", \n\tsimConfigTraceable=" + simConfigTraceable +
                 ", \n\tsimConfigShowRequestedService=" + simConfigShowRequestedService +
                 ", \n\tid=" + id +
-                ", \n\tloc_x=" + location.getX() +
-                ", \n\tloc_y=" + location.getY() +
-                ", \n\tvelocity_x=" + velocity_x +
-                ", \n\tvelocity_y=" + velocity_y +
+                ", \n\tloc_x=" + Globals.environment.transitions[agent_Current_State].getLocation().x +
+                ", \n\tloc_y=" + Globals.environment.transitions[agent_Current_State].getLocation().x  +
+//                ", \n\tvelocity_x=" + velocity_x +
+//                ", \n\tvelocity_y=" + velocity_y +
                 ", \n\tcurrentDoingServiceSize=" + currentDoingServiceSize +
                 ", \n\tcap=" + capacity.toString() +
                 ", \n\ttrust=" + trust.toString() +
@@ -475,20 +362,14 @@ public class Agent {
     }
 
     public int getLoc_x() {
-        return location.getX();
+        return (int) Globals.environment.transitions[agent_Current_State].getLocation().x;
     }
 
     public int getLoc_y() {
-        return location.getY();
+        return (int) Globals.environment.transitions[agent_Current_State].getLocation().x;
     }
 
-    public int getVelocity_x() {
-        return velocity_x;
-    }
 
-    public int getVelocity_y() {
-        return velocity_y;
-    }
 
     public World getWorld() {
         return world;
@@ -559,4 +440,7 @@ public class Agent {
         return trust;
     }
 
+    public void updateCurrentState() {
+
+    }
 }
