@@ -1,22 +1,71 @@
 package profiler;
-
-
-import _type.TtCapacityProfiler;
 import utils.DefParameter;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
+import java.util.ArrayList;
 
 public class CapacityProfiler {
-    public int populationCount;
-    public int simulationRound;
+
+    private String populationCount;
+    private String simulationRound;
+    private String world_width;
+    private String maxVelocityX;
+    private String maxVelocityY;
+
+
+    private DefParameter _populationCount;
+    private DefParameter _simulationRound;
+    private DefParameter _world_width;
+    private DefParameter _maxVelocityX;
+    private DefParameter _maxVelocityY;
+
     public ArrayList<PopulationBunch> BunchOfIndividualsCapacity;
+
+    public int getPopulationCount() {
+        return _populationCount.nextValue();
+    }
+
+    public void setPopulationCount(String populationCount) {
+        this._populationCount.setParameter( populationCount );
+    }
+
+    public int getSimulationRound() {
+        return _simulationRound.nextValue();
+    }
+
+    public void setSimulationRound(String simulationRound) {
+        this._simulationRound.setParameter( simulationRound );
+    }
+
 
     public CapacityProfiler()
     {
         currentBunch = 0;
     }
+
+    public int getWorld_width() {
+        return _world_width.nextValue();
+    }
+
+    public void setWorld_width(String world_width) {
+        this._world_width.setParameter(world_width);
+    }
+
+    public int getMaxVelocityX() {
+        return _maxVelocityX.nextValue();
+    }
+
+    public void setMaxVelocityX(String maxVelocityX) {
+        this._maxVelocityX.setParameter( maxVelocityX );
+    }
+
+    public int getMaxVelocityY() {
+        return _maxVelocityY.nextValue();
+    }
+
+    public void setMaxVelocityY(String maxVelocityY) {
+        this._maxVelocityY.setParameter( maxVelocityY );
+    }
+
     public void init()
     {
         for(int i=0;i<bunchCount();i++)

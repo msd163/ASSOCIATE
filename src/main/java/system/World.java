@@ -51,15 +51,14 @@ public class World {
 
         //============================
 
-        width = Globals.RANDOM.nextInt(Config.WORLD_MAX_WIDTH - Config.WORLD_MIN_WIDTH + 1) + Config.WORLD_MIN_WIDTH;
-        height = Globals.RANDOM.nextInt(Config.WORLD_MAX_HEIGHT - Config.WORLD_MIN_HEIGHT + 1) + Config.WORLD_MIN_HEIGHT;
+        width = Globals.profiler.getWorld_width();
+        height = Globals.profiler.getWorld_width();
 
         bignessFactor = Math.max(width, height);
 
-        maxVelocityOfAgents_x = (int) (width * Config.WORLD_MAX_VELOCITY_RATIO_X);
-        maxVelocityOfAgents_y = (int) (height * Config.WORLD_MAX_VELOCITY_RATIO_Y);
+        maxVelocityOfAgents_x = Globals.profiler.getMaxVelocityX();
 
-        agentsCount = Globals.profiler.populationCount;
+        agentsCount = Globals.profiler.getPopulationCount();
         agents = new Agent[agentsCount];
 
         //============================ Services
@@ -76,21 +75,25 @@ public class World {
                         + " | agentsCount: " + agentsCount
 
         );
+
         int id = 0;
-        int thisBunchFinished = Globals.profiler.bunchCount();
-        for (int i = 0, agentsLength = agents.length; i < agentsLength; i++) {
+        int thisBunchFinished = Globals.profiler.CurrentBunch().getBunchCount();
+        int stateCount = Globals.environment.getStateCount();
+        for (int i = 0 ; i < Globals.profiler.getPopulationCount(); i++) {
             if(i >= thisBunchFinished)
             {
                 Globals.profiler.NextBunch();
-                thisBunchFinished+=Globals.profiler.bunchCount();
+                thisBunchFinished = thisBunchFinished + Globals.profiler.CurrentBunch().getBunchCount();
             }
             agents[i] = new Agent(this, ++id);
-            agents[agentId].init();
+            agents[i].init();
 
             // if agentId is in 'traceAgentIds', it will set as traceable
-            if (isTraceable(agentId)) {
-                agents[agentId].setAsTraceable();
+            if (isTraceable(i)) {
+                agents[i].setAsTraceable();
             }
+            agents[i].my_national_code = i;
+            agents[i].setAgent_Current_State( Globals.RANDOM.nextInt(stateCount) );
         }
     }
 
@@ -146,14 +149,7 @@ public class World {
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
             for (Agent agent : agents) {
-                switch (Config.MOVEMENT_MODE) {
-                    case FreeMovement:
-                        agent.updateLocation();
-                        break;
-                    case TravelBasedOnMap:
-                        agent.travel();
-                        break;
-                }
+                agent.updateCurrentState();
             }
 
             for (Agent agent : agents) {

@@ -1,0 +1,8 @@
+{
+  "stateCount": 3,
+  "transitions": [
+    { "state_idx": 0, "final_idx":[1,2] },
+    { "state_idx": 1, "final_idx":[0,2] },
+    { "state_idx": 2, "final_idx":[0,1] }
+  ]
+}
