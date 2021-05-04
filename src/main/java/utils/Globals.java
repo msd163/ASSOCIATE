@@ -12,7 +12,7 @@ public class Globals {
 
     public static int WORLD_TIME;
     public static CapacityProfiler profiler    = new CapacityProfiler();
-    public static Environment      environment = new Environment();
+   // public static Environment      environment = new Environment();
     public static MissionGenerator commander   = new MissionGenerator();
 
     public static int WORLD_TIMER;                                       // The timer of world which is increased by every run of world

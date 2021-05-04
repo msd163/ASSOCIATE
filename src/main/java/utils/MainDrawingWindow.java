@@ -1,8 +1,7 @@
 package utils;
 
 import com.sun.javafx.geom.Point2D;
-import stateTransition.DefState;
-import stateTransition.DefTransition;
+import stateTransition.StateTrans;
 import system.World;
 
 import java.awt.*;
@@ -39,22 +38,20 @@ public class MainDrawingWindow extends Canvas {
         g.drawRect(0, 0, world.getWidth(), world.getHeight());
 
         //============================
-        DefState startState;
-        DefState endState;
-        for (int x = 0 ; x < Globals.environment.getStateCount() ; x++)
-        {
-            DefTransition start = Globals.environment.transitions[x];
+
+        for (int x = 0; x < world.getEnvironment().getStateCount(); x++) {
+
+            StateTrans start = world.getEnvironment().getTransition(x);
             Point2D xx = start.getLocation();
-            ArrayList<Integer> final_idx = start.getFinal_idx();
-            g.drawRect((int)xx.x, (int)xx.y, 5, 5);
-            for (int i = 0 ; i < final_idx.size() ; i++)
-            {
-                g.drawLine((int)xx.x,(int)xx.y,
-                        (int)Globals.environment.transitions[final_idx.get(i)].getLocation().x,
-                        (int)Globals.environment.transitions[final_idx.get(i)].getLocation().y);
+            ArrayList<StateTrans> final_idx = start.getTargets();
+            g.drawRect((int) xx.x, (int) xx.y, 5, 5);
+
+            for (StateTrans st : final_idx) {
+                g.drawLine((int) xx.x, (int) xx.y,
+                        (int) st.getLocation().x,
+                        (int) st.getLocation().y);
             }
         }
-
 
 
 //        for (Agent agent : world.getAgents()) {

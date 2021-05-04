@@ -1,5 +1,6 @@
 package system;
 
+import stateTransition.Environment;
 import utils.Config;
 import utils.DiagramDrawingWindow;
 import utils.Globals;
@@ -12,8 +13,8 @@ import java.util.List;
 
 public class World {
 
-    public World() {
-        init();
+    public World(Environment environment) {
+        init(environment);
     }
 
     private int width;                      // The width of this world. it will defined randomly in Initializing time of the world.
@@ -30,9 +31,12 @@ public class World {
 
     private List<WorldHistory> histories;
 
-    //============================//============================//============================
-    private void init() {
+    private Environment environment;
 
+    //============================//============================//============================
+    private void init(Environment environment) {
+
+        this.environment = environment;
 
         totalServiceCount =
                 falseNegative =
@@ -78,22 +82,20 @@ public class World {
 
         int id = 0;
         int thisBunchFinished = Globals.profiler.CurrentBunch().getBunchCount();
-        int stateCount = Globals.environment.getStateCount();
-        for (int i = 0 ; i < Globals.profiler.getPopulationCount(); i++) {
-            if(i >= thisBunchFinished)
-            {
+
+        for (int i = 0; i < Globals.profiler.getPopulationCount(); i++) {
+            if (i >= thisBunchFinished) {
                 Globals.profiler.NextBunch();
                 thisBunchFinished = thisBunchFinished + Globals.profiler.CurrentBunch().getBunchCount();
             }
-            agents[i] = new Agent(this, ++id);
+
+            agents[i] = new Agent(this, ++id,environment.getRandomState());
             agents[i].init();
 
             // if agentId is in 'traceAgentIds', it will set as traceable
             if (isTraceable(i)) {
                 agents[i].setAsTraceable();
             }
-            agents[i].my_national_code = i;
-            agents[i].setAgent_Current_State( Globals.RANDOM.nextInt(stateCount) );
         }
     }
 
@@ -148,9 +150,9 @@ public class World {
         // Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
-            for (Agent agent : agents) {
+           /* for (Agent agent : agents) {
                 agent.updateCurrentState();
-            }
+            }*/
 
             for (Agent agent : agents) {
                 agent.resetParams();
@@ -332,4 +334,11 @@ public class World {
         return agentsCount;
     }
 
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 }

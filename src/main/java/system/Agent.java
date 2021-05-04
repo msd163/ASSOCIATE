@@ -1,7 +1,6 @@
 package system;
 
-import _type.TtMovementMode;
-import stateTransition.DefState;
+import stateTransition.StateTrans;
 import utils.Config;
 import utils.Globals;
 
@@ -11,33 +10,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Agent {
-    private int agent_Current_State;
-    public int my_national_code;
+    private StateTrans state;
 
-    public int getAgent_Current_State() {
-        return agent_Current_State;
-    }
 
-    public void setAgent_Current_State(int agent_next_State) {
-        if(Globals.environment.transitions[agent_next_State].I_am_in(my_national_code) == true) {
-            if(agent_Current_State != -1)
-            {
-                Globals.environment.transitions[agent_Current_State].I_am_out(my_national_code);
-            }
-            this.agent_Current_State = agent_next_State;
-        }
-
-    }
-
-    public Agent(World parentWorld, int id) {
+    public Agent(World parentWorld, int id, StateTrans stateTrans) {
         this.world = parentWorld;
         this.id = id;
+        this.state = stateTrans;
         currentDoingServiceSize = 0;
         simConfigTraceable =
                 simConfigShowWatchRadius =
                         simConfigShowRequestedService =
                                 simConfigLinkToWatchedAgents = false;
-        agent_Current_State = -1;
 
 
     }
@@ -102,7 +86,6 @@ public class Agent {
         requestedServices = new ArrayList<Service>();
         doneServices = new ArrayList<Service>();
 
-
     }
 
     public void setAsTraceable() {
@@ -111,9 +94,6 @@ public class Agent {
         simConfigLinkToWatchedAgents = true;
         simConfigShowRequestedService = true;
     }
-
-   
-
 
 
     public void updateProfile() {
@@ -126,23 +106,31 @@ public class Agent {
     }
 
 
+ /*   public void setCurrentState(int state) {
+        if (Globals.environment.getTransition(state).I_am_in(this)) {
+            if (currentState != -1) {
+                Globals.environment.getTransition(currentState).I_am_out(this);
+            }
+            this.currentState = state;
+        }
+
+    }*/
 
     //============================ Watching
 
+    /**
+     * Clearing the current watch list and filling it according the current state of the agent.
+     * The watch list is depends on the watch radius, that is the capacity of the agent.
+     */
     public void updateWatchList() {
         watchedAgents.clear();
-        ArrayList<Integer> seenStates = Globals.environment.getMyWatchList(capacity.getWatchRadius(), agent_Current_State);
-        Agent[] agents = world.getAgents();
+        ArrayList<StateTrans> seenStates = state.getWatchList(capacity.getWatchRadius());
 
-        for (int i = 0 ; i < seenStates.size() ; i++)
-        {
-            ArrayList<Integer> who_is = Globals.environment.transitions[seenStates.get(i)].getWho_is_here();
-            for (int k = 0 ; k < who_is.size() ; k++)
-            {
-                if (watchedAgents.size() >= capacity.getWatchListCapacity() &&
-                        agents[i].my_national_code !=  who_is.get(k))
-                {
-                    watchedAgents.add( agents[ who_is.get(k) ] ) ;
+        for (StateTrans st : seenStates) {
+            ArrayList<Agent> ags = st.getAgents();
+            for (Agent ag : ags) {
+                if (watchedAgents.size() <= capacity.getWatchListCapacity()) {
+                    watchedAgents.add(ag);
                 }
             }
         }
@@ -157,8 +145,7 @@ public class Agent {
 
     public boolean canWatch(Agent agent) {
         for (int i = 0; i < watchedAgents.size(); i++) {
-            if (watchedAgents.get(i).my_national_code == agent.my_national_code)
-            {
+            if (watchedAgents.get(i).id == agent.id) {
                 return true;
             }
         }
@@ -283,8 +270,9 @@ public class Agent {
         int loc_x;
         int loc_y;
 
-        loc_x = (int) Globals.environment.transitions[agent_Current_State].getLocation().x;
-        loc_y = (int) Globals.environment.transitions[agent_Current_State].getLocation().y;
+        loc_x = (int) state.getLocation().x;
+        loc_y = (int) state.getLocation().y;
+
         honestColor = behavior.getIsHonest() ? Color.GREEN : Color.RED;
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
@@ -340,20 +328,28 @@ public class Agent {
 
     @Override
     public String toString() {
-        return "\nAgent{" +
-                "\n\tsimConfigShowWatchRadius=" + simConfigShowWatchRadius +
-                ", \n\tsimConfigLinkToWatchedAgents=" + simConfigLinkToWatchedAgents +
-                ", \n\tsimConfigTraceable=" + simConfigTraceable +
-                ", \n\tsimConfigShowRequestedService=" + simConfigShowRequestedService +
-                ", \n\tid=" + id +
-                ", \n\tloc_x=" + Globals.environment.transitions[agent_Current_State].getLocation().x +
-                ", \n\tloc_y=" + Globals.environment.transitions[agent_Current_State].getLocation().x  +
-//                ", \n\tvelocity_x=" + velocity_x +
-//                ", \n\tvelocity_y=" + velocity_y +
-                ", \n\tcurrentDoingServiceSize=" + currentDoingServiceSize +
-                ", \n\tcap=" + capacity.toString() +
-                ", \n\ttrust=" + trust.toString() +
-                ", \n\tprofile=" + behavior.toString() +
+        return "Agent{" +
+                "\n\tstate=" + state +
+                ",\n\t simConfigShowWatchRadius=" + simConfigShowWatchRadius +
+                ",\n\t simConfigLinkToWatchedAgents=" + simConfigLinkToWatchedAgents +
+                ",\n\t simConfigTraceable=" + simConfigTraceable +
+                ",\n\t simConfigShowRequestedService=" + simConfigShowRequestedService +
+                ",\n\t id=" + id +
+                ",\n\t currentDoingServiceSize=" + currentDoingServiceSize +
+                ",\n\t world=" + world +
+                ",\n\t capacity=" + capacity +
+                ",\n\t trust=" + trust +
+                ",\n\t behavior=" + behavior +
+                ",\n\t watchedAgents=" + watchedAgents +
+                ",\n\t requestingServiceTypes=" + requestingServiceTypes +
+                ",\n\t doingServiceTypes=" + doingServiceTypes +
+                ",\n\t requestedServices=" + requestedServices +
+                ",\n\t doneServices=" + doneServices +
+                ",\n\t stroke3=" + stroke3 +
+                ",\n\t stroke1=" + stroke1 +
+                ",\n\t font=" + font +
+                ",\n\t honestColor=" + honestColor +
+                ",\n\t isCapCandid=" + isCapCandid +
                 '}';
     }
 
@@ -362,13 +358,12 @@ public class Agent {
     }
 
     public int getLoc_x() {
-        return (int) Globals.environment.transitions[agent_Current_State].getLocation().x;
+        return (int) state.getLocation().x;
     }
 
     public int getLoc_y() {
-        return (int) Globals.environment.transitions[agent_Current_State].getLocation().x;
+        return (int) state.getLocation().y;
     }
-
 
 
     public World getWorld() {
@@ -440,7 +435,11 @@ public class Agent {
         return trust;
     }
 
-    public void updateCurrentState() {
+    public StateTrans getState() {
+        return state;
+    }
 
+    public void setState(StateTrans state) {
+        this.state = state;
     }
 }

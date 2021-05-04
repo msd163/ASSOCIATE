@@ -18,6 +18,18 @@ public class CapacityProfiler {
     private DefParameter _maxVelocityX;
     private DefParameter _maxVelocityY;
 
+    private int currentBunch;
+
+    //============================//============================
+
+
+    public CapacityProfiler()
+    {
+        currentBunch = 0;
+    }
+
+    //============================//============================
+
     public ArrayList<PopulationBunch> BunchOfIndividualsCapacity;
 
     public int getPopulationCount() {
@@ -36,11 +48,6 @@ public class CapacityProfiler {
         this._simulationRound.setParameter( simulationRound );
     }
 
-
-    public CapacityProfiler()
-    {
-        currentBunch = 0;
-    }
 
     public int getWorld_width() {
         return _world_width.nextValue();
@@ -100,5 +107,22 @@ public class CapacityProfiler {
         currentBunch = 0;
     }
 
-    private int currentBunch;
+
+    @Override
+    public String toString() {
+        return "CapacityProfiler{" +
+                "populationCount='" + populationCount + '\'' +
+                ", simulationRound='" + simulationRound + '\'' +
+                ", world_width='" + world_width + '\'' +
+                ", maxVelocityX='" + maxVelocityX + '\'' +
+                ", maxVelocityY='" + maxVelocityY + '\'' +
+                ", _populationCount=" + _populationCount +
+                ", _simulationRound=" + _simulationRound +
+                ", _world_width=" + _world_width +
+                ", _maxVelocityX=" + _maxVelocityX +
+                ", _maxVelocityY=" + _maxVelocityY +
+                ", BunchOfIndividualsCapacity=" + BunchOfIndividualsCapacity +
+                ", currentBunch=" + currentBunch +
+                '}';
+    }
 }

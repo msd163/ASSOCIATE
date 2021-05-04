@@ -1,0 +1,6 @@
+ThisAgentTypeCount   WatchCount  WatchHistoryDepth
+%10@1200             5             ?100
+%40@1200             50            #20..50
+%20@1200             #30..40       10
+%10@1200             5             10
+%10@1200             ?500          2

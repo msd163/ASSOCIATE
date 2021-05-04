@@ -1,0 +1,7 @@
+{
+  "transitions": [
+    { "id": 0, "targetIds":[1,2] },
+    { "id": 1, "targetIds":[0,2] },
+    { "id": 2, "targetIds":[0,1] }
+  ]
+}
