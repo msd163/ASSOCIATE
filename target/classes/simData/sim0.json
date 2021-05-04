@@ -1,21 +1,20 @@
 {
-  "populationCount":"5",
-  "world_width": "#2500..2550",
-  "maxVelocityX": "#2..5",
-  "maxVelocityY": "#2..5",
+  "agentsCount": "5",
+  "worldWidth": "#2500..2550",
+  "worldHeight": "#2500..2550",
   "simulationRound": "2",
-  "BunchOfIndividualsCapacity": [
+  "bunches": [
     {
-      "BunchCount": "%10@1000",
-      "HistoryServiceRecordCap": "15",
+      "bunchCount": "%10@1000",
+      "historyServiceRecordCap": "15",
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
       "watchRadius": "320",
       "concurrentDoingServiceCap": "?10"
     },
     {
-      "BunchCount": "%10@1000",
-      "HistoryServiceRecordCap": "15",
+      "bunchCount": "%10@1000",
+      "historyServiceRecordCap": "15",
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
       "watchRadius": "320",

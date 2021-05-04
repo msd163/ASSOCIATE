@@ -22,6 +22,12 @@ public class Simulator {
         //============================
         FileReader prfReader = new FileReader(projectPath.sim0Data());
         Globals.profiler = gson.fromJson(prfReader, CapacityProfiler.class);
+
+        if (Globals.profiler == null) {
+            System.out.println(">> Simulator.init");
+            System.out.println("> Error: profiler not found.");
+            return;
+        }
         Globals.profiler.init();
 
         System.out.println(Globals.profiler.toString());
@@ -30,6 +36,13 @@ public class Simulator {
         FileReader envReader = new FileReader(projectPath.environmentData());
         Environment environment = gson.fromJson(envReader, Environment.class);
 
+        if (environment == null) {
+            System.out.println(">> Simulator.init");
+            System.out.println("> Error: environment not found.");
+            return;
+        }
+
+        System.out.println("Environment loaded from file.");
         System.out.println(environment.toString());
 
         //============================
@@ -38,7 +51,6 @@ public class Simulator {
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
             worlds[i] = new World(environment);
         }
-
     }
 
     public void simulate() {

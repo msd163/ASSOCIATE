@@ -58,6 +58,7 @@ public class StateTrans {
 
     /**
      * Updating the target array according targetIds.
+     *
      * @param environment
      */
     public void updateTargets(Environment environment) {
@@ -163,5 +164,31 @@ public class StateTrans {
 
     public void setTargets(ArrayList<StateTrans> targets) {
         this.targets = targets;
+    }
+
+    //============================//============================
+
+    public String toString(int tabIndex) {
+        tabIndex++;
+        StringBuilder tx = new StringBuilder("\n");
+        StringBuilder ti = new StringBuilder("\n");
+        for (int i = 0; i <= tabIndex; i++) {
+            if (i > 1) {
+                tx.append("\t");
+            }
+            ti.append("\t");
+        }
+
+        return tx + "StateTrans{" +
+                ti + "  id=" + id +
+                ti + ", nodeTrafficCapacity=" + nodeTrafficCapacity +
+                ti + ", hasLoc=" + hasLoc +
+                ti + ", location=" + location +
+                tx + '}';
+    }
+
+    @Override
+    public String toString() {
+        return toString(0);
     }
 }

@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -16,7 +14,6 @@ public class Main {
 
         Simulator simulator = new Simulator();
         simulator.simulate();
-
 
     }
 

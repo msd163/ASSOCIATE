@@ -1,128 +1,130 @@
 package profiler;
+
 import utils.DefParameter;
 
 import java.util.ArrayList;
 
 public class CapacityProfiler {
 
-    private String populationCount;
+    private String agentsCount;
+    private String worldWidth;
+    private String worldHeight;
     private String simulationRound;
-    private String world_width;
-    private String maxVelocityX;
-    private String maxVelocityY;
 
+    private ArrayList<PopulationBunch> bunches;
 
-    private DefParameter _populationCount;
-    private DefParameter _simulationRound;
-    private DefParameter _world_width;
-    private DefParameter _maxVelocityX;
-    private DefParameter _maxVelocityY;
+    private DefParameter agentsCountD;
+    private DefParameter worldWidthD;
+    private DefParameter worldHeightD;
+    private DefParameter simulationRoundD;
 
-    private int currentBunch;
+    private int currentBunchIndex;
 
     //============================//============================
 
-
-    public CapacityProfiler()
-    {
-        currentBunch = 0;
+    public CapacityProfiler() {
+        agentsCount
+                = worldWidth
+                = worldHeight
+                = simulationRound
+                = "";
+        currentBunchIndex = 0;
+        bunches = null;
     }
 
-    //============================//============================
+    public void init() {
 
-    public ArrayList<PopulationBunch> BunchOfIndividualsCapacity;
+        agentsCountD = new DefParameter(agentsCount);
+        worldWidthD = new DefParameter(worldWidth);
+        worldHeightD = new DefParameter(worldHeight);
+        simulationRoundD = new DefParameter(simulationRound);
 
-    public int getPopulationCount() {
-        return _populationCount.nextValue();
-    }
+        if (bunches == null || bunches.isEmpty()) {
+            System.out.println(">> ERROR: Profiler bunch is empty.");
+            return;
+        }
 
-    public void setPopulationCount(String populationCount) {
-        this._populationCount.setParameter( populationCount );
-    }
-
-    public int getSimulationRound() {
-        return _simulationRound.nextValue();
-    }
-
-    public void setSimulationRound(String simulationRound) {
-        this._simulationRound.setParameter( simulationRound );
-    }
-
-
-    public int getWorld_width() {
-        return _world_width.nextValue();
-    }
-
-    public void setWorld_width(String world_width) {
-        this._world_width.setParameter(world_width);
-    }
-
-    public int getMaxVelocityX() {
-        return _maxVelocityX.nextValue();
-    }
-
-    public void setMaxVelocityX(String maxVelocityX) {
-        this._maxVelocityX.setParameter( maxVelocityX );
-    }
-
-    public int getMaxVelocityY() {
-        return _maxVelocityY.nextValue();
-    }
-
-    public void setMaxVelocityY(String maxVelocityY) {
-        this._maxVelocityY.setParameter( maxVelocityY );
-    }
-
-    public void init()
-    {
-        for(int i=0;i<bunchCount();i++)
-        {
-            BunchOfIndividualsCapacity.get(i).initDefParams();
+        for (int i = 0, len = bunches.size(); i < len; i++) {
+            bunches.get(i).initDefParams();
         }
     }
 
-    public int bunchCount() {
-        return BunchOfIndividualsCapacity.size();
+    public void NextBunch() {
+        currentBunchIndex++;
+        if (currentBunchIndex >= bunches.size())
+            currentBunchIndex = 0;
     }
 
-    public PopulationBunch CurrentBunch()
-    {
-        return BunchOfIndividualsCapacity.get(currentBunch);
+    public void PrevBunch() {
+        currentBunchIndex--;
+        if (currentBunchIndex < 0)
+            currentBunchIndex = bunches.size() - 1;
     }
 
-    public void NextBunch()
-    {
-        currentBunch++;
-        if(currentBunch >= BunchOfIndividualsCapacity.size())
-            currentBunch = 0;
-    }
-    public void PrevBunch()
-    {
-        currentBunch--;
-        if(currentBunch<0)
-            currentBunch = BunchOfIndividualsCapacity.size()-1;
-    }
-    public void ResetBunch()
-    {
-        currentBunch = 0;
+    public void ResetBunch() {
+        currentBunchIndex = 0;
     }
 
+    public PopulationBunch getCurrentBunch() {
+        return bunches.get(currentBunchIndex);
+    }
+    //============================//============================
+
+    public int getSimulationRound() {
+        return simulationRoundD.nextValue();
+    }
+
+
+    public int getAgentsCount() {
+        return agentsCountD.nextValue();
+    }
+
+    public int getWorldWidth() {
+        return worldWidthD.nextValue();
+    }
+
+    public int getWorldHeight() {
+        return worldHeightD.nextValue();
+    }
+
+    //============================//============================
+
+    public String toString(int tabIndex) {
+        tabIndex++;
+        StringBuilder tx = new StringBuilder("\n");
+        StringBuilder ti = new StringBuilder("\n");
+        for (int i = 0; i <= tabIndex; i++) {
+            if (i > 1) {
+                tx.append("\t");
+            }
+            ti.append("\t");
+        }
+        tabIndex++;
+
+        StringBuilder bs = new StringBuilder(ti + "[");
+        if (bunches != null) {
+            for (PopulationBunch b : bunches) {
+                bs.append(b.toString(tabIndex)).append(",");
+            }
+        }
+        bs.append(ti).append("]");
+
+        return tx + "CapacityProfiler{" +
+                ti + "  agentsCount='" + agentsCount + '\'' +
+                ti + ", worldWidth='" + worldWidth + '\'' +
+                ti + ", worldHeight='" + worldHeight + '\'' +
+                ti + ", simulationRound='" + simulationRound + '\'' +
+                ti + ", agentsCountD=" + agentsCountD.toString(tabIndex) +
+                ti + ", worldWidthD=" + worldWidthD.toString(tabIndex) +
+                ti + ", worldHeightD=" + worldHeightD.toString(tabIndex) +
+                ti + ", simulationRoundD=" + simulationRoundD.toString(tabIndex) +
+                ti + ", currentBunch=" + currentBunchIndex +
+                ti + ", bunches=" + bs +
+                tx + '}';
+    }
 
     @Override
     public String toString() {
-        return "CapacityProfiler{" +
-                "populationCount='" + populationCount + '\'' +
-                ", simulationRound='" + simulationRound + '\'' +
-                ", world_width='" + world_width + '\'' +
-                ", maxVelocityX='" + maxVelocityX + '\'' +
-                ", maxVelocityY='" + maxVelocityY + '\'' +
-                ", _populationCount=" + _populationCount +
-                ", _simulationRound=" + _simulationRound +
-                ", _world_width=" + _world_width +
-                ", _maxVelocityX=" + _maxVelocityX +
-                ", _maxVelocityY=" + _maxVelocityY +
-                ", BunchOfIndividualsCapacity=" + BunchOfIndividualsCapacity +
-                ", currentBunch=" + currentBunch +
-                '}';
+        return toString(0);
     }
 }

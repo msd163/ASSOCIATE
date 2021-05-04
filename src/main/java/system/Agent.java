@@ -126,6 +126,10 @@ public class Agent {
         watchedAgents.clear();
         ArrayList<StateTrans> seenStates = state.getWatchList(capacity.getWatchRadius());
 
+        if (seenStates == null) {
+            return;
+        }
+
         for (StateTrans st : seenStates) {
             ArrayList<Agent> ags = st.getAgents();
             for (Agent ag : ags) {

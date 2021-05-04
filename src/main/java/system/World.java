@@ -19,8 +19,6 @@ public class World {
 
     private int width;                      // The width of this world. it will defined randomly in Initializing time of the world.
     private int height;                     // The height of this world. it will defined randomly in Initializing time of the world.
-    private int maxVelocityOfAgents_x;      //
-    private int maxVelocityOfAgents_y;
     private int bignessFactor;
     private Agent[] agents;
     private int agentsCount;
@@ -34,9 +32,12 @@ public class World {
     private Environment environment;
 
     //============================//============================//============================
-    private void init(Environment environment) {
+    private void init(Environment _environment) {
 
-        this.environment = environment;
+        this.environment = new Environment();
+        this.environment.setStateTrans(_environment.getStateTrans());
+        this.environment.setStateCount(_environment.getStateCount());
+        this.environment.init(this);
 
         totalServiceCount =
                 falseNegative =
@@ -55,14 +56,13 @@ public class World {
 
         //============================
 
-        width = Globals.profiler.getWorld_width();
-        height = Globals.profiler.getWorld_width();
+        width = Globals.profiler.getWorldWidth();
+        height = Globals.profiler.getWorldHeight();
 
         bignessFactor = Math.max(width, height);
 
-        maxVelocityOfAgents_x = Globals.profiler.getMaxVelocityX();
 
-        agentsCount = Globals.profiler.getPopulationCount();
+        agentsCount = Globals.profiler.getAgentsCount();
         agents = new Agent[agentsCount];
 
         //============================ Services
@@ -81,15 +81,15 @@ public class World {
         );
 
         int id = 0;
-        int thisBunchFinished = Globals.profiler.CurrentBunch().getBunchCount();
+        int thisBunchFinished = Globals.profiler.getCurrentBunch().getBunchCount();
 
-        for (int i = 0; i < Globals.profiler.getPopulationCount(); i++) {
+        for (int i = 0; i < agentsCount; i++) {
             if (i >= thisBunchFinished) {
                 Globals.profiler.NextBunch();
-                thisBunchFinished = thisBunchFinished + Globals.profiler.CurrentBunch().getBunchCount();
+                thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
             }
 
-            agents[i] = new Agent(this, ++id,environment.getRandomState());
+            agents[i] = new Agent(this, ++id, environment.getRandomState());
             agents[i].init();
 
             // if agentId is in 'traceAgentIds', it will set as traceable
@@ -283,15 +283,37 @@ public class World {
     }
 
     //============================//============================//============================
+
+    public String toString(int tabIndex) {
+        tabIndex++;
+        StringBuilder tx = new StringBuilder("\n");
+        StringBuilder ti = new StringBuilder("\n");
+        for (int i = 0; i <= tabIndex; i++) {
+            if (i > 1) {
+                tx.append("\t");
+            }
+            ti.append("\t");
+        }
+        return tx + "World{" +
+                ti + "  width=" + width +
+                ti + ", height=" + height +
+                ti + ", bignessFactor=" + bignessFactor +
+                ti + ", agentsCount=" + agentsCount +
+                ti + ", totalServiceCount=" + totalServiceCount +
+                ti + ", dishonestServiceCount=" + dishonestServiceCount +
+                ti + ", honestServiceCount=" + honestServiceCount +
+                ti + ", recordedServices=" + recordedServices +
+                ti + ", dontDoneServices=" + dontDoneServices +
+                ti + ", falsePositive=" + falsePositive +
+                ti + ", falseNegative=" + falseNegative +
+                ti + ", truePositive=" + truePositive +
+                ti + ", trueNegative=" + trueNegative +
+                tx + '}';
+    }
+
     @Override
     public String toString() {
-        return "World{" +
-                "width=" + width +
-                ", \nheight=" + height +
-                ", \nmaxVelocityOfAgents_x=" + maxVelocityOfAgents_x +
-                ", \nmaxVelocityOfAgents_y=" + maxVelocityOfAgents_y +
-                ", \nagents length=" + agents.length +
-                '}';
+        return toString(0);
     }
 
     public int getWidth() {
@@ -302,13 +324,6 @@ public class World {
         return height;
     }
 
-    public int getMaxVelocityOfAgents_x() {
-        return maxVelocityOfAgents_x;
-    }
-
-    public int getMaxVelocityOfAgents_y() {
-        return maxVelocityOfAgents_y;
-    }
 
     public Agent[] getAgents() {
         return agents;

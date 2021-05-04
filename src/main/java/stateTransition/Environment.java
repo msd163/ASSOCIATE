@@ -1,19 +1,22 @@
 package stateTransition;
 
 import com.sun.javafx.geom.Point2D;
+import system.World;
+import utils.Globals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Environment {
 
     private int stateCount;
-
     private StateTrans stateTrans[];
+    private World world;
 
-    public void init() {
+    public void init(World world) {
         stateCount = stateTrans == null ? 0 : stateTrans.length;
+        this.world = world;
 
+        // Assigning location to environment states
         int r = 1;
         double theta = 0;
         for (int pop = 0; pop < stateCount; pop++) {
@@ -23,13 +26,14 @@ public class Environment {
 
             System.out.println("state " + pop + " have out degree " + getTransitionOutDegree(pop));
             if (!curState.isHasLoc()) {
-                curState.setLocation(new Point2D((float) (r * 80 * Math.sin(theta)),
-                        (float) (r * 80 * Math.cos(theta))));
+                curState.setLocation(new Point2D((int) (r * 80 * Math.sin(theta)),
+                        (int) (r * 80 * Math.cos(theta))));
                 theta = theta + (3.14159 / 12.0);
                 if (theta > (2.0 * 3.14159)) {
                     theta = 0.0;
                     r++;
                 }
+                curState.setHasLoc(true);
             }
 
             StateTrans final_temp;
@@ -40,8 +44,8 @@ public class Environment {
                 if (final_temp.isHasLoc()) {
                     final_temp.setLocation(
                             new Point2D(
-                                    (float) (r * 80 * Math.sin(theta) + curState.getLocation().x),
-                                    (float) (r * 80 * Math.cos(theta)) + curState.getLocation().y));
+                                    (int) (r * 80 * Math.sin(theta) + curState.getLocation().x),
+                                    (int) (r * 80 * Math.cos(theta)) + curState.getLocation().y));
                     theta = theta + (3.14159 / 12.0);
                     if (theta > (2.0 * 3.14159)) {
                         theta = 0.0;
@@ -50,6 +54,8 @@ public class Environment {
                 }
             }
         }
+
+        System.out.println(toString());
     }
 
     //============================//============================
@@ -59,7 +65,6 @@ public class Environment {
     }
 
     public void setStateCount(int stateCount) {
-        stateTrans = new StateTrans[stateCount];
         this.stateCount = stateCount;
     }
 
@@ -80,17 +85,50 @@ public class Environment {
         this.stateTrans = stateTrans;
     }
 
+
+    public String toString(int tabIndex) {
+        tabIndex++;
+        StringBuilder tx = new StringBuilder("\n");
+        StringBuilder ti = new StringBuilder("\n");
+        for (int i = 0; i <= tabIndex; i++) {
+            if (i > 1) {
+                tx.append("\t");
+            }
+            ti.append("\t");
+        }
+        tabIndex++;
+
+        StringBuilder sts = new StringBuilder(ti + "[");
+        if (stateTrans != null) {
+            for (StateTrans b : stateTrans) {
+                sts.append(b.toString(tabIndex)).append(",");
+            }
+        }
+        sts.append(ti).append("]");
+
+        return tx + "Environment{" +
+                ti + "  stateCount=" + stateCount +
+                ti + ", stateTrans=" + sts +
+                tx + '}';
+    }
+
     @Override
     public String toString() {
-        return "Environment{" +
-                "stateCount=" + stateCount +
-                ", stateTrans=" + Arrays.toString(stateTrans) +
-                '}';
+        return toString(0);
     }
 
     public StateTrans getRandomState() {
 
+        int i = Globals.RANDOM.nextInt(stateCount);
 
-        return null;
+        return stateTrans[i];
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 }
