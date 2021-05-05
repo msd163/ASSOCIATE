@@ -35,9 +35,18 @@ public class MainDrawingWindow extends Canvas {
 
     //============================//============================//============================
 
+    private int _colorIndex = 0;
+    private StateX _stateX;
+    private Point _statePoint;
+    private ArrayList<StateX> _targets;
+    private float _arcCenX, _arcCenY;   // Transition Arc center. Subscript 0 used for center throughout.
+    private float _sPointX, _sPointY;   // SourcePoint
+    private float _tPointX, _tPointY;   // TargetPoint
+
     @Override
     public void update(Graphics gr) {
 
+        //============================//============================ Preparing
         Graphics2D g = (Graphics2D) gr;
 
         g.clearRect(0, 0, getWidth(), getHeight());
@@ -46,7 +55,7 @@ public class MainDrawingWindow extends Canvas {
         g.setColor(Color.YELLOW);
 
         //============================ Title
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 38));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.drawString(world.toString(), 40, 40);
 
         //============================ Translate
@@ -56,88 +65,74 @@ public class MainDrawingWindow extends Canvas {
         //============================ Bound Rectangle
         g.drawRect(0, 0, world.getWidth(), world.getHeight());
 
-        //============================
 
-        int colorIndex = 0;
+        //============================//============================ Drawing states
+        _colorIndex = 0;
         for (int x = 0; x < environment.getStateCount(); x++) {
 
-            StateX start = environment.getState(x);
-            Point point = start.getLocation();
-            ArrayList<StateX> targets = start.getTargets();
+            _stateX = environment.getState(x);
+            _statePoint = _stateX.getLocation();
+            _targets = _stateX.getTargets();
 
-            drawState(g, start);
-            float x0, y0;   // Arc center. Subscript 0 used for center throughout.
-            float xa, ya;   // Arc anchor point.  Subscript a for anchor.
-            float xd, yd;   // Point determining arc angle. Subscript d for determiner.
+            drawStateX(g, _stateX);
 
-            xa = point.getX();
-            ya = point.getY();
+            _sPointX = _statePoint.getX();
+            _sPointY = _statePoint.getY();
 
-            for (StateX st : targets) {
+            for (StateX st : _targets) {
 
-                colorIndex++;
-                if (colorIndex >= colors.length) {
-                    colorIndex = 0;
+                _colorIndex++;
+                if (_colorIndex >= colors.length) {
+                    _colorIndex = 0;
                 }
 
-                xd = st.getLocation().getX();
-                yd = st.getLocation().getY();
+                _tPointX = st.getLocation().getX();
+                _tPointY = st.getLocation().getY();
 
-                if (xa == xd) {
-                    if (ya == yd) {
-                        x0 = xd;
-                        y0 = yd;
+                // calc arc point
+                if (_sPointX == _tPointX) {
+                    if (_sPointY == _tPointY) {
+                        _arcCenX = _tPointX;
+                        _arcCenY = _tPointY;
                     } else {
-                        y0 = (ya + yd) / 2;
-                        x0 = xa + ((ya > yd ? -1 : 1) * 100);
+                        _arcCenY = (_sPointY + _tPointY) / 2;
+                        _arcCenX = _sPointX + ((_sPointY > _tPointY ? -1 : 1) * 100);
                     }
                 } else {
-                    if (ya == yd) {
-                        x0 = (xa + xd) / 2;
-                        y0 = ya + ((xa > xd ? -1 : 1) * 100);
+                    if (_sPointY == _tPointY) {
+                        _arcCenX = (_sPointX + _tPointX) / 2;
+                        _arcCenY = _sPointY + ((_sPointX > _tPointX ? -1 : 1) * 100);
                     } else {
-                        x0 = xa;
-                        y0 = yd;
+                        _arcCenX = _sPointX;
+                        _arcCenY = _tPointY;
                     }
                 }
 
-                drawTransitionCurveBase(g, x0, y0);
+                drawArcCenterPont(g, _arcCenX, _arcCenY);
 
-
-              /*  int w = st.getLocation().getX() - point.getX();
-                int h = st.getLocation().getY() - point.getY();
-*/
                 // Get radii of anchor and det point.
-                float ra = dist0(xa, ya, x0, y0);
-                float rd = dist0(xd, yd, x0, y0);
+                float radSP = dist0(_sPointX, _sPointY, _arcCenX, _arcCenY);
+                float radTP = dist0(_tPointX, _tPointY, _arcCenX, _arcCenY);
 
                 // If either is zero there's nothing else to draw.
-                if (ra == 0 || rd == 0) {
+                if (radSP == 0 || radTP == 0) {
                     continue;
                 }
 
                 // Get the angles from center to points.
-                float aa = angle0(xa, ya, x0, y0);
-                float ad = angle0(xd, yd, x0, y0);  // (xb, yb) would work fine, too.
+                float angSP = angle0(_sPointX, _sPointY, _arcCenX, _arcCenY);
+                float angTP = angle0(_tPointX, _tPointY, _arcCenX, _arcCenY);  // (xb, yb) would work fine, too.
 
-
-                g.setColor(colors[colorIndex]);
-                g.draw(new Arc2D.Float(x0 - ra, y0 - ra, // box upper left
-                        2 * ra, 2 * ra,                  // box width and height
-                        aa, angleDiff(aa, ad),           // angle start, extent
+                g.setColor(colors[_colorIndex]);
+                g.draw(new Arc2D.Float(_arcCenX - radSP, _arcCenY - radSP, // box upper left
+                        2 * radSP, 2 * radSP,                  // box width and height
+                        angSP, angleDiff(angSP, angTP),           // angle start, extent
                         Arc2D.OPEN));
 
-          /*      g.drawArc(
-                        point.getX(),
-                        point.getY(),
-                        w,
-                        h,
-                        0,
-                        180
-                );*/
             }
         }
 
+        //============================//============================ Drawing agents
       /*  for (Agent agent : world.getAgents()) {
 
             agent.draw((Graphics2D) g);
@@ -147,28 +142,31 @@ public class MainDrawingWindow extends Canvas {
 
     //============================//============================//============================
 
-    // Return the square of a float.
-    static float sqr(float x) {
-        return x * x;
-    }
-
-    static void drawState(Graphics2D g, StateX stateX) {
+    static void drawStateX(Graphics2D g, StateX stateX) {
         final int rad = 9;
         int x = stateX.getLocation().getX();
         int y = stateX.getLocation().getY();
         Color color = g.getColor();
         g.setColor(Color.GREEN);
         g.fill(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
-        g.drawString("(" + stateX.getId() + ")", x, y + (3 * rad));
+        g.drawString("(" + stateX.getId() + ")", x, y + (4 * rad));
         g.setColor(color);
     }
 
-    static void drawTransitionCurveBase(Graphics2D g, float x, float y) {
+    static void drawArcCenterPont(Graphics2D g, float x, float y) {
         final int rad = 9;
         Color color = g.getColor();
         g.setColor(Color.GRAY);
         g.fill(new Ellipse2D.Float(x - rad, y - rad, 2 * rad, 2 * rad));
         g.setColor(color);
+    }
+
+
+    //============================//============================//============================
+
+    // Return the square of a float.
+    static float sqr(float x) {
+        return x * x;
     }
 
     // Return the distance from any point to the arc center.

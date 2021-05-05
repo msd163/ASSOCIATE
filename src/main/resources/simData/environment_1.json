@@ -2,7 +2,7 @@
   "states":
   [
     { "id": 0, "targetIds":[1,2] },
-    { "id": 1, "targetIds":[4,2] },
+    { "id": 1, "targetIds":[4,2,3] },
     { "id": 2, "targetIds":[1,5] },
     { "id": 3, "targetIds":[0] },
     { "id": 4, "targetIds":[0,2,5] },
