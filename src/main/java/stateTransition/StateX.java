@@ -1,28 +1,29 @@
 package stateTransition;
 
-import com.sun.javafx.geom.Point2D;
 import system.Agent;
+import utils.Point;
 
 import java.util.ArrayList;
 
-public class StateTrans {
+public class StateX {
 
     private int id;
     private ArrayList<Integer> targetIds;
-    private ArrayList<StateTrans> targets;
+    private ArrayList<StateX> targets;
     private ArrayList<Agent> agents;
     private int nodeTrafficCapacity;
 
     private boolean hasLoc;
-    private Point2D location;
+    private Point location;
 
     //============================//============================
 
-    public StateTrans() {
+    public StateX() {
         hasLoc = false;
         agents = new ArrayList<Agent>();
         targetIds = new ArrayList<Integer>();
-        targets = new ArrayList<StateTrans>();
+        targets = new ArrayList<StateX>();
+        location = new Point(0, 0);
     }
 
     //============================//============================
@@ -62,18 +63,18 @@ public class StateTrans {
      * @param environment
      */
     public void updateTargets(Environment environment) {
-        StateTrans[] stateTrans = environment.getStateTrans();
-        targets = new ArrayList<StateTrans>();
+        StateX[] stateTrans = environment.getStates();
+        targets = new ArrayList<StateX>();
 
         if (targetIds != null && stateTrans != null) {
             boolean isAdded;
             boolean isFound;
             for (Integer ti : targetIds) {
                 isFound = false;
-                for (StateTrans st : stateTrans) {
+                for (StateX st : stateTrans) {
                     if (st.getId() == ti) {
                         isAdded = false;
-                        for (StateTrans ta : targets) {
+                        for (StateX ta : targets) {
                             if (st.getId() == ta.getId()) {
                                 isAdded = true;
                                 break;
@@ -128,26 +129,30 @@ public class StateTrans {
         this.hasLoc = hasLoc;
     }
 
-    public Point2D getLocation() {
+    public boolean hasTarget() {
+        return targets.size() > 0;
+    }
+
+    public Point getLocation() {
         return location;
     }
 
-    public void setLocation(Point2D location) {
+    public void setLocation(Point location) {
         this.location = location;
     }
 
-    public ArrayList<StateTrans> getWatchList(int depth) {
+    public ArrayList<StateX> getWatchList(int depth) {
 
         if (targets == null || targets.isEmpty()) {
             return null;
         }
-        ArrayList<StateTrans> to = null;
+        ArrayList<StateX> to = null;
 
         if (depth >= 1) {
-            to = new ArrayList<StateTrans>();
+            to = new ArrayList<StateX>();
             for (int i = 0; i < targets.size(); i++) {
                 to.add(targets.get(i));
-                ArrayList<StateTrans> watchList = getWatchList(depth - 1);
+                ArrayList<StateX> watchList = getWatchList(depth - 1);
                 if (watchList != null) {
                     to.addAll(watchList);
                 }
@@ -158,11 +163,11 @@ public class StateTrans {
 
     }
 
-    public ArrayList<StateTrans> getTargets() {
+    public ArrayList<StateX> getTargets() {
         return targets;
     }
 
-    public void setTargets(ArrayList<StateTrans> targets) {
+    public void setTargets(ArrayList<StateX> targets) {
         this.targets = targets;
     }
 
@@ -183,7 +188,7 @@ public class StateTrans {
                 ti + "  id=" + id +
                 ti + ", nodeTrafficCapacity=" + nodeTrafficCapacity +
                 ti + ", hasLoc=" + hasLoc +
-                ti + ", location=" + location +
+                ti + ", location=" + location.toString(tabIndex) +
                 tx + '}';
     }
 

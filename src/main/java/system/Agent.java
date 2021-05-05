@@ -1,6 +1,6 @@
 package system;
 
-import stateTransition.StateTrans;
+import stateTransition.StateX;
 import utils.Config;
 import utils.Globals;
 
@@ -10,13 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Agent {
-    private StateTrans state;
+    private StateX state;
 
 
-    public Agent(World parentWorld, int id, StateTrans stateTrans) {
+    public Agent(World parentWorld, int id, StateX stateX) {
         this.world = parentWorld;
         this.id = id;
-        this.state = stateTrans;
+        this.state = stateX;
         currentDoingServiceSize = 0;
         simConfigTraceable =
                 simConfigShowWatchRadius =
@@ -124,13 +124,13 @@ public class Agent {
      */
     public void updateWatchList() {
         watchedAgents.clear();
-        ArrayList<StateTrans> seenStates = state.getWatchList(capacity.getWatchRadius());
+        ArrayList<StateX> seenStates = state.getWatchList(capacity.getWatchRadius());
 
         if (seenStates == null) {
             return;
         }
 
-        for (StateTrans st : seenStates) {
+        for (StateX st : seenStates) {
             ArrayList<Agent> ags = st.getAgents();
             for (Agent ag : ags) {
                 if (watchedAgents.size() <= capacity.getWatchListCapacity()) {
@@ -274,8 +274,8 @@ public class Agent {
         int loc_x;
         int loc_y;
 
-        loc_x = (int) state.getLocation().x;
-        loc_y = (int) state.getLocation().y;
+        loc_x = state.getLocation().getX();
+        loc_y = state.getLocation().getY();
 
         honestColor = behavior.getIsHonest() ? Color.GREEN : Color.RED;
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
@@ -362,11 +362,11 @@ public class Agent {
     }
 
     public int getLoc_x() {
-        return (int) state.getLocation().x;
+        return (int) state.getLocation().getX();
     }
 
     public int getLoc_y() {
-        return (int) state.getLocation().y;
+        return (int) state.getLocation().getY();
     }
 
 
@@ -439,11 +439,11 @@ public class Agent {
         return trust;
     }
 
-    public StateTrans getState() {
+    public StateX getState() {
         return state;
     }
 
-    public void setState(StateTrans state) {
+    public void setState(StateX state) {
         this.state = state;
     }
 }

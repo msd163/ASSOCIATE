@@ -1,60 +1,63 @@
 package stateTransition;
 
-import com.sun.javafx.geom.Point2D;
 import system.World;
 import utils.Globals;
-
-import java.util.ArrayList;
+import utils.Point;
 
 public class Environment {
 
+    private static final double PI = 3.14159;
     private int stateCount;
-    private StateTrans stateTrans[];
+    private StateX states[];
     private World world;
 
-    public void init(World world) {
-        stateCount = stateTrans == null ? 0 : stateTrans.length;
-        this.world = world;
 
-        // Assigning location to environment states
-        int r = 1;
-        double theta = 0;
-        for (int pop = 0; pop < stateCount; pop++) {
-            StateTrans curState = getTransition(pop);
-            ArrayList<StateTrans> final_idx = curState.getTargets();
-            int size = final_idx.size();
+    private void assignPoint(StateX stateX, Point base, int targetIndex, int radius) {
 
-            System.out.println("state " + pop + " have out degree " + getTransitionOutDegree(pop));
-            if (!curState.isHasLoc()) {
-                curState.setLocation(new Point2D((int) (r * 80 * Math.sin(theta)),
-                        (int) (r * 80 * Math.cos(theta))));
-                theta = theta + (3.14159 / 12.0);
-                if (theta > (2.0 * 3.14159)) {
-                    theta = 0.0;
-                    r++;
-                }
-                curState.setHasLoc(true);
+        if (!stateX.isHasLoc()) {
+
+            double theta = 0;
+            int newRadius = radius;
+            if (stateX.hasTarget()) {
+                newRadius *= 2;
+                int targetCount = stateX.getTargets().size();
+                theta = targetIndex * (PI / targetCount);
             }
 
-            StateTrans final_temp;
-            StateTrans x;
-            for (int i = 0; i < size; i++) {
-                x = final_idx.get(i);
-                final_temp = getTransition(x.getId());
-                if (final_temp.isHasLoc()) {
-                    final_temp.setLocation(
-                            new Point2D(
-                                    (int) (r * 80 * Math.sin(theta) + curState.getLocation().x),
-                                    (int) (r * 80 * Math.cos(theta)) + curState.getLocation().y));
-                    theta = theta + (3.14159 / 12.0);
-                    if (theta > (2.0 * 3.14159)) {
-                        theta = 0.0;
-                        r++;
-                    }
-                }
-            }
+            stateX.setLocation(
+                    new Point(
+                            base.getX() + (int) (newRadius * Math.sin(theta)),
+                            base.getY() + (int) (newRadius * Math.cos(theta)))
+            );
+            stateX.setHasLoc(true);
         }
 
+        if (stateX.hasTarget()) {
+            int index = 0;
+            for (StateX target : stateX.getTargets()) {
+                assignPoint(target, stateX.getLocation(), index, radius);
+                index++;
+            }
+        }
+    }
+
+    public void init(World world) {
+        stateCount = states == null ? 0 : states.length;
+        this.world = world;
+
+        if(stateCount>0) {
+            // Assigning location to environment states
+            Point base = new Point(
+                    world.getWidth() / 2,
+                    world.getHeight() / 2
+            );
+            int radius = Math.min(base.getX(), base.getY()) / stateCount;
+            int index = 0;
+            for (StateX state : states) {
+                assignPoint(state, base, index, radius);
+                index++;
+            }
+        }
         System.out.println(toString());
     }
 
@@ -69,20 +72,17 @@ public class Environment {
     }
 
 
-    public StateTrans getTransition(int stateId) {
-        return stateTrans[stateId];
+    public StateX getState(int stateId) {
+        return states[stateId];
     }
 
-    public int getTransitionOutDegree(int pop) {
-        return stateTrans[pop].getTargets().size();
+
+    public StateX[] getStates() {
+        return states;
     }
 
-    public StateTrans[] getStateTrans() {
-        return stateTrans;
-    }
-
-    public void setStateTrans(StateTrans[] stateTrans) {
-        this.stateTrans = stateTrans;
+    public void setStates(StateX[] states) {
+        this.states = states;
     }
 
 
@@ -99,8 +99,8 @@ public class Environment {
         tabIndex++;
 
         StringBuilder sts = new StringBuilder(ti + "[");
-        if (stateTrans != null) {
-            for (StateTrans b : stateTrans) {
+        if (states != null) {
+            for (StateX b : states) {
                 sts.append(b.toString(tabIndex)).append(",");
             }
         }
@@ -117,11 +117,11 @@ public class Environment {
         return toString(0);
     }
 
-    public StateTrans getRandomState() {
+    public StateX getRandomState() {
 
         int i = Globals.RANDOM.nextInt(stateCount);
 
-        return stateTrans[i];
+        return states[i];
     }
 
     public World getWorld() {

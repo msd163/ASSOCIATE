@@ -1,7 +1,7 @@
 package utils;
 
-import com.sun.javafx.geom.Point2D;
-import stateTransition.StateTrans;
+import stateTransition.Environment;
+import stateTransition.StateX;
 import system.World;
 
 import java.awt.*;
@@ -12,9 +12,11 @@ public class MainDrawingWindow extends Canvas {
     public final static int SHIFT_X = 100;
     public final static int SHIFT_Y = 200;
     private World world;
+    private Environment environment;
 
     public MainDrawingWindow(World world) {
         this.world = world;
+        this.environment = world.getEnvironment();
     }
 
     @Override
@@ -32,33 +34,32 @@ public class MainDrawingWindow extends Canvas {
         g.drawString(world.toString(), 40, 40);
 
         //============================ Translate
-        g.translate(SHIFT_X, SHIFT_Y);
+       // g.translate(SHIFT_X, SHIFT_Y);
 
         //============================ Bound Rectangle
         g.drawRect(0, 0, world.getWidth(), world.getHeight());
 
         //============================
 
-        for (int x = 0; x < world.getEnvironment().getStateCount(); x++) {
+        for (int x = 0; x < environment.getStateCount(); x++) {
 
-            StateTrans start = world.getEnvironment().getTransition(x);
-            Point2D xx = start.getLocation();
-            ArrayList<StateTrans> final_idx = start.getTargets();
-            g.drawRect((int) xx.x, (int) xx.y, 5, 5);
+            StateX start = environment.getState(x);
+            Point point = start.getLocation();
+            ArrayList<StateX> targets = start.getTargets();
+            g.drawRect(point.getX(), point.getY(), 5, 5);
 
-            for (StateTrans st : final_idx) {
-                g.drawLine((int) xx.x, (int) xx.y,
-                        (int) st.getLocation().x,
-                        (int) st.getLocation().y);
+            for (StateX st : targets) {
+                g.drawLine(point.getX(), point.getY(),
+                        st.getLocation().getX(),
+                        st.getLocation().getY());
             }
         }
 
+      /*  for (Agent agent : world.getAgents()) {
 
-//        for (Agent agent : world.getAgents()) {
-//
-//            agent.draw((Graphics2D) g);
-//
-//        }
+            agent.draw((Graphics2D) g);
+
+        }*/
     }
 
 

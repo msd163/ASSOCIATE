@@ -33,12 +33,6 @@ public class World {
 
     //============================//============================//============================
     private void init(Environment _environment) {
-
-        this.environment = new Environment();
-        this.environment.setStateTrans(_environment.getStateTrans());
-        this.environment.setStateCount(_environment.getStateCount());
-        this.environment.init(this);
-
         totalServiceCount =
                 falseNegative =
                         falsePositive =
@@ -72,6 +66,13 @@ public class World {
             serviceTypes[i] = new ServiceType(i + 1);
         }
 
+
+        //============================ Environment
+        this.environment = new Environment();
+        this.environment.setStates(_environment.getStates());
+        this.environment.setStateCount(_environment.getStateCount());
+        this.environment.init(this);
+
         //============================ Initializing agents
 
         System.out.println(
@@ -97,6 +98,7 @@ public class World {
                 agents[i].setAsTraceable();
             }
         }
+
     }
 
     private boolean isTraceable(int i) {
@@ -136,6 +138,7 @@ public class World {
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             mainFrame.setMinimumSize(new Dimension(this.width, this.height));
             mainFrame.setVisible(true);
+            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         //============================ Initializing Diagram Drawing Windows
         DiagramDrawingWindow diagramWindow = new DiagramDrawingWindow(this);
@@ -283,6 +286,26 @@ public class World {
     }
 
     //============================//============================//============================
+
+    public String toStringInfo() {
+        StringBuilder tx = new StringBuilder("\n");
+        StringBuilder ti = new StringBuilder("\n\n\n\t");
+
+        return tx + "World: " +
+                ti + "  width=" + width +
+                ti + " * height=" + height +
+                ti + " | bignessFactor=" + bignessFactor +
+                ti + " | agentsCount=" + agentsCount +
+                ti + " | dishonestSrvCount=" + dishonestServiceCount +
+                ti + " * honestSrvCount=" + honestServiceCount +
+                ti + " | totalSrvCount=" + totalServiceCount +
+                ti + " * recordedSrv=" + recordedServices +
+                ti + " * dontDoneSrv=" + dontDoneServices +
+                ti + " | falsePositive=" + falsePositive +
+                ti + " * falseNegative=" + falseNegative +
+                ti + " | truePositive=" + truePositive +
+                ti + " * trueNegative=" + trueNegative;
+    }
 
     public String toString(int tabIndex) {
         tabIndex++;
