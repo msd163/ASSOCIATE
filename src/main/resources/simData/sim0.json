@@ -1,7 +1,7 @@
 {
   "agentsCount": "5",
-  "worldWidth": "#1000..2000",
-  "worldHeight": "#500..850",
+  "worldWidth": "2000",
+  "worldHeight": "#1500..1850",
   "simulationRound": "2",
   "bunches": [
     {
@@ -9,7 +9,7 @@
       "historyServiceRecordCap": "15",
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
-      "watchRadius": "320",
+      "watchRadius": "2",
       "concurrentDoingServiceCap": "?10"
     },
     {
@@ -17,7 +17,7 @@
       "historyServiceRecordCap": "15",
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
-      "watchRadius": "320",
+      "watchRadius": "3",
       "concurrentDoingServiceCap": "?10"
     }
   ]

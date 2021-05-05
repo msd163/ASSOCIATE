@@ -10,9 +10,9 @@ public class AgentCapacity {
         int worldBF = parentAgent.getWorld().getBignessFactor() / 4;
         int worldAC = parentAgent.getWorld().getAgentsCount();
 
-        watchRadius = Globals.profiler.getCurrentBunch().getWatchRadiusD().nextValue() * worldBF;
+        watchRadius = Globals.profiler.getCurrentBunch().getWatchRadiusD().nextValue();
 
-        watchListCapacity = Globals.profiler.getCurrentBunch().getWatchListCapacityD().nextValue() * worldAC;
+        watchListCapacity = Globals.profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
 
         concurrentDoingServiceCap = Globals.profiler.getCurrentBunch().getConcurrentDoingServiceCapD().nextValue();
 

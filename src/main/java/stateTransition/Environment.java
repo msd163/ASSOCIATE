@@ -4,6 +4,8 @@ import system.World;
 import utils.Globals;
 import utils.Point;
 
+import java.util.ArrayList;
+
 public class Environment {
 
     private static final double PI = 3.14159;
@@ -33,10 +35,11 @@ public class Environment {
         }
 
         if (stateX.hasTarget()) {
-            int index = 0;
-            for (StateX target : stateX.getTargets()) {
-                assignPoint(target, stateX.getLocation(), index, radius);
-                index++;
+            ArrayList<StateX> targets = stateX.getTargets();
+            for (int i = 0, targetsSize = targets.size(); i < targetsSize; i++) {
+                if (!targets.get(i).isHasLoc()) {
+                    assignPoint(targets.get(i), stateX.getLocation(), i, radius);
+                }
             }
         }
     }
@@ -45,17 +48,21 @@ public class Environment {
         stateCount = states == null ? 0 : states.length;
         this.world = world;
 
-        if(stateCount>0) {
+        if (stateCount > 0) {
+            // Updating state targets
+            for (StateX state : states) {
+                state.updateTargets(this);
+            }
+
+
             // Assigning location to environment states
             Point base = new Point(
-                    world.getWidth() / 2,
-                    world.getHeight() / 2
+                    world.getWidth() / 6,
+                    world.getHeight() / 6
             );
-            int radius = Math.min(base.getX(), base.getY()) / stateCount;
-            int index = 0;
-            for (StateX state : states) {
-                assignPoint(state, base, index, radius);
-                index++;
+            int radius = 3 * Math.min(base.getX(), base.getY()) / stateCount;
+            for (int i = 0, statesLength = states.length; i < statesLength; i++) {
+                assignPoint(states[i], base, i, radius);
             }
         }
         System.out.println(toString());
