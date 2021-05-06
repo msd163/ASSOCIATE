@@ -64,7 +64,7 @@ public class Environment {
                     600,
                     300
             );
-            int radius = 3 * Math.min(base.getX(), base.getY()) / stateCount;
+            int radius = 200;
             for (int i = 0, statesLength = states.length; i < statesLength; i++) {
                 assignPoint(states[i], base, i, radius);
             }

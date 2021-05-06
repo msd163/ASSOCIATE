@@ -1,5 +1,7 @@
 package stateTransition;
 
+import utils.Globals;
+
 public class TransitionX {
 
     private StateX from;
@@ -12,7 +14,6 @@ public class TransitionX {
         updatePath();
     }
     //============================//============================
-
 
 
     //============================//============================ DRAWING PARAMS
@@ -67,14 +68,50 @@ public class TransitionX {
                 _arcCenX = _tPointX;
                 _arcCenY = _tPointY;
             } else {
+                // moving edges from center of stages to borders : Y axis
+                if (_sPointY > _tPointY) {
+                    _sPointY -= Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointY += Globals.STATE_WIDTH_IN_DRAWING;
+                } else {
+                    _sPointY += Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointY -= Globals.STATE_WIDTH_IN_DRAWING;
+                }
+
                 _arcCenY = (_sPointY + _tPointY) / 2;
                 _arcCenX = _sPointX + ((_sPointY > _tPointY ? -1 : 1) * 100);
             }
         } else {
             if (_sPointY == _tPointY) {
+                // moving edges from center of stages to borders : Y axis
+                if (_sPointX > _tPointX) {
+                    _sPointX -= Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointX += Globals.STATE_WIDTH_IN_DRAWING;
+                } else {
+                    _sPointX += Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointX -= Globals.STATE_WIDTH_IN_DRAWING;
+                }
+
                 _arcCenX = (_sPointX + _tPointX) / 2;
                 _arcCenY = _sPointY + ((_sPointX > _tPointX ? -1 : 1) * 100);
             } else {
+                // moving edges from center of stages to borders : Y axis
+                if (_sPointY > _tPointY) {
+                    _sPointY -= Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointY += Globals.STATE_WIDTH_IN_DRAWING;
+                } else {
+                    _sPointY += Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointY -= Globals.STATE_WIDTH_IN_DRAWING;
+                }
+                // moving edges from center of stages to borders : Y axis
+                if (_sPointX > _tPointX) {
+                    _sPointX -= Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointX += Globals.STATE_WIDTH_IN_DRAWING;
+                } else {
+                    _sPointX += Globals.STATE_WIDTH_IN_DRAWING;
+                    _tPointX -= Globals.STATE_WIDTH_IN_DRAWING;
+                }
+
+
 
                 // The slop of main direct path between the source and the target
                 float mf = (float) (_sPointY - _tPointY) / (_sPointX - _tPointX);

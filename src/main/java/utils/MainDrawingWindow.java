@@ -89,18 +89,8 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         //g.drawRect(0, 0, world.getWidth(), world.getHeight());
 
 
-        //============================//============================ Drawing states
+        //============================//============================ Drawing Transition
         _colorIndex = 0;
-        for (int x = 0; x < environment.getStateCount(); x++) {
-
-            _stateX = environment.getState(x);
-            _statePoint = _stateX.getLocation();
-            _targets = _stateX.getTargets();
-
-            drawStateX(g, _stateX);
-        }
-
-
         for (TransitionX trans : environment.getTransitions()) {
 
             _colorIndex++;
@@ -119,6 +109,17 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         }
 
 
+        //============================//============================ Drawing states
+        for (int x = 0; x < environment.getStateCount(); x++) {
+
+            _stateX = environment.getState(x);
+            _statePoint = _stateX.getLocation();
+            _targets = _stateX.getTargets();
+
+            drawStateX(g, _stateX);
+        }
+
+
         //============================//============================ Drawing agents
       /*  for (Agent agent : world.getAgents()) {
 
@@ -130,13 +131,15 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     //============================//============================//============================
 
     static void drawStateX(Graphics2D g, StateX stateX) {
-        final int rad = 9;
+        final int rad = Globals.STATE_WIDTH_IN_DRAWING;
         int x = stateX.getLocation().getX();
         int y = stateX.getLocation().getY();
         Color color = g.getColor();
+//        g.setColor(Color.BLACK);
+//        g.fill(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
         g.setColor(Color.GREEN);
-        g.fill(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
-        g.drawString("(" + stateX.getId() + ")", x, y + (4 * rad));
+        g.draw(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
+        g.drawString("(" + stateX.getId() + ")", x - rad, y - rad - 20);
         g.setColor(color);
     }
 
@@ -150,7 +153,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         );
     }
 
-
+    //============================//============================//============================ Mouse events
     @Override
     public void mouseDragged(MouseEvent e) {
         pnOffset.x = pnOffsetOld.x + e.getPoint().x - pnStartPoint.x;
@@ -159,7 +162,6 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
     }
 
     @Override
