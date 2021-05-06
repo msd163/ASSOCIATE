@@ -1,7 +1,5 @@
 {
   "agentsCount": "5",
-  "worldWidth": "2000",
-  "worldHeight": "#1500..1850",
   "simulationRound": "2",
   "bunches": [
     {

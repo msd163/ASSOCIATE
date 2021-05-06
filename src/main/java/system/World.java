@@ -17,8 +17,8 @@ public class World {
         init(environment);
     }
 
-    private int width;                      // The width of this world. it will defined randomly in Initializing time of the world.
-    private int height;                     // The height of this world. it will defined randomly in Initializing time of the world.
+    //    private int width;                      // The width of this world. it will defined randomly in Initializing time of the world.
+//    private int height;                     // The height of this world. it will defined randomly in Initializing time of the world.
     private int bignessFactor;
     private Agent[] agents;
     private int agentsCount;
@@ -49,11 +49,6 @@ public class World {
         histories = new ArrayList<WorldHistory>();
 
         //============================
-
-        width = Globals.profiler.getWorldWidth();
-        height = Globals.profiler.getWorldHeight();
-
-        bignessFactor = Math.max(width, height);
 
 
         agentsCount = Globals.profiler.getAgentsCount();
@@ -131,14 +126,19 @@ public class World {
 
         //============================ Initializing Main Drawing Windows
         MainDrawingWindow mainWindow = new MainDrawingWindow(this);
-
+        mainWindow.setDoubleBuffered(true);
         if (showMainWindow) {
             JFrame mainFrame = new JFrame();
-            mainFrame.add(mainWindow);
+           // mainFrame.add(mainWindow);
+          /*  JPanel j = new JPanel();
+            j.add(mainWindow);
+            j.setBackground(Color.red);*/
+            mainFrame.getContentPane().add(mainWindow);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            mainFrame.setMinimumSize(new Dimension(this.width, this.height));
+            //mainFrame.setMinimumSize(new Dimension(this.width, this.height));
             mainFrame.setVisible(true);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+           // boolean doubleBuffered = mainFrame.isDoubleBuffered();
         }
         //============================ Initializing Diagram Drawing Windows
         DiagramDrawingWindow diagramWindow = new DiagramDrawingWindow(this);
@@ -146,7 +146,7 @@ public class World {
             JFrame diagramFrame = new JFrame();
             diagramFrame.add(diagramWindow);
             diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            diagramFrame.setMinimumSize(new Dimension(this.width, this.height));
+            // diagramFrame.setMinimumSize(new Dimension(this.width, this.height));
             diagramFrame.setVisible(true);
         }
 
@@ -292,8 +292,6 @@ public class World {
         StringBuilder ti = new StringBuilder("\n\n\n\t");
 
         return tx + "World: " +
-                ti + "  width=" + width +
-                ti + " * height=" + height +
                 ti + " | bignessFactor=" + bignessFactor +
                 ti + " | agentsCount=" + agentsCount +
                 ti + " | dishonestSrvCount=" + dishonestServiceCount +
@@ -318,9 +316,7 @@ public class World {
             ti.append("\t");
         }
         return tx + "World{" +
-                ti + "  width=" + width +
-                ti + ", height=" + height +
-                ti + ", bignessFactor=" + bignessFactor +
+                ti + "  bignessFactor=" + bignessFactor +
                 ti + ", agentsCount=" + agentsCount +
                 ti + ", totalServiceCount=" + totalServiceCount +
                 ti + ", dishonestServiceCount=" + dishonestServiceCount +
@@ -338,15 +334,6 @@ public class World {
     public String toString() {
         return toString(0);
     }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
 
     public Agent[] getAgents() {
         return agents;

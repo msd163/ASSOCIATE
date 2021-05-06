@@ -10,8 +10,9 @@ public class Environment {
 
     private static final double PI = 3.14159;
     private int stateCount;
-    private StateX states[];
+    private StateX[] states;
     private World world;
+    private TransitionX[] transitions;
 
 
     private void assignPoint(StateX stateX, Point base, int targetIndex, int radius) {
@@ -49,21 +50,38 @@ public class Environment {
         this.world = world;
 
         if (stateCount > 0) {
-            // Updating state targets
+
+            int transCount = 0;     // Count of transitions
+
+            //============================  Updating state targets
             for (StateX state : states) {
                 state.updateTargets(this);
+                transCount += state.getTargets().size();
             }
-
 
             // Assigning location to environment states
             Point base = new Point(
-                    world.getWidth() / 6,
-                    world.getHeight() / 6
+                    600,
+                    300
             );
             int radius = 3 * Math.min(base.getX(), base.getY()) / stateCount;
             for (int i = 0, statesLength = states.length; i < statesLength; i++) {
                 assignPoint(states[i], base, i, radius);
             }
+
+            //============================ Creating Transition list
+            transitions = new TransitionX[transCount];
+            int transIndex = 0;
+            for (StateX state : states) {
+                if (state.getTargets().size() > 0) {
+                    for (StateX target : state.getTargets()) {
+                        transitions[transIndex++] = new TransitionX(state, target);
+                    }
+                }
+            }
+
+        } else {
+            transitions = new TransitionX[0];
         }
         System.out.println(toString());
     }
@@ -137,5 +155,9 @@ public class Environment {
 
     public void setWorld(World world) {
         this.world = world;
+    }
+
+    public TransitionX[] getTransitions() {
+        return transitions;
     }
 }
