@@ -7,15 +7,13 @@ import system.World;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-public class MainDrawingWindow extends JPanel implements MouseMotionListener {
+public class MainDrawingWindow extends JPanel implements MouseMotionListener, MouseWheelListener {
 
     private static final Random random = new Random();
 
@@ -28,6 +26,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
     private Point pnOffsetOld = new Point(0, 0);
     private Point pnStartPoint = new Point(0, 0);
 
+    private float scale = 1f;
 
     public MainDrawingWindow(World world) {
         this.world = world;
@@ -54,7 +53,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
                 });
 
         this.addMouseMotionListener(this);
-
+        this.addMouseWheelListener(this);
     }
 
     //============================//============================//============================
@@ -85,7 +84,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
         //============================ Translate
 
         g.translate(pnOffset.x, pnOffset.y);
-
+        g.scale(scale, scale);
         //============================ Bound Rectangle
         //g.drawRect(0, 0, world.getWidth(), world.getHeight());
 
@@ -163,4 +162,21 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
 
     }
 
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+
+        float x = scale;
+
+        if (x > 1) {
+            x += -1 * e.getWheelRotation();
+        } else {
+            x += -0.1 * e.getWheelRotation();
+        }
+        if (x > 5) {
+            x = 5;
+        } else if (x < 0.2f) {
+            x = 0.2f;
+        }
+        scale = x;
+    }
 }
