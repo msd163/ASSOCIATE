@@ -1,6 +1,7 @@
 package system;
 
 import stateTransition.Environment;
+import stateTransition.TransitionX;
 import utils.Config;
 import utils.DiagramDrawingWindow;
 import utils.Globals;
@@ -41,7 +42,7 @@ public class World {
         //============================
 
         // Identifying the agents that we want to trace in Main diagram.
-        traceAgentIds = new int[]{1, 4, 9, 10, 11, 12, 13};
+        traceAgentIds = new int[]{};
 
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
@@ -92,6 +93,10 @@ public class World {
             if (isTraceable(i)) {
                 agents[i].setAsTraceable();
             }
+        }
+
+        for (TransitionX transition : environment.getTransitions()) {
+            transition.updatePath();
         }
 
     }
@@ -149,10 +154,10 @@ public class World {
         // Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
-           /* for (Agent agent : agents) {
+          /*  for (Agent agent : agents) {
                 agent.updateCurrentState();
-            }*/
-
+            }
+*/
             for (Agent agent : agents) {
                 agent.resetParams();
                 agent.updateWatchList();

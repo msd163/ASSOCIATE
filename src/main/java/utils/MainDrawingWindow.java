@@ -3,6 +3,7 @@ package utils;
 import stateTransition.Environment;
 import stateTransition.StateX;
 import stateTransition.TransitionX;
+import system.Agent;
 import system.World;
 
 import javax.swing.*;
@@ -99,7 +100,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
             }
 
             g.setColor(colors[_colorIndex]);
-            g.setStroke(new BasicStroke(5));
+            g.setStroke(new BasicStroke(2));
 
             g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),      // box upper left
                     trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),                                   // box width and height
@@ -131,16 +132,27 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     //============================//============================//============================
 
     static void drawStateX(Graphics2D g, StateX stateX) {
-        final int rad = Globals.STATE_WIDTH_IN_DRAWING;
+        final int rad = stateX.getWidth() / 2;
+        final int radEnd = 2 * rad;
         int x = stateX.getLocation().getX();
         int y = stateX.getLocation().getY();
         Color color = g.getColor();
 //        g.setColor(Color.BLACK);
 //        g.fill(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
         g.setColor(Color.GREEN);
-        g.draw(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
+        g.draw(new Rectangle.Float(x - rad, y - rad, radEnd,  radEnd));
         g.drawString("(" + stateX.getId() + ")", x - rad, y - rad - 20);
         g.setColor(color);
+
+        if (!stateX.getAgents().isEmpty()) {
+            int index = 0;
+            for (Agent agent : stateX.getAgents()) {
+                agent.draw(g, index++);
+            }
+
+
+        }
+
     }
 
     //============================//============================//============================

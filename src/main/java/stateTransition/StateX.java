@@ -1,6 +1,7 @@
 package stateTransition;
 
 import system.Agent;
+import utils.Globals;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class StateX {
     private ArrayList<Agent> agents;
     private int nodeTrafficCapacity;
 
+    //============================ Location in Drawing
     private boolean hasLoc;
     private Point location;
 
@@ -92,6 +94,23 @@ public class StateX {
                 }
             }
         }
+    }
+
+    public int getBigness() {
+        return (int) (Math.sqrt(agents.size()) + 1);
+    }
+
+
+    public Point getTileLocation(int index) {
+        int bn = getBigness();
+        return new Point(
+                (index % bn) * Globals.STATE_TILE_WIDTH + location.x - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4),
+                (index / bn) * Globals.STATE_TILE_WIDTH + location.y - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4)
+        );
+    }
+
+    public int getWidth() {
+        return getBigness() * Globals.STATE_TILE_WIDTH;
     }
 
     //============================//============================
@@ -195,5 +214,9 @@ public class StateX {
     @Override
     public String toString() {
         return toString(0);
+    }
+
+    public void addAgent(Agent agent) {
+        agents.add(agent);
     }
 }

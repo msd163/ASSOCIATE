@@ -1,7 +1,5 @@
 package stateTransition;
 
-import utils.Globals;
-
 public class TransitionX {
 
     private StateX from;
@@ -10,8 +8,6 @@ public class TransitionX {
     public TransitionX(StateX from, StateX to) {
         this.from = from;
         this.to = to;
-
-        updatePath();
     }
     //============================//============================
 
@@ -51,90 +47,89 @@ public class TransitionX {
         return d;
     }
 
-    private void updatePath() {
+    public void updatePath() {
 
         int _arcCenX;
         int _arcCenY;
 
-        int _sPointX = from.getLocation().getX();
-        int _sPointY = from.getLocation().getY();
+        int fromX = from.getLocation().getX();
+        int fromY = from.getLocation().getY();
 
-        int _tPointX = to.getLocation().getX();
-        int _tPointY = to.getLocation().getY();
+        int toX = to.getLocation().getX();
+        int toY = to.getLocation().getY();
 
         // calc arc point
-        if (_sPointX == _tPointX) {
-            if (_sPointY == _tPointY) {
-                _arcCenX = _tPointX;
-                _arcCenY = _tPointY;
+        if (fromX == toX) {
+            if (fromY == toY) {
+                _arcCenX = toX;
+                _arcCenY = toY;
             } else {
                 // moving edges from center of stages to borders : Y axis
-                if (_sPointY > _tPointY) {
-                    _sPointY -= Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointY += Globals.STATE_WIDTH_IN_DRAWING;
+                if (fromY > toY) {
+                    fromY -= from.getWidth() / 2;
+                    toY += to.getWidth() / 2;
                 } else {
-                    _sPointY += Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointY -= Globals.STATE_WIDTH_IN_DRAWING;
+                    fromY += from.getWidth() / 2;
+                    toY -= to.getWidth() / 2;
                 }
 
-                _arcCenY = (_sPointY + _tPointY) / 2;
-                _arcCenX = _sPointX + ((_sPointY > _tPointY ? -1 : 1) * 100);
+                _arcCenY = (fromY + toY) / 2;
+                _arcCenX = fromX + ((fromY > toY ? -1 : 1) * 100);
             }
         } else {
-            if (_sPointY == _tPointY) {
+            if (fromY == toY) {
                 // moving edges from center of stages to borders : Y axis
-                if (_sPointX > _tPointX) {
-                    _sPointX -= Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointX += Globals.STATE_WIDTH_IN_DRAWING;
+                if (fromX > toX) {
+                    fromX -= from.getWidth() / 2;
+                    toX += to.getWidth() / 2;
                 } else {
-                    _sPointX += Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointX -= Globals.STATE_WIDTH_IN_DRAWING;
+                    fromX += from.getWidth() / 2;
+                    toX -= to.getWidth() / 2;
                 }
 
-                _arcCenX = (_sPointX + _tPointX) / 2;
-                _arcCenY = _sPointY + ((_sPointX > _tPointX ? -1 : 1) * 100);
+                _arcCenX = (fromX + toX) / 2;
+                _arcCenY = fromY + ((fromX > toX ? -1 : 1) * 100);
             } else {
                 // moving edges from center of stages to borders : Y axis
-                if (_sPointY > _tPointY) {
-                    _sPointY -= Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointY += Globals.STATE_WIDTH_IN_DRAWING;
+                if (fromY > toY) {
+                    fromY -= from.getWidth() / 2;
+                    toY += to.getWidth() / 2;
                 } else {
-                    _sPointY += Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointY -= Globals.STATE_WIDTH_IN_DRAWING;
+                    fromY += from.getWidth() / 2;
+                    toY -= to.getWidth() / 2;
                 }
                 // moving edges from center of stages to borders : Y axis
-                if (_sPointX > _tPointX) {
-                    _sPointX -= Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointX += Globals.STATE_WIDTH_IN_DRAWING;
+                if (fromX > toX) {
+                    fromX -= from.getWidth() / 2;
+                    toX += to.getWidth() / 2;
                 } else {
-                    _sPointX += Globals.STATE_WIDTH_IN_DRAWING;
-                    _tPointX -= Globals.STATE_WIDTH_IN_DRAWING;
+                    fromX += from.getWidth() / 2;
+                    toX -= to.getWidth() / 2;
                 }
-
 
 
                 // The slop of main direct path between the source and the target
-                float mf = (float) (_sPointY - _tPointY) / (_sPointX - _tPointX);
+                float mf = (float) (fromY - toY) / (fromX - toX);
                 // The slop of the line perpendicular to the main path
                 float m = -1 / mf;
 
                 // The middle of main path. middle line is on the perpendicular line
-                int middleX = (_sPointX + _tPointX) / 2;
-                int middleY = (_sPointY + _tPointY) / 2;
+                int middleX = (fromX + toX) / 2;
+                int middleY = (fromY + toY) / 2;
 
                 // For perpendicular line:  Y = a * X + b , what is b?
                 int b = (int) (middleY - (m * middleX));
 
                 // Calculating arc point as the second point of perpendicular line
-                _arcCenX = middleX + (_sPointX > _tPointX ? 1 : -1) * 50;
+                _arcCenX = middleX + (fromX > toX ? 1 : -1) * 50;
                 _arcCenY = (int) (m * +_arcCenX + b);
 
             }
         }
 
         // Get radii of anchor and det point.
-        float radSP = dist0(_sPointX, _sPointY, _arcCenX, _arcCenY);
-        float radTP = dist0(_tPointX, _tPointY, _arcCenX, _arcCenY);
+        float radSP = dist0(fromX, fromY, _arcCenX, _arcCenY);
+        float radTP = dist0(toX, toY, _arcCenX, _arcCenY);
 
         // If either is zero there's nothing else to draw.
         if (radSP == 0 || radTP == 0) {
@@ -142,8 +137,8 @@ public class TransitionX {
         }
 
         // Get the angles from center to points.
-        drawAngStart = angle0(_sPointX, _sPointY, _arcCenX, _arcCenY);
-        float angTP = angle0(_tPointX, _tPointY, _arcCenX, _arcCenY);  // (xb, yb) would work fine, too.
+        drawAngStart = angle0(fromX, fromY, _arcCenX, _arcCenY);
+        float angTP = angle0(toX, toY, _arcCenX, _arcCenY);  // (xb, yb) would work fine, too.
         drawAngExtend = angleDiff(drawAngStart, angTP);
 
         drawX = _arcCenX - radSP;

@@ -3,6 +3,7 @@ package system;
 import stateTransition.StateX;
 import utils.Config;
 import utils.Globals;
+import utils.Point;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Agent {
         this.world = parentWorld;
         this.id = id;
         this.state = stateX;
+        this.state.addAgent(this);
         currentDoingServiceSize = 0;
         simConfigTraceable =
                 simConfigShowWatchRadius =
@@ -269,13 +271,16 @@ public class Agent {
 
     private boolean isCapCandid = false;
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, int index) {
 
         int loc_x;
         int loc_y;
 
-        loc_x = state.getLocation().getX();
-        loc_y = state.getLocation().getY();
+        Point tileIndex = state.getTileLocation(index);
+
+        loc_x = tileIndex.x;
+        loc_y = tileIndex.y;
+
 
         honestColor = behavior.getIsHonest() ? Color.GREEN : Color.RED;
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;

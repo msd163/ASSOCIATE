@@ -64,7 +64,8 @@ public class Environment {
                     600,
                     300
             );
-            int radius = 200;
+            // space size between states
+            int radius = getWorld().getAgentsCount()*5;
             for (int i = 0, statesLength = states.length; i < statesLength; i++) {
                 assignPoint(states[i], base, i, radius);
             }

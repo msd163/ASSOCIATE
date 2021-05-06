@@ -1,6 +1,6 @@
 {
-  "agentsCount": "5",
-  "simulationRound": "2",
+  "agentsCount": "50",
+  "simulationRound": "1",
   "bunches": [
     {
       "bunchCount": "%10@1000",

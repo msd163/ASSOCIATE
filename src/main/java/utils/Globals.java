@@ -16,5 +16,5 @@ public class Globals {
 
     public static int WORLD_TIMER;                                       // The timer of world which is increased by every run of world
 
-    public static int STATE_WIDTH_IN_DRAWING = 100;
+    public static int STATE_TILE_WIDTH = 40;
 }
