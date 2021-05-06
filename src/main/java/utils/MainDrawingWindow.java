@@ -7,20 +7,24 @@ import system.World;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-public class MainDrawingWindow extends JPanel {
+public class MainDrawingWindow extends JPanel implements MouseMotionListener {
 
-    public final static int SHIFT_X = 100;
-    public final static int SHIFT_Y = 200;
     private static final Random random = new Random();
 
     private World world;
     private Environment environment;
     private Color[] colors;
+
+    private java.awt.Point offset = new java.awt.Point(0, 0);
+    private java.awt.Point startPoint;
 
     public MainDrawingWindow(World world) {
         this.world = world;
@@ -32,7 +36,28 @@ public class MainDrawingWindow extends JPanel {
         for (int i = 0; i < colors.length; i++) {
             colors[i] = getRandColor();
         }
-        setBackground(Color.blue);
+
+        //============================//============================
+        addMouseListener(
+                 new MouseAdapter() {
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        startPoint = e.getPoint();
+                        startPoint.x -= offset.x;
+                        startPoint.y -= offset.y;
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        startPoint = null;
+                    }
+
+
+        });
+
+        this.addMouseMotionListener(this);
+
     }
 
     //============================//============================//============================
@@ -62,7 +87,7 @@ public class MainDrawingWindow extends JPanel {
 
         //============================ Translate
 
-        g.translate(SHIFT_X, SHIFT_Y);
+        g.translate(offset.x, offset.y);
 
         //============================ Bound Rectangle
         //g.drawRect(0, 0, world.getWidth(), world.getHeight());
@@ -127,6 +152,20 @@ public class MainDrawingWindow extends JPanel {
                 random.nextInt(210) + 40,
                 random.nextInt(210) + 40
         );
+    }
+
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        java.awt.Point p = e.getPoint();
+        int x = p.x - startPoint.x;
+        int y = p.y - startPoint.x;
+        offset = new java.awt.Point(x, y);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
 
 }

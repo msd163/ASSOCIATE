@@ -129,13 +129,9 @@ public class World {
         mainWindow.setDoubleBuffered(true);
         if (showMainWindow) {
             JFrame mainFrame = new JFrame();
-           // mainFrame.add(mainWindow);
-          /*  JPanel j = new JPanel();
-            j.add(mainWindow);
-            j.setBackground(Color.red);*/
             mainFrame.getContentPane().add(mainWindow);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            //mainFrame.setMinimumSize(new Dimension(this.width, this.height));
+            mainFrame.setMinimumSize(new Dimension(1500, 800));
             mainFrame.setVisible(true);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
            // boolean doubleBuffered = mainFrame.isDoubleBuffered();
@@ -234,13 +230,13 @@ public class World {
                 recordedServices += agent.getTrust().getHistorySize();
             }
 
-            System.out.println("-------------------------\t\t\t\t\tcurrentTime: " + Globals.WORLD_TIMER);
+         /*   System.out.println("-------------------------\t\t\t\t\tcurrentTime: " + Globals.WORLD_TIMER);
             System.out.println("  totalServiceCount    : " + totalServiceCount);
             System.out.println("  honestServiceCount   : " + honestServiceCount + " >  " + (float) honestServiceCount / totalServiceCount);
             System.out.println("  dishonestServiceCount: " + dishonestServiceCount + " >  " + (float) dishonestServiceCount / totalServiceCount);
             System.out.println("  dontDoneServices     : " + dontDoneServices + " >  " + (float) dontDoneServices / totalServiceCount);
             System.out.println("  recordedService      : " + recordedServices);
-
+*/
             histories.add(new WorldHistory(totalServiceCount, dishonestServiceCount, honestServiceCount));
 
             if (showMainWindow) {
