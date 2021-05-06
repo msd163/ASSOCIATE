@@ -8,7 +8,6 @@ import system.World;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Arc2D;
-import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -42,7 +41,6 @@ public class MainDrawingWindow extends JPanel {
     private StateX _stateX;
     private Point _statePoint;
     private ArrayList<StateX> _targets;
-
 
     Graphics2D g;
 
@@ -97,14 +95,6 @@ public class MainDrawingWindow extends JPanel {
                     trans.getDrawAngStart(), trans.getDrawAngExtend(),                                 // angle start, extent
                     Arc2D.OPEN));
 
-            drawArcCenterPontX(g,
-                    trans.getFrom().getLocation().getX(),
-                    trans.getFrom().getLocation().getY()
-            );
-            drawArcCenterPontY(g,
-                    trans.getTo().getLocation().getX(),
-                    trans.getTo().getLocation().getY()
-            );
         }
 
 
@@ -129,37 +119,13 @@ public class MainDrawingWindow extends JPanel {
         g.setColor(color);
     }
 
-    static void drawArcCenterPont(Graphics2D g, float x, float y) {
-        final int rad = 7;
-        Color color = g.getColor();
-        g.setColor(Color.GRAY);
-        g.fill(new Ellipse2D.Float(x - rad, y - rad, 2 * rad, 2 * rad));
-        g.setColor(color);
-    }
-
-    static void drawArcCenterPontX(Graphics2D g, float x, float y) {
-        final int rad = 18;
-        Color color = g.getColor();
-        g.setColor(Color.GREEN);
-        g.fill(new Ellipse2D.Float(x - rad, y - rad, 2 * rad, 2 * rad));
-        g.setColor(color);
-    }
-
-    static void drawArcCenterPontY(Graphics2D g, float x, float y) {
-        final int rad = 9;
-        Color color = g.getColor();
-        g.setColor(Color.red);
-        g.fill(new Ellipse2D.Float(x - rad, y - rad, 2 * rad, 2 * rad));
-        g.setColor(color);
-    }
-
     //============================//============================//============================
 
     public Color getRandColor() {
         return new Color(
-                random.nextInt(220) + 20,
-                random.nextInt(220) + 20,
-                random.nextInt(220) + 20
+                random.nextInt(210) + 40,
+                random.nextInt(210) + 40,
+                random.nextInt(210) + 40
         );
     }
 

@@ -101,7 +101,7 @@ public class TransitionX {
 
         // If either is zero there's nothing else to draw.
         if (radSP == 0 || radTP == 0) {
-        //    return;
+            return;
         }
 
         // Get the angles from center to points.
