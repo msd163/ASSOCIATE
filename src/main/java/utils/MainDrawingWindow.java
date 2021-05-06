@@ -23,8 +23,11 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
     private Environment environment;
     private Color[] colors;
 
-    private java.awt.Point offset = new java.awt.Point(0, 0);
-    private java.awt.Point startPoint;
+    //============================//============================  panning params
+    private Point pnOffset = new Point(0, 0);
+    private Point pnOffsetOld = new Point(0, 0);
+    private Point pnStartPoint = new Point(0, 0);
+
 
     public MainDrawingWindow(World world) {
         this.world = world;
@@ -39,22 +42,16 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
 
         //============================//============================
         addMouseListener(
-                 new MouseAdapter() {
+                new MouseAdapter() {
 
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        startPoint = e.getPoint();
-                        startPoint.x -= offset.x;
-                        startPoint.y -= offset.y;
+                        pnStartPoint.x = (int) (e.getPoint().getX());
+                        pnStartPoint.y = (int) (e.getPoint().getY());
+                        pnOffsetOld.x = pnOffset.x;
+                        pnOffsetOld.y = pnOffset.y;
                     }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        startPoint = null;
-                    }
-
-
-        });
+                });
 
         this.addMouseMotionListener(this);
 
@@ -87,7 +84,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
 
         //============================ Translate
 
-        g.translate(offset.x, offset.y);
+        g.translate(pnOffset.x, pnOffset.y);
 
         //============================ Bound Rectangle
         //g.drawRect(0, 0, world.getWidth(), world.getHeight());
@@ -157,10 +154,8 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        java.awt.Point p = e.getPoint();
-        int x = p.x - startPoint.x;
-        int y = p.y - startPoint.x;
-        offset = new java.awt.Point(x, y);
+        pnOffset.x = pnOffsetOld.x + e.getPoint().x - pnStartPoint.x;
+        pnOffset.y = pnOffsetOld.y + e.getPoint().y - pnStartPoint.y;
     }
 
     @Override
