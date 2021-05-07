@@ -12,7 +12,10 @@ public class StateX {
     private ArrayList<Integer> targetIds;
     private ArrayList<StateX> targets;
     private ArrayList<Agent> agents;
-    private int nodeTrafficCapacity;
+    private int capacity;
+    private ArrayList<TransitionX> targetTrans;
+    private ArrayList<TransitionX> sourceTrans;
+    private Environment environment;
 
     //============================ Location in Drawing
     private boolean hasLoc;
@@ -21,17 +24,21 @@ public class StateX {
     //============================//============================
 
     public StateX() {
+//        this.environment = environment;
         hasLoc = false;
         agents = new ArrayList<Agent>();
         targetIds = new ArrayList<Integer>();
         targets = new ArrayList<StateX>();
+        targetTrans = new ArrayList<TransitionX>();
+        sourceTrans = new ArrayList<TransitionX>();
         location = new Point(0, 0);
+
     }
 
     //============================//============================
 
     public boolean I_am_in(Agent agent) {
-        if (getTraffic() < nodeTrafficCapacity) {
+        if (getTraffic() < capacity) {
             boolean add = true;
             for (int i = 0; i < agents.size(); i++) {
                 if (agents.get(i).getId() == agent.getId()) {
@@ -113,6 +120,81 @@ public class StateX {
         return getBigness() * Globals.STATE_TILE_WIDTH;
     }
 
+    public void addTargetTrans(TransitionX transition) {
+        targetTrans.add(transition);
+    }
+
+    public void addSourceTrans(TransitionX transition) {
+        sourceTrans.add(transition);
+    }
+
+    public TransitionX getSourceTrans(StateX sourceState) {
+        for (TransitionX st : sourceTrans) {
+            if (sourceState.getId() == st.getFrom().getId()) {
+                return st;
+            }
+        }
+        return null;
+    }
+
+
+    public TransitionX getTargetTrans(StateX targetState) {
+        for (TransitionX st : targetTrans) {
+            if (targetState.getId() == st.getTo().getId()) {
+                return st;
+            }
+        }
+        return null;
+    }
+
+    public boolean addAgent(Agent agent) {
+        if (getTraffic() < capacity) {
+            boolean add = true;
+            for (int i = 0; i < agents.size(); i++) {
+                if (agents.get(i).getId() == agent.getId()) {
+                    add = false;
+                    break;
+                }
+            }
+            if (add) {
+                int bigness = getBigness();
+
+                agents.add(agent);
+
+                // for updating transition paths if size of state box is changed in drawing area
+                if (bigness != getBigness()) {
+                    for (TransitionX tt : targetTrans) {
+                        tt.updatePath();
+                    }
+                    for (TransitionX st : sourceTrans) {
+                        st.updatePath();
+                    }
+                }
+
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean leave(Agent agent) {
+        int bigness = getBigness();
+        boolean remove = false;
+        if (agents != null && !agents.isEmpty()) {
+            remove = agents.remove(agent);
+            // for updating transition paths if size of state box is changed in drawing area
+            if (bigness != getBigness()) {
+                for (TransitionX tt : targetTrans) {
+                    tt.updatePath();
+                }
+                for (TransitionX st : sourceTrans) {
+                    st.updatePath();
+                }
+            }
+        }
+        return remove;
+    }
+
     //============================//============================
 
 
@@ -132,12 +214,12 @@ public class StateX {
         this.agents = agents;
     }
 
-    public int getNodeTrafficCapacity() {
-        return nodeTrafficCapacity;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setNodeTrafficCapacity(int nodeTrafficCapacity) {
-        this.nodeTrafficCapacity = nodeTrafficCapacity;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public boolean isHasLoc() {
@@ -205,7 +287,7 @@ public class StateX {
 
         return tx + "StateTrans{" +
                 ti + "  id=" + id +
-                ti + ", nodeTrafficCapacity=" + nodeTrafficCapacity +
+                ti + ", nodeTrafficCapacity=" + capacity +
                 ti + ", hasLoc=" + hasLoc +
                 ti + ", location=" + location.toString(tabIndex) +
                 tx + '}';
@@ -216,7 +298,4 @@ public class StateX {
         return toString(0);
     }
 
-    public void addAgent(Agent agent) {
-        agents.add(agent);
-    }
 }

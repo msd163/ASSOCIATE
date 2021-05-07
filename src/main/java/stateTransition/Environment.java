@@ -1,5 +1,6 @@
 package stateTransition;
 
+import profiler.DefParameter;
 import system.World;
 import utils.Globals;
 import utils.Point;
@@ -10,10 +11,12 @@ public class Environment {
 
     private static final double PI = 3.14159;
     private int stateCount;
+    private String stateCapacity;
     private StateX[] states;
     private World world;
     private TransitionX[] transitions;
 
+    private DefParameter stateCapacityD;
 
     private void assignPoint(StateX stateX, Point base, int targetIndex, int radius) {
 
@@ -46,6 +49,8 @@ public class Environment {
     }
 
     public void init(World world) {
+        stateCapacityD = new DefParameter(stateCapacity);
+
         stateCount = states == null ? 0 : states.length;
         this.world = world;
 
@@ -59,15 +64,16 @@ public class Environment {
                 transCount += state.getTargets().size();
             }
 
-            // Assigning location to environment states
+            // Assigning location to environment states and setting state capacity
             Point base = new Point(
                     600,
                     300
             );
             // space size between states
-            int radius = getWorld().getAgentsCount()*5;
+            int radius = getWorld().getAgentsCount() * 5;
             for (int i = 0, statesLength = states.length; i < statesLength; i++) {
                 assignPoint(states[i], base, i, radius);
+                states[i].setCapacity(getStateCapacityValue());
             }
 
             //============================ Creating Transition list
@@ -76,7 +82,10 @@ public class Environment {
             for (StateX state : states) {
                 if (state.getTargets().size() > 0) {
                     for (StateX target : state.getTargets()) {
-                        transitions[transIndex++] = new TransitionX(state, target);
+                        transitions[transIndex] = new TransitionX(state, target);
+                        state.addTargetTrans(transitions[transIndex]);
+                        target.addSourceTrans(transitions[transIndex]);
+                        transIndex++;
                     }
                 }
             }
@@ -84,10 +93,19 @@ public class Environment {
         } else {
             transitions = new TransitionX[0];
         }
-        System.out.println(toString());
+       // System.out.println(toString());
     }
 
+    public void updateTransitionsPath() {
+        for (TransitionX transition : getTransitions()) {
+            transition.updatePath();
+        }
+    }
     //============================//============================
+
+    public int getStateCapacityValue() {
+        return stateCapacityD.nextValue();
+    }
 
     public int getStateCount() {
         return stateCount;
@@ -96,7 +114,6 @@ public class Environment {
     public void setStateCount(int stateCount) {
         this.stateCount = stateCount;
     }
-
 
     public StateX getState(int stateId) {
         return states[stateId];
@@ -160,5 +177,13 @@ public class Environment {
 
     public TransitionX[] getTransitions() {
         return transitions;
+    }
+
+    public void setStateCapacity(String stateCapacity) {
+        this.stateCapacity = stateCapacity;
+    }
+
+    public String getStateCapacity() {
+        return stateCapacity;
     }
 }

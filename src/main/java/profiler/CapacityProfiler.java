@@ -68,7 +68,6 @@ public class CapacityProfiler {
         return simulationRoundD.nextValue();
     }
 
-
     public int getAgentsCount() {
         return agentsCountD.nextValue();
     }

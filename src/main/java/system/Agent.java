@@ -1,6 +1,7 @@
 package system;
 
 import stateTransition.StateX;
+import stateTransition.TransitionX;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
@@ -11,14 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Agent {
-    private StateX state;
 
-
-    public Agent(World parentWorld, int id, StateX stateX) {
+    public Agent(World parentWorld, int id) {
         this.world = parentWorld;
         this.id = id;
-        this.state = stateX;
-        this.state.addAgent(this);
         currentDoingServiceSize = 0;
         simConfigTraceable =
                 simConfigShowWatchRadius =
@@ -28,6 +25,7 @@ public class Agent {
 
     }
 
+
     //============================
     private boolean simConfigShowWatchRadius;
     private boolean simConfigLinkToWatchedAgents;
@@ -35,17 +33,16 @@ public class Agent {
     private boolean simConfigShowRequestedService;
 
     //============================
-
     private int id;
-
 
     //============================ processing variables
     private int currentDoingServiceSize;
 
     //============================
     private World world;
-    //============================
+    private StateX state;
 
+    //============================
     private AgentCapacity capacity;
 
     private AgentTrust trust;
@@ -68,7 +65,6 @@ public class Agent {
     private List<Service> doneServices;
 
     //============================//============================//============================
-
 
     public void init() {
         capacity = new AgentCapacity(this);
@@ -108,6 +104,33 @@ public class Agent {
     }
 
 
+    //============================//============================ Movement
+
+    public boolean gotoState(int index) {
+        ArrayList<StateX> targets = state.getTargets();
+        if (targets.size() > index) {
+            StateX newState = state.getTargets().get(index);
+            if (newState != null) {
+                // can we add this agent to new state? if true, it will be added.
+                if (newState.addAgent(this)) {
+                    // can we remove this state from current state? if true, it will be removed.
+                    if (state.leave(this)) {
+                        TransitionX targetTrans = state.getTargetTrans(newState);
+                        if (targetTrans != null) {
+                            targetTrans.setDrawIsActive(true);
+                        }
+                        state = newState;
+                        return true;
+                    } else {
+                        // If it can not able to leave current state, will leave new state.
+                        newState.leave(this);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
  /*   public void setCurrentState(int state) {
         if (Globals.environment.getTransition(state).I_am_in(this)) {
             if (currentState != -1) {
@@ -126,7 +149,7 @@ public class Agent {
      */
     public void updateWatchList() {
         watchedAgents.clear();
-        ArrayList<StateX> seenStates = state.getWatchList(capacity.getWatchRadius());
+        List<StateX> seenStates = state.getWatchList(capacity.getWatchRadius());
 
         if (seenStates == null) {
             return;

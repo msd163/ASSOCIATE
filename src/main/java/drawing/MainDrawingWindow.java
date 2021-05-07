@@ -101,7 +101,12 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
             }
 
             g.setColor(colors[_colorIndex]);
-            g.setStroke(new BasicStroke(2));
+            if (trans.isDrawIsActive()) {
+                g.setStroke(new BasicStroke(10));
+                trans.setDrawIsActive(false);
+            } else {
+                g.setStroke(new BasicStroke(2));
+            }
 
             g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),      // box upper left
                     trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),                                   // box width and height
@@ -141,7 +146,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
 //        g.setColor(Color.BLACK);
 //        g.fill(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
         g.setColor(Color.GREEN);
-        g.draw(new Rectangle.Float(x - rad, y - rad, radEnd,  radEnd));
+        g.draw(new Rectangle.Float(x - rad, y - rad, radEnd, radEnd));
         g.drawString("(" + stateX.getId() + ")", x - rad, y - rad - 20);
         g.setColor(color);
 

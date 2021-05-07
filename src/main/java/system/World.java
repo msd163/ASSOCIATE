@@ -3,6 +3,7 @@ package system;
 import drawing.DiagramDrawingWindow;
 import drawing.MainDrawingWindow;
 import stateTransition.Environment;
+import stateTransition.StateX;
 import stateTransition.TransitionX;
 import utils.Config;
 import utils.Globals;
@@ -64,6 +65,7 @@ public class World {
         this.environment = new Environment();
         this.environment.setStates(_environment.getStates());
         this.environment.setStateCount(_environment.getStateCount());
+        this.environment.setStateCapacity(_environment.getStateCapacity());
         this.environment.init(this);
 
         //============================ Initializing agents
@@ -81,8 +83,20 @@ public class World {
                 thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
             }
 
-            agents[i] = new Agent(this, ++id, environment.getRandomState());
+            agents[i] = new Agent(this, ++id);
             agents[i].init();
+
+            StateX randomState;
+            int tryCount = 0;
+            boolean isAddedToState;
+            do {
+                randomState = environment.getRandomState();
+                isAddedToState = randomState.addAgent(agents[i]);
+            } while (!isAddedToState && tryCount++ < agentsCount);
+
+            if (isAddedToState) {
+                agents[i].setState(randomState);
+            }
 
             // if agentId is in 'traceAgentIds', it will set as traceable
             if (isTraceable(i)) {
@@ -90,9 +104,7 @@ public class World {
             }
         }
 
-        for (TransitionX transition : environment.getTransitions()) {
-            transition.updatePath();
-        }
+       environment.updateTransitionsPath();
 
     }
 
@@ -149,10 +161,12 @@ public class World {
         // Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
-          /*  for (Agent agent : agents) {
-                agent.updateCurrentState();
-            }
-*/
+             int i = Globals.RANDOM.nextInt(agentsCount);
+             agents[i].gotoState(0);
+            /*for (Agent agent : agents) {
+                agent.gotoState(0);
+            }*/
+
             for (Agent agent : agents) {
                 agent.resetParams();
                 agent.updateWatchList();

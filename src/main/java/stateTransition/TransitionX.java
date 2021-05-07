@@ -19,7 +19,7 @@ public class TransitionX {
     private float drawWidthAndHeight;       // box width and height
     private float drawAngStart;             // angle start
     private float drawAngExtend;            // angle extent
-
+    private boolean drawIsActive;           // true: a transmission is done from this transition now.
     // Return the distance from any point to the arc center.
     float dist0(float x, float y, float x0, float y0) {
         return (float) Math.sqrt(sqr(x - x0) + sqr(y - y0));
@@ -184,5 +184,13 @@ public class TransitionX {
 
     public float getDrawAngExtend() {
         return drawAngExtend;
+    }
+
+    public boolean isDrawIsActive() {
+        return drawIsActive;
+    }
+
+    public void setDrawIsActive(boolean drawIsActive) {
+        this.drawIsActive = drawIsActive;
     }
 }
