@@ -162,7 +162,10 @@ public class World {
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
              int i = Globals.RANDOM.nextInt(agentsCount);
-             agents[i].gotoState(0);
+             if(agents[i].getState().getTargets().size()!=0){
+                 int targetIndex = Globals.RANDOM.nextInt(agents[i].getState().getTargets().size());
+                 agents[i].gotoState(targetIndex);
+             }
             /*for (Agent agent : agents) {
                 agent.gotoState(0);
             }*/

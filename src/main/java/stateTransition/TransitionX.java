@@ -178,6 +178,10 @@ public class TransitionX {
         return drawWidthAndHeight;
     }
 
+    public float getDrawSourceArrowSize() {
+        return 1000/drawWidthAndHeight ;
+    }
+
     public float getDrawAngStart() {
         return drawAngStart;
     }

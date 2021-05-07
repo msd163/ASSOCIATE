@@ -5,13 +5,12 @@ import stateTransition.StateX;
 import stateTransition.TransitionX;
 import system.Agent;
 import system.World;
-import utils.Point;
+import utils.RectangleX;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Arc2D;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
@@ -29,7 +28,11 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     private utils.Point pnStartPoint = new utils.Point(0, 0);
 
     private float scale = 1f;
+    private int _colorIndex = 0;
 
+    Graphics2D g;
+
+    //============================//============================//============================
     public MainDrawingWindow(World world) {
         this.world = world;
         this.environment = world.getEnvironment();
@@ -59,19 +62,10 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     }
 
     //============================//============================//============================
-
-    private int _colorIndex = 0;
-    private StateX _stateX;
-    private Point _statePoint;
-    private ArrayList<StateX> _targets;
-
-    Graphics2D g;
-
     @Override
     public void paint(Graphics gr) {
         //============================//============================ Preparing
         g = (Graphics2D) gr;
-
 
         g.setBackground(Color.BLACK);
 
@@ -83,13 +77,10 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.drawString(world.toString(), 40, 40);
 
-        //============================ Translate
+        //============================//============================ Translate for panning and scaling
 
         g.translate(pnOffset.x, pnOffset.y);
         g.scale(scale, scale);
-        //============================ Bound Rectangle
-        //g.drawRect(0, 0, world.getWidth(), world.getHeight());
-
 
         //============================//============================ Drawing Transition
         _colorIndex = 0;
@@ -108,22 +99,40 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
                 g.setStroke(new BasicStroke(2));
             }
 
-            g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),      // box upper left
-                    trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),                                   // box width and height
-                    trans.getDrawAngStart(), trans.getDrawAngExtend(),                                 // angle start, extent
+            g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
+                    trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
+                    trans.getDrawAngStart(), trans.getDrawAngExtend(),                          // angle start, extent
                     Arc2D.OPEN));
+
+            g.setColor(Color.WHITE);
+            g.setStroke(new BasicStroke(10));
+
+            g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
+                    trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
+                    trans.getDrawAngStart(), trans.getDrawAngExtend() > 0 ? trans.getDrawSourceArrowSize() : -trans.getDrawSourceArrowSize(),                          // angle start, extent
+                    Arc2D.OPEN));
+//            g.drawRoundRect((int) trans.getDrawX(), (int) trans.getDrawY(), 20, 20, 4, 4);
+            g.setStroke(new BasicStroke(1));
 
         }
 
-
         //============================//============================ Drawing states
-        for (int x = 0; x < environment.getStateCount(); x++) {
+        for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
+            StateX stateX = environment.getState(stateIndex);
+            RectangleX rec = stateX.getBoundedRectangle();
+            Color color = g.getColor();
 
-            _stateX = environment.getState(x);
-            _statePoint = _stateX.getLocation();
-            _targets = _stateX.getTargets();
+            g.setColor(Color.GREEN);
+            g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
+            g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
+            g.setColor(color);
 
-            drawStateX(g, _stateX);
+            if (!stateX.getAgents().isEmpty()) {
+                int index = 0;
+                for (Agent agent : stateX.getAgents()) {
+                    agent.draw(g, index++);
+                }
+            }
         }
 
 
@@ -135,31 +144,6 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         }*/
     }
 
-    //============================//============================//============================
-
-    static void drawStateX(Graphics2D g, StateX stateX) {
-        final int rad = stateX.getWidth() / 2;
-        final int radEnd = 2 * rad;
-        int x = stateX.getLocation().getX();
-        int y = stateX.getLocation().getY();
-        Color color = g.getColor();
-//        g.setColor(Color.BLACK);
-//        g.fill(new Rectangle.Float(x - rad, y - rad, 2 * rad, 2 * rad));
-        g.setColor(Color.GREEN);
-        g.draw(new Rectangle.Float(x - rad, y - rad, radEnd, radEnd));
-        g.drawString("(" + stateX.getId() + ")", x - rad, y - rad - 20);
-        g.setColor(color);
-
-        if (!stateX.getAgents().isEmpty()) {
-            int index = 0;
-            for (Agent agent : stateX.getAgents()) {
-                agent.draw(g, index++);
-            }
-
-
-        }
-
-    }
 
     //============================//============================//============================
 

@@ -3,6 +3,7 @@ package stateTransition;
 import system.Agent;
 import utils.Globals;
 import utils.Point;
+import utils.RectangleX;
 
 import java.util.ArrayList;
 
@@ -107,18 +108,7 @@ public class StateX {
         return (int) (Math.sqrt(agents.size()) + 1);
     }
 
-
-    public Point getTileLocation(int index) {
-        int bn = getBigness();
-        return new Point(
-                (index % bn) * Globals.STATE_TILE_WIDTH + location.x - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4),
-                (index / bn) * Globals.STATE_TILE_WIDTH + location.y - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4)
-        );
-    }
-
-    public int getWidth() {
-        return getBigness() * Globals.STATE_TILE_WIDTH;
-    }
+    //============================ Transition
 
     public void addTargetTrans(TransitionX transition) {
         targetTrans.add(transition);
@@ -137,7 +127,6 @@ public class StateX {
         return null;
     }
 
-
     public TransitionX getTargetTrans(StateX targetState) {
         for (TransitionX st : targetTrans) {
             if (targetState.getId() == st.getTo().getId()) {
@@ -147,6 +136,7 @@ public class StateX {
         return null;
     }
 
+    //============================ Agents
     public boolean addAgent(Agent agent) {
         if (getTraffic() < capacity) {
             boolean add = true;
@@ -193,6 +183,24 @@ public class StateX {
             }
         }
         return remove;
+    }
+
+    //============================ Area
+    public Point getTileLocation(int index) {
+        int bn = getBigness();
+        return new Point(
+                (index % bn) * Globals.STATE_TILE_WIDTH + location.x - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4),
+                (index / bn) * Globals.STATE_TILE_WIDTH + location.y - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4)
+        );
+    }
+
+    public int getWidth() {
+        return getBigness() * Globals.STATE_TILE_WIDTH;
+    }
+
+    public RectangleX getBoundedRectangle() {
+        int w = getWidth();
+        return new RectangleX(location.x - (w / 2), location.y - (w / 2), w, w);
     }
 
     //============================//============================

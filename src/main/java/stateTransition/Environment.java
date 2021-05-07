@@ -18,7 +18,15 @@ public class Environment {
 
     private DefParameter stateCapacityD;
 
-    private void assignPoint(StateX stateX, Point base, int targetIndex, int radius) {
+    /**
+     * Assigning point to states in environment
+     *
+     * @param stateX
+     * @param base
+     * @param targetIndex
+     * @param radius
+     */
+    private void assignPoint(StateX stateX, Point base, int targetIndex, int targetCount, int radius) {
 
         if (!stateX.isHasLoc()) {
 
@@ -26,15 +34,33 @@ public class Environment {
             int newRadius = radius;
             if (stateX.hasTarget()) {
                 newRadius *= 2;
-                int targetCount = stateX.getTargets().size();
-                theta = targetIndex * (PI / targetCount);
             }
+            theta = targetIndex * (PI / targetCount);
 
-            stateX.setLocation(
-                    new Point(
-                            base.getX() + (int) (newRadius * Math.sin(theta)),
-                            base.getY() + (int) (newRadius * Math.cos(theta)))
-            );
+            boolean isConflict;
+            float radiusFactor = 1;
+            // this do-while is for preventing overlapping state rectangles
+            do {
+                isConflict = false;
+                stateX.setLocation(
+                        new Point(
+                                base.getX() + (int) (newRadius * radiusFactor * Math.sin(theta)),
+                                base.getY() + (int) (newRadius * radiusFactor * Math.cos(theta)))
+                );
+
+
+                for (StateX state : states) {
+                    if (state.isHasLoc() &&
+                            (state.getBoundedRectangle().isOverlapping(stateX.getBoundedRectangle()))
+                    ) {
+                        radiusFactor += 0.3f;
+                        isConflict = true;
+                        break;
+                    }
+                }
+            } while (isConflict);
+
+
             stateX.setHasLoc(true);
         }
 
@@ -42,7 +68,7 @@ public class Environment {
             ArrayList<StateX> targets = stateX.getTargets();
             for (int i = 0, targetsSize = targets.size(); i < targetsSize; i++) {
                 if (!targets.get(i).isHasLoc()) {
-                    assignPoint(targets.get(i), stateX.getLocation(), i, radius);
+                    assignPoint(targets.get(i), stateX.getLocation(), i, targetsSize, radius);
                 }
             }
         }
@@ -72,7 +98,7 @@ public class Environment {
             // space size between states
             int radius = getWorld().getAgentsCount() * 5;
             for (int i = 0, statesLength = states.length; i < statesLength; i++) {
-                assignPoint(states[i], base, i, radius);
+                assignPoint(states[i], base, i, statesLength, radius);
                 states[i].setCapacity(getStateCapacityValue());
             }
 
@@ -93,7 +119,7 @@ public class Environment {
         } else {
             transitions = new TransitionX[0];
         }
-       // System.out.println(toString());
+        // System.out.println(toString());
     }
 
     public void updateTransitionsPath() {
