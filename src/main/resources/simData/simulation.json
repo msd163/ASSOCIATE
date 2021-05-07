@@ -1,5 +1,6 @@
 {
   "agentsCount": "50",
+  "serviceCount": "2",
   "simulationRound": "1",
   "bunches": [
     {

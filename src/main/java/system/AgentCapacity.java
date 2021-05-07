@@ -7,8 +7,6 @@ public class AgentCapacity {
     public AgentCapacity(Agent parentAgent) {
 
         this.agent = parentAgent;
-        int worldBF = parentAgent.getWorld().getBignessFactor() / 4;
-        int worldAC = parentAgent.getWorld().getAgentsCount();
 
         watchRadius = Globals.profiler.getCurrentBunch().getWatchRadiusD().nextValue();
 

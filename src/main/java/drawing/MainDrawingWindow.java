@@ -183,7 +183,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         float x = scale;
 
         if (x > 1) {
-            x += -1 * e.getWheelRotation();
+            x += -0.5 * e.getWheelRotation();
         } else {
             x += -0.1 * e.getWheelRotation();
         }

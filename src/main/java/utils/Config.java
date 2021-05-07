@@ -9,8 +9,6 @@ public class Config {
     public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
 
-    public static final int WORLD_SERVICES_COUNT = 1;
-
     public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
     public static final int TRUST_HONEST_DISCRETE_PERCENT = 50;   // if TtHonestStrategy.Discrete selected, this defines the percentage of honest agents
 

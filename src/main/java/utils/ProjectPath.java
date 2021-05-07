@@ -12,12 +12,12 @@ public class ProjectPath {
         return root() + "/src/main/resources";
     }
 
-    public String environmentData() {
-        return root() + "/src/main/resources/simData/environment.json";
+    public String statesData() {
+        return root() + "/src/main/resources/simData/states.json";
     }
 
-    public String sim0Data() {
-        return root() + "/src/main/resources/simData/sim0.json";
+    public String simulationData() {
+        return root() + "/src/main/resources/simData/simulation.json";
     }
 
 }

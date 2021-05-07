@@ -1,11 +1,11 @@
 package system;
 
+import drawing.DiagramDrawingWindow;
+import drawing.MainDrawingWindow;
 import stateTransition.Environment;
 import stateTransition.TransitionX;
 import utils.Config;
-import drawing.DiagramDrawingWindow;
 import utils.Globals;
-import drawing.MainDrawingWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +18,6 @@ public class World {
         init(environment);
     }
 
-    //    private int width;                      // The width of this world. it will defined randomly in Initializing time of the world.
-//    private int height;                     // The height of this world. it will defined randomly in Initializing time of the world.
-    private int bignessFactor;
     private Agent[] agents;
     private int agentsCount;
 
@@ -56,9 +53,9 @@ public class World {
         agents = new Agent[agentsCount];
 
         //============================ Services
-
-        serviceTypes = new ServiceType[Config.WORLD_SERVICES_COUNT];
-        for (int i = 0; i < Config.WORLD_SERVICES_COUNT; i++) {
+        int serviceCount = Globals.profiler.getServiceCount();
+        serviceTypes = new ServiceType[serviceCount];
+        for (int i = 0; i < serviceCount; i++) {
             serviceTypes[i] = new ServiceType(i + 1);
         }
 
@@ -72,9 +69,7 @@ public class World {
         //============================ Initializing agents
 
         System.out.println(
-                " | bignessFactor: " + bignessFactor
-                        + " | agentsCount: " + agentsCount
-
+                " | agentsCount: " + agentsCount
         );
 
         int id = 0;
@@ -139,7 +134,7 @@ public class World {
             mainFrame.setMinimumSize(new Dimension(1500, 800));
             mainFrame.setVisible(true);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-           // boolean doubleBuffered = mainFrame.isDoubleBuffered();
+            // boolean doubleBuffered = mainFrame.isDoubleBuffered();
         }
         //============================ Initializing Diagram Drawing Windows
         DiagramDrawingWindow diagramWindow = new DiagramDrawingWindow(this);
@@ -293,7 +288,6 @@ public class World {
         StringBuilder ti = new StringBuilder("\n\n\n\t");
 
         return tx + "World: " +
-                ti + " | bignessFactor=" + bignessFactor +
                 ti + " | agentsCount=" + agentsCount +
                 ti + " | dishonestSrvCount=" + dishonestServiceCount +
                 ti + " * honestSrvCount=" + honestServiceCount +
@@ -317,7 +311,6 @@ public class World {
             ti.append("\t");
         }
         return tx + "World{" +
-                ti + "  bignessFactor=" + bignessFactor +
                 ti + ", agentsCount=" + agentsCount +
                 ti + ", totalServiceCount=" + totalServiceCount +
                 ti + ", dishonestServiceCount=" + dishonestServiceCount +
@@ -350,10 +343,6 @@ public class World {
 
     public List<WorldHistory> getHistories() {
         return histories;
-    }
-
-    public int getBignessFactor() {
-        return bignessFactor;
     }
 
     public int getAgentsCount() {
