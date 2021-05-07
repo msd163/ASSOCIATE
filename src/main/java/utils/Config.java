@@ -1,7 +1,6 @@
 package utils;
 
 import _type.TtBehaviorStrategy;
-import _type.TtMovementMode;
 import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {

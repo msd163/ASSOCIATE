@@ -3,9 +3,9 @@ package system;
 import stateTransition.Environment;
 import stateTransition.TransitionX;
 import utils.Config;
-import utils.DiagramDrawingWindow;
+import drawing.DiagramDrawingWindow;
 import utils.Globals;
-import utils.MainDrawingWindow;
+import drawing.MainDrawingWindow;
 
 import javax.swing.*;
 import java.awt.*;

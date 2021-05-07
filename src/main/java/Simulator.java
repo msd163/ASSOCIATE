@@ -12,7 +12,6 @@ public class Simulator {
 
     private World[] worlds;
 
-
     private void init() throws FileNotFoundException {
 
         ProjectPath projectPath = new ProjectPath();

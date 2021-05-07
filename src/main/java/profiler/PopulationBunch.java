@@ -1,7 +1,5 @@
 package profiler;
 
-import utils.DefParameter;
-
 public class PopulationBunch {
     private String bunchCount;
     private String historyServiceRecordCap;

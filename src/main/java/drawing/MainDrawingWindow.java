@@ -1,10 +1,11 @@
-package utils;
+package drawing;
 
 import stateTransition.Environment;
 import stateTransition.StateX;
 import stateTransition.TransitionX;
 import system.Agent;
 import system.World;
+import utils.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,9 +24,9 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     private Color[] colors;
 
     //============================//============================  panning params
-    private Point pnOffset = new Point(0, 0);
-    private Point pnOffsetOld = new Point(0, 0);
-    private Point pnStartPoint = new Point(0, 0);
+    private utils.Point pnOffset = new utils.Point(0, 0);
+    private utils.Point pnOffsetOld = new utils.Point(0, 0);
+    private utils.Point pnStartPoint = new utils.Point(0, 0);
 
     private float scale = 1f;
 

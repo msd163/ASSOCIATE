@@ -1,7 +1,5 @@
 package profiler;
 
-import utils.DefParameter;
-
 import java.util.ArrayList;
 
 public class CapacityProfiler {
