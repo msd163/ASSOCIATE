@@ -51,7 +51,7 @@ public class Environment {
 
                 for (StateX state : states) {
                     if (state.isHasLoc() &&
-                            (state.getBoundedRectangle().isOverlapping(stateX.getBoundedRectangle()))
+                            (stateX.getBoundedRectangle().isOverlapping(state.getBoundedRectangle()))
                     ) {
                         radiusFactor += 0.3f;
                         isConflict = true;
@@ -90,15 +90,7 @@ public class Environment {
                 transCount += state.getTargets().size();
             }
 
-            // Assigning location to environment states and setting state capacity
-            Point base = new Point(
-                    600,
-                    300
-            );
-            // space size between states
-            int radius = getWorld().getAgentsCount() * 5;
             for (int i = 0, statesLength = states.length; i < statesLength; i++) {
-                assignPoint(states[i], base, i, statesLength, radius);
                 states[i].setCapacity(getStateCapacityValue());
             }
 
@@ -123,6 +115,18 @@ public class Environment {
     }
 
     public void updateTransitionsPath() {
+
+        // Assigning location to environment states and setting state capacity
+        Point base = new Point(
+                600,
+                300
+        );
+        // space size between states
+        int radius = getWorld().getAgentsCount() * 5;
+        for (int i = 0, statesLength = states.length; i < statesLength; i++) {
+            assignPoint(states[i], base, i, statesLength, radius);
+        }
+
         for (TransitionX transition : getTransitions()) {
             transition.updatePath();
         }

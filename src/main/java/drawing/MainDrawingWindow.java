@@ -122,6 +122,37 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
             RectangleX rec = stateX.getBoundedRectangle();
             Color color = g.getColor();
 
+           // g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+
+           /* g.setColor(Color.RED);
+            g.drawString(
+                    "TL " + rec.topLeft().x + "," + rec.topLeft().y,
+                    rec.topLeft().x - 10,
+                    rec.topLeft().y - 10);
+
+            g.setColor(Color.YELLOW);
+            g.drawString(
+                    "TR " + rec.topRight().x + "," + rec.topRight().y,
+                    rec.topRight().x - 10,
+                    rec.topRight().y - 10
+            );
+
+
+            g.setColor(Color.cyan);
+            g.drawString(
+                    "BR " + rec.bottomRight().x + "," + rec.bottomRight().y,
+                    rec.bottomRight().x ,
+                    rec.bottomRight().y + 20
+            );
+
+
+            g.setColor(Color.orange);
+            g.drawString(
+                    "BL " + rec.bottomLeft().x + "," + rec.bottomLeft().y,
+                    rec.bottomLeft().x ,
+                    rec.bottomLeft().y + 30
+            );*/
+
             g.setColor(Color.GREEN);
             g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
             g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);

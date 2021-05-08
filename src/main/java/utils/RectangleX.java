@@ -15,8 +15,8 @@ public class RectangleX {
     }
 
     public boolean isOverlapping(RectangleX other) {
-        if (this.topRight().getY() < other.bottomLeft().getY()
-                || this.bottomLeft().getY() > other.topRight().getY()) {
+        if (this.topRight().getY() > other.bottomLeft().getY()
+                || this.bottomLeft().getY() < other.topRight().getY()) {
             return false;
         }
         if (this.topRight().getX() < other.bottomLeft().getX()
