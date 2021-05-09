@@ -30,15 +30,20 @@ public class Environment {
 
         if (!stateX.isHasLoc()) {
 
-            double theta = 0;
+            double theta;
             int newRadius = radius;
             if (stateX.hasTarget()) {
                 newRadius *= 2;
             }
+            float radiusFactor = 1;
+
+            if (targetIndex >= targetCount) {
+                targetIndex = 0;
+                radiusFactor += 0.5f;
+            }
             theta = targetIndex * (PI / targetCount);
 
             boolean isConflict;
-            float radiusFactor = 1;
             // this do-while is for preventing overlapping state rectangles
             do {
                 isConflict = false;
@@ -53,7 +58,14 @@ public class Environment {
                     if (state.isHasLoc() &&
                             (stateX.getBoundedRectangle().isOverlapping(state.getBoundedRectangle()))
                     ) {
-                        radiusFactor += 0.3f;
+                   /*     targetIndex++;
+                        if (targetIndex >= targetCount) {
+                            targetIndex = 0;
+                            radiusFactor += 0.5f;
+                        }
+                        theta = targetIndex * (PI / targetCount);*/
+
+                        radiusFactor += 0.5f;
                         isConflict = true;
                         break;
                     }
@@ -75,6 +87,8 @@ public class Environment {
     }
 
     public void init(World world) {
+
+        // Maximum count of agents in state
         stateCapacityD = new DefParameter(stateCapacity);
 
         stateCount = states == null ? 0 : states.length;
@@ -84,14 +98,14 @@ public class Environment {
 
             int transCount = 0;     // Count of transitions
 
-            //============================  Updating state targets
+            //============================  Updating state targets and setting state capability
             for (StateX state : states) {
+                // updating targets
                 state.updateTargets(this);
+                // set state capability
+                state.setCapacity(getStateCapacityValue());
+                // transaction count
                 transCount += state.getTargets().size();
-            }
-
-            for (int i = 0, statesLength = states.length; i < statesLength; i++) {
-                states[i].setCapacity(getStateCapacityValue());
             }
 
             //============================ Creating Transition list
@@ -114,19 +128,20 @@ public class Environment {
         // System.out.println(toString());
     }
 
-    public void updateTransitionsPath() {
+    public void reassigningStateLocationAndTransPath() {
 
-        // Assigning location to environment states and setting state capacity
+        //-- Assigning location to environment states and setting state capacity
         Point base = new Point(
                 600,
                 300
         );
         // space size between states
-        int radius = getWorld().getAgentsCount() * 5;
+        int radius = getWorld().getAgentsCount() * 2;
         for (int i = 0, statesLength = states.length; i < statesLength; i++) {
             assignPoint(states[i], base, i, statesLength, radius);
         }
 
+        //-- updating transaction path
         for (TransitionX transition : getTransitions()) {
             transition.updatePath();
         }

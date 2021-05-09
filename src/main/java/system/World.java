@@ -4,7 +4,6 @@ import drawing.DiagramDrawingWindow;
 import drawing.MainDrawingWindow;
 import stateTransition.Environment;
 import stateTransition.StateX;
-import stateTransition.TransitionX;
 import utils.Config;
 import utils.Globals;
 
@@ -104,7 +103,7 @@ public class World {
             }
         }
 
-       environment.updateTransitionsPath();
+       environment.reassigningStateLocationAndTransPath();
 
     }
 
