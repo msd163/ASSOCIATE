@@ -1,5 +1,5 @@
 {
-  "agentsCount": "50",
+  "agentsCount": "200",
   "serviceCount": "2",
   "simulationRound": "1",
   "bunches": [
@@ -9,7 +9,7 @@
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
       "watchRadius": "2",
-      "stateMapCap": "20",
+      "stateMapCap": "#20..50",
       "concurrentDoingServiceCap": "?10"
     },
     {

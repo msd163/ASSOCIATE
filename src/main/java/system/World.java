@@ -173,6 +173,7 @@ public class World {
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
             //============================//============================  Updating agents statuses
+            System.out.println(Globals.WORLD_TIMER + " : World.run------------------------------- ");
             for (Agent agent : agents) {
                 agent.resetParams();
                 agent.updateStateMap();

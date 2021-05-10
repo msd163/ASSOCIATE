@@ -408,7 +408,7 @@ public class Agent {
     BasicStroke stroke3 = new BasicStroke(3);
     BasicStroke stroke2 = new BasicStroke(2);
     BasicStroke stroke1 = new BasicStroke(1);
-    Font font = new Font("Tahoma", Font.PLAIN, 12);
+    Font font = new Font("Tahoma", Font.PLAIN, 9);
     Color honestBackColor;
     Color honestForeColor;
     Color honestBorderColor;
@@ -426,9 +426,9 @@ public class Agent {
         loc_y = tileIndex.y;
 
 
-        honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : Color.RED;
-        honestForeColor = behavior.getIsHonest() ?  new Color(0, 0, 0): Color.WHITE;
-        honestBorderColor = behavior.getIsHonest() ?  new Color(255, 230, 0): Color.WHITE;
+        honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : new Color(255, 71, 71);
+        honestForeColor = behavior.getIsHonest() ?  new Color(36, 151, 9): new Color(255, 196, 166);
+        honestBorderColor = behavior.getIsHonest() ?  new Color(29, 102, 0): new Color(160, 0, 0);
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
         if (isCapCandid || isSimConfigShowWatchRadius()) {
@@ -477,18 +477,17 @@ public class Agent {
         int agentBound = capacity.getCapPower() / 10;
         g.fillOval(loc_x - agentBound, loc_y - agentBound, agentBound * 2, agentBound * 2);
 
-
-        // Drawing id of the node
-        g.setColor(honestForeColor);
-        g.setFont(font);
-        g.drawString(id + "", loc_x - 5, loc_y + 5 /*+ capacity.getCapPower() + 10*/);
-
         if (isInTargetState()) {
             // If agent is in target state draw a circle around it.
             g.setColor(honestBorderColor);
             g.setStroke(stroke2);
             g.drawArc(loc_x - agentBound, loc_y - agentBound, agentBound * 2, agentBound * 2, 0, 270);
         }
+
+        // Drawing id of the node
+        g.setColor(honestForeColor);
+        g.setFont(font);
+        g.drawString(id + "", loc_x - 5, loc_y + 5 /*+ capacity.getCapPower() + 10*/);
 
     }
     //============================//============================//============================

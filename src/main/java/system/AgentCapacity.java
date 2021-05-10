@@ -21,7 +21,7 @@ public class AgentCapacity {
         historyServiceRecordCap = Globals.profiler.getCurrentBunch().getHistoryServiceRecordCapD().nextValue();
 
         // capPower is between 0 and 100
-        capPower =100 * (stateMapCap/Globals.profiler.getCurrentBunch().getStateMapCapD().getMaxValue());
+        capPower = (int)(100 * ((float)stateMapCap/Globals.profiler.getCurrentBunch().getStateMapCapD().getMaxValue()));
 
         /*System.out.println(
                 " | watchRadius: " + watchRadius
