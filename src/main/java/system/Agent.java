@@ -1,5 +1,6 @@
 package system;
 
+import stateTransition.StateMap;
 import stateTransition.StateX;
 import stateTransition.TransitionX;
 import utils.Config;
@@ -20,9 +21,8 @@ public class Agent {
         simConfigTraceable =
                 simConfigShowWatchRadius =
                         simConfigShowRequestedService =
-                                simConfigLinkToWatchedAgents = false;
-
-
+                                simConfigShowTargetState =
+                                        simConfigLinkToWatchedAgents = false;
     }
 
 
@@ -31,6 +31,7 @@ public class Agent {
     private boolean simConfigLinkToWatchedAgents;
     private boolean simConfigTraceable;
     private boolean simConfigShowRequestedService;
+    private boolean simConfigShowTargetState;
 
     //============================
     private int id;
@@ -41,7 +42,8 @@ public class Agent {
     //============================
     private World world;
     private StateX state;
-
+    private ArrayList<StateMap> stateMaps;
+    private StateX targetState;
     //============================
     private AgentCapacity capacity;
 
@@ -84,6 +86,8 @@ public class Agent {
         requestedServices = new ArrayList<Service>();
         doneServices = new ArrayList<Service>();
 
+        stateMaps = new ArrayList<>();
+
     }
 
     public void setAsTraceable() {
@@ -91,6 +95,7 @@ public class Agent {
         simConfigShowWatchRadius = true;
         simConfigLinkToWatchedAgents = true;
         simConfigShowRequestedService = true;
+        simConfigShowTargetState = true;
     }
 
 
@@ -104,31 +109,144 @@ public class Agent {
     }
 
 
+    //============================//============================ State Map
+
+    private int getOldStateMapIndex() {
+        int minVal = 99999999;
+        int oldIndex = 0, ix = 0;
+        for (StateMap map : stateMaps) {
+            if (map.getVisitTime() < minVal) {
+                minVal = map.getVisitTime();
+                oldIndex = ix;
+            }
+            ix++;
+        }
+        return oldIndex;
+    }
+
+    private int getStateMapIndex(StateX stateX) {
+        int ix = 0;
+        for (StateMap map : stateMaps) {
+            if (map.getStateX().getId() == stateX.getId()) {
+                return ix;
+            }
+            ix++;
+        }
+        return -1;
+    }
+
+    public void updateStateMap() {
+
+        //int stateMapIndex = getStateMapIndex(state);
+        //if (stateMapIndex == -1) {
+        int size = stateMaps.size();
+        if (size > 0 && stateMaps.get(size - 1).getStateX().getId() == state.getId()) {
+            stateMaps.get(size - 1).updateVisitTime();
+            return;
+        }
+
+        if (size >= capacity.getStateMapCap()) {
+            //int index = getOldStateMapIndex();
+            //stateMaps.remove(index);
+            stateMaps.remove(0);
+        }
+
+        stateMaps.add(new StateMap(state, Globals.WORLD_TIMER, state.getTargets()));
+
+        //}
+       /* else {
+            stateMaps.get(stateMapIndex).updateVisitTime();
+        }*/
+        String sIds = "";
+        for (StateMap s : stateMaps) {
+            sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
+        }
+        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId()+" >  t: "+ targetState.getId() + " ] #  maps: " + sIds);
+
+    }
     //============================//============================ Movement
 
-    public boolean gotoState(int index) {
-        ArrayList<StateX> targets = state.getTargets();
-        if (targets.size() > index) {
-            StateX newState = state.getTargets().get(index);
-            if (newState != null) {
-                // can we add this agent to new state? if true, it will be added.
-                if (newState.addAgent(this)) {
-                    // can we remove this state from current state? if true, it will be removed.
-                    if (state.leave(this)) {
-                        TransitionX targetTrans = state.getTargetTrans(newState);
-                        if (targetTrans != null) {
-                            targetTrans.setDrawIsActive(true);
-                        }
-                        state = newState;
-                        return true;
-                    } else {
-                        // If it can not able to leave current state, will leave new state.
-                        newState.leave(this);
+
+    public boolean isInTargetState() {
+        return state.getId() == targetState.getId();
+
+    }
+
+    public boolean gotoState(StateX nextState) {
+        if (nextState != null) {
+            // can we add this agent to new state? if true, it will be added.
+            if (nextState.addAgent(this)) {
+                // can we remove this state from current state? if true, it will be removed.
+                if (state.leave(this)) {
+                    TransitionX targetTrans = state.getTargetTrans(nextState);
+                    if (targetTrans != null) {
+                        targetTrans.setDrawIsActive(true);
                     }
+                    state = nextState;
+                    return true;
+                } else {
+                    // If it can not able to leave current state, will leave new state.
+                    nextState.leave(this);
                 }
             }
         }
         return false;
+    }
+
+
+    public boolean gotoState(int index) {
+        ArrayList<StateX> targets = state.getTargets();
+        if (targets.size() > index) {
+            StateX nextState = state.getTargets().get(index);
+            return gotoState(nextState);
+        }
+        return false;
+    }
+
+
+    public StateX whereToGo() {
+        if (targetState == null) {
+            return null;
+        }
+        boolean isVisitedPreviously;
+        for (Agent agent : state.getAgents()) {
+            StateX stateX = agent.doYouKnowWhereIs(targetState);
+            if (stateX != null) {
+                isVisitedPreviously = false;
+                for (StateMap stateMap : stateMaps) {
+                    if (stateMap.getStateX().getId() == stateX.getId()) {
+                        isVisitedPreviously = true;
+                        break;
+                    }
+                }
+                if (!isVisitedPreviously) {
+                    return stateX;
+                }
+            }
+
+        }
+        return null;
+    }
+
+    private StateX doYouKnowWhereIs(StateX targetState) {
+        boolean isFound = false;
+        for (int i = stateMaps.size() - 1; i >= 0; i--) {
+            if (stateMaps.get(i).isAnyPathTo(targetState)) {
+                isFound = true;
+                break;
+            } else if (i > 1 && !stateMaps.get(i).hasPathTo(stateMaps.get(i - 1))) {
+                return null;
+            }
+        }
+
+        if (isFound) {
+            for (int i = stateMaps.size() - 1; i >= 0; i--) {
+                if (stateMaps.get(i).getStateX().getId() != state.getId()) {
+                    return stateMaps.get(i).getStateX();
+                }
+            }
+        }
+        return null;
     }
 
  /*   public void setCurrentState(int state) {
@@ -288,9 +406,12 @@ public class Agent {
     //============================//============================//============================
 
     BasicStroke stroke3 = new BasicStroke(3);
+    BasicStroke stroke2 = new BasicStroke(2);
     BasicStroke stroke1 = new BasicStroke(1);
-    Font font = new Font("Tahoma", Font.PLAIN, 20);
-    Color honestColor;
+    Font font = new Font("Tahoma", Font.PLAIN, 12);
+    Color honestBackColor;
+    Color honestForeColor;
+    Color honestBorderColor;
 
     private boolean isCapCandid = false;
 
@@ -305,7 +426,9 @@ public class Agent {
         loc_y = tileIndex.y;
 
 
-        honestColor = behavior.getIsHonest() ? Color.GREEN : Color.RED;
+        honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : Color.RED;
+        honestForeColor = behavior.getIsHonest() ?  new Color(0, 0, 0): Color.WHITE;
+        honestBorderColor = behavior.getIsHonest() ?  new Color(255, 230, 0): Color.WHITE;
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
         if (isCapCandid || isSimConfigShowWatchRadius()) {
@@ -341,18 +464,31 @@ public class Agent {
             }
         }
 
+/*        if (simConfigShowTargetState) {
+            RectangleX rec = targetState.getBoundedRectangle();
+            g.setColor(Color.RED);
+            g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
+        }*/
+
         // Set color of node with honest strategy
-        g.setColor(honestColor);
+        g.setColor(honestBackColor);
+
         // Draw node according to it's capacity
-        int agentBound = capacity.getCapPower() / 5;
+        int agentBound = capacity.getCapPower() / 10;
         g.fillOval(loc_x - agentBound, loc_y - agentBound, agentBound * 2, agentBound * 2);
 
 
         // Drawing id of the node
+        g.setColor(honestForeColor);
         g.setFont(font);
+        g.drawString(id + "", loc_x - 5, loc_y + 5 /*+ capacity.getCapPower() + 10*/);
 
-        // Set color of node with honest strategy
-        g.drawString(id + "", loc_x, loc_y + capacity.getCapPower() + 10);
+        if (isInTargetState()) {
+            // If agent is in target state draw a circle around it.
+            g.setColor(honestBorderColor);
+            g.setStroke(stroke2);
+            g.drawArc(loc_x - agentBound, loc_y - agentBound, agentBound * 2, agentBound * 2, 0, 270);
+        }
 
     }
     //============================//============================//============================
@@ -380,7 +516,7 @@ public class Agent {
                 ",\n\t stroke3=" + stroke3 +
                 ",\n\t stroke1=" + stroke1 +
                 ",\n\t font=" + font +
-                ",\n\t honestColor=" + honestColor +
+                ",\n\t honestColor=" + honestBackColor +
                 ",\n\t isCapCandid=" + isCapCandid +
                 '}';
     }
@@ -416,6 +552,10 @@ public class Agent {
 
     public boolean isSimConfigShowWatchRadius() {
         return simConfigShowWatchRadius;
+    }
+
+    public boolean isSimConfigShowTargetState() {
+        return simConfigShowTargetState;
     }
 
     public boolean isSimConfigTraceable() {
@@ -474,4 +614,13 @@ public class Agent {
     public void setState(StateX state) {
         this.state = state;
     }
+
+    public StateX getTargetState() {
+        return targetState;
+    }
+
+    public void setTargetState(StateX targetState) {
+        this.targetState = targetState;
+    }
+
 }

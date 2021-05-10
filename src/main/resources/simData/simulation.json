@@ -9,6 +9,7 @@
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
       "watchRadius": "2",
+      "stateMapCap": "20",
       "concurrentDoingServiceCap": "?10"
     },
     {
@@ -16,6 +17,7 @@
       "historyServiceRecordCap": "15",
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
+      "stateMapCap": "20",
       "watchRadius": "3",
       "concurrentDoingServiceCap": "?10"
     }

@@ -166,13 +166,16 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
             }
         }
 
-
         //============================//============================ Drawing agents
-      /*  for (Agent agent : world.getAgents()) {
+        for (Agent agent : world.getAgents()) {
 
-            agent.draw((Graphics2D) g);
+            if(agent.isSimConfigShowTargetState()){
+                RectangleX rec = agent.getTargetState().getBoundedRectangle();
+                g.setColor(Color.RED);
+                g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
+            }
 
-        }*/
+        }
     }
 
 

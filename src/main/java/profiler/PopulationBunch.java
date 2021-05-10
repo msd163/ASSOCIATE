@@ -6,6 +6,7 @@ public class PopulationBunch {
     private String historyCap;
     private String watchListCapacity;
     private String watchRadius;
+    private String stateMapCap;
     private String concurrentDoingServiceCap;
 
     //============================
@@ -14,6 +15,7 @@ public class PopulationBunch {
     private DefParameter historyCapD;
     private DefParameter watchListCapacityD;
     private DefParameter watchRadiusD;
+    private DefParameter stateMapCapD;
     private DefParameter concurrentDoingServiceCapD;
 
 
@@ -25,6 +27,7 @@ public class PopulationBunch {
         historyCapD = new DefParameter(historyCap);
         watchListCapacityD = new DefParameter(watchListCapacity);
         watchRadiusD = new DefParameter(watchRadius);
+        stateMapCapD = new DefParameter(stateMapCap);
         concurrentDoingServiceCapD = new DefParameter(concurrentDoingServiceCap);
     }
 
@@ -56,6 +59,10 @@ public class PopulationBunch {
         return watchRadiusD;
     }
 
+    public DefParameter getStateMapCapD() {
+        return stateMapCapD;
+    }
+
     public DefParameter getConcurrentDoingServiceCapD() {
         return concurrentDoingServiceCapD;
     }
@@ -78,12 +85,14 @@ public class PopulationBunch {
                 ti + ", historyCap='" + historyCap + '\'' +
                 ti + ", watchListCapacity='" + watchListCapacity + '\'' +
                 ti + ", watchRadius='" + watchRadius + '\'' +
+                ti + ", stateMapCap='" + stateMapCap + '\'' +
                 ti + ", concurrentDoingServiceCap='" + concurrentDoingServiceCap + '\'' +
                 ti + ", bunchCountD=" + bunchCountD.toString(tabIndex) +
                 ti + ", historyServiceRecordCapD=" + historyServiceRecordCapD.toString(tabIndex) +
                 ti + ", historyCapD=" + historyCapD.toString(tabIndex) +
                 ti + ", watchListCapacityD=" + watchListCapacityD.toString(tabIndex) +
                 ti + ", watchRadiusD=" + watchRadiusD.toString(tabIndex) +
+                ti + ", stateMapCapD=" + stateMapCapD.toString(tabIndex) +
                 ti + ", concurrentDoingServiceCapD=" + concurrentDoingServiceCapD.toString(tabIndex) +
                 tx + '}';
     }

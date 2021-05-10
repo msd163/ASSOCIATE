@@ -39,7 +39,7 @@ public class World {
         //============================
 
         // Identifying the agents that we want to trace in Main diagram.
-        traceAgentIds = new int[]{};
+        traceAgentIds = new int[]{1};
 
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
@@ -82,14 +82,17 @@ public class World {
                 thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
             }
 
+            //============================ Creating new state
             agents[i] = new Agent(this, ++id);
             agents[i].init();
 
+            //============================  Adding agent to an state
             StateX randomState;
             int tryCount = 0;
             boolean isAddedToState;
             do {
                 randomState = environment.getRandomState();
+                // checking state capability and adding the agent to it.
                 isAddedToState = randomState.addAgent(agents[i]);
             } while (!isAddedToState && tryCount++ < agentsCount);
 
@@ -97,13 +100,22 @@ public class World {
                 agents[i].setState(randomState);
             }
 
-            // if agentId is in 'traceAgentIds', it will set as traceable
+            //============================ Adding target state to agents
+            agents[i].setTargetState(environment.getRandomState());
+
+            //============================  if agentId is in 'traceAgentIds', it will set as traceable
+//            Agent agent = agents[i];
             if (isTraceable(i)) {
                 agents[i].setAsTraceable();
             }
+            System.out.println("world:::init::agent: " +  agents[i].getId() + " state: " +  agents[i].getState().getId() + " target: " +  agents[i].getTargetState().getId());
         }
 
-       environment.reassigningStateLocationAndTransPath();
+      /*  for (Agent agent : agents) {
+            System.out.println("agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + agent.getTargetState().getId());
+        }*/
+
+        environment.reassigningStateLocationAndTransPath();
 
     }
 
@@ -160,20 +172,60 @@ public class World {
         // Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
-             int i = Globals.RANDOM.nextInt(agentsCount);
-             if(agents[i].getState().getTargets().size()!=0){
-                 int targetIndex = Globals.RANDOM.nextInt(agents[i].getState().getTargets().size());
-                 agents[i].gotoState(targetIndex);
-             }
+            //============================//============================  Updating agents statuses
+            for (Agent agent : agents) {
+                agent.resetParams();
+                agent.updateStateMap();
+                agent.updateWatchList();
+                agent.updateProfile();
+            }
+
+            //============================//============================ Traveling
+
+
+            for (Agent agent : agents) {
+                if (!agent.isInTargetState()) {
+                    if (agent.getState().getTargets().size() != 0) {
+                        StateX nextState = agent.whereToGo();
+                        if (nextState != null) {
+                            agent.gotoState(nextState);
+                        } else {
+                            int targetIndex = Globals.RANDOM.nextInt(agent.getState().getTargets().size());
+                            agent.gotoState(targetIndex);
+                        }
+                    }
+                }
+            }
+
+          /*  int i = Globals.RANDOM.nextInt(agentsCount);
+            if (!agents[i].isInTargetState()) {
+
+                if (agents[i].getState().getTargets().size() != 0) {
+                    StateX nextState = agents[i].whereToGo();
+                    if (nextState != null) {
+                        agents[i].gotoState(nextState);
+                    } else {
+                        int targetIndex = Globals.RANDOM.nextInt(agents[i].getState().getTargets().size());
+                        agents[i].gotoState(targetIndex);
+                    }
+                }
+            }*/
+
+/*
+            int i = Globals.RANDOM.nextInt(agentsCount);
+            if (agents[i].getState().getTargets().size() != 0) {
+                StateX nextState = agents[i].whereToGo();
+                if (nextState != null) {
+                    agents[i].gotoState(nextState);
+                }else{
+                    int targetIndex = Globals.RANDOM.nextInt(agents[i].getState().getTargets().size());
+                    agents[i].gotoState(targetIndex);
+                }
+            }*/
             /*for (Agent agent : agents) {
                 agent.gotoState(0);
             }*/
 
-            for (Agent agent : agents) {
-                agent.resetParams();
-                agent.updateWatchList();
-                agent.updateProfile();
-            }
 
             //============================ Finding Doer of service an doing it
             Agent doerAgent;

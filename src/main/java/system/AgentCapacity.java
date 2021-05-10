@@ -10,6 +10,8 @@ public class AgentCapacity {
 
         watchRadius = Globals.profiler.getCurrentBunch().getWatchRadiusD().nextValue();
 
+        stateMapCap = Globals.profiler.getCurrentBunch().getStateMapCapD().nextValue();
+
         watchListCapacity = Globals.profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
 
         concurrentDoingServiceCap = Globals.profiler.getCurrentBunch().getConcurrentDoingServiceCapD().nextValue();
@@ -18,13 +20,17 @@ public class AgentCapacity {
         historyCap = Globals.profiler.getCurrentBunch().getHistoryCapD().nextValue();
         historyServiceRecordCap = Globals.profiler.getCurrentBunch().getHistoryServiceRecordCapD().nextValue();
 
-        System.out.println(
+        // capPower is between 0 and 100
+        capPower =100 * (stateMapCap/Globals.profiler.getCurrentBunch().getStateMapCapD().getMaxValue());
+
+        /*System.out.println(
                 " | watchRadius: " + watchRadius
                         + " | watchListCap: " + watchListCapacity
+                        + " | stateMapCap: " + stateMapCap
                         + " | concurrentDoSerCap: " + concurrentDoingServiceCap
                         + " | historyCap: " + historyCap
                         + " | historySerRecCap: " + historyServiceRecordCap
-        );
+        );*/
 
     }
 
@@ -36,6 +42,7 @@ public class AgentCapacity {
 
     private int watchListCapacity;
     private int watchRadius;                        // radius of watch
+    private int stateMapCap;                        // radius of watch
 
     private int concurrentDoingServiceCap;             // number of concurrent services that can do for requester of a service
 
@@ -49,6 +56,9 @@ public class AgentCapacity {
         return watchRadius;
     }
 
+    public int getStateMapCap() {
+        return stateMapCap;
+    }
 
     public int getCapPower() {
         return capPower;
@@ -61,6 +71,7 @@ public class AgentCapacity {
                 ",\n\t\tserviceRecordCap=" + historyCap +
                 ",\n\t\twatchListCapacity=" + watchListCapacity +
                 ",\n\t\twatchRadius=" + watchRadius +
+                ",\n\t\tstateMapCap=" + stateMapCap +
                 ",\n\t\tconcurrentDoingServiceCap=" + concurrentDoingServiceCap +
                 ",\n\t\tcapPower=" + capPower +
                 '}';

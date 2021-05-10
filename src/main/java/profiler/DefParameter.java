@@ -84,6 +84,22 @@ public class DefParameter {
         return value;
     }
 
+
+    public int getMaxValue() {
+        switch (paramType) {
+            case Rand:
+               return randRange;
+            case Const:
+                return value;
+            case Range:
+                return upperBound;
+            case Percent:
+                return percentRefValue;
+            default:
+                throw new IllegalStateException("Unexpected value: " + paramType);
+        }
+    }
+
     public String toString(int tabIndex) {
         tabIndex++;
         StringBuilder tx = new StringBuilder("\n");

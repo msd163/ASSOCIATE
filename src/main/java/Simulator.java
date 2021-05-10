@@ -29,7 +29,7 @@ public class Simulator {
         }
         Globals.profiler.init();
 
-        System.out.println(Globals.profiler.toString());
+        //System.out.println(Globals.profiler.toString());
 
         //============================
         FileReader envReader = new FileReader(projectPath.statesData());
@@ -42,7 +42,7 @@ public class Simulator {
         }
 
         System.out.println("Environment loaded from file.");
-        System.out.println(environment.toString());
+       // System.out.println(environment.toString());
 
         //============================
         worlds = new World[Globals.profiler.getSimulationRound()];
