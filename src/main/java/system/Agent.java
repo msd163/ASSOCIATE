@@ -10,6 +10,7 @@ import utils.Point;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Agent {
@@ -52,6 +53,8 @@ public class Agent {
     private AgentBehavior behavior;
 
     // agents that are watched by this agent
+    // watched list must be sorted according to trust level of watched agents.
+    // first agent (zero position) is agent with maximum trust level.
     private List<Agent> watchedAgents;
 
     // list of services that can request with this agent
@@ -135,82 +138,186 @@ public class Agent {
         return -1;
     }
 
+    /**
+     *
+     */
     public void updateStateMap() {
 
-        //int stateMapIndex = getStateMapIndex(state);
-        //if (stateMapIndex == -1) {
         int size = stateMaps.size();
+        // If the agent do not moved and it's state doesnt changed, only the visit time will to be updated.
         if (size > 0 && stateMaps.get(size - 1).getStateX().getId() == state.getId()) {
             stateMaps.get(size - 1).updateVisitTime();
             return;
         }
 
+        // If stateMap if full, remove old (first) state in map
         if (size >= capacity.getStateMapCap()) {
-            //int index = getOldStateMapIndex();
-            //stateMaps.remove(index);
             stateMaps.remove(0);
         }
 
+        // Adding new state to the map
         stateMaps.add(new StateMap(state, Globals.WORLD_TIMER, state.getTargets()));
 
-        //}
-       /* else {
-            stateMaps.get(stateMapIndex).updateVisitTime();
-        }*/
+        // Printing map
         String sIds = "";
         for (StateMap s : stateMaps) {
             sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
         }
-        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId()+" >  t: "+ targetState.getId() + " ] #  maps: " + sIds);
+        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
 
     }
     //============================//============================ Movement
 
-
-    public boolean isInTargetState() {
+    private boolean isInTargetState() {
         return state.getId() == targetState.getId();
+    }
+
+    public StateX gotoTarget() {
+
+        StateX stateX = gotoState(targetState);
+
+        if (stateX == null) {
+            int targetIndex = Globals.RANDOM.nextInt(getState().getTargets().size());
+            stateX = gotoNeighborState(targetIndex);
+        }
+
+        return stateX;
+
+      /*  // Is not now in target state
+        if (!isInTargetState()) {
+            // the state has at least one output state
+            if (state.getTargets().size() > 0) {
+                StateX nextState = whereToGo();
+                // can find goal state
+                if (nextState != null) {
+                    gotoNeighborState(nextState);
+                }
+                // If there is no candidate to go. Random selection of goal state.
+                else {
+                    int targetIndex = Globals.RANDOM.nextInt(getState().getTargets().size());
+                    gotoNeighborState(targetIndex);
+                }
+            }
+        }*/
+    }
+
+    public StateX gotoState(StateX goalState) {
+
+        // Is not now in goal state
+        if (state.getId() == goalState.getId()) {
+            return state;
+        }
+
+        // the state has no output state
+        if (state.getTargets().size() == 0) {
+            // Printing map
+            String sIds = "";
+            for (StateMap s : stateMaps) {
+                sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
+            }
+            System.out.println(">>ERR>> no target for agent:::gotoSate::agentId: " + id + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
+
+
+            return state;
+        }
+
+        StateX nextState = whereToGo(goalState);
+
+        // can not find goal state
+        if (nextState == null) {
+            return null;
+        }
+
+        // can find goal state and next state is it's neighbor
+        if (isNeighborState(nextState)) {
+            return gotoNeighborState(nextState);
+        }
+        // if next state is not neighbor
+        else {
+            return gotoState(nextState);
+        }
 
     }
 
-    public boolean gotoState(StateX nextState) {
-        if (nextState != null) {
-            // can we add this agent to new state? if true, it will be added.
-            if (nextState.addAgent(this)) {
-                // can we remove this state from current state? if true, it will be removed.
-                if (state.leave(this)) {
-                    TransitionX targetTrans = state.getTargetTrans(nextState);
-                    if (targetTrans != null) {
-                        targetTrans.setDrawIsActive(true);
-                    }
-                    state = nextState;
-                    return true;
-                } else {
-                    // If it can not able to leave current state, will leave new state.
-                    nextState.leave(this);
-                }
+    private boolean isNeighborState(StateX stateX) {
+        if (state.getTargets().isEmpty()) {
+            return false;
+        }
+
+        for (StateX target : state.getTargets()) {
+            if (stateX.getId() == target.getId()) {
+                return true;
             }
         }
         return false;
     }
 
+    /**
+     * go to neighbor state
+     *
+     * @param nextState
+     * @return newState
+     */
+    private StateX gotoNeighborState(StateX nextState) {
+        if (nextState == null) {
+            return state;
+        }
+        // If now is in nextState
+        if (nextState.getId() == state.getId()) {
+            return state;
+        }
+        // If nextState is not neighbor state
+        if (!isNeighborState(nextState)) {
+            return state;
+        }
 
-    public boolean gotoState(int index) {
+        // can we add this agent to new state? if true, it will be added.
+        if (nextState.addAgent(this)) {
+
+            // can we remove this state from current state? if true, it will be removed.
+            if (state.leave(this)) {
+
+                // Selecting the transition that will transmit the agent from current state to next state an activating it.
+                TransitionX targetTrans = state.getTargetTrans(nextState);
+                if (targetTrans != null) {
+                    targetTrans.setDrawIsActive(true);
+                }
+                state = nextState;
+                return nextState;
+            } else {
+                // If it can not able to leave current state, will leave new state.
+                nextState.leave(this);
+            }
+        }
+
+        return state;
+    }
+
+    private StateX gotoNeighborState(int index) {
         ArrayList<StateX> targets = state.getTargets();
         if (targets.size() > index) {
             StateX nextState = state.getTargets().get(index);
-            return gotoState(nextState);
+            return gotoNeighborState(nextState);
         }
-        return false;
+        return state;
     }
 
+    private StateX whereToGo() {
+        return whereToGo(targetState);
+    }
 
-    public StateX whereToGo() {
-        if (targetState == null) {
+    /**
+     * @param goalState
+     * @return neighbor state that is in the path of target state
+     */
+    private StateX whereToGo(StateX goalState) {
+        if (goalState == null) {
+            System.out.println(">> ERR > Agent.whereToGo: goalState is null for agent: " + id);
             return null;
         }
         boolean isVisitedPreviously;
-        for (Agent agent : state.getAgents()) {
-            StateX stateX = agent.doYouKnowWhereIs(targetState);
+        for (Agent agent : watchedAgents) {
+            StateX stateX = agent.doYouKnowWhereIs(goalState, state);
             if (stateX != null) {
                 isVisitedPreviously = false;
                 for (StateMap stateMap : stateMaps) {
@@ -228,20 +335,33 @@ public class Agent {
         return null;
     }
 
-    private StateX doYouKnowWhereIs(StateX targetState) {
+    /**
+     * @param goalState
+     * @param from
+     * @return neighbor state that routes to goalState
+     */
+    private StateX doYouKnowWhereIs(StateX goalState, StateX from) {
+
         boolean isFound = false;
-        for (int i = stateMaps.size() - 1; i >= 0; i--) {
-            if (stateMaps.get(i).isAnyPathTo(targetState)) {
+        int lastIndex = stateMaps.size() - 1;
+
+        for (int i = lastIndex; i >= 0; i--) {
+
+            // If there is no reverse path from state 'i' to state 'i-1'
+            if (i < lastIndex && !stateMaps.get(i + 1).hasPathTo(stateMaps.get(i))) {
+                return null;
+            }
+
+            if (stateMaps.get(i).isAnyPathTo(goalState)) {
                 isFound = true;
                 break;
-            } else if (i > 1 && !stateMaps.get(i).hasPathTo(stateMaps.get(i - 1))) {
-                return null;
             }
         }
 
         if (isFound) {
-            for (int i = stateMaps.size() - 1; i >= 0; i--) {
-                if (stateMaps.get(i).getStateX().getId() != state.getId()) {
+            for (int i = lastIndex; i >= 0; i--) {
+//                if (stateMaps.get(i).getStateX().getId() != from.getId()) {
+                if (from.isNeighborState(stateMaps.get(i).getStateX())) {
                     return stateMaps.get(i).getStateX();
                 }
             }
@@ -276,11 +396,22 @@ public class Agent {
         for (StateX st : seenStates) {
             ArrayList<Agent> ags = st.getAgents();
             for (Agent ag : ags) {
-                if (watchedAgents.size() <= capacity.getWatchListCapacity()) {
+                if (watchedAgents.size() <= capacity.getWatchListCapacity() &&
+                        !watchedAgents.contains(ag)
+                ) {
                     watchedAgents.add(ag);
                 }
             }
         }
+
+        watchedAgents.sort((o1, o2) -> {
+
+            float t1 = trust.getTrustScore(o1);
+            float t2 = trust.getTrustScore(o2);
+
+            return Float.compare(t1, t2);
+        });
+
     }
 
 
@@ -427,8 +558,8 @@ public class Agent {
 
 
         honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : new Color(255, 71, 71);
-        honestForeColor = behavior.getIsHonest() ?  new Color(36, 151, 9): new Color(255, 196, 166);
-        honestBorderColor = behavior.getIsHonest() ?  new Color(29, 102, 0): new Color(160, 0, 0);
+        honestForeColor = behavior.getIsHonest() ? new Color(36, 151, 9) : new Color(255, 196, 166);
+        honestBorderColor = behavior.getIsHonest() ? new Color(29, 102, 0) : new Color(160, 0, 0);
         isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
         // Drawing watch radius
         if (isCapCandid || isSimConfigShowWatchRadius()) {

@@ -169,7 +169,7 @@ public class World {
             diagramFrame.setVisible(true);
         }
 
-        // Main loop of running in a world
+        //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
             //============================//============================  Updating agents statuses
@@ -183,19 +183,8 @@ public class World {
 
             //============================//============================ Traveling
 
-
             for (Agent agent : agents) {
-                if (!agent.isInTargetState()) {
-                    if (agent.getState().getTargets().size() != 0) {
-                        StateX nextState = agent.whereToGo();
-                        if (nextState != null) {
-                            agent.gotoState(nextState);
-                        } else {
-                            int targetIndex = Globals.RANDOM.nextInt(agent.getState().getTargets().size());
-                            agent.gotoState(targetIndex);
-                        }
-                    }
-                }
+               agent.gotoTarget();
             }
 
           /*  int i = Globals.RANDOM.nextInt(agentsCount);

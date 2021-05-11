@@ -108,6 +108,19 @@ public class StateX {
         return (int) (Math.sqrt(agents.size()) + 1);
     }
 
+    public boolean isNeighborState(StateX stateX) {
+        if (targets.isEmpty()) {
+            return false;
+        }
+
+        for (StateX target : targets) {
+            if (stateX.getId() == target.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //============================ Transition
 
     public void addTargetTrans(TransitionX transition) {
@@ -252,24 +265,28 @@ public class StateX {
 
     public ArrayList<StateX> getWatchList(int depth) {
 
-        if (targets == null || targets.isEmpty()) {
+        if (depth < 0) {
             return null;
         }
-        ArrayList<StateX> to = null;
 
-        if (depth >= 1) {
-            to = new ArrayList<StateX>();
+        ArrayList<StateX> to = new ArrayList<>();
+
+        to.add(this);
+
+        if (targets == null || targets.isEmpty()) {
+            return to;
+        }
+
+        if (depth > 0) {
             for (int i = 0; i < targets.size(); i++) {
-                to.add(targets.get(i));
-                ArrayList<StateX> watchList = getWatchList(depth - 1);
+                // to.add(targets.get(i));
+                ArrayList<StateX> watchList = targets.get(i).getWatchList(depth - 1);
                 if (watchList != null) {
                     to.addAll(watchList);
                 }
             }
         }
         return to;
-
-
     }
 
     public ArrayList<StateX> getTargets() {

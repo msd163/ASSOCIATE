@@ -104,8 +104,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
                     trans.getDrawAngStart(), trans.getDrawAngExtend(),                          // angle start, extent
                     Arc2D.OPEN));
 
-            g.setColor(Color.WHITE);
-            g.setStroke(new BasicStroke(10));
+            g.setStroke(new BasicStroke(6));
 
             g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
                     trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
