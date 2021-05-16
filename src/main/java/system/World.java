@@ -98,17 +98,25 @@ public class World {
 
             if (isAddedToState) {
                 agents[i].setState(randomState);
+                boolean isAnyPathTo;
+                //============================ Adding target state to agents
+                do {
+                    randomState = environment.getRandomState();
+                    //
+                    isAnyPathTo = agents[i].getState().isAnyPathTo(randomState);
+                } while (!isAnyPathTo && tryCount++ < agentsCount);
+
+                if (isAnyPathTo) {
+                    agents[i].setTargetState(randomState);
+                }
+
             }
-
-            //============================ Adding target state to agents
-            agents[i].setTargetState(environment.getRandomState());
-
             //============================  if agentId is in 'traceAgentIds', it will set as traceable
 //            Agent agent = agents[i];
             if (isTraceable(i)) {
                 agents[i].setAsTraceable();
             }
-            System.out.println("world:::init::agent: " +  agents[i].getId() + " state: " +  agents[i].getState().getId() + " target: " +  agents[i].getTargetState().getId());
+            System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getTargetState() != null ? agents[i].getTargetState().getId() : "NULL"));
         }
 
       /*  for (Agent agent : agents) {
@@ -169,11 +177,16 @@ public class World {
             diagramFrame.setVisible(true);
         }
 
+        /* ****************************
+         *            MAIN LOOP      *
+         * ****************************/
+
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
-            //============================//============================  Updating agents statuses
             System.out.println(Globals.WORLD_TIMER + " : World.run------------------------------- ");
+
+            //============================//============================  Updating agents statuses
             for (Agent agent : agents) {
                 agent.resetParams();
                 agent.updateStateMap();
@@ -184,38 +197,8 @@ public class World {
             //============================//============================ Traveling
 
             for (Agent agent : agents) {
-               agent.gotoTarget();
+                agent.gotoTarget();
             }
-
-          /*  int i = Globals.RANDOM.nextInt(agentsCount);
-            if (!agents[i].isInTargetState()) {
-
-                if (agents[i].getState().getTargets().size() != 0) {
-                    StateX nextState = agents[i].whereToGo();
-                    if (nextState != null) {
-                        agents[i].gotoState(nextState);
-                    } else {
-                        int targetIndex = Globals.RANDOM.nextInt(agents[i].getState().getTargets().size());
-                        agents[i].gotoState(targetIndex);
-                    }
-                }
-            }*/
-
-/*
-            int i = Globals.RANDOM.nextInt(agentsCount);
-            if (agents[i].getState().getTargets().size() != 0) {
-                StateX nextState = agents[i].whereToGo();
-                if (nextState != null) {
-                    agents[i].gotoState(nextState);
-                }else{
-                    int targetIndex = Globals.RANDOM.nextInt(agents[i].getState().getTargets().size());
-                    agents[i].gotoState(targetIndex);
-                }
-            }*/
-            /*for (Agent agent : agents) {
-                agent.gotoState(0);
-            }*/
-
 
             //============================ Finding Doer of service an doing it
             Agent doerAgent;

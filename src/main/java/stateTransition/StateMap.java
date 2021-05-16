@@ -19,16 +19,16 @@ public class StateMap {
         this.targets = targets;
     }
 
-    public boolean isAnyPathTo(StateX targetState) {
+    public int isAnyPathTo(StateX targetState) {
         if (stateX.getId() == targetState.getId()) {
-            return true;
+            return 0;
         }
         for (StateX target : targets) {
             if (target.getId() == targetState.getId()) {
-                return true;
+                return 1;
             }
         }
-        return false;
+        return -1;
     }
 
 

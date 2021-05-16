@@ -1,6 +1,7 @@
 package stateTransition;
 
 import system.Agent;
+import system.WatchedAgent;
 import utils.Globals;
 import utils.Point;
 import utils.RectangleX;
@@ -218,6 +219,41 @@ public class StateX {
 
     //============================//============================
 
+    public boolean isAnyPathTo(StateX goalState) {
+        ArrayList<StateX> visitedStates = new ArrayList<>();
+        return isAnyPathTo(goalState, visitedStates);
+    }
+
+    public boolean isAnyPathTo(StateX goalState, ArrayList<StateX> visitedStates) {
+
+        if (this.getId() == goalState.getId()) {
+            return true;
+        }
+
+        if (targets == null) {
+            return false;
+        }
+
+        for (StateX target : targets) {
+
+            if (visitedStates.contains(target)) {
+                continue;
+            }
+
+            visitedStates.add(target);
+
+            if (target.isAnyPathTo(goalState, visitedStates)) {
+                return true;
+            }
+
+
+        }
+
+        return false;
+
+    }
+    //============================//============================
+
 
     public int getId() {
         return id;
@@ -263,30 +299,89 @@ public class StateX {
         this.location = location;
     }
 
-    public ArrayList<StateX> getWatchList(int depth) {
+    /**
+     * Getting Watched agents list with specific depth
+     *
+     * @param depth
+     * @param maxDepth
+     * @param count
+     * @param sourceAgent
+     * @param visitedStates
+     * @param parentPath
+     * @return
+     */
+    public ArrayList<WatchedAgent> getWatchList(int depth, int maxDepth, int count, Agent sourceAgent, ArrayList<StateX> visitedStates, ArrayList<StateX> parentPath) {
 
-        if (depth < 0) {
-            return null;
+        if (depth < 0 || count < 1) {
+            return new ArrayList<>();
         }
 
-        ArrayList<StateX> to = new ArrayList<>();
+        // adding current stated lo visited states list
+        visitedStates.add(this);
 
-        to.add(this);
+        ArrayList<WatchedAgent> was = new ArrayList<>();
+
+        for (Agent agent : agents) {
+            // preventing visiting itself
+            if (agent.getId() == sourceAgent.getId()) {
+                continue;
+            }
+            WatchedAgent watchedAgent = new WatchedAgent();
+            watchedAgent.setAgent(agent);
+            if (depth < maxDepth) {
+                for (int i = 0, len = parentPath.size(); i < len; i++) {
+                    watchedAgent.addPath(parentPath.get(i));
+                }
+                watchedAgent.addPath(this);
+            }
+            count--;
+            was.add(watchedAgent);
+            if (count < 1) {
+                return was;
+            }
+        }
 
         if (targets == null || targets.isEmpty()) {
-            return to;
+            return was;
         }
 
         if (depth > 0) {
+            boolean isStateVisited;
+
+            ArrayList<StateX> localParentPath = new ArrayList<>(parentPath);
+            if (depth < maxDepth) {
+                localParentPath.add(this);
+            }
+
             for (int i = 0; i < targets.size(); i++) {
-                // to.add(targets.get(i));
-                ArrayList<StateX> watchList = targets.get(i).getWatchList(depth - 1);
+
+                // Ignoring previously visited states.
+                isStateVisited = false;
+                for (StateX vs : visitedStates) {
+                    if (targets.get(i).getId() == vs.getId()) {
+                        isStateVisited = true;
+                        break;
+                    }
+                }
+                if (isStateVisited) {
+                    continue;
+                }
+
+                ArrayList<WatchedAgent> watchList = targets.get(i).getWatchList(depth - 1, maxDepth, count, sourceAgent, visitedStates, localParentPath);
+
                 if (watchList != null) {
-                    to.addAll(watchList);
+
+                    was.addAll(watchList);
+                    count -= watchList.size();
+
+                    if (count < 1) {
+                        return was;
+                    }
                 }
             }
         }
-        return to;
+
+        return was;
     }
 
     public ArrayList<StateX> getTargets() {

@@ -1,5 +1,6 @@
 package system;
 
+import stateTransition.RoutingHelp;
 import stateTransition.StateMap;
 import stateTransition.StateX;
 import stateTransition.TransitionX;
@@ -10,7 +11,6 @@ import utils.Point;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Agent {
@@ -45,6 +45,7 @@ public class Agent {
     private StateX state;
     private ArrayList<StateMap> stateMaps;
     private StateX targetState;
+    private ArrayList<StateX> nextStates;
     //============================
     private AgentCapacity capacity;
 
@@ -55,7 +56,7 @@ public class Agent {
     // agents that are watched by this agent
     // watched list must be sorted according to trust level of watched agents.
     // first agent (zero position) is agent with maximum trust level.
-    private List<Agent> watchedAgents;
+    private List<WatchedAgent> watchedAgents;
 
     // list of services that can request with this agent
     private List<ServiceType> requestingServiceTypes;
@@ -75,7 +76,7 @@ public class Agent {
         capacity = new AgentCapacity(this);
         trust = new AgentTrust(this, capacity.getHistoryCap(), capacity.getHistoryServiceRecordCap());
         behavior = new AgentBehavior();
-        watchedAgents = new ArrayList<Agent>();
+        watchedAgents = new ArrayList<>();
 
 
         //todo: [policy] : assigning requested services
@@ -90,6 +91,7 @@ public class Agent {
         doneServices = new ArrayList<Service>();
 
         stateMaps = new ArrayList<>();
+        nextStates = new ArrayList<>();
 
     }
 
@@ -163,53 +165,30 @@ public class Agent {
         for (StateMap s : stateMaps) {
             sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
         }
-        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
+        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + (targetState == null ? "NULL" : targetState.getId()) + " ] #  maps: " + sIds);
 
     }
     //============================//============================ Movement
 
     private boolean isInTargetState() {
-        return state.getId() == targetState.getId();
+
+        return targetState != null && state.getId() == targetState.getId();
     }
 
     public StateX gotoTarget() {
 
-        StateX stateX = gotoState(targetState);
-
-        if (stateX == null) {
-            int targetIndex = Globals.RANDOM.nextInt(getState().getTargets().size());
-            stateX = gotoNeighborState(targetIndex);
+        if (targetState == null) {
+            return null;
         }
 
-        return stateX;
-
-      /*  // Is not now in target state
-        if (!isInTargetState()) {
-            // the state has at least one output state
-            if (state.getTargets().size() > 0) {
-                StateX nextState = whereToGo();
-                // can find goal state
-                if (nextState != null) {
-                    gotoNeighborState(nextState);
-                }
-                // If there is no candidate to go. Random selection of goal state.
-                else {
-                    int targetIndex = Globals.RANDOM.nextInt(getState().getTargets().size());
-                    gotoNeighborState(targetIndex);
-                }
-            }
-        }*/
-    }
-
-    public StateX gotoState(StateX goalState) {
-
-        // Is not now in goal state
-        if (state.getId() == goalState.getId()) {
+        if (isInTargetState()) {
+            nextStates.clear();
             return state;
         }
 
         // the state has no output state
         if (state.getTargets().size() == 0) {
+            nextStates.clear();
             // Printing map
             String sIds = "";
             for (StateMap s : stateMaps) {
@@ -217,26 +196,112 @@ public class Agent {
             }
             System.out.println(">>ERR>> no target for agent:::gotoSate::agentId: " + id + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
 
-
             return state;
         }
 
-        StateX nextState = whereToGo(goalState);
+        if (nextStates.isEmpty()) {
+            updateNextStates(targetState);
+        }
 
-        // can not find goal state
-        if (nextState == null) {
+        if (nextStates.isEmpty()) {
+            int targetIndex = Globals.RANDOM.nextInt(getState().getTargets().size());
+            return gotoNeighborState(targetIndex);
+        }
+
+//      StateX stateX = gotoNeighborState(nextStates.get(0));
+        StateX nextState = nextStates.remove(0);
+
+        if (!isNeighborState(nextState)) {
+            System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + id + " state: " + state.getId() + "  nextState: " + nextState.getId());
             return null;
         }
 
-        // can find goal state and next state is it's neighbor
-        if (isNeighborState(nextState)) {
-            return gotoNeighborState(nextState);
-        }
-        // if next state is not neighbor
-        else {
-            return gotoState(nextState);
+        nextState = gotoNeighborState(nextState);
+        return nextState;
+
+    }
+
+    public void updateNextStates(StateX goalState) {
+
+        nextStates.clear();
+
+        RoutingHelp routingHelp;
+
+        if (watchedAgents == null) {
+            return;
         }
 
+        // Asking from watched list that is sorted according to trust level of watched agents.
+        ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
+        for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize && i < 5; i++) {
+            WatchedAgent wa = watchedAgents.get(i);
+            //todo: check reverse path
+            routingHelp = wa.getAgent().doYouKnowWhereIs(goalState);
+
+            if (routingHelp != null) {
+                routingHelp.setStepToTarget(routingHelp.getStepToTarget() + wa.getPathSize());
+                routingHelps.add(routingHelp);
+            }
+        }
+
+        routingHelps.sort((c1, c2) -> {
+            if (c1.getStepToTarget() < c2.getStepToTarget()) {
+                return -1;
+            } else if (c1.getStepToTarget() > c2.getStepToTarget()) {
+                return 1;
+            }
+            return 0;
+        });
+
+        for (RoutingHelp help : routingHelps) {
+            nextStates.clear();
+
+            for (WatchedAgent wa : watchedAgents) {
+                if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
+                    nextStates.addAll(wa.getPath());
+                    break;
+                }
+            }
+
+            if (help.getNextState() != null) {
+                nextStates.add(help.getNextState());
+            }
+
+            boolean isVisited = false;
+            for (int i = 0, nextStatesSize = nextStates.size(); i < nextStatesSize; i++) {
+                StateX nextState = nextStates.get(i);
+
+                int siteMapLastIndex = stateMaps.size() - 1;
+                for (int j = siteMapLastIndex; j >= 0 && j > siteMapLastIndex - nextStatesSize - 2; j--) {
+                    StateMap stateMap = stateMaps.get(j);
+
+                    if (stateMap.getStateX().getId() == nextState.getId()) {
+                        isVisited = true;
+                        break;
+                    }
+                }
+
+            }
+            if (!isVisited) {
+                break;
+            }
+
+        }
+
+     /*   if (routingHelp == null) {
+            return;
+        }*/
+
+  /*      for (WatchedAgent wa : watchedAgents) {
+            if (wa.getAgent().getId() == routingHelp.getHelperAgent().getId()) {
+                nextStates.addAll(wa.getPath());
+                break;
+            }
+        }*/
+
+      /*  if (routingHelp.getNextState() != null) {
+            nextStates.add(routingHelp.getNextState());
+        }*/
     }
 
     private boolean isNeighborState(StateX stateX) {
@@ -302,49 +367,49 @@ public class Agent {
         return state;
     }
 
-    private StateX whereToGo() {
-        return whereToGo(targetState);
-    }
 
     /**
      * @param goalState
      * @return neighbor state that is in the path of target state
      */
-    private StateX whereToGo(StateX goalState) {
+    /*private RoutingHelp whereToGo(StateX goalState) {
         if (goalState == null) {
             System.out.println(">> ERR > Agent.whereToGo: goalState is null for agent: " + id);
             return null;
         }
-        boolean isVisitedPreviously;
-        for (Agent agent : watchedAgents) {
-            StateX stateX = agent.doYouKnowWhereIs(goalState, state);
-            if (stateX != null) {
-                isVisitedPreviously = false;
+        //boolean isVisitedPreviously;
+
+        // Requesting from agents in watched list
+        for (WatchedAgent wa : watchedAgents) {
+            //todo: check reverse path
+            RoutingHelp routingHelp = wa.getAgent().doYouKnowWhereIs(goalState);
+            if (routingHelp != null) {
+              *//*  isVisitedPreviously = false;
                 for (StateMap stateMap : stateMaps) {
-                    if (stateMap.getStateX().getId() == stateX.getId()) {
+                    if (stateMap.getStateX().getId() == routingHelp.getNextState().getId()) {
                         isVisitedPreviously = true;
                         break;
                     }
-                }
-                if (!isVisitedPreviously) {
-                    return stateX;
-                }
+                }*//*
+                // if (!isVisitedPreviously) {
+                return routingHelp;
+                // }
             }
 
         }
         return null;
-    }
+    }*/
 
     /**
      * @param goalState
-     * @param from
      * @return neighbor state that routes to goalState
      */
-    private StateX doYouKnowWhereIs(StateX goalState, StateX from) {
+    private RoutingHelp doYouKnowWhereIs(StateX goalState) {
 
-        boolean isFound = false;
+        //boolean isFound = false;
         int lastIndex = stateMaps.size() - 1;
 
+        //int allStepsToTarget = 0;
         for (int i = lastIndex; i >= 0; i--) {
 
             // If there is no reverse path from state 'i' to state 'i-1'
@@ -352,20 +417,28 @@ public class Agent {
                 return null;
             }
 
-            if (stateMaps.get(i).isAnyPathTo(goalState)) {
-                isFound = true;
-                break;
+            int stepTo = stateMaps.get(i).isAnyPathTo(goalState);
+            if (stepTo >= 0) {
+                RoutingHelp routingHelp = new RoutingHelp();
+                routingHelp.setHelperAgent(this);
+                routingHelp.setStepToTarget(lastIndex - i + stepTo);
+
+                if (i < lastIndex /*&& lastIndex > 0*/) {
+                    routingHelp.setNextState(stateMaps.get(lastIndex - 1).getStateX());
+                }
+                return routingHelp;
             }
         }
 
-        if (isFound) {
+      /*  if (isFound) {
+
             for (int i = lastIndex; i >= 0; i--) {
 //                if (stateMaps.get(i).getStateX().getId() != from.getId()) {
                 if (from.isNeighborState(stateMaps.get(i).getStateX())) {
                     return stateMaps.get(i).getStateX();
                 }
             }
-        }
+        }*/
         return null;
     }
 
@@ -387,7 +460,37 @@ public class Agent {
      */
     public void updateWatchList() {
         watchedAgents.clear();
-        List<StateX> seenStates = state.getWatchList(capacity.getWatchRadius());
+        ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
+        ArrayList<StateX> parentPath = new ArrayList<>();
+        watchedAgents = state.getWatchList(capacity.getWatchRadius(), capacity.getWatchRadius(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
+       /* watchedAgents.clear();
+        // List<StateX> seenStates = state.getWatchList(capacity.getWatchRadius());
+
+
+        int watchCount = 0;
+        int depth = 0;
+        StateX watchedState = state;
+        while (watchCount <= capacity.getWatchListCapacity()) {
+
+            for (Agent agent : watchedState.getAgents()) {
+                watchCount++;
+                WatchedAgent watchedAgent = new WatchedAgent();
+                watchedAgent.setAgent(agent);
+                if (depth > 0) {
+                    watchedAgent.addPath(state);
+                }
+                watchedAgents.add(watchedAgent);
+                if (watchCount > capacity.getWatchListCapacity()) {
+                    break;
+                }
+            }
+
+            if(depth< capacity.getWatchRadius()){
+
+            }
+
+        }
+
 
         if (seenStates == null) {
             return;
@@ -410,7 +513,7 @@ public class Agent {
             float t2 = trust.getTrustScore(o2);
 
             return Float.compare(t1, t2);
-        });
+        });*/
 
     }
 
@@ -422,9 +525,11 @@ public class Agent {
 
 
     public boolean canWatch(Agent agent) {
-        for (int i = 0; i < watchedAgents.size(); i++) {
-            if (watchedAgents.get(i).id == agent.id) {
-                return true;
+        if (watchedAgents != null) {
+            for (int i = 0; i < watchedAgents.size(); i++) {
+                if (watchedAgents.get(i).getAgent().id == agent.id) {
+                    return true;
+                }
             }
         }
         return false;
@@ -458,16 +563,16 @@ public class Agent {
         for (int index : trust.getHistoriesSortedIndex()) {
             AgentHistory history = trust.getHistories()[index];
 
-            for (Agent watchedAgent : watchedAgents) {
+            for (WatchedAgent watchedAgent : watchedAgents) {
                 if (history != null
-                        && history.getDoerAgent().getId() == watchedAgent.getId()  // if the watched agent is in history
+                        && history.getDoerAgent().getId() == watchedAgent.getAgent().getId()  // if the watched agent is in history
                         //todo: [policy] : set threshold to trustee selection
                         && history.getEffectiveTrustLevel() > 0  // if the watched agent is not dishonest
                 ) {
 
-                    boolean serviceAcceptance = watchedAgent.canDoService(this, service);
+                    boolean serviceAcceptance = watchedAgent.getAgent().canDoService(this, service);
                     if (serviceAcceptance) {
-                        return watchedAgent;
+                        return watchedAgent.getAgent();
                     }
                 }
             }
@@ -480,8 +585,8 @@ public class Agent {
 
         while (++tryCount < 10) {
             i = Globals.RANDOM.nextInt(watchSize);
-            if (trust.getTrustScore(watchedAgents.get(i)) >= 0) {
-                return watchedAgents.get(i);
+            if (trust.getTrustScore(watchedAgents.get(i).getAgent()) >= 0) {
+                return watchedAgents.get(i).getAgent();
             }
         }
 
@@ -575,8 +680,8 @@ public class Agent {
         // Drawing links to watched agents
         if (simConfigLinkToWatchedAgents) {
             g.setColor(Color.GRAY);
-            for (Agent wa : watchedAgents) {
-                g.drawLine(loc_x, loc_y, wa.getLoc_x(), wa.getLoc_y());
+            for (WatchedAgent wa : watchedAgents) {
+                g.drawLine(loc_x, loc_y, wa.getAgent().getLoc_x(), wa.getAgent().getLoc_y());
             }
         }
 
@@ -672,7 +777,7 @@ public class Agent {
         return capacity;
     }
 
-    public List<Agent> getWatchedAgents() {
+    public List<WatchedAgent> getWatchedAgents() {
         return watchedAgents;
     }
 
