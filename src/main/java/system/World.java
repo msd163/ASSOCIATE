@@ -2,6 +2,7 @@ package system;
 
 import drawing.DiagramDrawingWindow;
 import drawing.MainDrawingWindow;
+import routing.Router;
 import stateTransition.Environment;
 import stateTransition.StateX;
 import utils.Config;
@@ -197,7 +198,7 @@ public class World {
             //============================//============================ Traveling
 
             for (Agent agent : agents) {
-                agent.gotoTarget();
+                Router.takeAStepTowardTheTarget(agent);
             }
 
             //============================ Finding Doer of service an doing it
