@@ -2,6 +2,7 @@ package stateTransition;
 
 import system.Agent;
 import system.WatchedAgent;
+import system.WatchedState;
 import utils.Globals;
 import utils.Point;
 import utils.RectangleX;
@@ -310,7 +311,7 @@ public class StateX {
      * @param parentPath
      * @return
      */
-    public ArrayList<WatchedAgent> getWatchList(int depth, int maxDepth, int count, Agent sourceAgent, ArrayList<StateX> visitedStates, ArrayList<StateX> parentPath) {
+    public ArrayList<WatchedAgent> getWatchListOfAgents(int depth, int maxDepth, int count, Agent sourceAgent, ArrayList<StateX> visitedStates, ArrayList<StateX> parentPath) {
 
         if (depth < 0 || count < 1) {
             return new ArrayList<>();
@@ -367,7 +368,7 @@ public class StateX {
                     continue;
                 }
 
-                ArrayList<WatchedAgent> watchList = targets.get(i).getWatchList(depth - 1, maxDepth, count, sourceAgent, visitedStates, localParentPath);
+                ArrayList<WatchedAgent> watchList = targets.get(i).getWatchListOfAgents(depth - 1, maxDepth, count, sourceAgent, visitedStates, localParentPath);
 
                 if (watchList != null) {
 
@@ -383,6 +384,58 @@ public class StateX {
 
         return was;
     }
+
+    public ArrayList<WatchedState> getWatchListOfStates(int depth) {
+
+        ArrayList<WatchedState> list = new ArrayList<>();
+
+        if (depth < 0) {
+            return list;
+        }
+
+        if (depth > 0) {
+            int visitedIndex;
+
+            // First adding children of current state, BFS navigation
+            for (StateX target : targets) {
+
+                WatchedState ws = new WatchedState();
+                ws.setStateX(target);
+                ws.addPath(target);
+                list.add(ws);
+            }
+
+
+            for (StateX target : targets) {
+
+                ArrayList<WatchedState> sList = target.getWatchListOfStates(depth - 1);
+
+                // Ignoring previously visited states.
+                for (WatchedState originState : list) {
+                    visitedIndex = -1;
+                    for (int i = 0, listSize = sList.size(); i < listSize; i++) {
+                        WatchedState newState = sList.get(i);
+                        if (originState.getStateX().getId() == newState.getStateX().getId()) {
+                            visitedIndex = i;
+                            break;
+                        }
+                    }
+                    if (visitedIndex > -1) {
+                        sList.remove(visitedIndex);
+                    }
+                }
+
+                for (WatchedState ws : sList) {
+                    ws.addPathInFirst(target);
+                    list.add(ws);
+                }
+
+            }
+        }
+
+        return list;
+    }
+
 
     public ArrayList<StateX> getTargets() {
         return targets;

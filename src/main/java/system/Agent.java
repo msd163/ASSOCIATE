@@ -58,6 +58,10 @@ public class Agent {
     // first agent (zero position) is agent with maximum trust level.
     private List<WatchedAgent> watchedAgents;
 
+    // States that will be watched according to watchRadius capacity of this agent.
+    // If watchRadius is Zero, watchStates will be empty
+    private List<WatchedState> watchedStates;
+
     // list of services that can request with this agent
     private List<ServiceType> requestingServiceTypes;
 
@@ -226,6 +230,20 @@ public class Agent {
         nextStates.clear();
 
         RoutingHelp routingHelp;
+
+
+        if (watchedStates != null) {
+
+            for (WatchedState ws : watchedStates) {
+                if (ws.getStateX().getId() == goalState.getId()) {
+                    nextStates.addAll(ws.getPath());
+                    System.out.println(">> Self Visiting > Agent: " + this.id +" | State: " + goalState.getId());
+                    return;
+                }
+            }
+
+
+        }
 
         if (watchedAgents == null) {
             return;
@@ -462,7 +480,9 @@ public class Agent {
         watchedAgents.clear();
         ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
         ArrayList<StateX> parentPath = new ArrayList<>();
-        watchedAgents = state.getWatchList(capacity.getWatchRadius(), capacity.getWatchRadius(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
+        watchedAgents = state.getWatchListOfAgents(capacity.getWatchRadius(), capacity.getWatchRadius(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
+        watchedStates = state.getWatchListOfStates(capacity.getWatchRadius());
+
        /* watchedAgents.clear();
         // List<StateX> seenStates = state.getWatchList(capacity.getWatchRadius());
 
