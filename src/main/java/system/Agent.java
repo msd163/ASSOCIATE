@@ -120,30 +120,6 @@ public class Agent {
 
     //============================//============================ State Map
 
-    private int getOldStateMapIndex() {
-        int minVal = 99999999;
-        int oldIndex = 0, ix = 0;
-        for (StateMap map : stateMaps) {
-            if (map.getVisitTime() < minVal) {
-                minVal = map.getVisitTime();
-                oldIndex = ix;
-            }
-            ix++;
-        }
-        return oldIndex;
-    }
-
-    private int getStateMapIndex(StateX stateX) {
-        int ix = 0;
-        for (StateMap map : stateMaps) {
-            if (map.getStateX().getId() == stateX.getId()) {
-                return ix;
-            }
-            ix++;
-        }
-        return -1;
-    }
-
     /**
      *
      */
@@ -197,66 +173,7 @@ public class Agent {
         watchedAgents = state.getWatchListOfAgents(capacity.getWatchRadius(), capacity.getWatchRadius(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
         watchedStates = state.getWatchListOfStates(capacity.getWatchRadius());
 
-       /* watchedAgents.clear();
-        // List<StateX> seenStates = state.getWatchList(capacity.getWatchRadius());
-
-
-        int watchCount = 0;
-        int depth = 0;
-        StateX watchedState = state;
-        while (watchCount <= capacity.getWatchListCapacity()) {
-
-            for (Agent agent : watchedState.getAgents()) {
-                watchCount++;
-                WatchedAgent watchedAgent = new WatchedAgent();
-                watchedAgent.setAgent(agent);
-                if (depth > 0) {
-                    watchedAgent.addPath(state);
-                }
-                watchedAgents.add(watchedAgent);
-                if (watchCount > capacity.getWatchListCapacity()) {
-                    break;
-                }
-            }
-
-            if(depth< capacity.getWatchRadius()){
-
-            }
-
-        }
-
-
-        if (seenStates == null) {
-            return;
-        }
-
-        for (StateX st : seenStates) {
-            ArrayList<Agent> ags = st.getAgents();
-            for (Agent ag : ags) {
-                if (watchedAgents.size() <= capacity.getWatchListCapacity() &&
-                        !watchedAgents.contains(ag)
-                ) {
-                    watchedAgents.add(ag);
-                }
-            }
-        }
-
-        watchedAgents.sort((o1, o2) -> {
-
-            float t1 = trust.getTrustScore(o1);
-            float t2 = trust.getTrustScore(o2);
-
-            return Float.compare(t1, t2);
-        });*/
-
     }
-
-
-//    public boolean canWatch(int x, int y) {
-////        TODO: here should be updated.
-//        return Math.sqrt(Math.pow((double) x - (double) location.getX(), 2) + Math.pow((double) y - (double) location.getY(), 2)) < (double) capacity.getWatchRadius();
-//    }
-
 
     public boolean canWatch(Agent agent) {
         if (watchedAgents != null) {
@@ -375,94 +292,6 @@ public class Agent {
 
     //============================//============================//============================
 
-    BasicStroke stroke3 = new BasicStroke(3);
-    BasicStroke stroke2 = new BasicStroke(2);
-    BasicStroke stroke1 = new BasicStroke(1);
-    Font font = new Font("Tahoma", Font.PLAIN, 9);
-    Color honestBackColor;
-    Color honestForeColor;
-    Color honestBorderColor;
-
-    private boolean isCapCandid = false;
-
-    public void draw(Graphics2D g, int index) {
-
-        int loc_x;
-        int loc_y;
-
-        Point tileIndex = state.getTileLocation(index);
-
-        loc_x = tileIndex.x;
-        loc_y = tileIndex.y;
-
-
-        honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : new Color(255, 71, 71);
-        honestForeColor = behavior.getIsHonest() ? new Color(36, 151, 9) : new Color(255, 196, 166);
-        honestBorderColor = behavior.getIsHonest() ? new Color(29, 102, 0) : new Color(160, 0, 0);
-        isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
-        // Drawing watch radius
-        if (isCapCandid || isSimConfigShowWatchRadius()) {
-            g.setColor(isCapCandid ? (behavior.getIsHonest() ? Color.GREEN : Color.RED) : simConfigTraceable ? Color.CYAN : Color.lightGray);
-            g.drawOval(
-                    loc_x - capacity.getWatchRadius(),
-                    loc_y - capacity.getWatchRadius(),
-                    capacity.getWatchRadius() * 2,
-                    capacity.getWatchRadius() * 2
-            );
-        }
-
-        // Drawing links to watched agents
-        if (simConfigLinkToWatchedAgents) {
-            g.setColor(Color.GRAY);
-            for (WatchedAgent wa : watchedAgents) {
-                g.drawLine(loc_x, loc_y, wa.getAgent().getLoc_x(), wa.getAgent().getLoc_y());
-            }
-        }
-
-        if (simConfigShowRequestedService && requestedServices.size() > 0) {
-            Service service = requestedServices.get(requestedServices.size() - 1);
-            if (service != null) {
-                g.setStroke(stroke3);
-                if (service.getDoer() != null) {
-                    g.setColor(service.getDoer().getBehavior().getIsHonest() ? Color.GREEN : Color.RED);
-                    g.drawLine(loc_x, loc_y, service.getDoer().getLoc_x(), service.getDoer().getLoc_y());
-                } else {
-                    g.setColor(Color.GREEN);
-                    g.drawLine(loc_x, loc_y, loc_x + 40, loc_y + 40);
-                }
-                g.setStroke(stroke1);
-            }
-        }
-
-/*        if (simConfigShowTargetState) {
-            RectangleX rec = targetState.getBoundedRectangle();
-            g.setColor(Color.RED);
-            g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
-        }*/
-
-        // Set color of node with honest strategy
-        g.setColor(honestBackColor);
-
-        // Draw node according to it's capacity
-        int agentBound = capacity.getCapPower() / 10;
-        g.fillOval(loc_x - agentBound, loc_y - agentBound, agentBound * 2, agentBound * 2);
-
-        if (isInTargetState()) {
-            // If agent is in target state draw a circle around it.
-            g.setColor(honestBorderColor);
-            g.setStroke(stroke2);
-            g.drawArc(loc_x - agentBound, loc_y - agentBound, agentBound * 2, agentBound * 2, 0, 270);
-        }
-
-        // Drawing id of the node
-        g.setColor(honestForeColor);
-        g.setFont(font);
-        g.drawString(id + "", loc_x - 5, loc_y + 5 /*+ capacity.getCapPower() + 10*/);
-
-    }
-    //============================//============================//============================
-
-
     @Override
     public String toString() {
         return "Agent{" +
@@ -482,11 +311,6 @@ public class Agent {
                 ",\n\t doingServiceTypes=" + doingServiceTypes +
                 ",\n\t requestedServices=" + requestedServices +
                 ",\n\t doneServices=" + doneServices +
-                ",\n\t stroke3=" + stroke3 +
-                ",\n\t stroke1=" + stroke1 +
-                ",\n\t font=" + font +
-                ",\n\t honestColor=" + honestBackColor +
-                ",\n\t isCapCandid=" + isCapCandid +
                 '}';
     }
 
@@ -602,5 +426,9 @@ public class Agent {
 
     public List<WatchedState> getWatchedStates() {
         return watchedStates;
+    }
+
+    public boolean isSimConfigShowRequestedService() {
+        return simConfigShowRequestedService;
     }
 }
