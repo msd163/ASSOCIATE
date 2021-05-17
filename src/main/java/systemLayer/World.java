@@ -1,10 +1,10 @@
-package system;
+package systemLayer;
 
-import drawing.DiagramDrawingWindow;
-import drawing.MainDrawingWindow;
-import routing.Router;
-import stateTransition.Environment;
-import stateTransition.StateX;
+import drawingLayer.DiagramDrawingWindow;
+import drawingLayer.MainDrawingWindow;
+import routingLayer.Router;
+import stateLayer.Environment;
+import stateLayer.StateX;
 import utils.Config;
 import utils.Globals;
 

@@ -1,9 +1,9 @@
-package drawing;
+package drawingLayer;
 
-import stateTransition.Environment;
-import stateTransition.StateX;
-import stateTransition.TransitionX;
-import system.*;
+import stateLayer.Environment;
+import stateLayer.StateX;
+import stateLayer.TransitionX;
+import systemLayer.*;
 import utils.Config;
 import utils.Point;
 import utils.RectangleX;

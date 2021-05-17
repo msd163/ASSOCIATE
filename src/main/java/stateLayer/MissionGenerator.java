@@ -1,4 +1,4 @@
-package stateTransition;
+package stateLayer;
 
 public class MissionGenerator {
     public int getNewMission() {

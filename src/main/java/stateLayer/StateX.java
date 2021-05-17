@@ -1,8 +1,8 @@
-package stateTransition;
+package stateLayer;
 
-import system.Agent;
-import system.WatchedAgent;
-import system.WatchedState;
+import systemLayer.Agent;
+import systemLayer.WatchedAgent;
+import systemLayer.WatchedState;
 import utils.Globals;
 import utils.Point;
 import utils.RectangleX;

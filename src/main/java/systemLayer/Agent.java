@@ -1,14 +1,9 @@
-package system;
+package systemLayer;
 
-import stateTransition.RoutingHelp;
-import stateTransition.StateMap;
-import stateTransition.StateX;
-import stateTransition.TransitionX;
-import utils.Config;
+import stateLayer.StateMap;
+import stateLayer.StateX;
 import utils.Globals;
-import utils.Point;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package profiler;
+package systemLayer.profiler;
 
 public class PopulationBunch {
     private String bunchCount;

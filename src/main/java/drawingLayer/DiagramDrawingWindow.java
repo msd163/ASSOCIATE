@@ -1,7 +1,7 @@
-package drawing;
+package drawingLayer;
 
-import system.World;
-import system.WorldHistory;
+import systemLayer.World;
+import systemLayer.WorldHistory;
 
 import java.awt.*;
 

@@ -1,12 +1,11 @@
-package routing;
+package routingLayer;
 
-import stateTransition.RoutingHelp;
-import stateTransition.StateMap;
-import stateTransition.StateX;
-import stateTransition.TransitionX;
-import system.Agent;
-import system.WatchedAgent;
-import system.WatchedState;
+import stateLayer.StateMap;
+import stateLayer.StateX;
+import stateLayer.TransitionX;
+import systemLayer.Agent;
+import systemLayer.WatchedAgent;
+import systemLayer.WatchedState;
 import utils.Globals;
 
 import java.util.ArrayList;
