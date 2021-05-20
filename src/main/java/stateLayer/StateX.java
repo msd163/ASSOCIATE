@@ -1,5 +1,6 @@
 package stateLayer;
 
+import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
@@ -11,14 +12,18 @@ import java.util.ArrayList;
 
 public class StateX {
 
+    @Expose
     private int id;
+    @Expose
     private ArrayList<Integer> targetIds;
     private ArrayList<StateX> targets;
+    @Expose
     private ArrayList<Agent> agents;
+    @Expose
     private int capacity;
-    private ArrayList<TransitionX> targetTrans;
+
     private ArrayList<TransitionX> sourceTrans;
-    private Environment environment;
+    private ArrayList<TransitionX> targetTrans;
 
     //============================ Location in Drawing
     private boolean hasLoc;
@@ -443,6 +448,14 @@ public class StateX {
 
     public void setTargets(ArrayList<StateX> targets) {
         this.targets = targets;
+    }
+
+    public ArrayList<Integer> getTargetIds() {
+        return targetIds;
+    }
+
+    public void setTargetIds(ArrayList<Integer> targetIds) {
+        this.targetIds = targetIds;
     }
 
     //============================//============================

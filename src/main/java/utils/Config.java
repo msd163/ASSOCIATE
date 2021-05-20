@@ -5,6 +5,10 @@ import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {
 
+    public static final String SimulatingFile= ProjectPath.instance().simulationData(1);
+    public static final String EnvironmentFile= ProjectPath.instance().environmentData(1);
+
+
     //============================ World
     public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world

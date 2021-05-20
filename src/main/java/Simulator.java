@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import systemLayer.profiler.CapacityProfiler;
 import stateLayer.Environment;
 import systemLayer.World;
+import utils.Config;
 import utils.Globals;
 import utils.ProjectPath;
 
@@ -19,7 +20,7 @@ public class Simulator {
         Gson gson = new Gson();
 
         //============================
-        FileReader prfReader = new FileReader(projectPath.simulationData());
+        FileReader prfReader = new FileReader(Config.SimulatingFile);
         Globals.profiler = gson.fromJson(prfReader, CapacityProfiler.class);
 
         if (Globals.profiler == null) {
@@ -32,7 +33,7 @@ public class Simulator {
         //System.out.println(Globals.profiler.toString());
 
         //============================
-        FileReader envReader = new FileReader(projectPath.statesData());
+        FileReader envReader = new FileReader(Config.EnvironmentFile);
         Environment environment = gson.fromJson(envReader, Environment.class);
 
         if (environment == null) {

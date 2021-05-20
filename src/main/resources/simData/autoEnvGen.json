@@ -1,0 +1,8 @@
+{
+  "stateCapacity": "50",
+  "stateCount": 400,
+  "stateTargetCount": "#1..10",
+  "states":
+  [
+  ]
+}

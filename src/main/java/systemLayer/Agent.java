@@ -1,7 +1,9 @@
 package systemLayer;
 
+import com.google.gson.annotations.Expose;
 import stateLayer.StateMap;
 import stateLayer.StateX;
+import trustLayer.AgentTrust;
 import utils.Globals;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class Agent {
     private boolean simConfigShowTargetState;
 
     //============================
+    @Expose
     private int id;
 
     //============================ processing variables
@@ -42,6 +45,7 @@ public class Agent {
     private StateX targetState;
     private ArrayList<StateX> nextStates;
     //============================
+    @Expose
     private AgentCapacity capacity;
 
     private AgentTrust trust;

@@ -1,8 +1,12 @@
 package systemLayer;
 
+import com.google.gson.annotations.Expose;
 import utils.Globals;
 
 public class AgentCapacity {
+
+    public AgentCapacity() {
+    }
 
     public AgentCapacity(Agent parentAgent) {
 
@@ -43,8 +47,11 @@ public class AgentCapacity {
     private int historyCap;
 
 
+    @Expose
     private int watchListCapacity;
+    @Expose
     private int watchRadius;                        // radius of watch
+    @Expose
     private int stateMapCap;                        // radius of watch
 
     private int concurrentDoingServiceCap;             // number of concurrent services that can do for requester of a service
@@ -101,4 +108,20 @@ public class AgentCapacity {
         this.historyCap = historyCap;
     }
 
+
+    public void setWatchListCapacity(int watchListCapacity) {
+        this.watchListCapacity = watchListCapacity;
+    }
+
+    public void setWatchRadius(int watchRadius) {
+        this.watchRadius = watchRadius;
+    }
+
+    public void setStateMapCap(int stateMapCap) {
+        this.stateMapCap = stateMapCap;
+    }
+
+    public void setConcurrentDoingServiceCap(int concurrentDoingServiceCap) {
+        this.concurrentDoingServiceCap = concurrentDoingServiceCap;
+    }
 }
