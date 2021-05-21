@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.File;
+
 public class ProjectPath {
 
     private static ProjectPath _instance = new ProjectPath();
@@ -27,11 +29,22 @@ public class ProjectPath {
     }
 
     public String pureEnvData(int i) {
-        return pureEnvDir() + "/p-environment_" + i + ".json";
+        return pureEnvDir() + "/p-environment-" + i + ".json";
     }
 
     public String fullEnvData(int i) {
-        return fullEnvDir() + "/f-environment_" + i + ".json";
+        return fullEnvDir() + "/f-environment-" + i + ".json";
+    }
+
+    public String fullEnvData() {
+        int i = 100;
+        for (; i > 0; i--) {
+            if (new File(fullEnvDir() + "/f-environment-" + i + ".json").exists()) {
+                break;
+            }
+        }
+        System.out.println("|>  Selected FullEnvironment file: " + fullEnvDir() + "/f-environment-" + i + ".json");
+        return fullEnvDir() + "/f-environment-" + i + ".json";
     }
 
     public String autoEnvGeneratorData() {
@@ -39,7 +52,12 @@ public class ProjectPath {
     }
 
     public String simulationData(int i) {
-        return resourcesDir() + "/simulation_" + i + ".json";
+        return resourcesDir() + "/simulation-" + i + ".json";
     }
 
+    //============================//============================
+
+    public String statisticsDir() {
+        return root() + "/statistics";
+    }
 }

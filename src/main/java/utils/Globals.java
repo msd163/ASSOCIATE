@@ -1,7 +1,7 @@
 package utils;
 
-import systemLayer.profiler.CapacityProfiler;
 import stateLayer.MissionGenerator;
+import systemLayer.profiler.CapacityProfiler;
 
 import java.util.Date;
 import java.util.Random;
@@ -15,4 +15,6 @@ public class Globals {
     public static int WORLD_TIMER;                                       // The timer of world which is increased by every run of world
 
     public static int STATE_TILE_WIDTH = 40;
+
+    public static StatGenerator statGenerator = new StatGenerator();
 }

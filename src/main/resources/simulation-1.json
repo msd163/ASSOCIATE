@@ -1,5 +1,5 @@
 {
-  "agentsCount": "1000",
+  "agentsCount": "500",
   "serviceCount": "2",
   "simulationRound": "1",
   "bunches": [
@@ -8,8 +8,8 @@
       "historyServiceRecordCap": "15",
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
-      "watchRadius": "5",
-      "stateMapCap": "#20..50",
+      "watchRadius": "#0..2",
+      "stateMapCap": "#10..150",
       "concurrentDoingServiceCap": "?10"
     },
     {
@@ -17,8 +17,8 @@
       "historyServiceRecordCap": "15",
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
-      "stateMapCap": "20",
-      "watchRadius": "#0..3",
+      "stateMapCap": "#60..300",
+      "watchRadius": "#0..4",
       "concurrentDoingServiceCap": "?10"
     }
   ]

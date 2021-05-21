@@ -7,12 +7,21 @@ import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
 import utils.Globals;
+import utils.WorldStatistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Router {
 
+    private WorldStatistics statistics;
+
+    public Router() {
+    }
+
+    public void setStatistics(WorldStatistics statistics) {
+        this.statistics = statistics;
+    }
 
     /**
      * Guide the agent towards the target by one step.
@@ -21,7 +30,7 @@ public class Router {
      * @param agent The agent to be navigated.
      * @return Final state of the agent after navigation.
      */
-    public static StateX takeAStepTowardTheTarget(Agent agent) {
+    public StateX takeAStepTowardTheTarget(Agent agent) {
 
         //============================
         StateX targetState = agent.getTargetState();
@@ -29,10 +38,12 @@ public class Router {
         //============================
 
         if (targetState == null) {
+            statistics.addAgentsWithNoTargetState();
             return null;
         }
 
         if (agent.isInTargetState()) {
+            statistics.addAllInTargetAgents();
             agent.clearNextStates();
             return state;
         }
@@ -52,17 +63,24 @@ public class Router {
 
         if (agent.getNextStates().isEmpty()) {
             updateNextStates(agent, targetState);
+            statistics.addUpdatedNextStatesOfAgents();
         }
 
         if (agent.getNextStates().isEmpty()) {
             int targetIndex = Globals.RANDOM.nextInt(state.getTargets().size());
-            return gotoNeighborState(agent, targetIndex);
+            StateX stateX = gotoNeighborState(agent, targetIndex);
+            statistics.addRandomTravelToNeighbors();
+            if (stateX.getId() == agent.getTargetState().getId()) {
+                statistics.addInTargetAgentsInThisTime();
+            }
+            return stateX;
         }
 
 //      StateX stateX = gotoNeighborState(nextStates.get(0));
         StateX nextState = agent.getNextStates().get(0);
 
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
+            statistics.addFailedTravelToGoToNeighbor();
             System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + agent.getId() + " state: " + state.getId() + "  nextState: " + nextState.getId());
             return null;
         }
@@ -70,7 +88,12 @@ public class Router {
         StateX finalState = gotoNeighborState(agent, nextState);
         if (finalState.getId() == nextState.getId()) {
             agent.getNextStates().remove(0);
+            statistics.addSuccessTravelToGoToNeighbor();
+            if (finalState.getId() == agent.getTargetState().getId()) {
+                statistics.addInTargetAgentsInThisTime();
+            }
         } else {
+            statistics.addFailedTravelToGoToNeighbor();
             System.out.println(">> Router.takeAStepTowardTheTarget:: [Warning] Agent (" + agent.getId() +
                     ") can not travel from (" + currentAgentStateId +
                     ") to neighbor state (" + nextState.getId() +
@@ -86,7 +109,7 @@ public class Router {
      * @param agent     The agent to be navigated.
      * @param goalState Goal state.
      */
-    public static void updateNextStates(Agent agent, StateX goalState) {
+    public void updateNextStates(Agent agent, StateX goalState) {
 
         //============================
         List<WatchedState> watchedStates = agent.getWatchedStates();
@@ -107,8 +130,6 @@ public class Router {
                     return;
                 }
             }
-
-
         }
 
         if (watchedAgents == null) {
@@ -179,7 +200,7 @@ public class Router {
      * @param state Target state
      * @return True: if the state is the neighbor of the agent.
      */
-    private static boolean isStateTheNeighborOfAgent(Agent agent, StateX state) {
+    private boolean isStateTheNeighborOfAgent(Agent agent, StateX state) {
         //----
         ArrayList<StateX> targets = agent.getState().getTargets();
         //---
@@ -204,7 +225,7 @@ public class Router {
      * @param nextState The state to be go
      * @return final state
      */
-    private static StateX gotoNeighborState(Agent agent, StateX nextState) {
+    private StateX gotoNeighborState(Agent agent, StateX nextState) {
 
         //============================
         StateX state = agent.getState();
@@ -251,7 +272,7 @@ public class Router {
      * @param index Index of target in targets list
      * @return Final state
      */
-    private static StateX gotoNeighborState(Agent agent, int index) {
+    private StateX gotoNeighborState(Agent agent, int index) {
         //============================
         ArrayList<StateX> targets = agent.getState().getTargets();
         //============================
@@ -270,7 +291,7 @@ public class Router {
      * @param goalState The goal state
      * @return The neighbor state that routes to goalState
      */
-    private static RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
+    private RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
 
         //============================
         ArrayList<StateMap> stateMaps = agent.getStateMaps();

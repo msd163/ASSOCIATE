@@ -8,6 +8,7 @@ import stateLayer.Environment;
 import stateLayer.StateX;
 import utils.Config;
 import utils.Globals;
+import utils.WorldStatistics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,10 @@ public class World {
 
     private Environment environment;
 
+    private WorldStatistics[] statistics;
+
+    private Router router;
+
     //============================//============================//============================
     private void init(Environment _environment) throws Exception {
 
@@ -49,6 +54,12 @@ public class World {
 
         histories = new ArrayList<WorldHistory>();
 
+        statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
+        for (int i = 0; i < statistics.length; i++) {
+            statistics[i] = new WorldStatistics();
+        }
+
+        router = new Router();
         //============================ Setting agents count
 
         if (Config.SIMULATION_MODE == TtSimulationMode.FullEnvironment) {
@@ -81,7 +92,7 @@ public class World {
 
 
         if (environment.getMaximumAgentCapability() < agentsCount) {
-            throw new Exception(">> Error: Agents count is bigger than maximum capability of environment:  " + agentsCount + " > " + environment.getMaximumAgentCapability()+". simulation_X.json -> \"agentsCount\": " + agentsCount);
+            throw new Exception(">> Error: Agents count is bigger than maximum capability of environment:  " + agentsCount + " > " + environment.getMaximumAgentCapability() + ". simulation_X.json -> \"agentsCount\": " + agentsCount);
         }
 
         //============================//============================  Initializing agents
@@ -227,8 +238,15 @@ public class World {
 
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
+            WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
+            statistic.setWorldTime(Globals.WORLD_TIMER);
+            router.setStatistics(statistic);
 
-            System.out.println(Globals.WORLD_TIMER + " : World.run------------------------------- ");
+            if (Globals.WORLD_TIMER == 0) {
+                Globals.statGenerator.addHeader(statistic);
+            }
+
+            System.out.println(Globals.WORLD_TIMER + " : World.run ------------------------------- ");
 
             //============================//============================  Updating agents statuses
             for (Agent agent : agents) {
@@ -241,7 +259,17 @@ public class World {
             //============================//============================ Traveling
 
             for (Agent agent : agents) {
-                Router.takeAStepTowardTheTarget(agent);
+                router.takeAStepTowardTheTarget(agent);
+            }
+
+            //============================//============================  updating full state statistics
+            for (StateX state : environment.getStates()) {
+                if (state.isFullCapability()) {
+                    statistic.addFullStateCount();
+                }
+                if (state.getTargets().size() == 0) {
+                    statistic.addStatesWithNoTarget();
+                }
             }
 
             //============================ Finding Doer of service an doing it
@@ -322,6 +350,12 @@ public class World {
             System.out.println("  dontDoneServices     : " + dontDoneServices + " >  " + (float) dontDoneServices / totalServiceCount);
             System.out.println("  recordedService      : " + recordedServices);
 */
+
+
+            System.out.println(statistic.toString());
+            Globals.statGenerator.addStat(statistic);
+
+
             histories.add(new WorldHistory(totalServiceCount, dishonestServiceCount, honestServiceCount));
 
             if (showMainWindow) {
@@ -440,5 +474,9 @@ public class World {
 
     public void setEnvironment(Environment environment) {
         this.environment = environment;
+    }
+
+    public WorldStatistics[] getStatistics() {
+        return statistics;
     }
 }

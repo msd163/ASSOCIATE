@@ -5,6 +5,8 @@ import systemLayer.World;
 import systemLayer.profiler.CapacityProfiler;
 import utils.Config;
 import utils.Globals;
+import utils.ParsCalendar;
+import utils.ProjectPath;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -67,6 +69,28 @@ public class Simulator {
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
             worlds[i] = new World(environment);
         }
+
+        //============================
+        if (Config.STATISTICS_IS_GENERATE) {
+            String statName = ParsCalendar.getInstance().getShortDateTime();
+            statName = statName
+                    .replaceAll("[ ]", "-")
+                    .replaceAll("[:/]", "")
+            ;
+
+            if (Config.SIMULATION_MODE == TtSimulationMode.FullEnvironment) {
+                statName += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1);
+            } else {
+                statName += "_" + Config.PureEnvironmentDataFile.substring(Config.PureEnvironmentDataFile.lastIndexOf("/") + 1);
+
+            }
+
+            System.out.println(statName);
+            statName = ProjectPath.instance().statisticsDir() + "/" + statName + ".csv";
+
+            Globals.statGenerator.init(statName);
+        }
+
     }
 
     public void simulate() throws Exception {
@@ -83,5 +107,8 @@ public class Simulator {
             world.run();
         }
 
+        if (Config.STATISTICS_IS_GENERATE) {
+            Globals.statGenerator.close();
+        }
     }
 }

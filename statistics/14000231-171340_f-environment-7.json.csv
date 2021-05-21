@@ -1,0 +1,10 @@
+# Simulation report. 
+# Date: 1400/02/31 17:13:40
+WorldTime,FullStateCount,StatesWithNoTarget,AgentsWithNoTargetState,AllInTargetAgents,InTargetAgentsInThisTime,UpdatedNextStatesOfAgents,SuccessTravelToGoToNeighbor,FailedTravelToGoToNeighbor,RandomTravelToNeighbors,TotalTravelToNeighbor
+0,3,0,0,6,7,194,11,0,183,194,
+1,2,0,0,13,16,186,16,3,168,184,
+2,1,0,0,29,12,168,14,3,154,168,
+3,3,0,0,41,16,155,16,2,141,157,
+4,2,0,0,57,10,141,13,0,130,143,
+5,4,0,0,67,7,133,8,0,125,133,
+6,2,0,0,74,7,126,5,1,120,125,

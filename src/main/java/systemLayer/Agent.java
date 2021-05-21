@@ -89,6 +89,7 @@ public class Agent {
         trust = new AgentTrust(this, capacity.getHistoryCap(), capacity.getHistoryServiceRecordCap());
         behavior = new AgentBehavior();
         watchedAgents = new ArrayList<>();
+        watchedStates = new ArrayList<>();
 
         //todo: [policy] : assigning requested services
         requestingServiceTypes = new ArrayList<ServiceType>();
@@ -178,7 +179,8 @@ public class Agent {
         ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
         ArrayList<StateX> parentPath = new ArrayList<>();
         watchedAgents = state.getWatchListOfAgents(capacity.getWatchRadius(), capacity.getWatchRadius(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
-        watchedStates = state.getWatchListOfStates(capacity.getWatchRadius());
+        watchedStates.clear();
+        state.getWatchListOfStates(capacity.getWatchRadius(), watchedStates, null);
 
     }
 

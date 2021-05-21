@@ -111,7 +111,7 @@ public class EnvGenerator {
 
         do {
             envFileCounter++;
-            file = new File(envFilePath + "_" + envFileCounter + ".json");
+            file = new File(envFilePath + "-" + envFileCounter + ".json");
         } while (file.exists() && envFileCounter < 10000);
 
         try {

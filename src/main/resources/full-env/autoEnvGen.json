@@ -1,7 +1,7 @@
 {
-  "stateCapacity": "#20..50",
-  "stateCount": 100,
-  "stateTargetCount": "#1..3",
+  "stateCapacity": "#40..80",
+  "stateCount": 40,
+  "stateTargetCount": "#2..20",
   "states":
   [
   ]

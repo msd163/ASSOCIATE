@@ -9,6 +9,7 @@ import utils.Point;
 import utils.RectangleX;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StateX {
 
@@ -391,57 +392,55 @@ public class StateX {
         return was;
     }
 
-    public ArrayList<WatchedState> getWatchListOfStates(int depth) {
 
-        ArrayList<WatchedState> list = new ArrayList<>();
+    public void getWatchListOfStates(int depth, List<WatchedState> watchedStates, WatchedState currentWatchState) {
 
         if (depth < 0) {
-            return list;
+            return;
         }
 
         if (depth > 0) {
-            int visitedIndex;
 
+            boolean isAdded;
             // First adding children of current state, BFS navigation
             for (StateX target : targets) {
+                isAdded = false;
+                for (WatchedState watchedState : watchedStates) {
+                    if (watchedState.getStateX().getId() == target.getId()) {
+                        isAdded = true;
+                        break;
+                    }
+                }
+                if (isAdded) {
+                    continue;
+                }
 
                 WatchedState ws = new WatchedState();
                 ws.setStateX(target);
+                if (currentWatchState != null) {
+                    ws.setPath(currentWatchState.getPath());
+                }
                 ws.addPath(target);
-                list.add(ws);
+                watchedStates.add(ws);
+
             }
 
-
             for (StateX target : targets) {
-
-                ArrayList<WatchedState> sList = target.getWatchListOfStates(depth - 1);
-
-                // Ignoring previously visited states.
-                for (WatchedState originState : list) {
-                    visitedIndex = -1;
-                    for (int i = 0, listSize = sList.size(); i < listSize; i++) {
-                        WatchedState newState = sList.get(i);
-                        if (originState.getStateX().getId() == newState.getStateX().getId()) {
-                            visitedIndex = i;
-                            break;
-                        }
-                    }
-                    if (visitedIndex > -1) {
-                        sList.remove(visitedIndex);
+                isAdded = false;
+                for (WatchedState watchedState : watchedStates) {
+                    if (watchedState.getStateX().getId() == target.getId()) {
+                        isAdded = true;
+                        break;
                     }
                 }
-
-                for (WatchedState ws : sList) {
-                    ws.addPathInFirst(target);
-                    list.add(ws);
+                if (isAdded) {
+                    continue;
                 }
-
+                target.getWatchListOfStates(depth - 1, watchedStates, null);
             }
         }
 
-        return list;
     }
-
 
     public ArrayList<StateX> getTargets() {
         return targets;
@@ -485,4 +484,7 @@ public class StateX {
         return toString(0);
     }
 
+    public boolean isFullCapability() {
+        return capacity <= agents.size();
+    }
 }

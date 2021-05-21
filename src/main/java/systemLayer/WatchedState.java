@@ -41,6 +41,7 @@ public class WatchedState {
         path.add(state);
     }
 
+
     public void addPathInFirst(StateX stateX) {
         path.add(0, stateX);
     }
