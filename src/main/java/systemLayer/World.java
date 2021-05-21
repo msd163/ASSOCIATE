@@ -1,5 +1,6 @@
 package systemLayer;
 
+import _type.TtSimulationMode;
 import drawingLayer.DiagramDrawingWindow;
 import drawingLayer.MainDrawingWindow;
 import routingLayer.Router;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class World {
 
-    public World(Environment environment) {
+    public World(Environment environment) throws Exception {
         init(environment);
     }
 
@@ -31,7 +32,8 @@ public class World {
     private Environment environment;
 
     //============================//============================//============================
-    private void init(Environment _environment) {
+    private void init(Environment _environment) throws Exception {
+
         totalServiceCount =
                 falseNegative =
                         falsePositive =
@@ -47,10 +49,18 @@ public class World {
 
         histories = new ArrayList<WorldHistory>();
 
-        //============================
+        //============================ Setting agents count
 
-
-        agentsCount = Globals.profiler.getAgentsCount();
+        if (Config.SIMULATION_MODE == TtSimulationMode.FullEnvironment) {
+            agentsCount = 0;
+            for (StateX state : _environment.getStates()) {
+                if (state.getAgents() != null) {
+                    agentsCount += state.getAgents().size();
+                }
+            }
+        } else {
+            agentsCount = Globals.profiler.getAgentsCount();
+        }
         agents = new Agent[agentsCount];
 
         //============================ Services
@@ -61,68 +71,101 @@ public class World {
         }
 
 
-        //============================ Environment
+        //============================ Initializing Environment
         this.environment = new Environment();
         this.environment.setStates(_environment.getStates());
         this.environment.setStateCount(_environment.getStateCount());
         this.environment.setStateCapacity(_environment.getStateCapacity());
+        this.environment.setAgentsCount(_environment.getAgentsCount());
         this.environment.init(this);
 
-        //============================ Initializing agents
 
+        if (environment.getMaximumAgentCapability() < agentsCount) {
+            throw new Exception(">> Error: Agents count is bigger than maximum capability of environment:  " + agentsCount + " > " + environment.getMaximumAgentCapability()+". simulation_X.json -> \"agentsCount\": " + agentsCount);
+        }
+
+        //============================//============================  Initializing agents
         System.out.println(
                 " | agentsCount: " + agentsCount
         );
 
-        int id = 0;
-        int thisBunchFinished = Globals.profiler.getCurrentBunch().getBunchCount();
+        if (Config.SIMULATION_MODE == TtSimulationMode.SimpleEnvironment) {
+            int id = 0;
+            int thisBunchFinished = Globals.profiler.getCurrentBunch().getBunchCount();
 
-        for (int i = 0; i < agentsCount; i++) {
-            if (i >= thisBunchFinished) {
-                Globals.profiler.NextBunch();
-                thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
-            }
-
-            //============================ Creating new state
-            agents[i] = new Agent(this, ++id);
-            agents[i].init();
-
-            //============================  Adding agent to an state
-            StateX randomState;
-            int tryCount = 0;
-            boolean isAddedToState;
-            do {
-                randomState = environment.getRandomState();
-                // checking state capability and adding the agent to it.
-                isAddedToState = randomState.addAgent(agents[i]);
-            } while (!isAddedToState && tryCount++ < agentsCount);
-
-            if (isAddedToState) {
-                agents[i].setState(randomState);
-                boolean isAnyPathTo;
-                //============================ Adding target state to agents
-                do {
-                    randomState = environment.getRandomState();
-                    //
-                    isAnyPathTo = agents[i].getState().isAnyPathTo(randomState);
-                } while (!isAnyPathTo && tryCount++ < agentsCount);
-
-                if (isAnyPathTo) {
-                    agents[i].setTargetState(randomState);
+            for (int i = 0; i < agentsCount; i++) {
+                if (i >= thisBunchFinished) {
+                    Globals.profiler.NextBunch();
+                    thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
                 }
 
-            }
-            //============================  if agentId is in 'traceAgentIds', it will set as traceable
+                //============================ Creating new state
+                agents[i] = new Agent(this, ++id);
+                agents[i].init();
+
+                //============================  Adding agent to an state
+                StateX randomState;
+                int tryCount = 0;
+                boolean isAddedToState;
+                do {
+                    randomState = environment.getRandomState();
+                    // checking state capability and adding the agent to it.
+                    isAddedToState = randomState.addAgent(agents[i]);
+                } while (!isAddedToState && tryCount++ < agentsCount);
+
+                if (isAddedToState) {
+                    agents[i].setState(randomState);
+                    boolean isAnyPathTo;
+                    //============================ Adding target state to agents
+                    do {
+                        randomState = environment.getRandomState();
+                        //
+                        isAnyPathTo = agents[i].getState().isAnyPathTo(randomState);
+                    } while (!isAnyPathTo && tryCount++ < agentsCount);
+
+                    if (isAnyPathTo) {
+                        agents[i].setTargetState(randomState);
+                    }
+
+                }
+                //============================  if agentId is in 'traceAgentIds', it will set as traceable
 //            Agent agent = agents[i];
-            if (isTraceable(i)) {
-                agents[i].setAsTraceable();
+                if (isTraceable(i)) {
+                    agents[i].setAsTraceable();
+                }
+                System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getTargetState() != null ? agents[i].getTargetState().getId() : "NULL"));
             }
-            System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getTargetState() != null ? agents[i].getTargetState().getId() : "NULL"));
+        }
+        //============================  FullEnv
+        else {
+            StateX[] states = environment.getStates();
+
+            int i = 0;
+            for (StateX state : states) {
+                for (Agent agent : state.getAgents()) {
+                    agent.setState(state);
+                    agent.setWorld(this);
+                    agent.initVars();
+
+                    agent.setTargetState(environment.getState(agent.getTargetStateId()));
+                    //============================  if agentId is in 'traceAgentIds', it will set as traceable
+                    if (isTraceable(i)) {
+                        agent.setAsTraceable();
+                    }
+
+                    System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getTargetState() != null ? agent.getTargetState().getId() : "NULL"));
+
+                    agents[i++] = agent;
+
+                }
+            }
         }
 
       /*  for (Agent agent : agents) {
             System.out.println("agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + agent.getTargetState().getId());
         }*/
+
+        environment.updateAgentsCount();
 
         environment.reassigningStateLocationAndTransPath();
 

@@ -13,6 +13,7 @@ import java.util.List;
 public class Agent {
 
     public Agent(World parentWorld, int id) {
+        targetStateId = -1;
         this.world = parentWorld;
         this.id = id;
         currentDoingServiceSize = 0;
@@ -42,6 +43,8 @@ public class Agent {
     private World world;
     private StateX state;
     private ArrayList<StateMap> stateMaps;
+    @Expose
+    private int targetStateId;
     private StateX targetState;
     private ArrayList<StateX> nextStates;
     //============================
@@ -77,10 +80,15 @@ public class Agent {
 
     public void init() {
         capacity = new AgentCapacity(this);
+        initVars();
+
+    }
+
+    public void initVars() {
+
         trust = new AgentTrust(this, capacity.getHistoryCap(), capacity.getHistoryServiceRecordCap());
         behavior = new AgentBehavior();
         watchedAgents = new ArrayList<>();
-
 
         //todo: [policy] : assigning requested services
         requestingServiceTypes = new ArrayList<ServiceType>();
@@ -413,6 +421,8 @@ public class Agent {
 
     public void setTargetState(StateX targetState) {
         this.targetState = targetState;
+        this.targetStateId = targetState == null ? -1 : targetState.getId();
+
     }
 
     public ArrayList<StateMap> getStateMaps() {
@@ -429,5 +439,13 @@ public class Agent {
 
     public boolean isSimConfigShowRequestedService() {
         return simConfigShowRequestedService;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public int getTargetStateId() {
+        return targetStateId;
     }
 }

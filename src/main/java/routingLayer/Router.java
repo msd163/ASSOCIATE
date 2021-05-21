@@ -17,6 +17,7 @@ public class Router {
     /**
      * Guide the agent towards the target by one step.
      * Each time this function is called, the agent moves one step towards the target.
+     *
      * @param agent The agent to be navigated.
      * @return Final state of the agent after navigation.
      */
@@ -59,21 +60,30 @@ public class Router {
         }
 
 //      StateX stateX = gotoNeighborState(nextStates.get(0));
-        StateX nextState = agent.getNextStates().remove(0);
+        StateX nextState = agent.getNextStates().get(0);
 
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
             System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + agent.getId() + " state: " + state.getId() + "  nextState: " + nextState.getId());
             return null;
         }
-
-        nextState = gotoNeighborState(agent, nextState);
-        return nextState;
+        int currentAgentStateId = agent.getState().getId();
+        StateX finalState = gotoNeighborState(agent, nextState);
+        if (finalState.getId() == nextState.getId()) {
+            agent.getNextStates().remove(0);
+        } else {
+            System.out.println(">> Router.takeAStepTowardTheTarget:: [Warning] Agent (" + agent.getId() +
+                    ") can not travel from (" + currentAgentStateId +
+                    ") to neighbor state (" + nextState.getId() +
+                    ") and is now in state (" + finalState.getId() + ").");
+        }
+        return finalState;
 
     }
 
     /**
      * Updating next states to reach the 'goalState;.
-     * @param agent The agent to be navigated.
+     *
+     * @param agent     The agent to be navigated.
      * @param goalState Goal state.
      */
     public static void updateNextStates(Agent agent, StateX goalState) {
@@ -189,7 +199,8 @@ public class Router {
 
     /**
      * Go to neighbor state if possible.
-     * @param agent walker agent
+     *
+     * @param agent     walker agent
      * @param nextState The state to be go
      * @return final state
      */
@@ -235,6 +246,7 @@ public class Router {
 
     /**
      * Go to the target with index of 'index'
+     *
      * @param agent Walker agent
      * @param index Index of target in targets list
      * @return Final state
@@ -251,9 +263,10 @@ public class Router {
         return agent.getState();
     }
 
-    /**&
+    /**
+     * &
      *
-     * @param agent Responder agent
+     * @param agent     Responder agent
      * @param goalState The goal state
      * @return The neighbor state that routes to goalState
      */

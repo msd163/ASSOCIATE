@@ -2,7 +2,7 @@ import java.net.URISyntaxException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.print("\n");
         System.out.print("  _________________________");
         System.out.print("\n");

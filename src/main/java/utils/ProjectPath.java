@@ -18,24 +18,28 @@ public class ProjectPath {
         return root() + "/src/main/resources";
     }
 
-    public String simDataDir() {
-        return root() + "/src/main/resources/simData";
+    public String pureEnvDir() {
+        return root() + "/src/main/resources/pure-env";
     }
 
-    public String environmentData(int i) {
-        return root() + "/src/main/resources/simData/environment_" + i + ".json";
+    public String fullEnvDir() {
+        return root() + "/src/main/resources/full-env";
     }
 
-    public String fullEnvironmentData(int i) {
-        return root() + "/src/main/resources/simData/full-environment_" + i + ".json";
+    public String pureEnvData(int i) {
+        return pureEnvDir() + "/p-environment_" + i + ".json";
+    }
+
+    public String fullEnvData(int i) {
+        return fullEnvDir() + "/f-environment_" + i + ".json";
     }
 
     public String autoEnvGeneratorData() {
-        return root() + "/src/main/resources/simData/autoEnvGen.json";
+        return fullEnvDir() + "/autoEnvGen.json";
     }
 
     public String simulationData(int i) {
-        return root() + "/src/main/resources/simData/simulation_" + i + ".json";
+        return resourcesDir() + "/simulation_" + i + ".json";
     }
 
 }

@@ -43,19 +43,19 @@ public class AgentCapacity {
 
     private Agent agent;
 
+    @Expose
     private int historyServiceRecordCap;    //size of services in each history
+    @Expose
     private int historyCap;
-
-
     @Expose
     private int watchListCapacity;
     @Expose
     private int watchRadius;                        // radius of watch
     @Expose
     private int stateMapCap;                        // radius of watch
-
+    @Expose
     private int concurrentDoingServiceCap;             // number of concurrent services that can do for requester of a service
-
+    @Expose
     private int capPower;                            // it will be calculated by other params
 
     public int getWatchListCapacity() {

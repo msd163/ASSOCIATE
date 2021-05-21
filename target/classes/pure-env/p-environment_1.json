@@ -1,6 +1,5 @@
 {
   "stateCapacity": "50",
-  "stateCount": 100,
   "states":
   [
     { "id": 0, "targetIds":[1,2] },

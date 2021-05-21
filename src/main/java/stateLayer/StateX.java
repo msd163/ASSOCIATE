@@ -184,6 +184,7 @@ public class StateX {
             }
             return true;
         }
+        System.out.println(">> StateX.addAgent:: [Warning] No capability to adding agent (" + agent.getId() + ") to state (" + id + ")");
         return false;
     }
 

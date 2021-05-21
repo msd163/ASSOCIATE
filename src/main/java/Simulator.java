@@ -1,10 +1,10 @@
+import _type.TtSimulationMode;
 import com.google.gson.Gson;
-import systemLayer.profiler.CapacityProfiler;
 import stateLayer.Environment;
 import systemLayer.World;
+import systemLayer.profiler.CapacityProfiler;
 import utils.Config;
 import utils.Globals;
-import utils.ProjectPath;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,11 +13,11 @@ public class Simulator {
 
     private World[] worlds;
 
-    private void init() throws FileNotFoundException {
-
-        ProjectPath projectPath = new ProjectPath();
+    private void init() throws Exception {
 
         Gson gson = new Gson();
+
+        Environment environment;
 
         //============================
         FileReader prfReader = new FileReader(Config.SimulatingFile);
@@ -30,20 +30,36 @@ public class Simulator {
         }
         Globals.profiler.init();
 
-        //System.out.println(Globals.profiler.toString());
 
-        //============================
-        FileReader envReader = new FileReader(Config.EnvironmentFile);
-        Environment environment = gson.fromJson(envReader, Environment.class);
+        if (Config.SIMULATION_MODE == TtSimulationMode.SimpleEnvironment) {
 
-        if (environment == null) {
-            System.out.println(">> Simulator.init");
-            System.out.println("> Error: environment not found.");
-            return;
+            //============================
+            FileReader envReader = new FileReader(Config.PureEnvironmentDataFile);
+            environment = gson.fromJson(envReader, Environment.class);
+
+            if (environment == null) {
+                System.out.println(">> Simulator.init");
+                System.out.println("> Error: environment not found.");
+                return;
+            }
+
+            System.out.println("Environment loaded from file.");
+            // System.out.println(environment.toString());
+
+        } else {
+            FileReader envReader = new FileReader(Config.FullEnvironmentDataFile);
+            environment = gson.fromJson(envReader, Environment.class);
+
+            if (environment == null) {
+                System.out.println(">> Simulator.init");
+                System.out.println("> Error: environment not found.");
+                return;
+            }
+
+            System.out.println("Environment loaded from file.");
+            // System.out.println(environment.toString());
+
         }
-
-        System.out.println("Environment loaded from file.");
-       // System.out.println(environment.toString());
 
         //============================
         worlds = new World[Globals.profiler.getSimulationRound()];
@@ -53,7 +69,7 @@ public class Simulator {
         }
     }
 
-    public void simulate() {
+    public void simulate() throws Exception {
 
         try {
             init();
