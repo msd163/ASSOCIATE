@@ -20,14 +20,7 @@ public class Config {
     public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
     public static final int TRUST_HONEST_DISCRETE_PERCENT = 50;   // if TtHonestStrategy.Discrete selected, this defines the percentage of honest agents
 
-    //============================  TRUST LEVEL
-    public static final boolean TRUST_LEVEL_RECORD_ACTIVITIES_OF_ITSELF = true;
-    public static final boolean TRUST_LEVEL_RECORD_ACTIVITIES_OF_OTHERS = true;
-    public static final boolean TRUST_LEVEL_RECORD_EXPERIENCES_OF_OTHERS = true;
-
     public static final TtTrustReplaceHistoryMethod TRUST_REPLACE_HISTORY_METHOD = TtTrustReplaceHistoryMethod.Sequential_Circular;
-
-    public static final boolean DO_REQUEST_SERVICE_BY_DISHONEST_AGENT = false;      // Whether a dishonest agent can request a service?
 
     //============================ Drawing Windows
 

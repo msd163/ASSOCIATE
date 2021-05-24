@@ -8,7 +8,7 @@ public class AgentHistory {
         this.doerAgent = doerAgent;
         this.serviceCap = maxServiceCap;
 
-        serviceMetaInfos = new ServiceMetaInfo[maxServiceCap];
+//        serviceMetaInfos = new ServiceMetaInfo[maxServiceCap];
 
         createTime = Globals.WORLD_TIMER;
         serviceIndex = -1;
@@ -16,7 +16,7 @@ public class AgentHistory {
 
     private Agent doerAgent;
 
-    private ServiceMetaInfo[] serviceMetaInfos;
+//    private ServiceMetaInfo[] serviceMetaInfos;
     private int serviceCap;
     private int serviceIndex;
     private int serviceSize;
@@ -25,7 +25,7 @@ public class AgentHistory {
 
     //============================//============================//============================
 
-    public int addToHistory(Service service, Agent publisher, boolean isExperience) {
+   /* public int addToHistory(Service service, Agent publisher, boolean isExperience) {
 
         if (isExperience) {
             for (int i = 0, serviceMetaInfosLength = serviceMetaInfos.length; i < serviceMetaInfosLength; i++) {
@@ -89,7 +89,7 @@ public class AgentHistory {
         }
         return 0f;
     }
-
+*/
     public long getLastUpdateTime() {
         return lastUpdateTime;
     }

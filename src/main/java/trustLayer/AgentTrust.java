@@ -1,10 +1,6 @@
 package trustLayer;
 
 import systemLayer.Agent;
-import systemLayer.AgentHistory;
-import systemLayer.Service;
-import systemLayer.ServiceMetaInfo;
-import utils.Config;
 
 import java.util.Arrays;
 
@@ -20,7 +16,7 @@ public class AgentTrust {
         this.historyCap = historyCap;
         this.historyServiceRecordCap = historyServiceRecordCap;
 
-        histories = new AgentHistory[historyCap];
+        histories = new TrustHistory[historyCap];
         for (int i = 0; i < historyCap; i++) {
             histories[i] = null;
         }
@@ -34,7 +30,7 @@ public class AgentTrust {
     private final Agent agent;
 
     // all services received by this agent across world run
-    private AgentHistory[] histories;
+    private TrustHistory[] histories;
     // An array of history indic that are sorted based on trustScore
     private int[] historiesSortedIndex;
     private int historyCap;
@@ -58,7 +54,7 @@ public class AgentTrust {
         for (int i = 0; i < size; i++)
             historiesSortedIndex[i] = i;
 
-        boolean sorted;
+       /* boolean sorted;
         do {
             sorted = true;
             int bubble = historiesSortedIndex[0];
@@ -79,7 +75,7 @@ public class AgentTrust {
                     bubble = historiesSortedIndex[i + 1];
                 }
             }
-        } while (!sorted);
+        } while (!sorted);*/
 
    /*     System.out.println("======= sorted list for " + agent.getId());
         for (int index : historiesSortedIndex) {
@@ -94,94 +90,19 @@ public class AgentTrust {
     //============================//============================//============================
 
     /**
-     * Adding visited service to it's history
-     *
-     * @param service
-     * @return
-     */
-    public int recordService(Service service) {
-        return recordService(service, false);
-    }
-
-    public int recordService(Service service, boolean isExperience) {
-
-        Agent doer = service.getDoer();
-
-        if (doer == null) {
-            System.out.println("Error: Doer is null in recodeService");
-            return -1;
-        }
-
-        int selectedHistoryIndex = -1;
-
-        for (int i = 0, historyLen = histories.length; i < historyLen; i++) {
-            AgentHistory ah = histories[i];
-            if (ah != null && ah.getDoerAgent().getId() == doer.getId()) {
-                selectedHistoryIndex = i;
-                break;
-            }
-        }
-        if (selectedHistoryIndex == -1) {
-            if (historySize < historyCap) {
-                historySize++;
-            }
-
-            // Replacing new history item with an exist one according selected method.
-            switch (Config.TRUST_REPLACE_HISTORY_METHOD) {
-
-                case Sequential_Circular:
-                    historyIndex++;
-                    if (historyIndex >= historyCap) {
-                        historyIndex = 0;
-                    }
-                    break;
-
-                case RemoveLastUpdated:
-                    AgentHistory oldHistory = histories[0];
-                    if (oldHistory == null) {
-                        historyIndex = 0;
-                    } else {
-                        for (int i = 1, historiesLength = histories.length; i < historiesLength; i++) {
-                            AgentHistory history = histories[i];
-
-                            if (history == null) {
-                                historyIndex = i;
-                                break;
-                            }
-                            if (oldHistory.getLastUpdateTime() > history.getLastUpdateTime()) {
-                                historyIndex = i;
-                                oldHistory = history;
-                            }
-                        }
-                    }
-                    break;
-            }
-            selectedHistoryIndex = historyIndex;
-            histories[selectedHistoryIndex] = new AgentHistory(doer, historyServiceRecordCap);
-        }
-
-        histories[selectedHistoryIndex].addToHistory(service, agent, isExperience);
-
-        return selectedHistoryIndex;
-    }
-
-    /**
      * @param agent
      * @return If there is not the input agent in the history: return 0;
      */
     public float getTrustScore(Agent agent) {
-        for (AgentHistory history : histories) {
+       /* for (AgentHistory history : histories) {
             if (history != null && history.getDoerAgent().getId() == agent.getId()) {
                 return history.getEffectiveTrustLevel();
             }
-        }
+        }*/
 
         return 0;
     }
 
-    public void recordExperience(ServiceMetaInfo info) {
-        recordService(info.getService(), true);
-    }
     //============================//============================//============================
 
 
@@ -207,10 +128,6 @@ public class AgentTrust {
 
     public int getHistorySize() {
         return historySize;
-    }
-
-    public AgentHistory[] getHistories() {
-        return histories;
     }
 
     public int[] getHistoriesSortedIndex() {

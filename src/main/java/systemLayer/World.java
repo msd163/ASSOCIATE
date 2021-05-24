@@ -12,8 +12,6 @@ import utils.WorldStatistics;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class World {
 
@@ -24,11 +22,7 @@ public class World {
     private Agent[] agents;
     private int agentsCount;
 
-    private ServiceType[] serviceTypes;     // The services that are accessible in this world
-
     private int[] traceAgentIds;            // Ids that will be traced in simulation time, in the MainDiagram window
-
-    private List<WorldHistory> histories;
 
     private Environment environment;
 
@@ -38,12 +32,6 @@ public class World {
 
     //============================//============================//============================
     private void init(Environment _environment) throws Exception {
-
-        totalServiceCount =
-                falseNegative =
-                        falsePositive =
-                                trueNegative =
-                                        truePositive = 0;
         //============================
 
         // Identifying the agents that we want to trace in Main diagram.
@@ -51,8 +39,6 @@ public class World {
 
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
-
-        histories = new ArrayList<WorldHistory>();
 
         statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
         for (int i = 0; i < statistics.length; i++) {
@@ -73,14 +59,6 @@ public class World {
             agentsCount = Globals.profiler.getAgentsCount();
         }
         agents = new Agent[agentsCount];
-
-        //============================ Services
-        int serviceCount = Globals.profiler.getServiceCount();
-        serviceTypes = new ServiceType[serviceCount];
-        for (int i = 0; i < serviceCount; i++) {
-            serviceTypes[i] = new ServiceType(i + 1);
-        }
-
 
         //============================ Initializing Environment
         this.environment = new Environment();
@@ -195,16 +173,6 @@ public class World {
 
     }
 
-    private int totalServiceCount;
-    private int dishonestServiceCount;
-    private int honestServiceCount;
-    private int recordedServices;
-    private int dontDoneServices;
-    private int falsePositive;
-    private int falseNegative;
-    private int truePositive;
-    private int trueNegative;
-
     public void run() {
 
         boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;           // Whether show MainWindow or not.
@@ -299,22 +267,6 @@ public class World {
 
         System.out.println("Finished");
 
-        for (Agent agent : agents) {
-
-            for (Service service : agent.getRequestedServices()) {
-                if (service.getResult() > 0) {
-                    honestServiceCount++;
-                } else {
-                    dishonestServiceCount++;
-                }
-                totalServiceCount++;
-            }
-        }
-
-        System.out.println("========================================");
-        System.out.println("  totalServiceCount    : " + totalServiceCount);
-        System.out.println("  honestServiceCount   : " + honestServiceCount);
-        System.out.println("  dishonestServiceCount: " + dishonestServiceCount);
 
     }
 
@@ -325,16 +277,7 @@ public class World {
         StringBuilder ti = new StringBuilder("\n\n\n\t");
 
         return tx + "World: " +
-                ti + " | agentsCount=" + agentsCount +
-                ti + " | dishonestSrvCount=" + dishonestServiceCount +
-                ti + " * honestSrvCount=" + honestServiceCount +
-                ti + " | totalSrvCount=" + totalServiceCount +
-                ti + " * recordedSrv=" + recordedServices +
-                ti + " * dontDoneSrv=" + dontDoneServices +
-                ti + " | falsePositive=" + falsePositive +
-                ti + " * falseNegative=" + falseNegative +
-                ti + " | truePositive=" + truePositive +
-                ti + " * trueNegative=" + trueNegative;
+                ti + " | agentsCount=" + agentsCount ;
     }
 
     public String toString(int tabIndex) {
@@ -349,15 +292,6 @@ public class World {
         }
         return tx + "World{" +
                 ti + ", agentsCount=" + agentsCount +
-                ti + ", totalServiceCount=" + totalServiceCount +
-                ti + ", dishonestServiceCount=" + dishonestServiceCount +
-                ti + ", honestServiceCount=" + honestServiceCount +
-                ti + ", recordedServices=" + recordedServices +
-                ti + ", dontDoneServices=" + dontDoneServices +
-                ti + ", falsePositive=" + falsePositive +
-                ti + ", falseNegative=" + falseNegative +
-                ti + ", truePositive=" + truePositive +
-                ti + ", trueNegative=" + trueNegative +
                 tx + '}';
     }
 
@@ -368,18 +302,6 @@ public class World {
 
     public Agent[] getAgents() {
         return agents;
-    }
-
-    public ServiceType[] getServiceTypes() {
-        return serviceTypes;
-    }
-
-    public void setServiceTypes(ServiceType[] serviceTypes) {
-        this.serviceTypes = serviceTypes;
-    }
-
-    public List<WorldHistory> getHistories() {
-        return histories;
     }
 
     public int getAgentsCount() {

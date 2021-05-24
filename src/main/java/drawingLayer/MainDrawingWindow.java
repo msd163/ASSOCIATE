@@ -241,7 +241,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
             }
         }
 
-        if (agent.isSimConfigShowRequestedService() && agent.getRequestedServices().size() > 0) {
+/*        if (agent.isSimConfigShowRequestedService() && agent.getRequestedServices().size() > 0) {
             Service service = agent.getRequestedServices().get(agent.getRequestedServices().size() - 1);
             if (service != null) {
                 g.setStroke(stroke3);
@@ -254,7 +254,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
                 }
                 g.setStroke(stroke1);
             }
-        }
+        }*/
 
 /*        if (simConfigShowTargetState) {
             RectangleX rec = targetState.getBoundedRectangle();

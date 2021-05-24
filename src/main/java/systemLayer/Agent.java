@@ -64,18 +64,6 @@ public class Agent {
     // If watchRadius is Zero, watchStates will be empty
     private List<WatchedState> watchedStates;
 
-    // list of services that can request with this agent
-    private List<ServiceType> requestingServiceTypes;
-
-    // list of services that can done with this agent
-    private List<ServiceType> doingServiceTypes;
-
-    // list of services that requested by agent
-    private List<Service> requestedServices;
-
-    // list of services that done by agent
-    private List<Service> doneServices;
-
     //============================//============================//============================
 
     public void init() {
@@ -90,17 +78,6 @@ public class Agent {
         behavior = new AgentBehavior();
         watchedAgents = new ArrayList<>();
         watchedStates = new ArrayList<>();
-
-        //todo: [policy] : assigning requested services
-        requestingServiceTypes = new ArrayList<ServiceType>();
-        requestingServiceTypes.addAll(Arrays.asList(world.getServiceTypes()));
-
-        //todo: [policy] : assigning possible services
-        doingServiceTypes = new ArrayList<ServiceType>();
-        doingServiceTypes.addAll(Arrays.asList(world.getServiceTypes()));
-
-        requestedServices = new ArrayList<Service>();
-        doneServices = new ArrayList<Service>();
 
         stateMaps = new ArrayList<>();
         nextStates = new ArrayList<>();
@@ -206,97 +183,10 @@ public class Agent {
         return false;
     }
 
-    //============================ Requesting
-
-    public Service selectRequestedService() {
-
-        ServiceType st = requestingServiceTypes.get(Globals.RANDOM.nextInt(requestingServiceTypes.size()));
-
-        Service rs = new Service();
-        rs.setRequester(this);
-        rs.setServiceType(st);
-
-        requestedServices.add(rs);
-
-        return rs;
-    }
-
-    public Agent findDoerOfRequestedService(Service service) {
-        //todo: [policy] : selecting doer of service
-
-        int watchSize = watchedAgents.size();
-        if (watchSize == 0) {
-            return null;
-        }
-
-        trust.sortHistoryByTrustLevel();
-
-        for (int index : trust.getHistoriesSortedIndex()) {
-            AgentHistory history = trust.getHistories()[index];
-
-            for (WatchedAgent watchedAgent : watchedAgents) {
-                if (history != null
-                        && history.getDoerAgent().getId() == watchedAgent.getAgent().getId()  // if the watched agent is in history
-                        //todo: [policy] : set threshold to trustee selection
-                        && history.getEffectiveTrustLevel() > 0  // if the watched agent is not dishonest
-                ) {
-
-                    boolean serviceAcceptance = watchedAgent.getAgent().canDoService(this, service);
-                    if (serviceAcceptance) {
-                        return watchedAgent.getAgent();
-                    }
-                }
-            }
-        }
-
-        //============================  Random selection if there is no agent in trust history
-
-        int i;
-        int tryCount = 0;
-
-        while (++tryCount < 10) {
-            i = Globals.RANDOM.nextInt(watchSize);
-            if (trust.getTrustScore(watchedAgents.get(i).getAgent()) >= 0) {
-                return watchedAgents.get(i).getAgent();
-            }
-        }
-
-        return null;
-
-    }
-
-
     //============================ Doing
 
-    public boolean canDoService(Agent requester, Service service) {
-
-        //todo: adding limit to count of concurrent doing service
-        if (currentDoingServiceSize < capacity.getConcurrentDoingServiceCap() && watchedAgents.contains(requester)) {
-            if (doingServiceTypes.contains(service.getServiceType())) {
-                //todo: [policy] : bidirectional trust
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Service doService(Service service) {
-
-        currentDoingServiceSize++;
-
-        service.setDoer(this);
-        /*Globals.random.nextFloat() * */
-        float res = capacity.getCapPower() * (behavior.getIsHonest() ? 0.1f : -0.1f);
-        service.setResult(res);
-
-        doneServices.add(service);
-
-        return service;
-
-    }
-
     public void shareExperienceWith(Agent agent) {
-        for (AgentHistory history : trust.getHistories()) {
+/*        for (AgentHistory history : trust.getHistories()) {
             if (history != null) {
                 for (ServiceMetaInfo info : history.getServiceMetaInfos()) {
                     if (info != null) {
@@ -307,7 +197,7 @@ public class Agent {
                     }
                 }
             }
-        }
+        }*/
     }
 
     //============================//============================//============================
@@ -327,10 +217,6 @@ public class Agent {
                 ",\n\t trust=" + trust +
                 ",\n\t behavior=" + behavior +
                 ",\n\t watchedAgents=" + watchedAgents +
-                ",\n\t requestingServiceTypes=" + requestingServiceTypes +
-                ",\n\t doingServiceTypes=" + doingServiceTypes +
-                ",\n\t requestedServices=" + requestedServices +
-                ",\n\t doneServices=" + doneServices +
                 '}';
     }
 
@@ -373,39 +259,6 @@ public class Agent {
 
     public boolean isSimConfigTraceable() {
         return simConfigTraceable;
-    }
-
-    public List<Service> getDoneServices() {
-        return doneServices;
-    }
-
-    public void setDoneServices(List<Service> doneServices) {
-        this.doneServices = doneServices;
-    }
-
-    public List<Service> getRequestedServices() {
-        return requestedServices;
-    }
-
-    public void setRequestedServices(List<Service> requestedServices) {
-        this.requestedServices = requestedServices;
-    }
-
-
-    public List<ServiceType> getRequestingServiceTypes() {
-        return requestingServiceTypes;
-    }
-
-    public void setRequestingServiceTypes(List<ServiceType> requestingServiceTypes) {
-        this.requestingServiceTypes = requestingServiceTypes;
-    }
-
-    public List<ServiceType> getDoingServiceTypes() {
-        return doingServiceTypes;
-    }
-
-    public void setDoingServiceTypes(List<ServiceType> doingServiceTypes) {
-        this.doingServiceTypes = doingServiceTypes;
     }
 
     public AgentBehavior getBehavior() {
