@@ -4,7 +4,7 @@ import utils.Globals;
 
 import java.util.ArrayList;
 
-public class StateMap {
+public class TravelHistory {
 
     private StateX stateX;
     private int visitTime;
@@ -13,7 +13,7 @@ public class StateMap {
     //============================//============================//============================
 
 
-    public StateMap(StateX stateX, int visitTime, ArrayList<StateX> targets) {
+    public TravelHistory(StateX stateX, int visitTime, ArrayList<StateX> targets) {
         this.stateX = stateX;
         this.visitTime = visitTime;
         this.targets = targets;
@@ -31,10 +31,9 @@ public class StateMap {
         return -1;
     }
 
-
-    public boolean hasPathTo(StateMap stateMap) {
+    public boolean hasPathTo(TravelHistory travelHistory) {
         for (StateX target : targets) {
-            if (target.getId() == stateMap.stateX.getId()) {
+            if (target.getId() == travelHistory.stateX.getId()) {
                 return true;
             }
         }

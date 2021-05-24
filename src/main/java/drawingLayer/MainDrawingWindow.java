@@ -226,10 +226,10 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         if (isCapCandid || agent.isSimConfigShowWatchRadius()) {
             g.setColor(isCapCandid ? (behavior.getIsHonest() ? Color.GREEN : Color.RED) : agent.isSimConfigTraceable() ? Color.CYAN : Color.lightGray);
             g.drawOval(
-                    loc_x - capacity.getWatchRadius(),
-                    loc_y - capacity.getWatchRadius(),
-                    capacity.getWatchRadius() * 2,
-                    capacity.getWatchRadius() * 2
+                    loc_x - capacity.getWatchDepth(),
+                    loc_y - capacity.getWatchDepth(),
+                    capacity.getWatchDepth() * 2,
+                    capacity.getWatchDepth() * 2
             );
         }
 

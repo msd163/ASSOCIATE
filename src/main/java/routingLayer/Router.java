@@ -1,6 +1,6 @@
 package routingLayer;
 
-import stateLayer.StateMap;
+import stateLayer.TravelHistory;
 import stateLayer.StateX;
 import stateLayer.TransitionX;
 import systemLayer.Agent;
@@ -55,7 +55,7 @@ public class Router {
             agent.clearNextStates();
             // Printing map
             String sIds = "";
-            for (StateMap s : agent.getStateMaps()) {
+            for (TravelHistory s : agent.getTravelHistories()) {
                 sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
             }
             System.out.println(">>ERR>> no target for agent:::gotoSate::agentId: " + agent.getId() + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
@@ -64,13 +64,13 @@ public class Router {
         }
 
         // If there is not any states in the agent history, the nextStates of agent have to be updated.
-        if (agent.getNextStates().isEmpty()) {
+        if (agent.getNextSteps().isEmpty()) {
             updateNextStates(agent, targetState);
             statistics.addUpdatedNextStatesOfAgents();
         }
 
         // If the nextStates is empty after updating the nextStates, the agent will go to one neighbor randomly.
-        if (agent.getNextStates().isEmpty()) {
+        if (agent.getNextSteps().isEmpty()) {
             int targetIndex = Globals.RANDOM.nextInt(state.getTargets().size());
             StateX stateX = gotoNeighborState(agent, targetIndex);
             statistics.addRandomTravelToNeighbors();
@@ -82,7 +82,7 @@ public class Router {
 
         // Traveling to one neighbor according to the first entity of the nextStates of the agent.
 //      StateX stateX = gotoNeighborState(nextStates.get(0));
-        StateX nextState = agent.getNextStates().get(0);
+        StateX nextState = agent.getNextSteps().get(0);
 
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
             statistics.addFailedTravelToGoToNeighbor();
@@ -93,7 +93,7 @@ public class Router {
         StateX finalState = gotoNeighborState(agent, nextState);
         // Successfully traveling to neighbor.
         if (finalState.getId() == nextState.getId()) {
-            agent.getNextStates().remove(0);
+            agent.getNextSteps().remove(0);
             statistics.addSuccessTravelToGoToNeighbor();
             if (finalState.getId() == agent.getTargetState().getId()) {
                 statistics.addInTargetAgentsInThisTime();
@@ -132,7 +132,7 @@ public class Router {
 
             for (WatchedState ws : watchedStates) {
                 if (ws.getStateX().getId() == goalState.getId()) {
-                    agent.getNextStates().addAll(ws.getPath());
+                    agent.getNextSteps().addAll(ws.getPath());
                     System.out.println(">> Self Visiting > Agent: " + agent.getId() + " | State: " + goalState.getId());
                     return;
                 }
@@ -170,24 +170,24 @@ public class Router {
 
             for (WatchedAgent wa : watchedAgents) {
                 if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
-                    agent.getNextStates().addAll(wa.getPath());
+                    agent.getNextSteps().addAll(wa.getPath());
                     break;
                 }
             }
 
             if (help.getNextState() != null) {
-                agent.getNextStates().add(help.getNextState());
+                agent.getNextSteps().add(help.getNextState());
             }
 
             boolean isVisited = false;
-            for (int i = 0, nextStatesSize = agent.getNextStates().size(); i < nextStatesSize; i++) {
-                StateX nextState = agent.getNextStates().get(i);
+            for (int i = 0, nextStatesSize = agent.getNextSteps().size(); i < nextStatesSize; i++) {
+                StateX nextState = agent.getNextSteps().get(i);
 
-                int siteMapLastIndex = agent.getStateMaps().size() - 1;
+                int siteMapLastIndex = agent.getTravelHistories().size() - 1;
                 for (int j = siteMapLastIndex; j >= 0 && j > siteMapLastIndex - nextStatesSize - 2; j--) {
-                    StateMap stateMap = agent.getStateMaps().get(j);
+                    TravelHistory travelHistory = agent.getTravelHistories().get(j);
 
-                    if (stateMap.getStateX().getId() == nextState.getId()) {
+                    if (travelHistory.getStateX().getId() == nextState.getId()) {
                         isVisited = true;
                         break;
                     }
@@ -301,28 +301,28 @@ public class Router {
     private RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
 
         //============================
-        ArrayList<StateMap> stateMaps = agent.getStateMaps();
+        ArrayList<TravelHistory> travelHistories = agent.getTravelHistories();
         //============================
 
         //boolean isFound = false;
-        int lastIndex = stateMaps.size() - 1;
+        int lastIndex = travelHistories.size() - 1;
 
         //int allStepsToTarget = 0;
         for (int i = lastIndex; i >= 0; i--) {
 
             // If there is no reverse path from state 'i' to state 'i-1'
-            if (i < lastIndex && !stateMaps.get(i + 1).hasPathTo(stateMaps.get(i))) {
+            if (i < lastIndex && !travelHistories.get(i + 1).hasPathTo(travelHistories.get(i))) {
                 return null;
             }
 
-            int stepTo = stateMaps.get(i).isAnyPathTo(goalState);
+            int stepTo = travelHistories.get(i).isAnyPathTo(goalState);
             if (stepTo >= 0) {
                 RoutingHelp routingHelp = new RoutingHelp();
                 routingHelp.setHelperAgent(agent);
                 routingHelp.setStepToTarget(lastIndex - i + stepTo);
 
                 if (i < lastIndex /*&& lastIndex > 0*/) {
-                    routingHelp.setNextState(stateMaps.get(lastIndex - 1).getStateX());
+                    routingHelp.setNextState(travelHistories.get(lastIndex - 1).getStateX());
                 }
                 return routingHelp;
             }

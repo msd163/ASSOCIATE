@@ -12,9 +12,9 @@ public class AgentCapacity {
 
         this.agent = parentAgent;
 
-        watchRadius = Globals.profiler.getCurrentBunch().getWatchRadiusD().nextValue();
+        watchDepth = Globals.profiler.getCurrentBunch().getWatchRadiusD().nextValue();
 
-        stateMapCap = Globals.profiler.getCurrentBunch().getStateMapCapD().nextValue();
+        travelHistoryCap = Globals.profiler.getCurrentBunch().getTravelHistoryCapD().nextValue();
 
         watchListCapacity = Globals.profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
 
@@ -26,14 +26,14 @@ public class AgentCapacity {
 
         // capPower is between 0 and 100
         capPower =
-                (int) (60 * ((float) stateMapCap / Globals.profiler.getCurrentBunch().getStateMapCapD().getMaxValue())) +
-                        (int) (40 * ((float) watchRadius / Globals.profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
+                (int) (60 * ((float) travelHistoryCap / Globals.profiler.getCurrentBunch().getTravelHistoryCapD().getMaxValue())) +
+                        (int) (40 * ((float) watchDepth / Globals.profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
         ;
 
         /*System.out.println(
                 " | watchRadius: " + watchRadius
                         + " | watchListCap: " + watchListCapacity
-                        + " | stateMapCap: " + stateMapCap
+                        + " | travelHistory: " + travelHistory
                         + " | concurrentDoSerCap: " + concurrentDoingServiceCap
                         + " | historyCap: " + historyCap
                         + " | historySerRecCap: " + historyServiceRecordCap
@@ -50,9 +50,9 @@ public class AgentCapacity {
     @Expose
     private int watchListCapacity;
     @Expose
-    private int watchRadius;                        // radius of watch
+    private int watchDepth;                              // depth of watch in neighbor states
     @Expose
-    private int stateMapCap;                        // radius of watch
+    private int travelHistoryCap;                        // size of travel history
     @Expose
     private int concurrentDoingServiceCap;             // number of concurrent services that can do for requester of a service
     @Expose
@@ -62,12 +62,12 @@ public class AgentCapacity {
         return watchListCapacity;
     }
 
-    public int getWatchRadius() {
-        return watchRadius;
+    public int getWatchDepth() {
+        return watchDepth;
     }
 
-    public int getStateMapCap() {
-        return stateMapCap;
+    public int getTravelHistoryCap() {
+        return travelHistoryCap;
     }
 
     public int getCapPower() {
@@ -80,8 +80,8 @@ public class AgentCapacity {
                 "\n\t\tagentVisitCap=" + historyServiceRecordCap +
                 ",\n\t\tserviceRecordCap=" + historyCap +
                 ",\n\t\twatchListCapacity=" + watchListCapacity +
-                ",\n\t\twatchRadius=" + watchRadius +
-                ",\n\t\tstateMapCap=" + stateMapCap +
+                ",\n\t\twatchDepth=" + watchDepth +
+                ",\n\t\ttravelHistory=" + travelHistoryCap +
                 ",\n\t\tconcurrentDoingServiceCap=" + concurrentDoingServiceCap +
                 ",\n\t\tcapPower=" + capPower +
                 '}';
@@ -113,12 +113,12 @@ public class AgentCapacity {
         this.watchListCapacity = watchListCapacity;
     }
 
-    public void setWatchRadius(int watchRadius) {
-        this.watchRadius = watchRadius;
+    public void setWatchDepth(int watchDepth) {
+        this.watchDepth = watchDepth;
     }
 
-    public void setStateMapCap(int stateMapCap) {
-        this.stateMapCap = stateMapCap;
+    public void setTravelHistoryCap(int travelHistoryCap) {
+        this.travelHistoryCap = travelHistoryCap;
     }
 
     public void setConcurrentDoingServiceCap(int concurrentDoingServiceCap) {

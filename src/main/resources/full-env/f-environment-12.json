@@ -33,7 +33,7 @@
             "historyCap": 1797,
             "watchListCapacity": 12,
             "watchRadius": 0,
-            "stateMapCap": 148,
+            "travelHistoryCap": 148,
             "concurrentDoingServiceCap": 0,
             "capPower": 59
           }
@@ -46,7 +46,7 @@
             "historyCap": 789,
             "watchListCapacity": 26,
             "watchRadius": 1,
-            "stateMapCap": 113,
+            "travelHistoryCap": 113,
             "concurrentDoingServiceCap": 0,
             "capPower": 65
           }
@@ -59,7 +59,7 @@
             "historyCap": 334,
             "watchListCapacity": 53,
             "watchRadius": 1,
-            "stateMapCap": 104,
+            "travelHistoryCap": 104,
             "concurrentDoingServiceCap": 0,
             "capPower": 61
           }
@@ -72,7 +72,7 @@
             "historyCap": 1839,
             "watchListCapacity": 39,
             "watchRadius": 1,
-            "stateMapCap": 103,
+            "travelHistoryCap": 103,
             "concurrentDoingServiceCap": 1,
             "capPower": 61
           }
@@ -85,7 +85,7 @@
             "historyCap": 2057,
             "watchListCapacity": 38,
             "watchRadius": 0,
-            "stateMapCap": 99,
+            "travelHistoryCap": 99,
             "concurrentDoingServiceCap": 4,
             "capPower": 19
           }
@@ -98,7 +98,7 @@
             "historyCap": 1202,
             "watchListCapacity": 41,
             "watchRadius": 3,
-            "stateMapCap": 177,
+            "travelHistoryCap": 177,
             "concurrentDoingServiceCap": 3,
             "capPower": 65
           }
@@ -111,7 +111,7 @@
             "historyCap": 1867,
             "watchListCapacity": 12,
             "watchRadius": 1,
-            "stateMapCap": 158,
+            "travelHistoryCap": 158,
             "concurrentDoingServiceCap": 3,
             "capPower": 41
           }
@@ -135,7 +135,7 @@
             "historyCap": 1056,
             "watchListCapacity": 11,
             "watchRadius": 0,
-            "stateMapCap": 106,
+            "travelHistoryCap": 106,
             "concurrentDoingServiceCap": 1,
             "capPower": 42
           }
@@ -148,7 +148,7 @@
             "historyCap": 470,
             "watchListCapacity": 31,
             "watchRadius": 1,
-            "stateMapCap": 102,
+            "travelHistoryCap": 102,
             "concurrentDoingServiceCap": 1,
             "capPower": 60
           }
@@ -161,7 +161,7 @@
             "historyCap": 1929,
             "watchListCapacity": 31,
             "watchRadius": 1,
-            "stateMapCap": 132,
+            "travelHistoryCap": 132,
             "concurrentDoingServiceCap": 1,
             "capPower": 72
           }
@@ -174,7 +174,7 @@
             "historyCap": 1882,
             "watchListCapacity": 3,
             "watchRadius": 0,
-            "stateMapCap": 133,
+            "travelHistoryCap": 133,
             "concurrentDoingServiceCap": 0,
             "capPower": 53
           }
@@ -187,7 +187,7 @@
             "historyCap": 2358,
             "watchListCapacity": 2,
             "watchRadius": 2,
-            "stateMapCap": 80,
+            "travelHistoryCap": 80,
             "concurrentDoingServiceCap": 5,
             "capPower": 36
           }
@@ -210,7 +210,7 @@
             "historyCap": 1790,
             "watchListCapacity": 49,
             "watchRadius": 1,
-            "stateMapCap": 17,
+            "travelHistoryCap": 17,
             "concurrentDoingServiceCap": 1,
             "capPower": 26
           }
@@ -223,7 +223,7 @@
             "historyCap": 1038,
             "watchListCapacity": 80,
             "watchRadius": 1,
-            "stateMapCap": 202,
+            "travelHistoryCap": 202,
             "concurrentDoingServiceCap": 2,
             "capPower": 50
           }
@@ -236,7 +236,7 @@
             "historyCap": 130,
             "watchListCapacity": 12,
             "watchRadius": 1,
-            "stateMapCap": 285,
+            "travelHistoryCap": 285,
             "concurrentDoingServiceCap": 6,
             "capPower": 67
           }
@@ -262,7 +262,7 @@
             "historyCap": 968,
             "watchListCapacity": 34,
             "watchRadius": 1,
-            "stateMapCap": 64,
+            "travelHistoryCap": 64,
             "concurrentDoingServiceCap": 0,
             "capPower": 45
           }
@@ -275,7 +275,7 @@
             "historyCap": 2323,
             "watchListCapacity": 26,
             "watchRadius": 3,
-            "stateMapCap": 252,
+            "travelHistoryCap": 252,
             "concurrentDoingServiceCap": 6,
             "capPower": 80
           }
@@ -288,7 +288,7 @@
             "historyCap": 604,
             "watchListCapacity": 23,
             "watchRadius": 2,
-            "stateMapCap": 104,
+            "travelHistoryCap": 104,
             "concurrentDoingServiceCap": 5,
             "capPower": 40
           }
@@ -301,7 +301,7 @@
             "historyCap": 510,
             "watchListCapacity": 72,
             "watchRadius": 3,
-            "stateMapCap": 121,
+            "travelHistoryCap": 121,
             "concurrentDoingServiceCap": 2,
             "capPower": 54
           }
@@ -331,7 +331,7 @@
             "historyCap": 1708,
             "watchListCapacity": 20,
             "watchRadius": 0,
-            "stateMapCap": 86,
+            "travelHistoryCap": 86,
             "concurrentDoingServiceCap": 1,
             "capPower": 34
           }
@@ -344,7 +344,7 @@
             "historyCap": 475,
             "watchListCapacity": 40,
             "watchRadius": 1,
-            "stateMapCap": 107,
+            "travelHistoryCap": 107,
             "concurrentDoingServiceCap": 0,
             "capPower": 62
           }
@@ -357,7 +357,7 @@
             "historyCap": 527,
             "watchListCapacity": 6,
             "watchRadius": 1,
-            "stateMapCap": 19,
+            "travelHistoryCap": 19,
             "concurrentDoingServiceCap": 0,
             "capPower": 27
           }
@@ -370,7 +370,7 @@
             "historyCap": 2358,
             "watchListCapacity": 34,
             "watchRadius": 1,
-            "stateMapCap": 117,
+            "travelHistoryCap": 117,
             "concurrentDoingServiceCap": 0,
             "capPower": 66
           }
@@ -383,7 +383,7 @@
             "historyCap": 995,
             "watchListCapacity": 28,
             "watchRadius": 1,
-            "stateMapCap": 82,
+            "travelHistoryCap": 82,
             "concurrentDoingServiceCap": 1,
             "capPower": 52
           }
@@ -396,7 +396,7 @@
             "historyCap": 985,
             "watchListCapacity": 51,
             "watchRadius": 0,
-            "stateMapCap": 263,
+            "travelHistoryCap": 263,
             "concurrentDoingServiceCap": 3,
             "capPower": 52
           }
@@ -409,7 +409,7 @@
             "historyCap": 1141,
             "watchListCapacity": 3,
             "watchRadius": 1,
-            "stateMapCap": 205,
+            "travelHistoryCap": 205,
             "concurrentDoingServiceCap": 3,
             "capPower": 51
           }
@@ -446,7 +446,7 @@
             "historyCap": 1221,
             "watchListCapacity": 42,
             "watchRadius": 2,
-            "stateMapCap": 78,
+            "travelHistoryCap": 78,
             "concurrentDoingServiceCap": 1,
             "capPower": 35
           }
@@ -459,7 +459,7 @@
             "historyCap": 2051,
             "watchListCapacity": 41,
             "watchRadius": 0,
-            "stateMapCap": 99,
+            "travelHistoryCap": 99,
             "concurrentDoingServiceCap": 3,
             "capPower": 19
           }
@@ -472,7 +472,7 @@
             "historyCap": 1153,
             "watchListCapacity": 5,
             "watchRadius": 2,
-            "stateMapCap": 69,
+            "travelHistoryCap": 69,
             "concurrentDoingServiceCap": 0,
             "capPower": 33
           }
@@ -485,7 +485,7 @@
             "historyCap": 1820,
             "watchListCapacity": 21,
             "watchRadius": 0,
-            "stateMapCap": 92,
+            "travelHistoryCap": 92,
             "concurrentDoingServiceCap": 3,
             "capPower": 18
           }
@@ -513,7 +513,7 @@
             "historyCap": 1750,
             "watchListCapacity": 1,
             "watchRadius": 0,
-            "stateMapCap": 115,
+            "travelHistoryCap": 115,
             "concurrentDoingServiceCap": 0,
             "capPower": 46
           }
@@ -526,7 +526,7 @@
             "historyCap": 2378,
             "watchListCapacity": 13,
             "watchRadius": 1,
-            "stateMapCap": 70,
+            "travelHistoryCap": 70,
             "concurrentDoingServiceCap": 1,
             "capPower": 48
           }
@@ -539,7 +539,7 @@
             "historyCap": 2206,
             "watchListCapacity": 43,
             "watchRadius": 1,
-            "stateMapCap": 126,
+            "travelHistoryCap": 126,
             "concurrentDoingServiceCap": 0,
             "capPower": 70
           }
@@ -552,7 +552,7 @@
             "historyCap": 609,
             "watchListCapacity": 39,
             "watchRadius": 1,
-            "stateMapCap": 38,
+            "travelHistoryCap": 38,
             "concurrentDoingServiceCap": 1,
             "capPower": 35
           }
@@ -565,7 +565,7 @@
             "historyCap": 2169,
             "watchListCapacity": 43,
             "watchRadius": 1,
-            "stateMapCap": 122,
+            "travelHistoryCap": 122,
             "concurrentDoingServiceCap": 1,
             "capPower": 68
           }
@@ -578,7 +578,7 @@
             "historyCap": 1314,
             "watchListCapacity": 3,
             "watchRadius": 1,
-            "stateMapCap": 75,
+            "travelHistoryCap": 75,
             "concurrentDoingServiceCap": 0,
             "capPower": 50
           }
@@ -591,7 +591,7 @@
             "historyCap": 197,
             "watchListCapacity": 20,
             "watchRadius": 0,
-            "stateMapCap": 106,
+            "travelHistoryCap": 106,
             "concurrentDoingServiceCap": 1,
             "capPower": 21
           }
@@ -604,7 +604,7 @@
             "historyCap": 172,
             "watchListCapacity": 38,
             "watchRadius": 0,
-            "stateMapCap": 241,
+            "travelHistoryCap": 241,
             "concurrentDoingServiceCap": 4,
             "capPower": 48
           }
@@ -617,7 +617,7 @@
             "historyCap": 1219,
             "watchListCapacity": 6,
             "watchRadius": 0,
-            "stateMapCap": 107,
+            "travelHistoryCap": 107,
             "concurrentDoingServiceCap": 0,
             "capPower": 21
           }
@@ -630,7 +630,7 @@
             "historyCap": 1845,
             "watchListCapacity": 40,
             "watchRadius": 2,
-            "stateMapCap": 263,
+            "travelHistoryCap": 263,
             "concurrentDoingServiceCap": 0,
             "capPower": 72
           }
@@ -643,7 +643,7 @@
             "historyCap": 475,
             "watchListCapacity": 66,
             "watchRadius": 3,
-            "stateMapCap": 195,
+            "travelHistoryCap": 195,
             "concurrentDoingServiceCap": 6,
             "capPower": 69
           }
@@ -673,7 +673,7 @@
             "historyCap": 833,
             "watchListCapacity": 31,
             "watchRadius": 1,
-            "stateMapCap": 40,
+            "travelHistoryCap": 40,
             "concurrentDoingServiceCap": 1,
             "capPower": 36
           }
@@ -686,7 +686,7 @@
             "historyCap": 1147,
             "watchListCapacity": 36,
             "watchRadius": 0,
-            "stateMapCap": 149,
+            "travelHistoryCap": 149,
             "concurrentDoingServiceCap": 1,
             "capPower": 59
           }
@@ -699,7 +699,7 @@
             "historyCap": 1595,
             "watchListCapacity": 53,
             "watchRadius": 0,
-            "stateMapCap": 90,
+            "travelHistoryCap": 90,
             "concurrentDoingServiceCap": 1,
             "capPower": 36
           }
@@ -712,7 +712,7 @@
             "historyCap": 1603,
             "watchListCapacity": 20,
             "watchRadius": 1,
-            "stateMapCap": 52,
+            "travelHistoryCap": 52,
             "concurrentDoingServiceCap": 0,
             "capPower": 40
           }
@@ -725,7 +725,7 @@
             "historyCap": 218,
             "watchListCapacity": 17,
             "watchRadius": 1,
-            "stateMapCap": 225,
+            "travelHistoryCap": 225,
             "concurrentDoingServiceCap": 2,
             "capPower": 55
           }
@@ -750,7 +750,7 @@
             "historyCap": 782,
             "watchListCapacity": 36,
             "watchRadius": 0,
-            "stateMapCap": 84,
+            "travelHistoryCap": 84,
             "concurrentDoingServiceCap": 1,
             "capPower": 33
           }
@@ -763,7 +763,7 @@
             "historyCap": 908,
             "watchListCapacity": 55,
             "watchRadius": 1,
-            "stateMapCap": 139,
+            "travelHistoryCap": 139,
             "concurrentDoingServiceCap": 0,
             "capPower": 75
           }
@@ -776,7 +776,7 @@
             "historyCap": 329,
             "watchListCapacity": 49,
             "watchRadius": 1,
-            "stateMapCap": 54,
+            "travelHistoryCap": 54,
             "concurrentDoingServiceCap": 0,
             "capPower": 41
           }
@@ -789,7 +789,7 @@
             "historyCap": 980,
             "watchListCapacity": 53,
             "watchRadius": 1,
-            "stateMapCap": 148,
+            "travelHistoryCap": 148,
             "concurrentDoingServiceCap": 0,
             "capPower": 79
           }
@@ -802,7 +802,7 @@
             "historyCap": 1348,
             "watchListCapacity": 30,
             "watchRadius": 1,
-            "stateMapCap": 138,
+            "travelHistoryCap": 138,
             "concurrentDoingServiceCap": 0,
             "capPower": 75
           }
@@ -815,7 +815,7 @@
             "historyCap": 1508,
             "watchListCapacity": 23,
             "watchRadius": 1,
-            "stateMapCap": 24,
+            "travelHistoryCap": 24,
             "concurrentDoingServiceCap": 0,
             "capPower": 29
           }
@@ -828,7 +828,7 @@
             "historyCap": 1234,
             "watchListCapacity": 9,
             "watchRadius": 2,
-            "stateMapCap": 113,
+            "travelHistoryCap": 113,
             "concurrentDoingServiceCap": 5,
             "capPower": 42
           }
@@ -866,7 +866,7 @@
             "historyCap": 1481,
             "watchListCapacity": 35,
             "watchRadius": 1,
-            "stateMapCap": 58,
+            "travelHistoryCap": 58,
             "concurrentDoingServiceCap": 1,
             "capPower": 43
           }
@@ -879,7 +879,7 @@
             "historyCap": 1552,
             "watchListCapacity": 3,
             "watchRadius": 1,
-            "stateMapCap": 65,
+            "travelHistoryCap": 65,
             "concurrentDoingServiceCap": 0,
             "capPower": 46
           }
@@ -892,7 +892,7 @@
             "historyCap": 1613,
             "watchListCapacity": 11,
             "watchRadius": 0,
-            "stateMapCap": 25,
+            "travelHistoryCap": 25,
             "concurrentDoingServiceCap": 1,
             "capPower": 10
           }
@@ -905,7 +905,7 @@
             "historyCap": 242,
             "watchListCapacity": 26,
             "watchRadius": 1,
-            "stateMapCap": 98,
+            "travelHistoryCap": 98,
             "concurrentDoingServiceCap": 2,
             "capPower": 29
           }
@@ -938,7 +938,7 @@
             "historyCap": 364,
             "watchListCapacity": 17,
             "watchRadius": 1,
-            "stateMapCap": 50,
+            "travelHistoryCap": 50,
             "concurrentDoingServiceCap": 0,
             "capPower": 40
           }
@@ -951,7 +951,7 @@
             "historyCap": 710,
             "watchListCapacity": 10,
             "watchRadius": 0,
-            "stateMapCap": 68,
+            "travelHistoryCap": 68,
             "concurrentDoingServiceCap": 1,
             "capPower": 27
           }
@@ -964,7 +964,7 @@
             "historyCap": 116,
             "watchListCapacity": 17,
             "watchRadius": 1,
-            "stateMapCap": 18,
+            "travelHistoryCap": 18,
             "concurrentDoingServiceCap": 0,
             "capPower": 27
           }
@@ -977,7 +977,7 @@
             "historyCap": 654,
             "watchListCapacity": 74,
             "watchRadius": 2,
-            "stateMapCap": 111,
+            "travelHistoryCap": 111,
             "concurrentDoingServiceCap": 0,
             "capPower": 42
           }
@@ -1011,7 +1011,7 @@
             "historyCap": 2472,
             "watchListCapacity": 24,
             "watchRadius": 1,
-            "stateMapCap": 97,
+            "travelHistoryCap": 97,
             "concurrentDoingServiceCap": 0,
             "capPower": 58
           }
@@ -1024,7 +1024,7 @@
             "historyCap": 817,
             "watchListCapacity": 33,
             "watchRadius": 0,
-            "stateMapCap": 120,
+            "travelHistoryCap": 120,
             "concurrentDoingServiceCap": 6,
             "capPower": 24
           }
@@ -1037,7 +1037,7 @@
             "historyCap": 1127,
             "watchListCapacity": 22,
             "watchRadius": 1,
-            "stateMapCap": 257,
+            "travelHistoryCap": 257,
             "concurrentDoingServiceCap": 6,
             "capPower": 61
           }
@@ -1050,7 +1050,7 @@
             "historyCap": 1630,
             "watchListCapacity": 51,
             "watchRadius": 1,
-            "stateMapCap": 142,
+            "travelHistoryCap": 142,
             "concurrentDoingServiceCap": 2,
             "capPower": 38
           }
@@ -1063,7 +1063,7 @@
             "historyCap": 1835,
             "watchListCapacity": 28,
             "watchRadius": 3,
-            "stateMapCap": 89,
+            "travelHistoryCap": 89,
             "concurrentDoingServiceCap": 6,
             "capPower": 47
           }
@@ -1076,7 +1076,7 @@
             "historyCap": 685,
             "watchListCapacity": 74,
             "watchRadius": 3,
-            "stateMapCap": 61,
+            "travelHistoryCap": 61,
             "concurrentDoingServiceCap": 0,
             "capPower": 42
           }
@@ -1104,7 +1104,7 @@
             "historyCap": 176,
             "watchListCapacity": 9,
             "watchRadius": 0,
-            "stateMapCap": 11,
+            "travelHistoryCap": 11,
             "concurrentDoingServiceCap": 0,
             "capPower": 4
           }
@@ -1117,7 +1117,7 @@
             "historyCap": 626,
             "watchListCapacity": 22,
             "watchRadius": 0,
-            "stateMapCap": 31,
+            "travelHistoryCap": 31,
             "concurrentDoingServiceCap": 1,
             "capPower": 12
           }
@@ -1130,7 +1130,7 @@
             "historyCap": 2096,
             "watchListCapacity": 52,
             "watchRadius": 0,
-            "stateMapCap": 27,
+            "travelHistoryCap": 27,
             "concurrentDoingServiceCap": 1,
             "capPower": 10
           }
@@ -1143,7 +1143,7 @@
             "historyCap": 1209,
             "watchListCapacity": 50,
             "watchRadius": 0,
-            "stateMapCap": 286,
+            "travelHistoryCap": 286,
             "concurrentDoingServiceCap": 2,
             "capPower": 57
           }
@@ -1156,7 +1156,7 @@
             "historyCap": 2132,
             "watchListCapacity": 22,
             "watchRadius": 3,
-            "stateMapCap": 213,
+            "travelHistoryCap": 213,
             "concurrentDoingServiceCap": 4,
             "capPower": 72
           }
@@ -1169,7 +1169,7 @@
             "historyCap": 1630,
             "watchListCapacity": 2,
             "watchRadius": 1,
-            "stateMapCap": 102,
+            "travelHistoryCap": 102,
             "concurrentDoingServiceCap": 6,
             "capPower": 30
           }
@@ -1182,7 +1182,7 @@
             "historyCap": 2481,
             "watchListCapacity": 5,
             "watchRadius": 0,
-            "stateMapCap": 149,
+            "travelHistoryCap": 149,
             "concurrentDoingServiceCap": 4,
             "capPower": 29
           }
@@ -1195,7 +1195,7 @@
             "historyCap": 488,
             "watchListCapacity": 29,
             "watchRadius": 3,
-            "stateMapCap": 159,
+            "travelHistoryCap": 159,
             "concurrentDoingServiceCap": 3,
             "capPower": 61
           }
@@ -1229,7 +1229,7 @@
             "historyCap": 2400,
             "watchListCapacity": 23,
             "watchRadius": 0,
-            "stateMapCap": 92,
+            "travelHistoryCap": 92,
             "concurrentDoingServiceCap": 0,
             "capPower": 36
           }
@@ -1242,7 +1242,7 @@
             "historyCap": 560,
             "watchListCapacity": 56,
             "watchRadius": 1,
-            "stateMapCap": 20,
+            "travelHistoryCap": 20,
             "concurrentDoingServiceCap": 1,
             "capPower": 28
           }
@@ -1255,7 +1255,7 @@
             "historyCap": 1118,
             "watchListCapacity": 9,
             "watchRadius": 0,
-            "stateMapCap": 74,
+            "travelHistoryCap": 74,
             "concurrentDoingServiceCap": 0,
             "capPower": 29
           }
@@ -1268,7 +1268,7 @@
             "historyCap": 223,
             "watchListCapacity": 59,
             "watchRadius": 3,
-            "stateMapCap": 230,
+            "travelHistoryCap": 230,
             "concurrentDoingServiceCap": 4,
             "capPower": 76
           }
@@ -1281,7 +1281,7 @@
             "historyCap": 1212,
             "watchListCapacity": 59,
             "watchRadius": 3,
-            "stateMapCap": 277,
+            "travelHistoryCap": 277,
             "concurrentDoingServiceCap": 5,
             "capPower": 85
           }
@@ -1294,7 +1294,7 @@
             "historyCap": 979,
             "watchListCapacity": 46,
             "watchRadius": 3,
-            "stateMapCap": 170,
+            "travelHistoryCap": 170,
             "concurrentDoingServiceCap": 4,
             "capPower": 64
           }
@@ -1307,7 +1307,7 @@
             "historyCap": 1610,
             "watchListCapacity": 24,
             "watchRadius": 0,
-            "stateMapCap": 208,
+            "travelHistoryCap": 208,
             "concurrentDoingServiceCap": 2,
             "capPower": 41
           }
@@ -1320,7 +1320,7 @@
             "historyCap": 520,
             "watchListCapacity": 19,
             "watchRadius": 3,
-            "stateMapCap": 270,
+            "travelHistoryCap": 270,
             "concurrentDoingServiceCap": 1,
             "capPower": 84
           }
@@ -1355,7 +1355,7 @@
             "historyCap": 1906,
             "watchListCapacity": 15,
             "watchRadius": 1,
-            "stateMapCap": 70,
+            "travelHistoryCap": 70,
             "concurrentDoingServiceCap": 0,
             "capPower": 48
           }
@@ -1368,7 +1368,7 @@
             "historyCap": 1394,
             "watchListCapacity": 51,
             "watchRadius": 1,
-            "stateMapCap": 12,
+            "travelHistoryCap": 12,
             "concurrentDoingServiceCap": 1,
             "capPower": 24
           }
@@ -1381,7 +1381,7 @@
             "historyCap": 789,
             "watchListCapacity": 30,
             "watchRadius": 0,
-            "stateMapCap": 112,
+            "travelHistoryCap": 112,
             "concurrentDoingServiceCap": 1,
             "capPower": 44
           }
@@ -1414,7 +1414,7 @@
             "historyCap": 1261,
             "watchListCapacity": 1,
             "watchRadius": 3,
-            "stateMapCap": 213,
+            "travelHistoryCap": 213,
             "concurrentDoingServiceCap": 1,
             "capPower": 72
           }
@@ -1427,7 +1427,7 @@
             "historyCap": 1627,
             "watchListCapacity": 77,
             "watchRadius": 3,
-            "stateMapCap": 239,
+            "travelHistoryCap": 239,
             "concurrentDoingServiceCap": 4,
             "capPower": 77
           }
@@ -1464,7 +1464,7 @@
             "historyCap": 154,
             "watchListCapacity": 4,
             "watchRadius": 1,
-            "stateMapCap": 69,
+            "travelHistoryCap": 69,
             "concurrentDoingServiceCap": 1,
             "capPower": 47
           }
@@ -1477,7 +1477,7 @@
             "historyCap": 1281,
             "watchListCapacity": 67,
             "watchRadius": 3,
-            "stateMapCap": 277,
+            "travelHistoryCap": 277,
             "concurrentDoingServiceCap": 5,
             "capPower": 85
           }
@@ -1490,7 +1490,7 @@
             "historyCap": 1261,
             "watchListCapacity": 40,
             "watchRadius": 0,
-            "stateMapCap": 77,
+            "travelHistoryCap": 77,
             "concurrentDoingServiceCap": 5,
             "capPower": 15
           }
@@ -1503,7 +1503,7 @@
             "historyCap": 1628,
             "watchListCapacity": 66,
             "watchRadius": 2,
-            "stateMapCap": 235,
+            "travelHistoryCap": 235,
             "concurrentDoingServiceCap": 0,
             "capPower": 67
           }
@@ -1541,7 +1541,7 @@
             "historyCap": 1681,
             "watchListCapacity": 18,
             "watchRadius": 1,
-            "stateMapCap": 43,
+            "travelHistoryCap": 43,
             "concurrentDoingServiceCap": 1,
             "capPower": 37
           }
@@ -1554,7 +1554,7 @@
             "historyCap": 1563,
             "watchListCapacity": 30,
             "watchRadius": 0,
-            "stateMapCap": 63,
+            "travelHistoryCap": 63,
             "concurrentDoingServiceCap": 1,
             "capPower": 25
           }
@@ -1567,7 +1567,7 @@
             "historyCap": 343,
             "watchListCapacity": 14,
             "watchRadius": 0,
-            "stateMapCap": 57,
+            "travelHistoryCap": 57,
             "concurrentDoingServiceCap": 0,
             "capPower": 22
           }
@@ -1580,7 +1580,7 @@
             "historyCap": 1197,
             "watchListCapacity": 49,
             "watchRadius": 0,
-            "stateMapCap": 200,
+            "travelHistoryCap": 200,
             "concurrentDoingServiceCap": 5,
             "capPower": 40
           }
@@ -1593,7 +1593,7 @@
             "historyCap": 126,
             "watchListCapacity": 8,
             "watchRadius": 2,
-            "stateMapCap": 68,
+            "travelHistoryCap": 68,
             "concurrentDoingServiceCap": 1,
             "capPower": 33
           }
@@ -1632,7 +1632,7 @@
             "historyCap": 1652,
             "watchListCapacity": 5,
             "watchRadius": 1,
-            "stateMapCap": 106,
+            "travelHistoryCap": 106,
             "concurrentDoingServiceCap": 0,
             "capPower": 62
           }
@@ -1645,7 +1645,7 @@
             "historyCap": 2004,
             "watchListCapacity": 51,
             "watchRadius": 0,
-            "stateMapCap": 24,
+            "travelHistoryCap": 24,
             "concurrentDoingServiceCap": 1,
             "capPower": 9
           }
@@ -1658,7 +1658,7 @@
             "historyCap": 610,
             "watchListCapacity": 46,
             "watchRadius": 1,
-            "stateMapCap": 242,
+            "travelHistoryCap": 242,
             "concurrentDoingServiceCap": 6,
             "capPower": 58
           }
@@ -1671,7 +1671,7 @@
             "historyCap": 1703,
             "watchListCapacity": 19,
             "watchRadius": 1,
-            "stateMapCap": 177,
+            "travelHistoryCap": 177,
             "concurrentDoingServiceCap": 2,
             "capPower": 45
           }
@@ -1702,7 +1702,7 @@
             "historyCap": 1263,
             "watchListCapacity": 46,
             "watchRadius": 1,
-            "stateMapCap": 100,
+            "travelHistoryCap": 100,
             "concurrentDoingServiceCap": 1,
             "capPower": 60
           }
@@ -1715,7 +1715,7 @@
             "historyCap": 273,
             "watchListCapacity": 5,
             "watchRadius": 1,
-            "stateMapCap": 55,
+            "travelHistoryCap": 55,
             "concurrentDoingServiceCap": 1,
             "capPower": 42
           }
@@ -1728,7 +1728,7 @@
             "historyCap": 402,
             "watchListCapacity": 23,
             "watchRadius": 1,
-            "stateMapCap": 51,
+            "travelHistoryCap": 51,
             "concurrentDoingServiceCap": 1,
             "capPower": 40
           }
@@ -1753,7 +1753,7 @@
             "historyCap": 2337,
             "watchListCapacity": 23,
             "watchRadius": 1,
-            "stateMapCap": 287,
+            "travelHistoryCap": 287,
             "concurrentDoingServiceCap": 3,
             "capPower": 67
           }
@@ -1766,7 +1766,7 @@
             "historyCap": 1466,
             "watchListCapacity": 58,
             "watchRadius": 0,
-            "stateMapCap": 274,
+            "travelHistoryCap": 274,
             "concurrentDoingServiceCap": 4,
             "capPower": 54
           }
@@ -1796,7 +1796,7 @@
             "historyCap": 670,
             "watchListCapacity": 36,
             "watchRadius": 1,
-            "stateMapCap": 30,
+            "travelHistoryCap": 30,
             "concurrentDoingServiceCap": 0,
             "capPower": 32
           }
@@ -1809,7 +1809,7 @@
             "historyCap": 1007,
             "watchListCapacity": 49,
             "watchRadius": 0,
-            "stateMapCap": 132,
+            "travelHistoryCap": 132,
             "concurrentDoingServiceCap": 1,
             "capPower": 52
           }
@@ -1822,7 +1822,7 @@
             "historyCap": 2364,
             "watchListCapacity": 56,
             "watchRadius": 0,
-            "stateMapCap": 18,
+            "travelHistoryCap": 18,
             "concurrentDoingServiceCap": 0,
             "capPower": 7
           }
@@ -1835,7 +1835,7 @@
             "historyCap": 2487,
             "watchListCapacity": 4,
             "watchRadius": 0,
-            "stateMapCap": 48,
+            "travelHistoryCap": 48,
             "concurrentDoingServiceCap": 1,
             "capPower": 19
           }
@@ -1848,7 +1848,7 @@
             "historyCap": 1260,
             "watchListCapacity": 40,
             "watchRadius": 0,
-            "stateMapCap": 286,
+            "travelHistoryCap": 286,
             "concurrentDoingServiceCap": 1,
             "capPower": 57
           }
@@ -1861,7 +1861,7 @@
             "historyCap": 2255,
             "watchListCapacity": 65,
             "watchRadius": 0,
-            "stateMapCap": 150,
+            "travelHistoryCap": 150,
             "concurrentDoingServiceCap": 6,
             "capPower": 30
           }
@@ -1874,7 +1874,7 @@
             "historyCap": 911,
             "watchListCapacity": 32,
             "watchRadius": 0,
-            "stateMapCap": 68,
+            "travelHistoryCap": 68,
             "concurrentDoingServiceCap": 0,
             "capPower": 13
           }
@@ -1899,7 +1899,7 @@
             "historyCap": 2331,
             "watchListCapacity": 28,
             "watchRadius": 0,
-            "stateMapCap": 102,
+            "travelHistoryCap": 102,
             "concurrentDoingServiceCap": 1,
             "capPower": 40
           }
@@ -1912,7 +1912,7 @@
             "historyCap": 678,
             "watchListCapacity": 8,
             "watchRadius": 0,
-            "stateMapCap": 20,
+            "travelHistoryCap": 20,
             "concurrentDoingServiceCap": 1,
             "capPower": 8
           }
@@ -1925,7 +1925,7 @@
             "historyCap": 2356,
             "watchListCapacity": 45,
             "watchRadius": 0,
-            "stateMapCap": 75,
+            "travelHistoryCap": 75,
             "concurrentDoingServiceCap": 0,
             "capPower": 30
           }
@@ -1938,7 +1938,7 @@
             "historyCap": 1246,
             "watchListCapacity": 65,
             "watchRadius": 0,
-            "stateMapCap": 163,
+            "travelHistoryCap": 163,
             "concurrentDoingServiceCap": 3,
             "capPower": 32
           }
@@ -1951,7 +1951,7 @@
             "historyCap": 1417,
             "watchListCapacity": 32,
             "watchRadius": 1,
-            "stateMapCap": 169,
+            "travelHistoryCap": 169,
             "concurrentDoingServiceCap": 6,
             "capPower": 43
           }
@@ -1980,7 +1980,7 @@
             "historyCap": 786,
             "watchListCapacity": 23,
             "watchRadius": 1,
-            "stateMapCap": 131,
+            "travelHistoryCap": 131,
             "concurrentDoingServiceCap": 0,
             "capPower": 72
           }
@@ -1993,7 +1993,7 @@
             "historyCap": 2442,
             "watchListCapacity": 53,
             "watchRadius": 0,
-            "stateMapCap": 94,
+            "travelHistoryCap": 94,
             "concurrentDoingServiceCap": 0,
             "capPower": 37
           }
@@ -2006,7 +2006,7 @@
             "historyCap": 772,
             "watchListCapacity": 7,
             "watchRadius": 0,
-            "stateMapCap": 34,
+            "travelHistoryCap": 34,
             "concurrentDoingServiceCap": 1,
             "capPower": 13
           }
@@ -2019,7 +2019,7 @@
             "historyCap": 975,
             "watchListCapacity": 27,
             "watchRadius": 1,
-            "stateMapCap": 45,
+            "travelHistoryCap": 45,
             "concurrentDoingServiceCap": 0,
             "capPower": 38
           }
@@ -2032,7 +2032,7 @@
             "historyCap": 475,
             "watchListCapacity": 49,
             "watchRadius": 0,
-            "stateMapCap": 120,
+            "travelHistoryCap": 120,
             "concurrentDoingServiceCap": 0,
             "capPower": 24
           }
@@ -2045,7 +2045,7 @@
             "historyCap": 1640,
             "watchListCapacity": 59,
             "watchRadius": 0,
-            "stateMapCap": 88,
+            "travelHistoryCap": 88,
             "concurrentDoingServiceCap": 5,
             "capPower": 17
           }
@@ -2084,7 +2084,7 @@
             "historyCap": 2188,
             "watchListCapacity": 9,
             "watchRadius": 1,
-            "stateMapCap": 66,
+            "travelHistoryCap": 66,
             "concurrentDoingServiceCap": 0,
             "capPower": 46
           }
@@ -2097,7 +2097,7 @@
             "historyCap": 1155,
             "watchListCapacity": 20,
             "watchRadius": 0,
-            "stateMapCap": 42,
+            "travelHistoryCap": 42,
             "concurrentDoingServiceCap": 0,
             "capPower": 16
           }
@@ -2110,7 +2110,7 @@
             "historyCap": 318,
             "watchListCapacity": 29,
             "watchRadius": 0,
-            "stateMapCap": 43,
+            "travelHistoryCap": 43,
             "concurrentDoingServiceCap": 0,
             "capPower": 17
           }
@@ -2123,7 +2123,7 @@
             "historyCap": 1729,
             "watchListCapacity": 16,
             "watchRadius": 0,
-            "stateMapCap": 138,
+            "travelHistoryCap": 138,
             "concurrentDoingServiceCap": 1,
             "capPower": 55
           }
@@ -2136,7 +2136,7 @@
             "historyCap": 1096,
             "watchListCapacity": 55,
             "watchRadius": 2,
-            "stateMapCap": 150,
+            "travelHistoryCap": 150,
             "concurrentDoingServiceCap": 5,
             "capPower": 50
           }
@@ -2149,7 +2149,7 @@
             "historyCap": 1022,
             "watchListCapacity": 17,
             "watchRadius": 2,
-            "stateMapCap": 75,
+            "travelHistoryCap": 75,
             "concurrentDoingServiceCap": 6,
             "capPower": 35
           }
@@ -2162,7 +2162,7 @@
             "historyCap": 1701,
             "watchListCapacity": 12,
             "watchRadius": 3,
-            "stateMapCap": 206,
+            "travelHistoryCap": 206,
             "concurrentDoingServiceCap": 6,
             "capPower": 71
           }
@@ -2190,7 +2190,7 @@
             "historyCap": 1395,
             "watchListCapacity": 26,
             "watchRadius": 1,
-            "stateMapCap": 56,
+            "travelHistoryCap": 56,
             "concurrentDoingServiceCap": 1,
             "capPower": 42
           }
@@ -2203,7 +2203,7 @@
             "historyCap": 272,
             "watchListCapacity": 50,
             "watchRadius": 0,
-            "stateMapCap": 206,
+            "travelHistoryCap": 206,
             "concurrentDoingServiceCap": 4,
             "capPower": 41
           }
@@ -2216,7 +2216,7 @@
             "historyCap": 320,
             "watchListCapacity": 78,
             "watchRadius": 2,
-            "stateMapCap": 223,
+            "travelHistoryCap": 223,
             "concurrentDoingServiceCap": 5,
             "capPower": 64
           }
@@ -2254,7 +2254,7 @@
             "historyCap": 994,
             "watchListCapacity": 53,
             "watchRadius": 1,
-            "stateMapCap": 237,
+            "travelHistoryCap": 237,
             "concurrentDoingServiceCap": 3,
             "capPower": 57
           }
@@ -2267,7 +2267,7 @@
             "historyCap": 2437,
             "watchListCapacity": 6,
             "watchRadius": 1,
-            "stateMapCap": 228,
+            "travelHistoryCap": 228,
             "concurrentDoingServiceCap": 1,
             "capPower": 55
           }
@@ -2280,7 +2280,7 @@
             "historyCap": 543,
             "watchListCapacity": 72,
             "watchRadius": 3,
-            "stateMapCap": 99,
+            "travelHistoryCap": 99,
             "concurrentDoingServiceCap": 5,
             "capPower": 49
           }
@@ -2293,7 +2293,7 @@
             "historyCap": 1153,
             "watchListCapacity": 56,
             "watchRadius": 3,
-            "stateMapCap": 277,
+            "travelHistoryCap": 277,
             "concurrentDoingServiceCap": 6,
             "capPower": 85
           }
@@ -2324,7 +2324,7 @@
             "historyCap": 503,
             "watchListCapacity": 73,
             "watchRadius": 2,
-            "stateMapCap": 109,
+            "travelHistoryCap": 109,
             "concurrentDoingServiceCap": 4,
             "capPower": 41
           }
@@ -2337,7 +2337,7 @@
             "historyCap": 771,
             "watchListCapacity": 65,
             "watchRadius": 2,
-            "stateMapCap": 179,
+            "travelHistoryCap": 179,
             "concurrentDoingServiceCap": 1,
             "capPower": 55
           }
@@ -2350,7 +2350,7 @@
             "historyCap": 1532,
             "watchListCapacity": 4,
             "watchRadius": 1,
-            "stateMapCap": 225,
+            "travelHistoryCap": 225,
             "concurrentDoingServiceCap": 6,
             "capPower": 55
           }
@@ -2363,7 +2363,7 @@
             "historyCap": 1175,
             "watchListCapacity": 61,
             "watchRadius": 3,
-            "stateMapCap": 295,
+            "travelHistoryCap": 295,
             "concurrentDoingServiceCap": 0,
             "capPower": 89
           }
@@ -2376,7 +2376,7 @@
             "historyCap": 1145,
             "watchListCapacity": 29,
             "watchRadius": 0,
-            "stateMapCap": 178,
+            "travelHistoryCap": 178,
             "concurrentDoingServiceCap": 0,
             "capPower": 35
           }
@@ -2415,7 +2415,7 @@
             "historyCap": 202,
             "watchListCapacity": 11,
             "watchRadius": 0,
-            "stateMapCap": 42,
+            "travelHistoryCap": 42,
             "concurrentDoingServiceCap": 1,
             "capPower": 16
           }
@@ -2428,7 +2428,7 @@
             "historyCap": 149,
             "watchListCapacity": 13,
             "watchRadius": 1,
-            "stateMapCap": 143,
+            "travelHistoryCap": 143,
             "concurrentDoingServiceCap": 0,
             "capPower": 77
           }
@@ -2441,7 +2441,7 @@
             "historyCap": 2116,
             "watchListCapacity": 21,
             "watchRadius": 0,
-            "stateMapCap": 13,
+            "travelHistoryCap": 13,
             "concurrentDoingServiceCap": 0,
             "capPower": 5
           }
@@ -2454,7 +2454,7 @@
             "historyCap": 1805,
             "watchListCapacity": 26,
             "watchRadius": 2,
-            "stateMapCap": 276,
+            "travelHistoryCap": 276,
             "concurrentDoingServiceCap": 5,
             "capPower": 75
           }
@@ -2482,7 +2482,7 @@
             "historyCap": 995,
             "watchListCapacity": 14,
             "watchRadius": 0,
-            "stateMapCap": 89,
+            "travelHistoryCap": 89,
             "concurrentDoingServiceCap": 0,
             "capPower": 35
           }
@@ -2495,7 +2495,7 @@
             "historyCap": 654,
             "watchListCapacity": 25,
             "watchRadius": 1,
-            "stateMapCap": 138,
+            "travelHistoryCap": 138,
             "concurrentDoingServiceCap": 0,
             "capPower": 75
           }
@@ -2508,7 +2508,7 @@
             "historyCap": 430,
             "watchListCapacity": 25,
             "watchRadius": 0,
-            "stateMapCap": 105,
+            "travelHistoryCap": 105,
             "concurrentDoingServiceCap": 1,
             "capPower": 42
           }
@@ -2521,7 +2521,7 @@
             "historyCap": 813,
             "watchListCapacity": 14,
             "watchRadius": 1,
-            "stateMapCap": 134,
+            "travelHistoryCap": 134,
             "concurrentDoingServiceCap": 0,
             "capPower": 73
           }
@@ -2534,7 +2534,7 @@
             "historyCap": 1294,
             "watchListCapacity": 51,
             "watchRadius": 3,
-            "stateMapCap": 283,
+            "travelHistoryCap": 283,
             "concurrentDoingServiceCap": 0,
             "capPower": 86
           }
@@ -2547,7 +2547,7 @@
             "historyCap": 405,
             "watchListCapacity": 30,
             "watchRadius": 1,
-            "stateMapCap": 68,
+            "travelHistoryCap": 68,
             "concurrentDoingServiceCap": 0,
             "capPower": 23
           }
@@ -2572,7 +2572,7 @@
             "historyCap": 661,
             "watchListCapacity": 15,
             "watchRadius": 1,
-            "stateMapCap": 80,
+            "travelHistoryCap": 80,
             "concurrentDoingServiceCap": 0,
             "capPower": 52
           }
@@ -2585,7 +2585,7 @@
             "historyCap": 1326,
             "watchListCapacity": 3,
             "watchRadius": 1,
-            "stateMapCap": 91,
+            "travelHistoryCap": 91,
             "concurrentDoingServiceCap": 0,
             "capPower": 56
           }
@@ -2598,7 +2598,7 @@
             "historyCap": 2327,
             "watchListCapacity": 56,
             "watchRadius": 0,
-            "stateMapCap": 13,
+            "travelHistoryCap": 13,
             "concurrentDoingServiceCap": 1,
             "capPower": 5
           }
@@ -2611,7 +2611,7 @@
             "historyCap": 1524,
             "watchListCapacity": 7,
             "watchRadius": 0,
-            "stateMapCap": 88,
+            "travelHistoryCap": 88,
             "concurrentDoingServiceCap": 0,
             "capPower": 35
           }
@@ -2624,7 +2624,7 @@
             "historyCap": 1174,
             "watchListCapacity": 52,
             "watchRadius": 0,
-            "stateMapCap": 23,
+            "travelHistoryCap": 23,
             "concurrentDoingServiceCap": 0,
             "capPower": 9
           }
@@ -2637,7 +2637,7 @@
             "historyCap": 1390,
             "watchListCapacity": 24,
             "watchRadius": 0,
-            "stateMapCap": 136,
+            "travelHistoryCap": 136,
             "concurrentDoingServiceCap": 0,
             "capPower": 54
           }
@@ -2650,7 +2650,7 @@
             "historyCap": 1346,
             "watchListCapacity": 69,
             "watchRadius": 0,
-            "stateMapCap": 238,
+            "travelHistoryCap": 238,
             "concurrentDoingServiceCap": 5,
             "capPower": 47
           }
@@ -2663,7 +2663,7 @@
             "historyCap": 1629,
             "watchListCapacity": 3,
             "watchRadius": 0,
-            "stateMapCap": 218,
+            "travelHistoryCap": 218,
             "concurrentDoingServiceCap": 3,
             "capPower": 43
           }
@@ -2676,7 +2676,7 @@
             "historyCap": 1110,
             "watchListCapacity": 32,
             "watchRadius": 2,
-            "stateMapCap": 142,
+            "travelHistoryCap": 142,
             "concurrentDoingServiceCap": 6,
             "capPower": 48
           }
@@ -2716,7 +2716,7 @@
             "historyCap": 1630,
             "watchListCapacity": 6,
             "watchRadius": 0,
-            "stateMapCap": 30,
+            "travelHistoryCap": 30,
             "concurrentDoingServiceCap": 0,
             "capPower": 12
           }
@@ -2729,7 +2729,7 @@
             "historyCap": 2122,
             "watchListCapacity": 31,
             "watchRadius": 3,
-            "stateMapCap": 91,
+            "travelHistoryCap": 91,
             "concurrentDoingServiceCap": 5,
             "capPower": 48
           }
@@ -2742,7 +2742,7 @@
             "historyCap": 1605,
             "watchListCapacity": 61,
             "watchRadius": 1,
-            "stateMapCap": 263,
+            "travelHistoryCap": 263,
             "concurrentDoingServiceCap": 5,
             "capPower": 62
           }
@@ -2773,7 +2773,7 @@
             "historyCap": 753,
             "watchListCapacity": 15,
             "watchRadius": 0,
-            "stateMapCap": 20,
+            "travelHistoryCap": 20,
             "concurrentDoingServiceCap": 1,
             "capPower": 8
           }
@@ -2786,7 +2786,7 @@
             "historyCap": 2344,
             "watchListCapacity": 61,
             "watchRadius": 1,
-            "stateMapCap": 257,
+            "travelHistoryCap": 257,
             "concurrentDoingServiceCap": 2,
             "capPower": 61
           }
@@ -2799,7 +2799,7 @@
             "historyCap": 502,
             "watchListCapacity": 68,
             "watchRadius": 3,
-            "stateMapCap": 204,
+            "travelHistoryCap": 204,
             "concurrentDoingServiceCap": 5,
             "capPower": 70
           }
@@ -2831,7 +2831,7 @@
             "historyCap": 1758,
             "watchListCapacity": 26,
             "watchRadius": 1,
-            "stateMapCap": 137,
+            "travelHistoryCap": 137,
             "concurrentDoingServiceCap": 0,
             "capPower": 74
           }
@@ -2844,7 +2844,7 @@
             "historyCap": 563,
             "watchListCapacity": 14,
             "watchRadius": 1,
-            "stateMapCap": 53,
+            "travelHistoryCap": 53,
             "concurrentDoingServiceCap": 1,
             "capPower": 41
           }
@@ -2868,7 +2868,7 @@
             "historyCap": 2228,
             "watchListCapacity": 8,
             "watchRadius": 1,
-            "stateMapCap": 121,
+            "travelHistoryCap": 121,
             "concurrentDoingServiceCap": 1,
             "capPower": 68
           }
@@ -2881,7 +2881,7 @@
             "historyCap": 2193,
             "watchListCapacity": 52,
             "watchRadius": 2,
-            "stateMapCap": 285,
+            "travelHistoryCap": 285,
             "concurrentDoingServiceCap": 0,
             "capPower": 77
           }
@@ -2894,7 +2894,7 @@
             "historyCap": 916,
             "watchListCapacity": 23,
             "watchRadius": 1,
-            "stateMapCap": 181,
+            "travelHistoryCap": 181,
             "concurrentDoingServiceCap": 0,
             "capPower": 46
           }
@@ -2907,7 +2907,7 @@
             "historyCap": 137,
             "watchListCapacity": 35,
             "watchRadius": 1,
-            "stateMapCap": 221,
+            "travelHistoryCap": 221,
             "concurrentDoingServiceCap": 0,
             "capPower": 54
           }
@@ -2920,7 +2920,7 @@
             "historyCap": 1277,
             "watchListCapacity": 47,
             "watchRadius": 1,
-            "stateMapCap": 149,
+            "travelHistoryCap": 149,
             "concurrentDoingServiceCap": 4,
             "capPower": 39
           }
@@ -2957,7 +2957,7 @@
             "historyCap": 1829,
             "watchListCapacity": 23,
             "watchRadius": 0,
-            "stateMapCap": 83,
+            "travelHistoryCap": 83,
             "concurrentDoingServiceCap": 1,
             "capPower": 33
           }
@@ -2970,7 +2970,7 @@
             "historyCap": 488,
             "watchListCapacity": 43,
             "watchRadius": 1,
-            "stateMapCap": 33,
+            "travelHistoryCap": 33,
             "concurrentDoingServiceCap": 0,
             "capPower": 33
           }
@@ -2983,7 +2983,7 @@
             "historyCap": 1094,
             "watchListCapacity": 48,
             "watchRadius": 2,
-            "stateMapCap": 256,
+            "travelHistoryCap": 256,
             "concurrentDoingServiceCap": 2,
             "capPower": 71
           }
@@ -2996,7 +2996,7 @@
             "historyCap": 178,
             "watchListCapacity": 60,
             "watchRadius": 3,
-            "stateMapCap": 63,
+            "travelHistoryCap": 63,
             "concurrentDoingServiceCap": 3,
             "capPower": 42
           }
@@ -3009,7 +3009,7 @@
             "historyCap": 448,
             "watchListCapacity": 80,
             "watchRadius": 0,
-            "stateMapCap": 254,
+            "travelHistoryCap": 254,
             "concurrentDoingServiceCap": 1,
             "capPower": 50
           }
@@ -3039,7 +3039,7 @@
             "historyCap": 2046,
             "watchListCapacity": 12,
             "watchRadius": 0,
-            "stateMapCap": 61,
+            "travelHistoryCap": 61,
             "concurrentDoingServiceCap": 1,
             "capPower": 24
           }
@@ -3052,7 +3052,7 @@
             "historyCap": 476,
             "watchListCapacity": 54,
             "watchRadius": 1,
-            "stateMapCap": 34,
+            "travelHistoryCap": 34,
             "concurrentDoingServiceCap": 0,
             "capPower": 33
           }
@@ -3065,7 +3065,7 @@
             "historyCap": 533,
             "watchListCapacity": 71,
             "watchRadius": 0,
-            "stateMapCap": 283,
+            "travelHistoryCap": 283,
             "concurrentDoingServiceCap": 0,
             "capPower": 56
           }
@@ -3078,7 +3078,7 @@
             "historyCap": 2317,
             "watchListCapacity": 75,
             "watchRadius": 1,
-            "stateMapCap": 86,
+            "travelHistoryCap": 86,
             "concurrentDoingServiceCap": 5,
             "capPower": 27
           }
@@ -3091,7 +3091,7 @@
             "historyCap": 620,
             "watchListCapacity": 74,
             "watchRadius": 0,
-            "stateMapCap": 251,
+            "travelHistoryCap": 251,
             "concurrentDoingServiceCap": 6,
             "capPower": 50
           }
@@ -3120,7 +3120,7 @@
             "historyCap": 1797,
             "watchListCapacity": 0,
             "watchRadius": 0,
-            "stateMapCap": 123,
+            "travelHistoryCap": 123,
             "concurrentDoingServiceCap": 2,
             "capPower": 24
           }
@@ -3133,7 +3133,7 @@
             "historyCap": 327,
             "watchListCapacity": 28,
             "watchRadius": 1,
-            "stateMapCap": 93,
+            "travelHistoryCap": 93,
             "concurrentDoingServiceCap": 4,
             "capPower": 28
           }
@@ -3146,7 +3146,7 @@
             "historyCap": 645,
             "watchListCapacity": 68,
             "watchRadius": 0,
-            "stateMapCap": 143,
+            "travelHistoryCap": 143,
             "concurrentDoingServiceCap": 0,
             "capPower": 28
           }
@@ -3159,7 +3159,7 @@
             "historyCap": 289,
             "watchListCapacity": 37,
             "watchRadius": 1,
-            "stateMapCap": 207,
+            "travelHistoryCap": 207,
             "concurrentDoingServiceCap": 4,
             "capPower": 51
           }
@@ -3186,7 +3186,7 @@
             "historyCap": 2408,
             "watchListCapacity": 33,
             "watchRadius": 0,
-            "stateMapCap": 57,
+            "travelHistoryCap": 57,
             "concurrentDoingServiceCap": 1,
             "capPower": 22
           }
@@ -3199,7 +3199,7 @@
             "historyCap": 2178,
             "watchListCapacity": 30,
             "watchRadius": 0,
-            "stateMapCap": 244,
+            "travelHistoryCap": 244,
             "concurrentDoingServiceCap": 6,
             "capPower": 48
           }
@@ -3212,7 +3212,7 @@
             "historyCap": 1058,
             "watchListCapacity": 77,
             "watchRadius": 0,
-            "stateMapCap": 128,
+            "travelHistoryCap": 128,
             "concurrentDoingServiceCap": 1,
             "capPower": 25
           }
@@ -3225,7 +3225,7 @@
             "historyCap": 428,
             "watchListCapacity": 67,
             "watchRadius": 0,
-            "stateMapCap": 274,
+            "travelHistoryCap": 274,
             "concurrentDoingServiceCap": 1,
             "capPower": 54
           }
@@ -3238,7 +3238,7 @@
             "historyCap": 396,
             "watchListCapacity": 27,
             "watchRadius": 0,
-            "stateMapCap": 151,
+            "travelHistoryCap": 151,
             "concurrentDoingServiceCap": 3,
             "capPower": 30
           }
@@ -3271,7 +3271,7 @@
             "historyCap": 2083,
             "watchListCapacity": 52,
             "watchRadius": 1,
-            "stateMapCap": 140,
+            "travelHistoryCap": 140,
             "concurrentDoingServiceCap": 1,
             "capPower": 76
           }
@@ -3284,7 +3284,7 @@
             "historyCap": 2486,
             "watchListCapacity": 54,
             "watchRadius": 0,
-            "stateMapCap": 60,
+            "travelHistoryCap": 60,
             "concurrentDoingServiceCap": 0,
             "capPower": 24
           }
@@ -3297,7 +3297,7 @@
             "historyCap": 2311,
             "watchListCapacity": 47,
             "watchRadius": 0,
-            "stateMapCap": 17,
+            "travelHistoryCap": 17,
             "concurrentDoingServiceCap": 0,
             "capPower": 6
           }
@@ -3310,7 +3310,7 @@
             "historyCap": 2263,
             "watchListCapacity": 48,
             "watchRadius": 1,
-            "stateMapCap": 78,
+            "travelHistoryCap": 78,
             "concurrentDoingServiceCap": 1,
             "capPower": 51
           }
@@ -3323,7 +3323,7 @@
             "historyCap": 2011,
             "watchListCapacity": 5,
             "watchRadius": 0,
-            "stateMapCap": 79,
+            "travelHistoryCap": 79,
             "concurrentDoingServiceCap": 0,
             "capPower": 31
           }
@@ -3336,7 +3336,7 @@
             "historyCap": 282,
             "watchListCapacity": 19,
             "watchRadius": 3,
-            "stateMapCap": 130,
+            "travelHistoryCap": 130,
             "concurrentDoingServiceCap": 1,
             "capPower": 56
           }

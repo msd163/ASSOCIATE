@@ -1,13 +1,12 @@
 package systemLayer;
 
 import com.google.gson.annotations.Expose;
-import stateLayer.StateMap;
+import stateLayer.TravelHistory;
 import stateLayer.StateX;
 import trustLayer.AgentTrust;
 import utils.Globals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Agent {
@@ -42,11 +41,13 @@ public class Agent {
     //============================
     private World world;
     private StateX state;
-    private ArrayList<StateMap> stateMaps;
+    // The history of previously visited states
+    private ArrayList<TravelHistory> travelHistories;
     @Expose
     private int targetStateId;
     private StateX targetState;
-    private ArrayList<StateX> nextStates;
+    // Next steps in order to reach the target state
+    private ArrayList<StateX> nextSteps;
     //============================
     @Expose
     private AgentCapacity capacity;
@@ -79,8 +80,8 @@ public class Agent {
         watchedAgents = new ArrayList<>();
         watchedStates = new ArrayList<>();
 
-        stateMaps = new ArrayList<>();
-        nextStates = new ArrayList<>();
+        travelHistories = new ArrayList<>();
+        nextSteps = new ArrayList<>();
 
     }
 
@@ -109,24 +110,24 @@ public class Agent {
      */
     public void updateStateMap() {
 
-        int size = stateMaps.size();
+        int size = travelHistories.size();
         // If the agent do not moved and it's state doesnt changed, only the visit time will to be updated.
-        if (size > 0 && stateMaps.get(size - 1).getStateX().getId() == state.getId()) {
-            stateMaps.get(size - 1).updateVisitTime();
+        if (size > 0 && travelHistories.get(size - 1).getStateX().getId() == state.getId()) {
+            travelHistories.get(size - 1).updateVisitTime();
             return;
         }
 
-        // If stateMap if full, remove old (first) state in map
-        if (size >= capacity.getStateMapCap()) {
-            stateMaps.remove(0);
+        // If travelHistory if full, remove old (first) state in map
+        if (size >= capacity.getTravelHistoryCap()) {
+            travelHistories.remove(0);
         }
 
         // Adding new state to the map
-        stateMaps.add(new StateMap(state, Globals.WORLD_TIMER, state.getTargets()));
+        travelHistories.add(new TravelHistory(state, Globals.WORLD_TIMER, state.getTargets()));
 
         // Printing map
         String sIds = "";
-        for (StateMap s : stateMaps) {
+        for (TravelHistory s : travelHistories) {
             sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
         }
         System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + (targetState == null ? "NULL" : targetState.getId()) + " ] #  maps: " + sIds);
@@ -136,7 +137,7 @@ public class Agent {
 
 
     public void clearNextStates() {
-        nextStates.clear();
+        nextSteps.clear();
     }
 
     public boolean isInTargetState() {
@@ -154,9 +155,9 @@ public class Agent {
         watchedAgents.clear();
         ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
         ArrayList<StateX> parentPath = new ArrayList<>();
-        watchedAgents = state.getWatchListOfAgents(capacity.getWatchRadius(), capacity.getWatchRadius(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
+        watchedAgents = state.getWatchListOfAgents(capacity.getWatchDepth(), capacity.getWatchDepth(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
         watchedStates.clear();
-        state.getWatchListOfStates(capacity.getWatchRadius(), watchedStates, null);
+        state.getWatchListOfStates(capacity.getWatchDepth(), watchedStates, null);
 
         // Sorting watched agents according trust level of this agent to them.
         watchedAgents.sort((WatchedAgent w1, WatchedAgent w2) -> {
@@ -291,12 +292,12 @@ public class Agent {
 
     }
 
-    public ArrayList<StateMap> getStateMaps() {
-        return stateMaps;
+    public ArrayList<TravelHistory> getTravelHistories() {
+        return travelHistories;
     }
 
-    public ArrayList<StateX> getNextStates() {
-        return nextStates;
+    public ArrayList<StateX> getNextSteps() {
+        return nextSteps;
     }
 
     public List<WatchedState> getWatchedStates() {
