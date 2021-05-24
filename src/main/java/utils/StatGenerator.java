@@ -68,7 +68,7 @@ public class StatGenerator {
                         stat.getSuccessTravelToGoToNeighbor() + "," +
                         stat.getFailedTravelToGoToNeighbor() + "," +
                         stat.getRandomTravelToNeighbors() + "," +
-                        stat.getTotalTravelToNeighbor() + ","
+                        stat.getTotalTravelToNeighbor()
 
                 ;
     }

@@ -37,18 +37,20 @@ public class Router {
         StateX state = agent.getState();
         //============================
 
+        // There is no targetState for this agent!
         if (targetState == null) {
             statistics.addAgentsWithNoTargetState();
             return null;
         }
 
+        // If the agent is in target agent
         if (agent.isInTargetState()) {
             statistics.addAllInTargetAgents();
             agent.clearNextStates();
             return state;
         }
 
-        // the state has no output state
+        // the state has no output state. The agent is in an state that is pit
         if (state.getTargets().size() == 0) {
             agent.clearNextStates();
             // Printing map
@@ -61,11 +63,13 @@ public class Router {
             return state;
         }
 
+        // If there is not any states in the agent history, the nextStates of agent have to be updated.
         if (agent.getNextStates().isEmpty()) {
             updateNextStates(agent, targetState);
             statistics.addUpdatedNextStatesOfAgents();
         }
 
+        // If the nextStates is empty after updating the nextStates, the agent will go to one neighbor randomly.
         if (agent.getNextStates().isEmpty()) {
             int targetIndex = Globals.RANDOM.nextInt(state.getTargets().size());
             StateX stateX = gotoNeighborState(agent, targetIndex);
@@ -76,6 +80,7 @@ public class Router {
             return stateX;
         }
 
+        // Traveling to one neighbor according to the first entity of the nextStates of the agent.
 //      StateX stateX = gotoNeighborState(nextStates.get(0));
         StateX nextState = agent.getNextStates().get(0);
 
@@ -86,13 +91,16 @@ public class Router {
         }
         int currentAgentStateId = agent.getState().getId();
         StateX finalState = gotoNeighborState(agent, nextState);
+        // Successfully traveling to neighbor.
         if (finalState.getId() == nextState.getId()) {
             agent.getNextStates().remove(0);
             statistics.addSuccessTravelToGoToNeighbor();
             if (finalState.getId() == agent.getTargetState().getId()) {
                 statistics.addInTargetAgentsInThisTime();
             }
-        } else {
+        }
+        // Failed to travel to neighbor.
+        else {
             statistics.addFailedTravelToGoToNeighbor();
             System.out.println(">> Router.takeAStepTowardTheTarget:: [Warning] Agent (" + agent.getId() +
                     ") can not travel from (" + currentAgentStateId +
@@ -100,7 +108,6 @@ public class Router {
                     ") and is now in state (" + finalState.getId() + ").");
         }
         return finalState;
-
     }
 
     /**

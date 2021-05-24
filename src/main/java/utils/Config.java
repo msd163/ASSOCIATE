@@ -10,7 +10,7 @@ public class Config {
 
     public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
     public static final String PureEnvironmentDataFile = ProjectPath.instance().pureEnvData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData();
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData(12);
 
 
     //============================ World
@@ -31,7 +31,7 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final boolean DRAWING_SHOW_MAIN_WINDOW = false;
+    public static final boolean DRAWING_SHOW_MAIN_WINDOW = true;
     public static final boolean DRAWING_SHOW_DIAGRAM_WINDOW = true;
 
     public static final boolean DRAWING_SHOW_POWERFUL_AGENTS_RADIUS = true;

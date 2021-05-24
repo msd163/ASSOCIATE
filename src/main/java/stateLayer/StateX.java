@@ -329,6 +329,7 @@ public class StateX {
 
         ArrayList<WatchedAgent> was = new ArrayList<>();
 
+        // For all agents in this state...
         for (Agent agent : agents) {
             // preventing visiting itself
             if (agent.getId() == sourceAgent.getId()) {
@@ -336,6 +337,9 @@ public class StateX {
             }
             WatchedAgent watchedAgent = new WatchedAgent();
             watchedAgent.setAgent(agent);
+            watchedAgent.setTrust(sourceAgent.getTrust().getTrustScore(agent));
+
+            // Adding path from the source state (state of the source agent) to this state (The state of visited agent)
             if (depth < maxDepth) {
                 for (int i = 0, len = parentPath.size(); i < len; i++) {
                     watchedAgent.addPath(parentPath.get(i));
@@ -344,6 +348,8 @@ public class StateX {
             }
             count--;
             was.add(watchedAgent);
+
+            // If the watch list of the source agent is full...
             if (count < 1) {
                 return was;
             }
@@ -375,10 +381,10 @@ public class StateX {
                     continue;
                 }
 
+                // Traveling in depth
                 ArrayList<WatchedAgent> watchList = targets.get(i).getWatchListOfAgents(depth - 1, maxDepth, count, sourceAgent, visitedStates, localParentPath);
 
                 if (watchList != null) {
-
                     was.addAll(watchList);
                     count -= watchList.size();
 
@@ -391,7 +397,6 @@ public class StateX {
 
         return was;
     }
-
 
     public void getWatchListOfStates(int depth, List<WatchedState> watchedStates, WatchedState currentWatchState) {
 

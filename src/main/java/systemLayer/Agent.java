@@ -182,6 +182,18 @@ public class Agent {
         watchedStates.clear();
         state.getWatchListOfStates(capacity.getWatchRadius(), watchedStates, null);
 
+        // Sorting watched agents according trust level of this agent to them.
+        watchedAgents.sort((WatchedAgent w1, WatchedAgent w2) -> {
+            float t1 = w1.getTrust();
+            float t2 = w2.getTrust();
+
+            if (t1 > t2) {
+                return 1;
+            } else if (t1 < t2) {
+                return -1;
+            }
+            return 0;
+        });
     }
 
     public boolean canWatch(Agent agent) {
