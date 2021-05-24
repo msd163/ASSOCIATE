@@ -56,6 +56,16 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
                         pnStartPoint.y = (int) (e.getPoint().getY());
                         pnOffsetOld.x = pnOffset.x;
                         pnOffsetOld.y = pnOffset.y;
+
+                        // For resetting screen by double click
+                        if (e.getClickCount() == 2) {
+                            pnOffset = new utils.Point(0, 0);
+                            pnOffsetOld = new utils.Point(0, 0);
+                            pnStartPoint = new utils.Point(0, 0);
+                            pnOffsetOld.x = pnOffset.x;
+                            pnOffsetOld.y = pnOffset.y;
+                            scale = 1f;
+                        }
                     }
                 });
 

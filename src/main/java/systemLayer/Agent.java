@@ -115,7 +115,6 @@ public class Agent {
         simConfigShowTargetState = true;
     }
 
-
     public void updateProfile() {
 
         behavior.updateHonestState();

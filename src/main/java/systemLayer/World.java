@@ -224,11 +224,12 @@ public class World {
         }
         //============================ Initializing Diagram Drawing Windows
         DiagramDrawingWindow diagramWindow = new DiagramDrawingWindow(this);
+        diagramWindow.setDoubleBuffered(true);
         if (showDiagramWindow) {
             JFrame diagramFrame = new JFrame();
-            diagramFrame.add(diagramWindow);
+            diagramFrame.getContentPane().add(diagramWindow);
             diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            // diagramFrame.setMinimumSize(new Dimension(this.width, this.height));
+            diagramFrame.setMinimumSize(new Dimension(1500, 800));
             diagramFrame.setVisible(true);
         }
 
@@ -272,91 +273,8 @@ public class World {
                 }
             }
 
-            //============================ Finding Doer of service an doing it
-            Agent doerAgent;
-            for (Agent requesterAgent : agents) {
-
-                // Ignoring requests of dishonest agents
-                if (!Config.DO_REQUEST_SERVICE_BY_DISHONEST_AGENT && !requesterAgent.getBehavior().getIsHonest()) {
-                    continue;
-                }
-
-                Service requestedService = requesterAgent.selectRequestedService();
-                doerAgent = requesterAgent.findDoerOfRequestedService(requestedService);
-
-                //============================ Acting Service by doer
-                if (doerAgent != null) {
-                    requestedService = doerAgent.doService(requestedService);
-
-                    //============================ TRUST Processes
-                    /*//----------  TRUST EXPERIENCE*/
-                    if (requestedService.getResult() > 0 && Config.TRUST_LEVEL_RECORD_EXPERIENCES_OF_OTHERS) {
-                        requesterAgent.shareExperienceWith(doerAgent);
-                    }
-
-                    /*//------------- TRUST OBSERVATION*/
-                    for (Agent superAgent : agents) {
-                        // Adding the service to the REQUESTER of service and SUPERVISOR AGENTS that can watch the requester or the doer
-                        if (
-                                (superAgent.getId() == requesterAgent.getId() && Config.TRUST_LEVEL_RECORD_ACTIVITIES_OF_ITSELF)   //  want adding current service experience to history of the requester
-                                        ||
-                                        (superAgent.getId() != requesterAgent.getId() && Config.TRUST_LEVEL_RECORD_ACTIVITIES_OF_OTHERS
-                                                &&
-                                                superAgent.getId() != doerAgent.getId()
-                                                &&
-                                                (
-                                                        superAgent.canWatch(requesterAgent)
-                                                                ||
-                                                                superAgent.canWatch(doerAgent)
-                                                )
-                                        )
-
-                        ) {
-                            /*if (superAgent.getId() == requesterAgent.getId()) {
-                                System.out.println("Added to history of requester: " + superAgent.getId());
-                            }*/
-                            superAgent.getTrust().recordService(requestedService);
-                        }
-                    }
-                } else {
-                    // There is no agent to do this action
-                }
-            }
-
-            dontDoneServices =
-                    recordedServices =
-                            honestServiceCount =
-                                    dishonestServiceCount =
-                                            totalServiceCount = 0;
-
-            for (Agent agent : agents) {
-                for (Service service : agent.getRequestedServices()) {
-                    if (service.getResult() > 0) {
-                        honestServiceCount++;
-                    } else if (service.getResult() < 0) {
-                        dishonestServiceCount++;
-                    } else {
-                        dontDoneServices++;
-                    }
-                    totalServiceCount++;
-                }
-                recordedServices += agent.getTrust().getHistorySize();
-            }
-
-         /*   System.out.println("-------------------------\t\t\t\t\tcurrentTime: " + Globals.WORLD_TIMER);
-            System.out.println("  totalServiceCount    : " + totalServiceCount);
-            System.out.println("  honestServiceCount   : " + honestServiceCount + " >  " + (float) honestServiceCount / totalServiceCount);
-            System.out.println("  dishonestServiceCount: " + dishonestServiceCount + " >  " + (float) dishonestServiceCount / totalServiceCount);
-            System.out.println("  dontDoneServices     : " + dontDoneServices + " >  " + (float) dontDoneServices / totalServiceCount);
-            System.out.println("  recordedService      : " + recordedServices);
-*/
-
-
             System.out.println(statistic.toString());
             Globals.statGenerator.addStat(statistic);
-
-
-            histories.add(new WorldHistory(totalServiceCount, dishonestServiceCount, honestServiceCount));
 
             if (showMainWindow) {
                 mainWindow.repaint();

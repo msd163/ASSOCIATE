@@ -10,7 +10,7 @@ public class Config {
 
     public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
     public static final String PureEnvironmentDataFile = ProjectPath.instance().pureEnvData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData(12);
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData(1);
 
 
     //============================ World
