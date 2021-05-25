@@ -6,11 +6,11 @@ import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {
 
-    public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.PureEnvironment;
+    public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.FullEnvironment;
 
     public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
     public static final String PureEnvironmentDataFile = ProjectPath.instance().pureEnvData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData(1);
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData();
 
 
     //============================ World

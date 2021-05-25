@@ -51,6 +51,7 @@ public class StatGenerator {
                         "SuccessTravelToGoToNeighbor," +
                         "FailedTravelToGoToNeighbor," +
                         "RandomTravelToNeighbors," +
+                        "AgentsInPitfall," +
                         "TotalTravelToNeighbor"
 
                 ;
@@ -68,6 +69,7 @@ public class StatGenerator {
                         stat.getSuccessTravelToGoToNeighbor() + "," +
                         stat.getFailedTravelToGoToNeighbor() + "," +
                         stat.getRandomTravelToNeighbors() + "," +
+                        stat.getAgentsInPitfall() + "," +
                         stat.getTotalTravelToNeighbor()
 
                 ;

@@ -1,3 +1,0 @@
-# Simulation report. 
-# Date: 1400/03/04 00:16:22
-WorldTime,FullStateCount,StatesWithNoTarget,AgentsWithNoTargetState,AllInTargetAgents,InTargetAgentsInThisTime,UpdatedNextStatesOfAgents,SuccessTravelToGoToNeighbor,FailedTravelToGoToNeighbor,RandomTravelToNeighbors,TotalTravelToNeighbor

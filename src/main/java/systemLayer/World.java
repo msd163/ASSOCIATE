@@ -61,11 +61,7 @@ public class World {
         agents = new Agent[agentsCount];
 
         //============================ Initializing Environment
-        this.environment = new Environment();
-        this.environment.setStates(_environment.getStates());
-        this.environment.setStateCount(_environment.getStateCount());
-        this.environment.setStateCapacity(_environment.getStateCapacity());
-        this.environment.setAgentsCount(_environment.getAgentsCount());
+        this.environment = new Environment(_environment);
         this.environment.init(this);
 
 
@@ -98,8 +94,12 @@ public class World {
                 boolean isAddedToState;
                 do {
                     randomState = environment.getRandomState();
-                    // checking state capability and adding the agent to it.
-                    isAddedToState = randomState.addAgent(agents[i]);
+                    if (randomState.isIsPitfall()) {
+                        isAddedToState = false;
+                    } else {
+                        // checking state capability and adding the agent to it.
+                        isAddedToState = randomState.addAgent(agents[i]);
+                    }
                 } while (!isAddedToState && tryCount++ < agentsCount);
 
                 if (isAddedToState) {
@@ -277,7 +277,7 @@ public class World {
         StringBuilder ti = new StringBuilder("\n\n\n\t");
 
         return tx + "World: " +
-                ti + " | agentsCount=" + agentsCount ;
+                ti + " | agentsCount=" + agentsCount;
     }
 
     public String toString(int tabIndex) {

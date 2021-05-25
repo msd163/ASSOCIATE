@@ -22,6 +22,8 @@ public class StateX {
     private ArrayList<Agent> agents;
     @Expose
     private int capacity;
+    @Expose
+    private boolean isPitfall;              // pitfalls have no targets.
 
     private ArrayList<TransitionX> sourceTrans;
     private ArrayList<TransitionX> targetTrans;
@@ -35,6 +37,7 @@ public class StateX {
     public StateX() {
 //        this.environment = environment;
         hasLoc = false;
+        isPitfall = false;
         agents = new ArrayList<Agent>();
         targetIds = new ArrayList<Integer>();
         targets = new ArrayList<StateX>();
@@ -491,5 +494,13 @@ public class StateX {
 
     public boolean isFullCapability() {
         return capacity <= agents.size();
+    }
+
+    public boolean isIsPitfall() {
+        return isPitfall;
+    }
+
+    public void setIsPitfall(boolean pitfall) {
+        isPitfall = pitfall;
     }
 }

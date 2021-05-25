@@ -25,6 +25,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     private Color[] colors;
 
     //============================//============================  panning params
+    private utils.Point scaleOffset = new utils.Point(0, 0);
     private utils.Point pnOffset = new utils.Point(0, 0);
     private utils.Point pnOffsetOld = new utils.Point(0, 0);
     private utils.Point pnStartPoint = new utils.Point(0, 0);
@@ -74,6 +75,8 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     }
 
     //============================//============================//============================
+    Color tempColor;
+
     @Override
     public void paint(Graphics gr) {
         //============================//============================ Preparing
@@ -91,7 +94,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
 
         //============================//============================ Translate for panning and scaling
 
-        g.translate(pnOffset.x, pnOffset.y);
+        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, scale);
 
         //============================//============================ Drawing Transition
@@ -130,8 +133,15 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         //============================//============================ Drawing states
         for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
             StateX stateX = environment.getState(stateIndex);
+
+            tempColor = g.getColor();
+
+            if (stateX.isIsPitfall()) {
+                g.setColor(Color.RED);
+            } else {
+                g.setColor(Color.GREEN);
+            }
             RectangleX rec = stateX.getBoundedRectangle();
-            Color color = g.getColor();
 
             // g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 
@@ -164,10 +174,9 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
                     rec.bottomLeft().y + 30
             );*/
 
-            g.setColor(Color.GREEN);
             g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
             g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
-            g.setColor(color);
+            g.setColor(tempColor);
 
             if (!stateX.getAgents().isEmpty()) {
                 int index = 0;
@@ -307,18 +316,33 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
 
-        float x = scale;
+        float sc = scale;
 
-        if (x > 1) {
-            x += -0.5 * e.getWheelRotation();
+        if (sc > 1) {
+            sc += -0.5 * e.getWheelRotation();
+        } else if (sc < 1) {
+            sc += -0.05 * e.getWheelRotation();
         } else {
-            x += -0.05 * e.getWheelRotation();
+            if (e.getWheelRotation() < 0) {
+                sc += -0.5 * e.getWheelRotation();
+            } else {
+                sc += -0.05 * e.getWheelRotation();
+            }
         }
-        if (x > 5) {
-            x = 5;
-        } else if (x < 0.09f) {
-            x = 0.05f;
+        if (sc > 5) {
+            sc = 5;
+        } else if (sc < 0.09f) {
+            sc = 0.05f;
         }
-        scale = x;
+
+        if (sc > scale) {
+            scaleOffset.y = -(int) ((e.getY()+ pnOffset.y) * (sc - scale));
+//            pnOffset.x -= (e.getX() * (sc - scale));
+        } else if (sc < scale) {
+            scaleOffset.y = (int) (e.getY() * (scale - sc));
+//            pnOffset.x += (e.getX() * (scale - sc));
+        }
+
+        scale = sc;
     }
 }

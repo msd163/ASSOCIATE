@@ -11,6 +11,7 @@ public class WorldStatistics {
     private int updatedNextStepsOfAgents;
     private int randomTravelToNeighbors;
     private int statesWithNoTarget;
+    private int agentsInPitfall;
 
     //============================//============================
 
@@ -26,6 +27,7 @@ public class WorldStatistics {
                 = updatedNextStepsOfAgents
                 = randomTravelToNeighbors
                 = statesWithNoTarget
+                = agentsInPitfall
                 = 0;
     }
 
@@ -65,6 +67,10 @@ public class WorldStatistics {
         randomTravelToNeighbors++;
     }
 
+    public void addAgentsInPitfall() {
+        agentsInPitfall++;
+    }
+
     public int getTotalTravelToNeighbor() {
         return randomTravelToNeighbors + successTravelToGoToNeighbor;
     }
@@ -97,6 +103,7 @@ public class WorldStatistics {
                 ti + ", successTravelToGoToNeighbor = " + successTravelToGoToNeighbor +
                 ti + ", failedTravelToGoToNeighbor = " + failedTravelToGoToNeighbor +
                 ti + ", randomTravelToNeighbors = " + randomTravelToNeighbors +
+                ti + ", agentsInPitfall = " + agentsInPitfall +
                 ti + ", totalTravelOfAgents = " + getTotalTravelToNeighbor() +
                 tx + '}';
 
@@ -146,4 +153,9 @@ public class WorldStatistics {
     public int getStatesWithNoTarget() {
         return statesWithNoTarget;
     }
+
+    public int getAgentsInPitfall() {
+        return agentsInPitfall;
+    }
+
 }

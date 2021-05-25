@@ -2,6 +2,7 @@ package drawingLayer;
 
 import systemLayer.World;
 import utils.Globals;
+import utils.Point;
 import utils.WorldStatistics;
 
 import javax.swing.*;
@@ -15,9 +16,11 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
     private int axisX = 0;
 
     //============================//============================  panning params
+    private utils.Point scaleOffset = new utils.Point(0, 0);
     private utils.Point pnOffset = new utils.Point(0, 0);
     private utils.Point pnOffsetOld = new utils.Point(0, 0);
     private utils.Point pnStartPoint = new utils.Point(0, 0);
+    private utils.Point mousePosition = new utils.Point(0, 0);
 
     private float scale = 1f;
 
@@ -43,6 +46,7 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
                             pnStartPoint = new utils.Point(0, 0);
                             pnOffsetOld.x = pnOffset.x;
                             pnOffsetOld.y = pnOffset.y;
+                            scaleOffset = new Point(0, 0);
                             scale = 1f;
                         }
                     }
@@ -69,7 +73,14 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
 
         //============================//============================ Translate for panning and scaling
 
-        g.translate(pnOffset.x, pnOffset.y);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+        g.drawString("mouse: " + mousePosition.x + " , " + mousePosition.y, 100, 60);
+        g.drawString("pn: " + pnOffset.x + " , " + pnOffset.y, 100, 100);
+        g.drawString("sc: " + scale, 100, 140);
+        g.drawString("scoff: " + scaleOffset.x + " , " + scaleOffset.y, 100, 180);
+
+
+        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
         g.translate(0, -getHeight() + 100);
         //============================ Translate
@@ -95,6 +106,9 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
             g.fillOval(axisX, stat.getSuccessTravelToGoToNeighbor(), 5, 5);
             //============================
             g.setColor(Color.RED);
+            g.fillOval(axisX, stat.getAgentsInPitfall(), 5, 5);
+            //============================
+            g.setColor(Color.yellow);
             g.fillOval(axisX, stat.getRandomTravelToNeighbors(), 5, 5);
             //============================
 /*
@@ -114,6 +128,7 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
     }
 
     //============================//============================//============================ Mouse events
+
     @Override
     public void mouseDragged(MouseEvent e) {
         pnOffset.x = pnOffsetOld.x + e.getPoint().x - pnStartPoint.x;
@@ -122,24 +137,43 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
 
     @Override
     public void mouseMoved(MouseEvent e) {
+//        mousePosition.x = e.getX();
+        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + getHeight() - 100;
+        mousePosition.x = (int) ((e.getX() - pnOffset.x - scaleOffset.x) / scale);
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
 
-        float x = scale;
+        float sc = scale;
 
-        if (x > 1) {
-            x += -0.5 * e.getWheelRotation();
+        if (sc > 1) {
+            sc += -0.5 * e.getWheelRotation();
+        } else if (sc < 1) {
+            sc += -0.05 * e.getWheelRotation();
         } else {
-            x += -0.05 * e.getWheelRotation();
+            if (e.getWheelRotation() < 0) {
+                sc += -0.5 * e.getWheelRotation();
+            } else {
+                sc += -0.05 * e.getWheelRotation();
+            }
         }
-        if (x > 5) {
-            x = 5;
-        } else if (x < 0.09f) {
-            x = 0.05f;
+        if (sc > 5) {
+            sc = 5;
+        } else if (sc < 0.09f) {
+            sc = 0.05f;
         }
-        scale = x;
+
+
+        if (sc > scale) {
+//            scaleOffset.y = -(int) ((mousePosition.y - pnOffset.y - scaleOffset.y) * (sc - scale));
+          //  pnOffset.y = -(int) ((mousePosition.y) * (sc - scale));
+            pnOffset.y -= (e.getY() * (sc - scale));
+        } else if (sc < scale) {
+            pnOffset.y += (int) (e.getY() * (scale - sc));
+//            pnOffset.x += (e.getX() * (scale - sc));
+        }
+        scale = sc;
     }
 
 }

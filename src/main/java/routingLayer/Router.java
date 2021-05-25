@@ -50,6 +50,12 @@ public class Router {
             return state;
         }
 
+        if (state.isIsPitfall()) {
+            statistics.addAgentsInPitfall();
+            System.out.println(">> WARN >> agent " + agent.getId() + " is in pitfall " + state.getId())                            ;
+            return state;
+        }
+
         // the state has no output state. The agent is in an state that is pit
         if (state.getTargets().size() == 0) {
             agent.clearNextSteps();
