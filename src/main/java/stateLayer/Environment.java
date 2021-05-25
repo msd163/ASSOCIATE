@@ -111,7 +111,7 @@ public class Environment {
 
     public void init(World world) {
         maximumAgentCapability = 0;
-        if (Config.SIMULATION_MODE == TtSimulationMode.SimpleEnvironment) {
+        if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
             stateCapacityD = new DefParameter(stateCapacity);
         }
 
@@ -127,7 +127,7 @@ public class Environment {
             for (StateX state : states) {
                 // updating targets
                 state.updateTargets(this);
-                if (Config.SIMULATION_MODE == TtSimulationMode.SimpleEnvironment) {
+                if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
                     // set state capability
                     state.setCapacity(getStateCapacityValue());
                 }

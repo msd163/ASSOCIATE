@@ -78,7 +78,7 @@ public class World {
                 " | agentsCount: " + agentsCount
         );
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.SimpleEnvironment) {
+        if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
             int id = 0;
             int thisBunchFinished = Globals.profiler.getCurrentBunch().getBunchCount();
 

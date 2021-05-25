@@ -6,11 +6,15 @@ import systemLayer.Agent;
 public class RoutingHelp {
 
     private Agent helperAgent;
-    private int stepToTarget;
+    private int stepFromHelperToTarget;
+    private int stepFromAgentToHelper;
     private StateX nextState;
 
     //============================//============================
 
+    public int getFinalStepFromAgentToTarget() {
+        return stepFromAgentToHelper + stepFromHelperToTarget;
+    }
 
     public Agent getHelperAgent() {
         return helperAgent;
@@ -20,12 +24,12 @@ public class RoutingHelp {
         this.helperAgent = helperAgent;
     }
 
-    public int getStepToTarget() {
-        return stepToTarget;
+    public int getStepFromHelperToTarget() {
+        return stepFromHelperToTarget;
     }
 
-    public void setStepToTarget(int stepToTarget) {
-        this.stepToTarget = stepToTarget;
+    public void setStepFromHelperToTarget(int stepFromHelperToTarget) {
+        this.stepFromHelperToTarget = stepFromHelperToTarget;
     }
 
     public StateX getNextState() {
@@ -34,5 +38,13 @@ public class RoutingHelp {
 
     public void setNextState(StateX nextState) {
         this.nextState = nextState;
+    }
+
+    public int getStepFromAgentToHelper() {
+        return stepFromAgentToHelper;
+    }
+
+    public void setStepFromAgentToHelper(int stepFromAgentToHelper) {
+        this.stepFromAgentToHelper = stepFromAgentToHelper;
     }
 }

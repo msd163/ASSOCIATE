@@ -33,7 +33,7 @@ public class Simulator {
         Globals.profiler.init();
 
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.SimpleEnvironment) {
+        if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
 
             //============================
             FileReader envReader = new FileReader(Config.PureEnvironmentDataFile);

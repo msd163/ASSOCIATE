@@ -18,7 +18,7 @@ public class EnvGenerator {
 
     public static void main(String[] args) throws Exception {
 
-        Config.SIMULATION_MODE = TtSimulationMode.SimpleEnvironment;
+        Config.SIMULATION_MODE = TtSimulationMode.PureEnvironment;
 
         Gson gson = new Gson();
 
