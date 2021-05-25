@@ -136,7 +136,7 @@ public class Agent {
     //============================//============================ Routing
 
 
-    public void clearNextStates() {
+    public void clearNextSteps() {
         nextSteps.clear();
     }
 

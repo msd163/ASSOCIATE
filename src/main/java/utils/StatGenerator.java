@@ -64,7 +64,7 @@ public class StatGenerator {
                         stat.getAgentsWithNoTargetState() + "," +
                         stat.getAllInTargetAgents() + "," +
                         stat.getInTargetAgentsInThisTime() + "," +
-                        stat.getUpdatedNextStatesOfAgents() + "," +
+                        stat.getUpdatedNextStepsOfAgents() + "," +
                         stat.getSuccessTravelToGoToNeighbor() + "," +
                         stat.getFailedTravelToGoToNeighbor() + "," +
                         stat.getRandomTravelToNeighbors() + "," +

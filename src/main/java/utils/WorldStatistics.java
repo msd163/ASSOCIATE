@@ -8,7 +8,7 @@ public class WorldStatistics {
     private int successTravelToGoToNeighbor;
     private int failedTravelToGoToNeighbor;
     private int agentsWithNoTargetState;
-    private int updatedNextStatesOfAgents;
+    private int updatedNextStepsOfAgents;
     private int randomTravelToNeighbors;
     private int statesWithNoTarget;
 
@@ -23,7 +23,7 @@ public class WorldStatistics {
                 = successTravelToGoToNeighbor
                 = failedTravelToGoToNeighbor
                 = agentsWithNoTargetState
-                = updatedNextStatesOfAgents
+                = updatedNextStepsOfAgents
                 = randomTravelToNeighbors
                 = statesWithNoTarget
                 = 0;
@@ -57,8 +57,8 @@ public class WorldStatistics {
         statesWithNoTarget++;
     }
 
-    public void addUpdatedNextStatesOfAgents() {
-        updatedNextStatesOfAgents++;
+    public void addUpdatedNextStepsOfAgents() {
+        updatedNextStepsOfAgents++;
     }
 
     public void addRandomTravelToNeighbors() {
@@ -93,7 +93,7 @@ public class WorldStatistics {
                 ti + ", agentsWithNoTargetState = " + agentsWithNoTargetState +
                 ti + ", allInTargetAgents = " + allInTargetAgents +
                 ti + ", inTargetAgentsInThisTime = " + inTargetAgentsInThisTime +
-                ti + ", updatedNextStatesOfAgents = " + updatedNextStatesOfAgents +
+                ti + ", updatedNextStatesOfAgents = " + updatedNextStepsOfAgents +
                 ti + ", successTravelToGoToNeighbor = " + successTravelToGoToNeighbor +
                 ti + ", failedTravelToGoToNeighbor = " + failedTravelToGoToNeighbor +
                 ti + ", randomTravelToNeighbors = " + randomTravelToNeighbors +
@@ -135,8 +135,8 @@ public class WorldStatistics {
         return agentsWithNoTargetState;
     }
 
-    public int getUpdatedNextStatesOfAgents() {
-        return updatedNextStatesOfAgents;
+    public int getUpdatedNextStepsOfAgents() {
+        return updatedNextStepsOfAgents;
     }
 
     public int getRandomTravelToNeighbors() {
