@@ -1,5 +1,5 @@
 {
-  "agentsCount": "200",
+  "agentsCount": "500",
   "serviceCount": "2",
   "simulationRound": "1",
   "bunches": [
@@ -18,7 +18,7 @@
       "historyCap": "#100..2500",
       "watchListCapacity": "?125",
       "travelHistory": "#60..300",
-      "watchRadius": "#0..4",
+      "watchRadius": "#3..6",
       "concurrentDoingServiceCap": "?10"
     }
   ]

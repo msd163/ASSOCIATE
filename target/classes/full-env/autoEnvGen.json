@@ -1,9 +1,0 @@
-{
-  "pitfallCount": "2",
-  "stateCapacity": "#40..80",
-  "stateCount": 40,
-  "stateTargetCount": "#2..20",
-  "states":
-  [
-  ]
-}

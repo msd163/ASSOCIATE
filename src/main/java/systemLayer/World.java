@@ -213,6 +213,7 @@ public class World {
 
             if (Globals.WORLD_TIMER == 0) {
                 Globals.statGenerator.addHeader(statistic);
+                Globals.statGenerator.addComment();
             }
 
             System.out.println(Globals.WORLD_TIMER + " : World.run ------------------------------- ");

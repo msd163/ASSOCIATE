@@ -52,7 +52,7 @@ public class Router {
 
         if (state.isIsPitfall()) {
             statistics.addAgentsInPitfall();
-            System.out.println(">> WARN >> agent " + agent.getId() + " is in pitfall " + state.getId())                            ;
+            System.out.println(">> WARN >> agent " + agent.getId() + " is in pitfall " + state.getId());
             return state;
         }
 
@@ -101,7 +101,12 @@ public class Router {
         if (finalState.getId() == nextState.getId()) {
             agent.getNextSteps().remove(0);
             statistics.addSuccessTravelToGoToNeighbor();
-            if (finalState.getId() == agent.getTargetState().getId()) {
+            //
+            if (finalState.isIsPitfall()) {
+                statistics.addInPitfallInThisTime();
+            }
+            //
+            else if (finalState.getId() == agent.getTargetState().getId()) {
                 statistics.addInTargetAgentsInThisTime();
             }
 

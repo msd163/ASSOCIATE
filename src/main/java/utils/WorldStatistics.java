@@ -12,6 +12,7 @@ public class WorldStatistics {
     private int randomTravelToNeighbors;
     private int statesWithNoTarget;
     private int agentsInPitfall;
+    private int inPitfallInThisTime;
 
     //============================//============================
 
@@ -28,6 +29,7 @@ public class WorldStatistics {
                 = randomTravelToNeighbors
                 = statesWithNoTarget
                 = agentsInPitfall
+                = inPitfallInThisTime
                 = 0;
     }
 
@@ -75,6 +77,9 @@ public class WorldStatistics {
         return randomTravelToNeighbors + successTravelToGoToNeighbor;
     }
 
+    public void addInPitfallInThisTime() {
+
+    }
     //============================//============================
     @Override
     public String toString() {
@@ -104,6 +109,7 @@ public class WorldStatistics {
                 ti + ", failedTravelToGoToNeighbor = " + failedTravelToGoToNeighbor +
                 ti + ", randomTravelToNeighbors = " + randomTravelToNeighbors +
                 ti + ", agentsInPitfall = " + agentsInPitfall +
+                ti + ", inPitfallInThisTime = " + inPitfallInThisTime +
                 ti + ", totalTravelOfAgents = " + getTotalTravelToNeighbor() +
                 tx + '}';
 

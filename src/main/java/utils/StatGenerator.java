@@ -14,7 +14,13 @@ public class StatGenerator {
 
         try {
             writer = new FileWriter(file);
-            writer.write("# Simulation report. \n# Date: " + ParsCalendar.getInstance().getShortDateTime());
+        } catch (IOException ignored) {
+        }
+    }
+
+    public void addComment() {
+        try {
+            writer.write("\n# Simulation report.,,,,,,,,,,,\n# Date:," + ParsCalendar.getInstance().getShortDateTime()+",,,,,,,,,,");
             writer.flush();
 
         } catch (IOException ignored) {
@@ -23,7 +29,7 @@ public class StatGenerator {
 
     public void addHeader(WorldStatistics stat) {
         try {
-            writer.write("\n" + getCsvHeader(stat));
+            writer.write(getCsvHeader(stat));
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();

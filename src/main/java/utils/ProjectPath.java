@@ -48,7 +48,7 @@ public class ProjectPath {
     }
 
     public String autoEnvGeneratorData() {
-        return fullEnvDir() + "/autoEnvGen.json";
+        return resourcesDir() + "/autoEnvGen.json";
     }
 
     public String simulationData(int i) {
