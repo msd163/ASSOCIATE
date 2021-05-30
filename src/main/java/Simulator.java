@@ -1,4 +1,3 @@
-import _type.TtSimulationMode;
 import com.google.gson.Gson;
 import stateLayer.Environment;
 import systemLayer.World;
@@ -32,36 +31,18 @@ public class Simulator {
         }
         Globals.profiler.init();
 
+        FileReader envReader = new FileReader(Config.FullEnvironmentDataFile);
+        environment = gson.fromJson(envReader, Environment.class);
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
-
-            //============================
-            FileReader envReader = new FileReader(Config.PureEnvironmentDataFile);
-            environment = gson.fromJson(envReader, Environment.class);
-
-            if (environment == null) {
-                System.out.println(">> Simulator.init");
-                System.out.println("> Error: environment not found.");
-                return;
-            }
-
-            System.out.println("Environment loaded from file.");
-            // System.out.println(environment.toString());
-
-        } else {
-            FileReader envReader = new FileReader(Config.FullEnvironmentDataFile);
-            environment = gson.fromJson(envReader, Environment.class);
-
-            if (environment == null) {
-                System.out.println(">> Simulator.init");
-                System.out.println("> Error: environment not found.");
-                return;
-            }
-
-            System.out.println("Environment loaded from file.");
-            // System.out.println(environment.toString());
-
+        if (environment == null) {
+            System.out.println(">> Simulator.init");
+            System.out.println("> Error: environment not found.");
+            return;
         }
+
+        System.out.println("Environment loaded from file.");
+        // System.out.println(environment.toString());
+
 
         //============================
         worlds = new World[Globals.profiler.getSimulationRound()];
@@ -78,12 +59,7 @@ public class Simulator {
                     .replaceAll("[:/]", "")
             ;
 
-            if (Config.SIMULATION_MODE == TtSimulationMode.FullEnvironment) {
-                statName += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1);
-            } else {
-                statName += "_" + Config.PureEnvironmentDataFile.substring(Config.PureEnvironmentDataFile.lastIndexOf("/") + 1);
-
-            }
+            statName += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1);
 
             System.out.println(statName);
             statName = ProjectPath.instance().statisticsDir() + "/" + statName + ".csv";

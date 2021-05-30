@@ -20,31 +20,24 @@ public class ProjectPath {
         return root() + "/src/main/resources";
     }
 
-    public String pureEnvDir() {
-        return root() + "/src/main/resources/pure-env";
+
+    public String envtDir() {
+        return root() + "/src/main/resources/environment";
     }
 
-    public String fullEnvDir() {
-        return root() + "/src/main/resources/full-env";
+    public String envData(int i) {
+        return envtDir() + "/environment-" + i + ".json";
     }
 
-    public String pureEnvData(int i) {
-        return pureEnvDir() + "/p-environment-" + i + ".json";
-    }
-
-    public String fullEnvData(int i) {
-        return fullEnvDir() + "/f-environment-" + i + ".json";
-    }
-
-    public String fullEnvData() {
+    public String envData() {
         int i = 100;
         for (; i > 0; i--) {
-            if (new File(fullEnvDir() + "/f-environment-" + i + ".json").exists()) {
+            if (new File(envtDir() + "/environment-" + i + ".json").exists()) {
                 break;
             }
         }
-        System.out.println("|>  Selected FullEnvironment file: " + fullEnvDir() + "/f-environment-" + i + ".json");
-        return fullEnvDir() + "/f-environment-" + i + ".json";
+        System.out.println("|>  Selected FullEnvironment file: " + envtDir() + "/environment-" + i + ".json");
+        return envtDir() + "/environment-" + i + ".json";
     }
 
     public String autoEnvGeneratorData() {

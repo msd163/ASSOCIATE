@@ -1,6 +1,7 @@
 {
   "agentsCount": "200",
   "simulationRound": "1",
+  "sleepInTarget": "2",
   "bunches": [
     {
       "bunchCount": "%50@1000",

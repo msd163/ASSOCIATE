@@ -50,6 +50,12 @@ public class Router {
         if (agent.isInTargetState()) {
             statistics.addAllInTargetAgents();
             agent.clearNextSteps();
+            agent.addSpentTimeAtTheTarget();
+            if (agent.getSpentTimeAtTheTarget() > 5) {
+                System.out.println( "---> Assigning new target to agent (" + agent.getId() + "). current target: " + agent.getCurrentTarget().getId());
+                agent.assignNextTargetState();
+                System.out.println(">---             > next target: " + agent.getCurrentTarget().getId());
+            }
             return state;
         }
 
@@ -179,7 +185,8 @@ public class Router {
 
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
-                routingHelp.setTrustLevel(Globals.trustManager.getTrustLevel(agent,wa.getAgent()));
+                //============================//============================ _Trust
+                 routingHelp.setTrustLevel(Globals.trustManager.getTrustLevel(agent, wa.getAgent()));
                 //============================//============================
                 routingHelps.add(routingHelp);
             }
@@ -199,7 +206,7 @@ public class Router {
                 return -1;
             } else if (c1.getTrustLevel() < c2.getTrustLevel()) {
                 return 1;
-            } else{
+            } else {
                 if (c1.getFinalStepFromAgentToTarget() < c2.getFinalStepFromAgentToTarget()) {
                     return -1;
                 } else if (c1.getFinalStepFromAgentToTarget() > c2.getFinalStepFromAgentToTarget()) {
@@ -380,6 +387,7 @@ public class Router {
 
     /**
      * Responding according to behavioral profile
+     *
      * @param agent     Responder agent
      * @param goalState The goal state
      * @return The neighbor state that routes to goalState

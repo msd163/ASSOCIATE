@@ -52,7 +52,7 @@ public class World {
         router = new Router(this);
         //============================ Setting agents count
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.FullEnvironment) {
+        if (Config.SIMULATION_MODE == TtSimulationMode.SimulateMode) {
             agentsCount = 0;
             for (StateX state : _environment.getStates()) {
                 if (state.getAgents() != null) {
@@ -78,7 +78,7 @@ public class World {
                 " | agentsCount: " + agentsCount
         );
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
+        if (Config.SIMULATION_MODE == TtSimulationMode.GenerateMode) {
             int id = 0;
             int thisBunchFinished = Globals.profiler.getCurrentBunch().getBunchCount();
 
@@ -111,7 +111,7 @@ public class World {
                     agents[i].setState(randomState);
 
                     int targetCounts = agents[i].getTargetCounts();
-
+                    StateX prevState = agents[i].getState();
                     for (int tc = 0; tc < targetCounts; tc++) {
                         boolean isValidToAddAsTarget;
                         //============================ Adding target state to agents
@@ -121,21 +121,22 @@ public class World {
                             if (randomState.isIsPitfall()) {
                                 isValidToAddAsTarget = false;
                             } else {
-                                // checking state capability and adding the agent to it.
-                                isValidToAddAsTarget = agents[i].getState().isAnyPathTo(randomState);
+                                //-- checking state capability and adding the agent to it.
+                                isValidToAddAsTarget = prevState.isAnyPathTo(randomState);
                             }
                             if (isValidToAddAsTarget) {
-                                // check if added previously as target
+                                //-- check if added previously as target
                                 isValidToAddAsTarget = !agents[i].isAsTarget(randomState);
                             }
                         } while (!isValidToAddAsTarget && tryCount++ < agentsCount);
 
                         if (isValidToAddAsTarget) {
                             agents[i].addTarget(randomState);
+                            prevState = randomState;
                         }
                     }
-
                 }
+
                 //============================  if agentId is in 'traceAgentIds', it will set as traceable
 //            Agent agent = agents[i];
                 if (isTraceable(i)) {
@@ -158,11 +159,10 @@ public class World {
                     //============================ filling state array according to stateId array
                     agent.updateTargets();
 
-                    // First updating travel history as initialization state
+                    //-- First updating travel history as initialization state
                     if (agent.getState() != null) {
                         agent.updateTravelHistory();
                     }
-
 
                     //============================  if agentId is in 'traceAgentIds', it will set as traceable
                     if (isTraceable(i)) {
@@ -170,8 +170,6 @@ public class World {
                     }
 
                     System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
-
-
 
                     agents[i++] = agent;
 

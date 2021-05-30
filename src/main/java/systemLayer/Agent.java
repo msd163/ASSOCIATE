@@ -12,7 +12,8 @@ import java.util.List;
 public class Agent {
 
     public Agent(World parentWorld, int id) {
-        currentTargetStateIndex = 0;
+        spentTimeAtTheTarget =
+                currentTargetStateIndex = 0;
         this.world = parentWorld;
         this.id = id;
         currentDoingServiceSize = 0;
@@ -47,6 +48,7 @@ public class Agent {
     private int[] targetStateIds;
     private StateX[] targetStates;
     private int currentTargetStateIndex;    // Index of targetStates array
+    private int spentTimeAtTheTarget;            // time spent at the target state.
 
 
     // Next steps in order to reach the target state
@@ -114,6 +116,18 @@ public class Agent {
     }
 
     //============================//============================ Travel
+    public int addSpentTimeAtTheTarget() {
+        return ++spentTimeAtTheTarget;
+    }
+
+    public boolean assignNextTargetState() {
+        if (currentTargetStateIndex < getTargetCounts() - 1) {
+            currentTargetStateIndex++;
+            spentTimeAtTheTarget = 0;
+            return true;
+        }
+        return false;
+    }
 
     /**
      *
@@ -370,6 +384,9 @@ public class Agent {
         return targetStateId;
     }*/
 
+    public int getSpentTimeAtTheTarget() {
+        return spentTimeAtTheTarget;
+    }
 
     public Agent getHelper() {
         return helper;

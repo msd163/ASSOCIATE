@@ -35,7 +35,7 @@ public class Environment {
 
     // Count of pitfalls
     @Expose
-    private int pitfallCountValue;      // final generated value from pitfallCount. used for exporting in f-environment.json file
+    private int pitfallCountValue;      // final generated value from pitfallCount. used for exporting in environment.json file
     private String pitfallCount;
 
     // The number of targets for each state
@@ -126,7 +126,7 @@ public class Environment {
 
     public void init(World world) {
         maximumAgentCapability = 0;
-        if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
+        if (Config.SIMULATION_MODE == TtSimulationMode.GenerateMode) {
             stateCapacityD = new DefParameter(stateCapacity);
         }
 
@@ -142,7 +142,7 @@ public class Environment {
             for (StateX state : states) {
                 // updating targets
                 state.updateTargets(this);
-                if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
+                if (Config.SIMULATION_MODE == TtSimulationMode.GenerateMode) {
                     // set state capability
                     state.setCapacity(getStateCapacityValue());
                 }

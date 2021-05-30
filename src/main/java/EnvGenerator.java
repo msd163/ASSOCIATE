@@ -21,7 +21,7 @@ public class EnvGenerator {
 
     public static void main(String[] args) throws Exception {
 
-        Config.SIMULATION_MODE = TtSimulationMode.PureEnvironment;
+        Config.SIMULATION_MODE = TtSimulationMode.GenerateMode;
 
         Gson gson = new Gson();
 
@@ -130,8 +130,8 @@ public class EnvGenerator {
         String envJson = gson.toJson(environment);
 
         int envFileCounter = 0;
-        String envFileName = "f-environment";
-        String envFilePath = ProjectPath.instance().fullEnvDir() + "/" + envFileName;
+        String envFileName = "environment";
+        String envFilePath = ProjectPath.instance().envtDir() + "/" + envFileName;
 
         File file;
 

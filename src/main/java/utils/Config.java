@@ -6,15 +6,14 @@ import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {
 
-    public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.FullEnvironment;
+    public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.SimulateMode;
 
     public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
-    public static final String PureEnvironmentDataFile = ProjectPath.instance().pureEnvData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData();
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().envData();
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME = 200;                        // time of execution in each world
+    public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
 
     public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
