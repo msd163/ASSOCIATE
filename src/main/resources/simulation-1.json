@@ -3,7 +3,8 @@
   "simulationRound": "1",
   "bunches": [
     {
-      "bunchCount": "%10@1000",
+      "bunchCount": "%50@1000",
+      "targetCount": "10",
       "watchDepth": "#0..10",
       "watchListCapacity": "?125",
       "travelHistory": "#10..150",
@@ -11,7 +12,8 @@
       "trustHistoryItemCap": "15"
     },
     {
-      "bunchCount": "%10@1000",
+      "bunchCount": "%50@1000",
+      "targetCount": "10",
       "watchDepth": "#10..60",
       "watchListCapacity": "?125",
       "travelHistory": "#60..300",

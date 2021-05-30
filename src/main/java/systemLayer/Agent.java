@@ -12,7 +12,7 @@ import java.util.List;
 public class Agent {
 
     public Agent(World parentWorld, int id) {
-        targetStateId = -1;
+        currentTargetStateIndex = 0;
         this.world = parentWorld;
         this.id = id;
         currentDoingServiceSize = 0;
@@ -44,8 +44,11 @@ public class Agent {
     // The history of previously visited states
     private ArrayList<TravelHistory> travelHistories;
     @Expose
-    private int targetStateId;
-    private StateX targetState;
+    private int[] targetStateIds;
+    private StateX[] targetStates;
+    private int currentTargetStateIndex;    // Index of targetStates array
+
+
     // Next steps in order to reach the target state
     private ArrayList<StateX> nextSteps;
     private Agent helper;
@@ -70,6 +73,11 @@ public class Agent {
 
     public void init() {
         capacity = new AgentCapacity(this);
+        int targetCount = Globals.profiler.getCurrentBunch().getTargetCountD().nextValue();
+
+        targetStateIds = new int[targetCount];
+        targetStates = new StateX[targetCount];
+
         initVars();
 
     }
@@ -85,9 +93,6 @@ public class Agent {
 
         nextSteps = new ArrayList<>();
         travelHistories = new ArrayList<>();
-        if (state != null) {
-            updateTravelHistory();
-        }
 
     }
 
@@ -108,8 +113,7 @@ public class Agent {
         currentDoingServiceSize = 0;
     }
 
-
-    //============================//============================ State Map
+    //============================//============================ Travel
 
     /**
      *
@@ -134,8 +138,9 @@ public class Agent {
                 Globals.WORLD_TIMER,
                 state.getTargets(),
                 helper,
-                state.getId() == targetStateId,
-                state.isIsPitfall()
+                state.getId() == getCurrentTarget().getId(),
+                state.isIsPitfall(),
+                currentTargetStateIndex
         ));
 
         // Printing map
@@ -143,20 +148,56 @@ public class Agent {
         for (TravelHistory s : travelHistories) {
             sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
         }
-        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + (targetState == null ? "NULL" : targetState.getId()) + " ] #  maps: " + sIds);
+        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + (getCurrentTarget() == null ? "NULL" : getCurrentTarget().getId()) + " ] #  maps: " + sIds);
 
     }
     //============================//============================ Routing
-
 
     public void clearNextSteps() {
         nextSteps.clear();
         helper = null;
     }
 
+    public StateX getCurrentTarget() {
+        return targetStates[currentTargetStateIndex];
+    }
+
+    public int getTargetCounts() {
+        return targetStates.length;
+    }
+
+    public boolean isAsTarget(StateX state) {
+        for (StateX targetState : targetStates) {
+            if (targetState != null && targetState.getId() == state.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isInTargetState() {
 
-        return targetState != null && state.getId() == targetState.getId();
+        return targetStates != null && state.getId() == getCurrentTarget().getId();
+    }
+
+    public void addTarget(StateX state) {
+        for (int i = 0; i < targetStates.length; i++) {
+            if (targetStates[i] == null) {
+                targetStates[i] = state;
+                targetStateIds[i] = state.getId();
+                break;
+            }
+        }
+    }
+
+    public void updateTargets() {
+        int length = targetStateIds.length;
+        targetStates = new StateX[length];
+
+        for (int i = 0; i < length; i++) {
+            int targetStateId = targetStateIds[i];
+            targetStates[i] = world.getEnvironment().getState(targetStateId);
+        }
     }
 
     //============================ Watching
@@ -247,7 +288,6 @@ public class Agent {
         return (int) state.getLocation().getY();
     }
 
-
     public World getWorld() {
         return world;
     }
@@ -296,7 +336,7 @@ public class Agent {
         this.state = state;
     }
 
-    public StateX getTargetState() {
+/*    public StateX getTargetState() {
         return targetState;
     }
 
@@ -304,7 +344,7 @@ public class Agent {
         this.targetState = targetState;
         this.targetStateId = targetState == null ? -1 : targetState.getId();
 
-    }
+    }*/
 
     public ArrayList<TravelHistory> getTravelHistories() {
         return travelHistories;
@@ -326,9 +366,10 @@ public class Agent {
         this.world = world;
     }
 
-    public int getTargetStateId() {
+   /* public int getTargetStateId() {
         return targetStateId;
-    }
+    }*/
+
 
     public Agent getHelper() {
         return helper;
@@ -337,4 +378,5 @@ public class Agent {
     public void setHelper(Agent helper) {
         this.helper = helper;
     }
+
 }

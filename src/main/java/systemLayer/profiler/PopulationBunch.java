@@ -7,6 +7,7 @@ public class PopulationBunch {
     private String watchListCapacity;
     private String watchDepth;
     private String travelHistory;
+    private String targetCount;
 
     //============================
     private DefParameter bunchCountD;
@@ -15,6 +16,7 @@ public class PopulationBunch {
     private DefParameter watchListCapacityD;
     private DefParameter watchDepthD;
     private DefParameter travelHistoryCapD;
+    private DefParameter targetCountD;
 
 
     //============================//============================
@@ -26,6 +28,7 @@ public class PopulationBunch {
         watchListCapacityD = new DefParameter(watchListCapacity);
         watchDepthD = new DefParameter(watchDepth);
         travelHistoryCapD = new DefParameter(travelHistory);
+        targetCountD = new DefParameter(targetCount);
     }
 
     //============================//============================
@@ -60,6 +63,10 @@ public class PopulationBunch {
         return travelHistoryCapD;
     }
 
+    public DefParameter getTargetCountD() {
+        return targetCountD;
+    }
+
 
     //============================//============================
     public String toString(int tabIndex) {
@@ -86,6 +93,7 @@ public class PopulationBunch {
                 ti + ", watchListCapacityD=" + watchListCapacityD.toString(tabIndex) +
                 ti + ", watchDepthD=" + watchDepthD.toString(tabIndex) +
                 ti + ", travelHistoryD=" + travelHistoryCapD.toString(tabIndex) +
+                ti + ", targetCountD=" + targetCountD.toString(tabIndex) +
                 tx + '}';
     }
 

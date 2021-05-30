@@ -106,22 +106,33 @@ public class World {
                 } while (!isAddedToState && tryCount++ < agentsCount);
 
                 if (isAddedToState) {
-                    agents[i].setState(randomState);
-                    boolean isAnyPathTo;
-                    //============================ Adding target state to agents
-                    do {
-                        randomState = environment.getRandomState();
-                        //
-                        if (randomState.isIsPitfall()) {
-                            isAnyPathTo = false;
-                        } else {
-                            // checking state capability and adding the agent to it.
-                            isAnyPathTo = agents[i].getState().isAnyPathTo(randomState);
-                        }
-                    } while (!isAnyPathTo && tryCount++ < agentsCount);
 
-                    if (isAnyPathTo) {
-                        agents[i].setTargetState(randomState);
+                    //============================ Adding state to agent
+                    agents[i].setState(randomState);
+
+                    int targetCounts = agents[i].getTargetCounts();
+
+                    for (int tc = 0; tc < targetCounts; tc++) {
+                        boolean isValidToAddAsTarget;
+                        //============================ Adding target state to agents
+                        do {
+                            randomState = environment.getRandomState();
+                            //
+                            if (randomState.isIsPitfall()) {
+                                isValidToAddAsTarget = false;
+                            } else {
+                                // checking state capability and adding the agent to it.
+                                isValidToAddAsTarget = agents[i].getState().isAnyPathTo(randomState);
+                            }
+                            if (isValidToAddAsTarget) {
+                                // check if added previously as target
+                                isValidToAddAsTarget = !agents[i].isAsTarget(randomState);
+                            }
+                        } while (!isValidToAddAsTarget && tryCount++ < agentsCount);
+
+                        if (isValidToAddAsTarget) {
+                            agents[i].addTarget(randomState);
+                        }
                     }
 
                 }
@@ -130,7 +141,7 @@ public class World {
                 if (isTraceable(i)) {
                     agents[i].setAsTraceable();
                 }
-                System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getTargetState() != null ? agents[i].getTargetState().getId() : "NULL"));
+                System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getCurrentTarget() != null ? agents[i].getCurrentTarget().getId() : "NULL"));
             }
         }
         //============================  FullEnv
@@ -144,13 +155,23 @@ public class World {
                     agent.setWorld(this);
                     agent.initVars();
 
-                    agent.setTargetState(environment.getState(agent.getTargetStateId()));
+                    //============================ filling state array according to stateId array
+                    agent.updateTargets();
+
+                    // First updating travel history as initialization state
+                    if (agent.getState() != null) {
+                        agent.updateTravelHistory();
+                    }
+
+
                     //============================  if agentId is in 'traceAgentIds', it will set as traceable
                     if (isTraceable(i)) {
                         agent.setAsTraceable();
                     }
 
-                    System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getTargetState() != null ? agent.getTargetState().getId() : "NULL"));
+                    System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
+
+
 
                     agents[i++] = agent;
 

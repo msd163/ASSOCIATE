@@ -36,7 +36,7 @@ public class Router {
     public StateX takeAStepTowardTheTarget(Agent agent) {
 
         //============================
-        StateX targetState = agent.getTargetState();
+        StateX targetState = agent.getCurrentTarget();
         StateX state = agent.getState();
         //============================
 
@@ -89,7 +89,7 @@ public class Router {
             int targetIndex = Globals.RANDOM.nextInt(state.getTargets().size());
             StateX stateX = gotoNeighborState(agent, targetIndex);
             statistics.addRandomTravelToNeighbors();
-            if (stateX.getId() == agent.getTargetState().getId()) {
+            if (stateX.getId() == agent.getCurrentTarget().getId()) {
                 statistics.addInTargetAgentsInThisTime();
             }
             return stateX;
@@ -120,7 +120,7 @@ public class Router {
                 Globals.trustManager.reduceTrustForPitfall(agent);
             }
             //
-            else if (finalState.getId() == agent.getTargetState().getId()) {
+            else if (finalState.getId() == agent.getCurrentTarget().getId()) {
                 statistics.addInTargetAgentsInThisTime();
                 Globals.trustManager.increaseTrustForSuccessTarget(agent);
             }

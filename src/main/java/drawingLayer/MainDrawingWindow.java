@@ -190,7 +190,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         for (Agent agent : world.getAgents()) {
 
             if (agent.isSimConfigShowTargetState()) {
-                RectangleX rec = agent.getTargetState().getBoundedRectangle();
+                RectangleX rec = agent.getCurrentTarget().getBoundedRectangle();
                 g.setColor(Color.BLUE);
                 g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
             }
