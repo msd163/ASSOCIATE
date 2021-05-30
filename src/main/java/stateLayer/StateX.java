@@ -340,7 +340,7 @@ public class StateX {
             }
             WatchedAgent watchedAgent = new WatchedAgent();
             watchedAgent.setAgent(agent);
-            watchedAgent.setTrust(sourceAgent.getTrust().getTrustScore(agent));
+           // watchedAgent.setTrust(sourceAgent.getTrust().getTrustScore(agent));
 
             // Adding path from the source state (state of the source agent) to this state (The state of visited agent)
             if (depth < maxDepth) {

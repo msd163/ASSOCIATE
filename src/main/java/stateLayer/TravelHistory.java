@@ -1,5 +1,6 @@
 package stateLayer;
 
+import systemLayer.Agent;
 import utils.Globals;
 
 import java.util.ArrayList;
@@ -9,14 +10,20 @@ public class TravelHistory {
     private StateX stateX;
     private int visitTime;
     private ArrayList<StateX> targets;
-
+    private Agent helper;
+    private boolean isTarget;
+    private boolean isPitfall;
+    private boolean isTrustCalculated;
     //============================//============================//============================
 
 
-    public TravelHistory(StateX stateX, int visitTime, ArrayList<StateX> targets) {
+    public TravelHistory(StateX stateX, int visitTime, ArrayList<StateX> targets, Agent helper, boolean isTarget, boolean isPitfall) {
         this.stateX = stateX;
         this.visitTime = visitTime;
         this.targets = targets;
+        this.helper = helper;
+        this.isTarget = isTarget;
+        this.isPitfall = isPitfall;
     }
 
     public int isAnyPathTo(StateX targetState) {
@@ -55,4 +62,27 @@ public class TravelHistory {
         visitTime = Globals.WORLD_TIMER;
     }
 
+    public boolean isIsTarget() {
+        return isTarget;
+    }
+
+    public void setIsTarget(boolean target) {
+        isTarget = target;
+    }
+
+    public Agent getHelper() {
+        return helper;
+    }
+
+    public void setHelper(Agent helper) {
+        this.helper = helper;
+    }
+
+    public void setIsTrustCalculated(boolean trustCalculated) {
+        isTrustCalculated = trustCalculated;
+    }
+
+    public boolean isTrustCalculated() {
+        return isTrustCalculated;
+    }
 }

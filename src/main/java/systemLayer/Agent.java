@@ -1,8 +1,8 @@
 package systemLayer;
 
 import com.google.gson.annotations.Expose;
-import stateLayer.TravelHistory;
 import stateLayer.StateX;
+import stateLayer.TravelHistory;
 import trustLayer.AgentTrust;
 import utils.Globals;
 
@@ -48,6 +48,7 @@ public class Agent {
     private StateX targetState;
     // Next steps in order to reach the target state
     private ArrayList<StateX> nextSteps;
+    private Agent helper;
     //============================
     @Expose
     private AgentCapacity capacity;
@@ -61,8 +62,8 @@ public class Agent {
     // first agent (zero position) is agent with maximum trust level.
     private List<WatchedAgent> watchedAgents;
 
-    // States that will be watched according to watchRadius capacity of this agent.
-    // If watchRadius is Zero, watchStates will be empty
+    // States that will be watched according to watchDepth capacity of this agent.
+    // If watchDepth is Zero, watchStates will be empty
     private List<WatchedState> watchedStates;
 
     //============================//============================//============================
@@ -75,13 +76,18 @@ public class Agent {
 
     public void initVars() {
 
-        trust = new AgentTrust(this, capacity.getHistoryCap(), capacity.getHistoryServiceRecordCap());
+        trust = new AgentTrust(this, capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap());
         behavior = new AgentBehavior();
         watchedAgents = new ArrayList<>();
         watchedStates = new ArrayList<>();
 
-        travelHistories = new ArrayList<>();
+        helper = null;
+
         nextSteps = new ArrayList<>();
+        travelHistories = new ArrayList<>();
+        if (state != null) {
+            updateTravelHistory();
+        }
 
     }
 
@@ -108,7 +114,7 @@ public class Agent {
     /**
      *
      */
-    public void updateStateMap() {
+    public void updateTravelHistory() {
 
         int size = travelHistories.size();
         // If the agent do not moved and it's state doesnt changed, only the visit time will to be updated.
@@ -123,7 +129,14 @@ public class Agent {
         }
 
         // Adding new state to the map
-        travelHistories.add(new TravelHistory(state, Globals.WORLD_TIMER, state.getTargets()));
+        travelHistories.add(new TravelHistory(
+                state,
+                Globals.WORLD_TIMER,
+                state.getTargets(),
+                helper,
+                state.getId() == targetStateId,
+                state.isIsPitfall()
+        ));
 
         // Printing map
         String sIds = "";
@@ -138,6 +151,7 @@ public class Agent {
 
     public void clearNextSteps() {
         nextSteps.clear();
+        helper = null;
     }
 
     public boolean isInTargetState() {
@@ -159,7 +173,7 @@ public class Agent {
         watchedStates.clear();
         state.getWatchListOfStates(capacity.getWatchDepth(), watchedStates, null);
 
-        // Sorting watched agents according trust level of this agent to them.
+   /*     // Sorting watched agents according trust level of this agent to them.
         watchedAgents.sort((WatchedAgent w1, WatchedAgent w2) -> {
             float t1 = w1.getTrust();
             float t2 = w2.getTrust();
@@ -170,7 +184,7 @@ public class Agent {
                 return -1;
             }
             return 0;
-        });
+        });*/
     }
 
     public boolean canWatch(Agent agent) {
@@ -314,5 +328,13 @@ public class Agent {
 
     public int getTargetStateId() {
         return targetStateId;
+    }
+
+    public Agent getHelper() {
+        return helper;
+    }
+
+    public void setHelper(Agent helper) {
+        this.helper = helper;
     }
 }

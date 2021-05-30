@@ -8,7 +8,7 @@ public class WatchedAgent {
 
     private Agent agent;
     private ArrayList<StateX> path;
-    private float trust;
+//    private float trust;
     //============================//============================
 
     public int getPathSize() {
@@ -40,12 +40,12 @@ public class WatchedAgent {
     public void addPath(StateX state) {
         path.add(state);
     }
-
-    public float getTrust() {
-        return trust;
-    }
-
-    public void setTrust(float trust) {
-        this.trust = trust;
-    }
+//
+//    public float getTrust() {
+//        return trust;
+//    }
+//
+//    public void setTrust(float trust) {
+//        this.trust = trust;
+//    }
 }

@@ -2,19 +2,20 @@ package trustLayer;
 
 import systemLayer.Agent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AgentTrust {
 
-    public AgentTrust(Agent parentAgent, int historyCap, int historyServiceRecordCap) {
+    public AgentTrust(Agent parentAgent, int trustHistoryCap, int historyItemCap) {
 
         this.agent = parentAgent;
 
         historyIndex = -1;
         historySize = 0;
 
-        this.historyCap = historyCap;
-        this.historyServiceRecordCap = historyServiceRecordCap;
+        this.historyCap = trustHistoryCap;
+        this.historyItemCap = historyItemCap;
 
         histories = new TrustHistory[historyCap];
         for (int i = 0; i < historyCap; i++) {
@@ -33,10 +34,10 @@ public class AgentTrust {
     private TrustHistory[] histories;
     // An array of history indic that are sorted based on trustScore
     private int[] historiesSortedIndex;
-    private int historyCap;
-    private int historyIndex;
-    private int historySize;
-    private int historyServiceRecordCap; // max size of services in each history
+    private int historyCap;     // maximum size of history
+    private int historyIndex;   // current index of history that will be fill
+    private int historySize;    // current capacity of history
+    private int historyItemCap; // max size of services in each history
 
     //============================//============================//============================
 
@@ -103,14 +104,37 @@ public class AgentTrust {
         return 0;
     }
 
+
+    public void createNewHistory(Agent helper, float trustScore) {
+
+        histories[historyIndex] = new TrustHistory(helper);
+        histories[historyIndex].addHistory(trustScore);
+
+    }
+
+
+    public void addHistory(float trustScore) {
+        ArrayList<TrustHistoryItem> items = histories[historyIndex].getItems();
+        if (items.size() >= historyItemCap) {
+            // Removing trust score of removed item from finalTrustLevel
+            histories[historyIndex].setFinalTrustLevel(
+                    histories[historyIndex].getFinalTrustLevel() -
+                            items.get(0).getTrustScore()
+            );
+            histories[historyIndex].getItems().remove(0);
+        }
+        histories[historyIndex].addHistory(trustScore);
+    }
+
+
     //============================//============================//============================
 
 
     protected AgentTrust clone() {
-        AgentTrust trust = new AgentTrust(agent, historyCap, historyServiceRecordCap);
+        AgentTrust trust = new AgentTrust(agent, historyCap, historyItemCap);
         trust.histories = this.histories;
         trust.historyIndex = this.historyIndex;
-        trust.historyServiceRecordCap = this.historyServiceRecordCap;
+        trust.historyItemCap = this.historyItemCap;
         return trust;
     }
 
@@ -122,7 +146,7 @@ public class AgentTrust {
                 ",\n\t\t historyCap=" + historyCap +
                 ",\n\t\t historyIndex=" + historyIndex +
                 ",\n\t\t historySize=" + historySize +
-                ",\n\t\t historyServiceRecordCap=" + historyServiceRecordCap +
+                ",\n\t\t trustHistoryItemCap=" + historyItemCap +
                 '}';
     }
 
@@ -132,6 +156,40 @@ public class AgentTrust {
 
     public int[] getHistoriesSortedIndex() {
         return historiesSortedIndex;
+    }
+
+    public TrustHistory[] getHistories() {
+        return histories;
+    }
+
+    public int getHistoryCap() {
+        return historyCap;
+    }
+
+    public int getHistoryIndex() {
+        return historyIndex;
+    }
+
+    public int getHistoryItemCap() {
+        return historyItemCap;
+    }
+
+    public void addHistorySizeIfPossible() {
+        if (historySize < historyCap) {
+            historySize++;
+        }
+    }
+
+    public void addHistoryIndex() {
+        historyIndex++;
+    }
+
+    public boolean isIndexExceedFromCap() {
+        return historyIndex >= historyCap;
+    }
+
+    public void setHistoryIndex(int historyIndex) {
+        this.historyIndex = historyIndex;
     }
 
 }

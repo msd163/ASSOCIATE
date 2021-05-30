@@ -7,6 +7,13 @@ public class TrustHistoryItem {
 
     //============================//============================//============================
 
+    public TrustHistoryItem(int visitTime, float trustScore) {
+        this.visitTime = visitTime;
+        this.trustScore = trustScore;
+    }
+
+    //============================//============================//============================
+
     public int getVisitTime() {
         return visitTime;
     }

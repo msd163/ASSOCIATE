@@ -134,7 +134,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
             StateX stateX = environment.getState(stateIndex);
 
-            tempColor = g.getColor();
+           // tempColor = g.getColor();
 
             if (stateX.isIsPitfall()) {
                 g.setColor(Color.RED);
@@ -176,7 +176,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
 
             g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
             g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
-            g.setColor(tempColor);
+           // g.setColor(tempColor);
 
             if (!stateX.getAgents().isEmpty()) {
                 int index = 0;
@@ -191,7 +191,7 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
 
             if (agent.isSimConfigShowTargetState()) {
                 RectangleX rec = agent.getTargetState().getBoundedRectangle();
-                g.setColor(Color.RED);
+                g.setColor(Color.BLUE);
                 g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
             }
 

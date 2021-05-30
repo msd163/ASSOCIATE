@@ -6,6 +6,8 @@ import drawingLayer.MainDrawingWindow;
 import routingLayer.Router;
 import stateLayer.Environment;
 import stateLayer.StateX;
+import trustLayer.TrustHistory;
+import trustLayer.TrustHistoryItem;
 import utils.Config;
 import utils.Globals;
 import utils.WorldStatistics;
@@ -37,15 +39,17 @@ public class World {
         // Identifying the agents that we want to trace in Main diagram.
         traceAgentIds = new int[]{1};
 
-        // Resetting the timer of the world.
-        Globals.WORLD_TIMER = 0;
+        // Initializing the timer of the world.
+        // Setting -1 for registering first history of travel time to -1;
+        // it used in initVar() of agent
+        Globals.WORLD_TIMER = -1;
 
         statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
         for (int i = 0; i < statistics.length; i++) {
             statistics[i] = new WorldStatistics();
         }
 
-        router = new Router();
+        router = new Router(this);
         //============================ Setting agents count
 
         if (Config.SIMULATION_MODE == TtSimulationMode.FullEnvironment) {
@@ -80,7 +84,6 @@ public class World {
 
             for (int i = 0; i < agentsCount; i++) {
                 if (i >= thisBunchFinished) {
-                    Globals.profiler.NextBunch();
                     thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
                 }
 
@@ -109,7 +112,12 @@ public class World {
                     do {
                         randomState = environment.getRandomState();
                         //
-                        isAnyPathTo = agents[i].getState().isAnyPathTo(randomState);
+                        if (randomState.isIsPitfall()) {
+                            isAnyPathTo = false;
+                        } else {
+                            // checking state capability and adding the agent to it.
+                            isAnyPathTo = agents[i].getState().isAnyPathTo(randomState);
+                        }
                     } while (!isAnyPathTo && tryCount++ < agentsCount);
 
                     if (isAnyPathTo) {
@@ -158,6 +166,8 @@ public class World {
 
         environment.reassigningStateLocationAndTransPath();
 
+        // Resetting the timer of the world.
+        Globals.WORLD_TIMER = 0;
     }
 
     private boolean isTraceable(int i) {
@@ -221,7 +231,7 @@ public class World {
             //============================//============================  Updating agents statuses
             for (Agent agent : agents) {
                 agent.resetParams();
-                agent.updateStateMap();
+                //agent.updateTravelHistory();
                 agent.updateWatchList();
                 agent.updateProfile();
             }
@@ -242,7 +252,7 @@ public class World {
                 }
             }
 
-            System.out.println(statistic.toString());
+            // System.out.println(statistic.toString());
             Globals.statGenerator.addStat(statistic);
 
             if (showMainWindow) {
@@ -257,6 +267,25 @@ public class World {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        for (Agent agent : agents) {
+            TrustHistory[] histories = agent.getTrust().getHistories();
+            String hiss = "";
+            System.out.println(agent.getId() + "------------------------------");
+            for (int i = 0; i < histories.length; i++) {
+                TrustHistory history = histories[i];
+                if (history != null) {
+                    hiss += " | " + history.getAgent().getId() + " > " + history.getFinalTrustLevel() + " : ";
+                    for (TrustHistoryItem item : history.getItems()) {
+                        if (item != null) {
+                            hiss += item.getTrustScore() + ", ";
+                        }
+                    }
+                }
+            }
+            System.out.println(hiss);
+
         }
 
         try {

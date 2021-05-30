@@ -18,11 +18,10 @@ public class AgentCapacity {
 
         watchListCapacity = Globals.profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
 
-        concurrentDoingServiceCap = Globals.profiler.getCurrentBunch().getConcurrentDoingServiceCapD().nextValue();
 
 
-        historyCap = Globals.profiler.getCurrentBunch().getHistoryCapD().nextValue();
-        historyServiceRecordCap = Globals.profiler.getCurrentBunch().getHistoryServiceRecordCapD().nextValue();
+        trustHistoryCap = Globals.profiler.getCurrentBunch().getTrustHistoryCapD().nextValue();
+        trustHistoryItemCap = Globals.profiler.getCurrentBunch().getTrustHistoryItemCapD().nextValue();
 
         // capPower is between 0 and 100
         capPower =
@@ -31,12 +30,11 @@ public class AgentCapacity {
         ;
 
         /*System.out.println(
-                " | watchRadius: " + watchRadius
+                " | watchDepth: " + watchDepth
                         + " | watchListCap: " + watchListCapacity
                         + " | travelHistory: " + travelHistory
-                        + " | concurrentDoSerCap: " + concurrentDoingServiceCap
-                        + " | historyCap: " + historyCap
-                        + " | historySerRecCap: " + historyServiceRecordCap
+                        + " | trustHistoryCap: " + trustHistoryCap
+                        + " | historySerRecCap: " + trustHistoryItemCap
         );*/
 
     }
@@ -44,17 +42,15 @@ public class AgentCapacity {
     private Agent agent;
 
     @Expose
-    private int historyServiceRecordCap;    //size of services in each history
+    private int trustHistoryItemCap;        //size of trust items in each trust history. trust items is score of trust for one agent (helper)
     @Expose
-    private int historyCap;
+    private int trustHistoryCap;
     @Expose
     private int watchListCapacity;
     @Expose
     private int watchDepth;                              // depth of watch in neighbor states
     @Expose
     private int travelHistoryCap;                        // size of travel history
-    @Expose
-    private int concurrentDoingServiceCap;             // number of concurrent services that can do for requester of a service
     @Expose
     private int capPower;                            // it will be calculated by other params
 
@@ -77,35 +73,31 @@ public class AgentCapacity {
     @Override
     public String toString() {
         return "\n\tAgentCapacity{" +
-                "\n\t\tagentVisitCap=" + historyServiceRecordCap +
-                ",\n\t\tserviceRecordCap=" + historyCap +
+                "\n\t\ttrustHistoryItemCap=" + trustHistoryItemCap +
+                ",\n\t\ttrustHistoryCap=" + trustHistoryCap +
                 ",\n\t\twatchListCapacity=" + watchListCapacity +
                 ",\n\t\twatchDepth=" + watchDepth +
-                ",\n\t\ttravelHistory=" + travelHistoryCap +
-                ",\n\t\tconcurrentDoingServiceCap=" + concurrentDoingServiceCap +
+                ",\n\t\ttravelHistoryCap=" + travelHistoryCap +
                 ",\n\t\tcapPower=" + capPower +
                 '}';
     }
 
-    public int getConcurrentDoingServiceCap() {
-        return concurrentDoingServiceCap;
+
+    public int getTrustHistoryItemCap() {
+        return trustHistoryItemCap;
     }
 
-    public int getHistoryServiceRecordCap() {
-        return historyServiceRecordCap;
-    }
-
-    public void setHistoryServiceRecordCap(int historyServiceRecordCap) {
-        this.historyServiceRecordCap = historyServiceRecordCap;
+    public void setTrustHistoryItemCap(int trustHistoryItemCap) {
+        this.trustHistoryItemCap = trustHistoryItemCap;
     }
 
 
-    public int getHistoryCap() {
-        return historyCap;
+    public int getTrustHistoryCap() {
+        return trustHistoryCap;
     }
 
-    public void setHistoryCap(int historyCap) {
-        this.historyCap = historyCap;
+    public void setTrustHistoryCap(int trustHistoryCap) {
+        this.trustHistoryCap = trustHistoryCap;
     }
 
 
@@ -121,7 +113,4 @@ public class AgentCapacity {
         this.travelHistoryCap = travelHistoryCap;
     }
 
-    public void setConcurrentDoingServiceCap(int concurrentDoingServiceCap) {
-        this.concurrentDoingServiceCap = concurrentDoingServiceCap;
-    }
 }

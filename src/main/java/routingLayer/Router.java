@@ -6,6 +6,7 @@ import stateLayer.TravelHistory;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
+import systemLayer.World;
 import utils.Globals;
 import utils.WorldStatistics;
 
@@ -15,8 +16,10 @@ import java.util.List;
 public class Router {
 
     private WorldStatistics statistics;
+    private World world;
 
-    public Router() {
+    public Router(World world) {
+        this.world = world;
     }
 
     public void setStatistics(WorldStatistics statistics) {
@@ -71,7 +74,13 @@ public class Router {
 
         // If there is not any states in the agent history, the nextSteps of agent have to be updated.
         if (agent.getNextSteps().isEmpty()) {
+            //============================//============================//============================
+            //============================//============================
+            //============================
             updateNextSteps(agent, targetState);
+            //============================
+            //============================//============================
+            //============================//============================//============================
             statistics.addUpdatedNextStepsOfAgents();
         }
 
@@ -86,15 +95,19 @@ public class Router {
             return stateX;
         }
 
-        // Traveling to one neighbor according to the first entity of the nextSteps of the agent.
-//      StateX stateX = gotoNeighborState(nextSteps.get(0));
+        // Getting first entity of the nextSteps of the agent.
         StateX nextState = agent.getNextSteps().get(0);
 
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
             statistics.addFailedTravelToGoToNeighbor();
             System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + agent.getId() + " state: " + state.getId() + "  nextState: " + nextState.getId());
+
+            // Clearing agent next steps for regenerating next steps, in order to resolve problem.
+            agent.clearNextSteps();
+
             return null;
         }
+
         int currentAgentStateId = agent.getState().getId();
         StateX finalState = gotoNeighborState(agent, nextState);
         // Successfully traveling to neighbor.
@@ -104,10 +117,12 @@ public class Router {
             //
             if (finalState.isIsPitfall()) {
                 statistics.addInPitfallInThisTime();
+                Globals.trustManager.reduceTrustForPitfall(agent);
             }
             //
             else if (finalState.getId() == agent.getTargetState().getId()) {
                 statistics.addInTargetAgentsInThisTime();
+                Globals.trustManager.increaseTrustForSuccessTarget(agent);
             }
 
         }
@@ -158,12 +173,14 @@ public class Router {
         // Asking from watched list that is sorted according to trust level of watched agents.
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
         //todo: set the threshold of watchedAgents (5) as a configurable variable
-        for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize && i < 5; i++) {
+        for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent wa = watchedAgents.get(i);
             routingHelp = doYouKnowWhereIs(wa.getAgent(), goalState);
 
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
+                routingHelp.setTrustLevel(Globals.trustManager.getTrustLevel(agent,wa.getAgent()));
+                //============================//============================
                 routingHelps.add(routingHelp);
             }
         }
@@ -173,7 +190,26 @@ public class Router {
             return;
         }
 
-        // Sorting routerHelpers based on shortest path.
+        //todo: Implementing trust mechanism
+
+
+        // Sorting routerHelpers based on bigger trust level.
+        routingHelps.sort((c1, c2) -> {
+            if (c1.getTrustLevel() > c2.getTrustLevel()) {
+                return -1;
+            } else if (c1.getTrustLevel() < c2.getTrustLevel()) {
+                return 1;
+            } else{
+                if (c1.getFinalStepFromAgentToTarget() < c2.getFinalStepFromAgentToTarget()) {
+                    return -1;
+                } else if (c1.getFinalStepFromAgentToTarget() > c2.getFinalStepFromAgentToTarget()) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
+
+/*        // Sorting routerHelpers based on shortest path.
         routingHelps.sort((c1, c2) -> {
             if (c1.getFinalStepFromAgentToTarget() < c2.getFinalStepFromAgentToTarget()) {
                 return -1;
@@ -181,7 +217,7 @@ public class Router {
                 return 1;
             }
             return 0;
-        });
+        });*/
 
         boolean isSuccessFull = false;
         for (RoutingHelp help : routingHelps) {
@@ -191,6 +227,7 @@ public class Router {
             for (WatchedAgent wa : watchedAgents) {
                 if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
                     agent.getNextSteps().addAll(wa.getPath());
+                    agent.setHelper(help.getHelperAgent());
                     break;
                 }
             }
@@ -199,6 +236,7 @@ public class Router {
             // This path moves only one step towards the target.
             if (help.getNextState() != null) {
                 agent.getNextSteps().add(help.getNextState());
+                agent.setHelper(help.getHelperAgent());
             }
 
             // Check if this route has been taken before or not?
@@ -234,6 +272,7 @@ public class Router {
             for (WatchedAgent wa : watchedAgents) {
                 if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
                     agent.getNextSteps().addAll(wa.getPath());
+                    agent.setHelper(help.getHelperAgent());
                     break;
                 }
             }
@@ -242,10 +281,9 @@ public class Router {
             // This path moves only one step towards the target.
             if (help.getNextState() != null) {
                 agent.getNextSteps().add(help.getNextState());
+                agent.setHelper(help.getHelperAgent());
             }
         }
-
-
     }
 
     /**
@@ -310,6 +348,7 @@ public class Router {
                     targetTrans.setDrawIsActive(true);
                 }
                 agent.setState(nextState);
+                agent.updateTravelHistory();
                 return nextState;
             } else {
                 // If it can not able to leave current state, will leave new state.
@@ -340,14 +379,35 @@ public class Router {
     }
 
     /**
-     * &
-     *
+     * Responding according to behavioral profile
      * @param agent     Responder agent
      * @param goalState The goal state
      * @return The neighbor state that routes to goalState
      */
     private RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
 
+        if (agent.getBehavior().getIsHonest()) {
+            return responseAsHonest(agent, goalState);
+        }
+        return responseAsDishonest(agent, goalState);
+
+    }
+
+    private RoutingHelp responseAsDishonest(Agent agent, StateX goalState) {
+
+        StateX pitState = null;
+        for (StateX state : world.getEnvironment().getStates()) {
+            if (state.isIsPitfall()) {
+                pitState = state;
+            }
+        }
+        if (pitState == null) {
+            pitState = world.getEnvironment().getRandomState();
+        }
+        return responseAsHonest(agent, pitState);
+    }
+
+    private RoutingHelp responseAsHonest(Agent agent, StateX goalState) {
         //============================
         ArrayList<TravelHistory> travelHistories = agent.getTravelHistories();
         //============================
@@ -375,7 +435,6 @@ public class Router {
                 return routingHelp;
             }
         }
-
         return null;
     }
 

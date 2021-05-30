@@ -9,6 +9,7 @@ public class RoutingHelp {
     private int stepFromHelperToTarget;
     private int stepFromAgentToHelper;
     private StateX nextState;
+    private float trustLevel;
 
     //============================//============================
 
@@ -46,5 +47,13 @@ public class RoutingHelp {
 
     public void setStepFromAgentToHelper(int stepFromAgentToHelper) {
         this.stepFromAgentToHelper = stepFromAgentToHelper;
+    }
+
+    public float getTrustLevel() {
+        return trustLevel;
+    }
+
+    public void setTrustLevel(float trustLevel) {
+        this.trustLevel = trustLevel;
     }
 }

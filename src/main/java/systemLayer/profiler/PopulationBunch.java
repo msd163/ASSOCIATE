@@ -2,33 +2,30 @@ package systemLayer.profiler;
 
 public class PopulationBunch {
     private String bunchCount;
-    private String historyServiceRecordCap;
-    private String historyCap;
+    private String trustHistoryItemCap;
+    private String trustHistoryCap;
     private String watchListCapacity;
-    private String watchRadius;
+    private String watchDepth;
     private String travelHistory;
-    private String concurrentDoingServiceCap;
 
     //============================
     private DefParameter bunchCountD;
-    private DefParameter historyServiceRecordCapD;
-    private DefParameter historyCapD;
+    private DefParameter trustHistoryItemCapD;
+    private DefParameter trustHistoryCapD;
     private DefParameter watchListCapacityD;
-    private DefParameter watchRadiusD;
+    private DefParameter watchDepthD;
     private DefParameter travelHistoryCapD;
-    private DefParameter concurrentDoingServiceCapD;
 
 
     //============================//============================
 
     public void initDefParams() {
         bunchCountD = new DefParameter(bunchCount);
-        historyServiceRecordCapD = new DefParameter(historyServiceRecordCap);
-        historyCapD = new DefParameter(historyCap);
+        trustHistoryItemCapD = new DefParameter(trustHistoryItemCap);
+        trustHistoryCapD = new DefParameter(trustHistoryCap);
         watchListCapacityD = new DefParameter(watchListCapacity);
-        watchRadiusD = new DefParameter(watchRadius);
+        watchDepthD = new DefParameter(watchDepth);
         travelHistoryCapD = new DefParameter(travelHistory);
-        concurrentDoingServiceCapD = new DefParameter(concurrentDoingServiceCap);
     }
 
     //============================//============================
@@ -43,12 +40,12 @@ public class PopulationBunch {
         return bunchCountD;
     }
 
-    public DefParameter getHistoryServiceRecordCapD() {
-        return historyServiceRecordCapD;
+    public DefParameter getTrustHistoryItemCapD() {
+        return trustHistoryItemCapD;
     }
 
-    public DefParameter getHistoryCapD() {
-        return historyCapD;
+    public DefParameter getTrustHistoryCapD() {
+        return trustHistoryCapD;
     }
 
     public DefParameter getWatchListCapacityD() {
@@ -56,16 +53,13 @@ public class PopulationBunch {
     }
 
     public DefParameter getWatchRadiusD() {
-        return watchRadiusD;
+        return watchDepthD;
     }
 
     public DefParameter getTravelHistoryCapD() {
         return travelHistoryCapD;
     }
 
-    public DefParameter getConcurrentDoingServiceCapD() {
-        return concurrentDoingServiceCapD;
-    }
 
     //============================//============================
     public String toString(int tabIndex) {
@@ -81,19 +75,17 @@ public class PopulationBunch {
         tabIndex++;
         return tx + "PopulationBunch{" +
                 ti + "  bunchCount='" + bunchCount + '\'' +
-                ti + ", historyServiceRecordCap='" + historyServiceRecordCap + '\'' +
-                ti + ", historyCap='" + historyCap + '\'' +
+                ti + ", trustHistoryItemCap='" + trustHistoryItemCap + '\'' +
+                ti + ", trustHistoryCap='" + trustHistoryCap + '\'' +
                 ti + ", watchListCapacity='" + watchListCapacity + '\'' +
-                ti + ", watchRadius='" + watchRadius + '\'' +
+                ti + ", watchDepth='" + watchDepth + '\'' +
                 ti + ", travelHistory='" + travelHistory + '\'' +
-                ti + ", concurrentDoingServiceCap='" + concurrentDoingServiceCap + '\'' +
                 ti + ", bunchCountD=" + bunchCountD.toString(tabIndex) +
-                ti + ", historyServiceRecordCapD=" + historyServiceRecordCapD.toString(tabIndex) +
-                ti + ", historyCapD=" + historyCapD.toString(tabIndex) +
+                ti + ", trustHistoryItemCapD=" + trustHistoryItemCapD.toString(tabIndex) +
+                ti + ", trustHistoryCapD=" + trustHistoryCapD.toString(tabIndex) +
                 ti + ", watchListCapacityD=" + watchListCapacityD.toString(tabIndex) +
-                ti + ", watchRadiusD=" + watchRadiusD.toString(tabIndex) +
+                ti + ", watchDepthD=" + watchDepthD.toString(tabIndex) +
                 ti + ", travelHistoryD=" + travelHistoryCapD.toString(tabIndex) +
-                ti + ", concurrentDoingServiceCapD=" + concurrentDoingServiceCapD.toString(tabIndex) +
                 tx + '}';
     }
 
