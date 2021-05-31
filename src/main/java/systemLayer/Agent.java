@@ -167,6 +167,13 @@ public class Agent {
     }
     //============================//============================ Routing
 
+
+    public boolean isInFinalTarget() {
+        return targetStates != null
+                && targetStates.length - 1 == currentTargetStateIndex
+                && state.getId() == getCurrentTarget().getId();
+    }
+
     public void clearNextSteps() {
         nextSteps.clear();
         helper = null;

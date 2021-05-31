@@ -1,5 +1,5 @@
 {
-  "agentsCount": "200",
+  "agentsCount": "50",
   "simulationRound": "1",
   "sleepInTarget": "2",
   "bunches": [
@@ -7,10 +7,10 @@
       "bunchCount": "%50@1000",
       "targetCount": "10",
       "watchDepth": "#0..10",
-      "watchListCapacity": "?125",
-      "travelHistory": "#10..150",
-      "trustHistoryCap": "#10..100",
-      "trustHistoryItemCap": "15"
+      "watchListCapacity": "#200..500",
+      "travelHistory": "#100..150",
+      "trustHistoryCap": "#100..150",
+      "trustHistoryItemCap": "50"
     },
     {
       "bunchCount": "%50@1000",

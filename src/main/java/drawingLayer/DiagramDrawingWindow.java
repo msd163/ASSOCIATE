@@ -102,7 +102,7 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
             g.setColor(Color.GREEN);
             g.fillOval(axisX, stat.getInTargetAgentsInThisTime(), 5, 5);
             //============================
-            g.setColor(Color.LIGHT_GRAY);
+            g.setColor(Color.DARK_GRAY);
             g.fillOval(axisX, stat.getSuccessTravelToGoToNeighbor(), 5, 5);
             //============================
             g.setColor(Color.RED);

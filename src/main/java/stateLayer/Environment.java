@@ -143,8 +143,12 @@ public class Environment {
                 // updating targets
                 state.updateTargets(this);
                 if (Config.SIMULATION_MODE == TtSimulationMode.GenerateMode) {
-                    // set state capability
-                    state.setCapacity(getStateCapacityValue());
+                    if (state.isIsPitfall()) {
+                        state.setCapacity(Globals.profiler.getAgentsCount());
+                    } else {
+                        // set state capability
+                        state.setCapacity(getStateCapacityValue());
+                    }
                 }
                 // transaction count
                 transCount += state.getTargets().size();

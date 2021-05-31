@@ -72,6 +72,7 @@ public class EnvGenerator {
                 int stateId = Globals.RANDOM.nextInt(stateCount);
                 if (!environment.getStates()[stateId].isIsPitfall()) {
                     environment.getStates()[stateId].setIsPitfall(true);
+                    environment.getStates()[stateId].setCapacity(Globals.profiler.getAgentsCount());
                     i++;
                 }
             }
