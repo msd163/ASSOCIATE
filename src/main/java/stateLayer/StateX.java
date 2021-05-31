@@ -340,7 +340,7 @@ public class StateX {
             }
             WatchedAgent watchedAgent = new WatchedAgent();
             watchedAgent.setAgent(agent);
-           // watchedAgent.setTrust(sourceAgent.getTrust().getTrustScore(agent));
+            // watchedAgent.setTrust(sourceAgent.getTrust().getTrustScore(agent));
 
             // Adding path from the source state (state of the source agent) to this state (The state of visited agent)
             if (depth < maxDepth) {
@@ -403,51 +403,51 @@ public class StateX {
 
     public void getWatchListOfStates(int depth, List<WatchedState> watchedStates, WatchedState currentWatchState) {
 
-        if (depth < 0) {
+        if (depth <= 0) {
             return;
         }
 
-        if (depth > 0) {
-
-            boolean isAdded;
-            // First adding children of current state, BFS navigation
-            for (StateX target : targets) {
-                isAdded = false;
-                for (WatchedState watchedState : watchedStates) {
-                    if (watchedState.getStateX().getId() == target.getId()) {
-                        isAdded = true;
-                        break;
-                    }
+        boolean isAdded;
+        // First adding children of current state, BFS navigation
+        for (StateX target : targets) {
+            isAdded = false;
+            for (WatchedState watchedState : watchedStates) {
+                if (watchedState.getStateX().getId() == target.getId()) {
+                    isAdded = true;
+                    break;
                 }
-                if (isAdded) {
-                    continue;
-                }
-
-                WatchedState ws = new WatchedState();
-                ws.setStateX(target);
-                if (currentWatchState != null) {
-                    ws.setPath(currentWatchState.getPath());
-                }
-                ws.addPath(target);
-                watchedStates.add(ws);
-
+            }
+            if (isAdded) {
+                continue;
             }
 
-            for (StateX target : targets) {
-                isAdded = false;
-                for (WatchedState watchedState : watchedStates) {
-                    if (watchedState.getStateX().getId() == target.getId()) {
-                        isAdded = true;
-                        break;
-                    }
-                }
-                if (isAdded) {
-                    continue;
-                }
-                target.getWatchListOfStates(depth - 1, watchedStates, null);
+            WatchedState ws = new WatchedState();
+            ws.setStateX(target);
+            if (currentWatchState != null) {
+                ws.setPath(currentWatchState.getPath());
             }
+            ws.addPath(target);
+            watchedStates.add(ws);
+
         }
 
+        if (depth > 1) {
+            for (StateX target : targets) {
+//                isAdded = false;
+                WatchedState currentWs = null;
+                for (WatchedState watchedState : watchedStates) {
+                    if (watchedState.getStateX().getId() == target.getId()) {
+//                        isAdded = true;
+                        currentWs = watchedState;
+                        break;
+                    }
+                }
+         /*   if (isAdded) {
+                continue;
+            }*/
+                target.getWatchListOfStates(depth - 1, watchedStates, currentWs);
+            }
+        }
     }
 
     public ArrayList<StateX> getTargets() {

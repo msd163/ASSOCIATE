@@ -58,8 +58,10 @@ public class Agent {
     @Expose
     private AgentCapacity capacity;
 
+    @Expose
     private AgentTrust trust;
 
+    @Expose
     private AgentBehavior behavior;
 
     // agents that are watched by this agent
@@ -75,7 +77,10 @@ public class Agent {
 
     public void init() {
         capacity = new AgentCapacity(this);
+        trust = new AgentTrust(capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap());
+
         int targetCount = Globals.profiler.getCurrentBunch().getTargetCountD().nextValue();
+        behavior = new AgentBehavior();
 
         targetStateIds = new int[targetCount];
         targetStates = new StateX[targetCount];
@@ -85,9 +90,7 @@ public class Agent {
     }
 
     public void initVars() {
-
-        trust = new AgentTrust(this, capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap());
-        behavior = new AgentBehavior();
+        trust.init(this);
         watchedAgents = new ArrayList<>();
         watchedStates = new ArrayList<>();
 

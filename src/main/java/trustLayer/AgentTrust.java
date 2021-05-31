@@ -1,5 +1,6 @@
 package trustLayer;
 
+import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 
 import java.util.ArrayList;
@@ -7,15 +8,18 @@ import java.util.Arrays;
 
 public class AgentTrust {
 
-    public AgentTrust(Agent parentAgent, int trustHistoryCap, int historyItemCap) {
+    public AgentTrust(int trustHistoryCap, int historyItemCap) {
+        this.historyCap = trustHistoryCap;
+        this.historyItemCap = historyItemCap;
+    }
+
+    public void init(Agent parentAgent) {
 
         this.agent = parentAgent;
 
         historyIndex = -1;
         historySize = 0;
 
-        this.historyCap = trustHistoryCap;
-        this.historyItemCap = historyItemCap;
 
         histories = new TrustHistory[historyCap];
         for (int i = 0; i < historyCap; i++) {
@@ -28,16 +32,21 @@ public class AgentTrust {
         }
     }
 
-    private final Agent agent;
+
+    private Agent agent;
 
     // all services received by this agent across world run
     private TrustHistory[] histories;
     // An array of history indic that are sorted based on trustScore
     private int[] historiesSortedIndex;
+
+    @Expose
     private int historyCap;     // maximum size of history
+    @Expose
+    private int historyItemCap; // max size of services in each history
+
     private int historyIndex;   // current index of history that will be fill
     private int historySize;    // current capacity of history
-    private int historyItemCap; // max size of services in each history
 
     //============================//============================//============================
 
@@ -131,7 +140,8 @@ public class AgentTrust {
 
 
     protected AgentTrust clone() {
-        AgentTrust trust = new AgentTrust(agent, historyCap, historyItemCap);
+        AgentTrust trust = new AgentTrust(historyCap, historyItemCap);
+        trust.init(agent);
         trust.histories = this.histories;
         trust.historyIndex = this.historyIndex;
         trust.historyItemCap = this.historyItemCap;

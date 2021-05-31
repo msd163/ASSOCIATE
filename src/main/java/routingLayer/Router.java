@@ -51,7 +51,7 @@ public class Router {
             statistics.addAllInTargetAgents();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
-            if(!agent.isInFinalTarget()) {
+            if (!agent.isInFinalTarget()) {
                 if (agent.getSpentTimeAtTheTarget() > 5) {
                     System.out.println("---> Assigning new target to agent (" + agent.getId() + "). current target: " + agent.getCurrentTarget().getId());
                     agent.assignNextTargetState();
@@ -188,7 +188,7 @@ public class Router {
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
                 //============================//============================ _Trust
-                 routingHelp.setTrustLevel(Globals.trustManager.getTrustLevel(agent, wa.getAgent()));
+                routingHelp.setTrustLevel(Globals.trustManager.getTrustLevel(agent, wa.getAgent()));
                 //============================//============================
                 routingHelps.add(routingHelp);
             }
@@ -248,6 +248,9 @@ public class Router {
                 agent.setHelper(help.getHelperAgent());
             }
 
+
+            //todo: have to be redesigned
+
             // Check if this route has been taken before or not?
             // If the suggested path (current help) contains steps that have already been taken by the agent, that path will be skipped.
             boolean isVisited = false;
@@ -262,6 +265,9 @@ public class Router {
                         isVisited = true;
                         break;
                     }
+                }
+                if (isVisited) {
+                    break;
                 }
 
             }
@@ -439,8 +445,19 @@ public class Router {
                 routingHelp.setHelperAgent(agent);
                 routingHelp.setStepFromHelperToTarget(lastIndex - i + stepTo);
 
+                // If the goal state is one of inner visited agents of their targets
                 if (i < lastIndex /*&& lastIndex > 0*/) {
                     routingHelp.setNextState(travelHistories.get(lastIndex - 1).getStateX());
+                }
+                // If the goal state is one of targets of current agent
+                else if (i == lastIndex) {
+                    ArrayList<StateX> targets = travelHistories.get(i).getStateX().getTargets();
+                    for (StateX t : targets) {
+                        if (t.getId() == goalState.getId()) {
+                            routingHelp.setNextState(t);
+                            break;
+                        }
+                    }
                 }
                 return routingHelp;
             }

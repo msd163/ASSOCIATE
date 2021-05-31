@@ -1,10 +1,12 @@
 package systemLayer;
 
 import _type.TtBehaviorStrategy;
+import com.google.gson.annotations.Expose;
 import utils.Config;
 import utils.Globals;
 
 public class AgentBehavior {
+
 
     public AgentBehavior() {
         switch (Config.TRUST_BEHAVIOR_STRATEGY) {
@@ -22,7 +24,9 @@ public class AgentBehavior {
         }
     }
 
+    @Expose
     private float honestDegree;
+    @Expose
     private boolean honestState;
 
     //============================//============================//============================
