@@ -163,7 +163,7 @@ public class Router {
 
         RoutingHelp routingHelp;
 
-        // If the agent can watch the goalState in its target.
+        //============================ (1) If the agent can watch the goalState in its target.
         if (watchedStates != null) {
             for (WatchedState ws : watchedStates) {
                 if (ws.getStateX().getId() == goalState.getId()) {
@@ -218,18 +218,33 @@ public class Router {
             }
         });
 
-/*        // Sorting routerHelpers based on shortest path.
-        routingHelps.sort((c1, c2) -> {
+        int srIndex = 0;
+        for (int routingHelpsSize = routingHelps.size(); srIndex < routingHelpsSize && srIndex < 6; srIndex++) {
+            RoutingHelp help = routingHelps.get(srIndex);
+            if (help.getTrustLevel() < 0) {
+                break;
+            }
+        }
+
+        if (srIndex == 0) {
+            System.out.println("!->> ERROR: can not found trustee in routerHelp.");
+            return;
+        }
+
+        List<RoutingHelp> sortedRoutingHelps = routingHelps.subList(0, srIndex);
+
+        // Sorting routerHelpers based on shortest path.
+        sortedRoutingHelps.sort((c1, c2) -> {
             if (c1.getFinalStepFromAgentToTarget() < c2.getFinalStepFromAgentToTarget()) {
                 return -1;
             } else if (c1.getFinalStepFromAgentToTarget() > c2.getFinalStepFromAgentToTarget()) {
                 return 1;
             }
             return 0;
-        });*/
+        });
 
-        boolean isSuccessFull = false;
-        for (RoutingHelp help : routingHelps) {
+       /* boolean isSuccessFull = false;
+        for (RoutingHelp help : sortedRoutingHelps) {
             agent.clearNextSteps();
 
             // Adding path from agent state to helper (agent) state
@@ -249,11 +264,12 @@ public class Router {
             }
 
 
+            break;
             //todo: have to be redesigned
 
             // Check if this route has been taken before or not?
             // If the suggested path (current help) contains steps that have already been taken by the agent, that path will be skipped.
-            boolean isVisited = false;
+            // boolean isVisited = false;
             for (int i = 0, nextStepsSize = agent.getNextSteps().size(); i < nextStepsSize; i++) {
                 StateX nextState = agent.getNextSteps().get(i);
 
@@ -276,29 +292,29 @@ public class Router {
                 isSuccessFull = true;
                 break;
             }
-        }
+        }*/
 
         // If all of routerHelps contain a loop, selecting the first one as a default
-        if (!isSuccessFull) {
+//        if (!isSuccessFull) {
 
-            agent.clearNextSteps();
-            RoutingHelp help = routingHelps.get(0);
-            // Adding path from agent state to helper (agent) state
-            for (WatchedAgent wa : watchedAgents) {
-                if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
-                    agent.getNextSteps().addAll(wa.getPath());
-                    agent.setHelper(help.getHelperAgent());
-                    break;
-                }
-            }
-
-            // Adding the output path to target that reported by helper.
-            // This path moves only one step towards the target.
-            if (help.getNextState() != null) {
-                agent.getNextSteps().add(help.getNextState());
+        agent.clearNextSteps();
+        RoutingHelp help = sortedRoutingHelps.get(0);
+        // Adding path from agent state to helper (agent) state
+        for (WatchedAgent wa : watchedAgents) {
+            if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
+                agent.getNextSteps().addAll(wa.getPath());
                 agent.setHelper(help.getHelperAgent());
+                break;
             }
         }
+
+        // Adding the output path to target that reported by helper.
+        // This path moves only one step towards the target.
+        if (help.getNextState() != null) {
+            agent.getNextSteps().add(help.getNextState());
+            agent.setHelper(help.getHelperAgent());
+        }
+//        }
     }
 
     /**
