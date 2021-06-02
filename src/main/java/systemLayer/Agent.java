@@ -245,7 +245,6 @@ public class Agent {
                 parentPath
         );
         //state.getWatchListOfStates(capacity.getWatchDepth(), watchedStates, null);
-        System.out.println();
    /*     // Sorting watched agents according trust level of this agent to them.
         watchedAgents.sort((WatchedAgent w1, WatchedAgent w2) -> {
             float t1 = w1.getTrust();

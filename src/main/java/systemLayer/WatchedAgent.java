@@ -33,9 +33,9 @@ public class WatchedAgent {
         return path;
     }
 
-    public void setPath(ArrayList<StateX> path) {
+ /*   public void setPath(ArrayList<StateX> path) {
         this.path = path;
-    }
+    }*/
 
     public void addPath(StateX state) {
         path.add(state);
