@@ -232,12 +232,20 @@ public class Agent {
      */
     public void updateWatchList() {
         watchedAgents.clear();
-        ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
-        ArrayList<StateX> parentPath = new ArrayList<>();
-        watchedAgents = state.getWatchListOfAgents(capacity.getWatchDepth(), capacity.getWatchDepth(), capacity.getWatchListCapacity(), this, visitedStates, parentPath);
         watchedStates.clear();
-        state.getWatchListOfStates(capacity.getWatchDepth(), watchedStates, null);
-
+       // ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
+        ArrayList<StateX> parentPath = new ArrayList<>();
+        state.getWatchListOfAgents(
+                watchedAgents,
+                watchedStates,
+                capacity.getWatchDepth(),
+                capacity.getWatchDepth(),
+                capacity.getWatchListCapacity(),
+                this,
+                parentPath
+        );
+        //state.getWatchListOfStates(capacity.getWatchDepth(), watchedStates, null);
+        System.out.println();
    /*     // Sorting watched agents according trust level of this agent to them.
         watchedAgents.sort((WatchedAgent w1, WatchedAgent w2) -> {
             float t1 = w1.getTrust();

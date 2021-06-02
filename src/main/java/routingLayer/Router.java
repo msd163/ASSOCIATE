@@ -51,14 +51,14 @@ public class Router {
             statistics.addAllInTargetAgents();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
-            if (!agent.isInFinalTarget()) {
+            /*if (!agent.isInFinalTarget()) {
                 if (agent.getSpentTimeAtTheTarget() > 5) {
                     System.out.println("---> Assigning new target to agent (" + agent.getId() + "). current target: " + agent.getCurrentTarget().getId());
                     agent.assignNextTargetState();
                     System.out.println(">---             > next target: " + agent.getCurrentTarget().getId());
                 }
-                return state;
-            }
+            }*/
+            return state;
         }
 
         if (state.isIsPitfall()) {
