@@ -14,6 +14,7 @@ import utils.WorldStatistics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class World {
 
@@ -147,7 +148,7 @@ public class World {
         }
         //============================  FullEnv
         else {
-            StateX[] states = environment.getStates();
+            ArrayList<StateX> states = environment.getStates();
 
             int i = 0;
             for (StateX state : states) {

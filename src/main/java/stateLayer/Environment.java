@@ -52,7 +52,7 @@ public class Environment {
     // it created for checking if agents count that set for world is not bigger that maximum capability of the environment.
     private int maximumAgentCapability;
     @Expose
-    private StateX[] states;
+    private ArrayList<StateX> states;
     private World world;
     private TransitionX[] transitions;
 
@@ -132,7 +132,7 @@ public class Environment {
 
         this.world = world;
 
-        stateCount = states == null ? 0 : states.length;
+        stateCount = states == null ? 0 : states.size();
 
         if (stateCount > 0) {
 
@@ -194,8 +194,8 @@ public class Environment {
         );
         // space size between states
         int radius = getWorld().getAgentsCount() * 2;
-        for (int i = 0, statesLength = states.length; i < statesLength; i++) {
-            assignPoint(states[i], base, i, statesLength, radius);
+        for (int i = 0, statesLength = states.size(); i < statesLength; i++) {
+            assignPoint(states.get(i), base, i, statesLength, radius);
         }
 
         //-- updating transaction path
@@ -231,15 +231,15 @@ public class Environment {
     }
 
     public StateX getState(int stateId) {
-        return states[stateId];
+        return states.get(stateId);
     }
 
 
-    public StateX[] getStates() {
+    public ArrayList<StateX> getStates() {
         return states;
     }
 
-    public void setStates(StateX[] states) {
+    public void setStates(ArrayList<StateX> states) {
         this.states = states;
     }
 
@@ -279,7 +279,7 @@ public class Environment {
 
         int i = Globals.RANDOM.nextInt(stateCount);
 
-        return states[i];
+        return states.get(i);
     }
 
     public World getWorld() {

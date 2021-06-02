@@ -84,8 +84,8 @@ public class StateX {
      * @param environment
      */
     public void updateTargets(Environment environment) {
-        StateX[] stateTrans = environment.getStates();
-        targets = new ArrayList<StateX>();
+        ArrayList<StateX> stateTrans = environment.getStates();
+        targets = new ArrayList<>();
 
         if (targetIds != null && stateTrans != null) {
             boolean isAdded;
