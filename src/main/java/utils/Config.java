@@ -9,15 +9,15 @@ public class Config {
     public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.SimulateMode;
 
     public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().envData();
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().envData(2);
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
+    public static int WORLD_LIFE_TIME = 10000;                        // time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
 
-    public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.OnlyHonest;
-    public static final int TRUST_HONEST_DISCRETE_PERCENT = 50;   // if TtHonestStrategy.Discrete selected, this defines the percentage of honest agents
+    public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
+    public static final int TRUST_HONEST_DISCRETE_PERCENT = 60;   // if TtHonestStrategy.Discrete selected, this defines the percentage of honest agents
 
     public static final TtTrustReplaceHistoryMethod TRUST_REPLACE_HISTORY_METHOD = TtTrustReplaceHistoryMethod.Sequential_Circular;
 

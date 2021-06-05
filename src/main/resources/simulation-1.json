@@ -1,20 +1,20 @@
 {
-  "agentsCount": "100",
+  "agentsCount": "400",
   "simulationRound": "1",
   "sleepInTarget": "2",
   "bunches": [
     {
-      "bunchCount": "%50@1000",
-      "targetCount": "10",
+      "bunchCount": "%50@400",
+      "targetCount": "100",
       "watchDepth": "#0..10",
       "watchListCapacity": "#200..500",
-      "travelHistory": "#100..150",
-      "trustHistoryCap": "#100..150",
-      "trustHistoryItemCap": "50"
+      "travelHistory": "#200..500",
+      "trustHistoryCap": "#500..1000",
+      "trustHistoryItemCap": "250"
     },
     {
-      "bunchCount": "%50@1000",
-      "targetCount": "10",
+      "bunchCount": "%50@400",
+      "targetCount": "100",
       "watchDepth": "#10..60",
       "watchListCapacity": "?125",
       "travelHistory": "#60..300",

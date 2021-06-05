@@ -128,8 +128,10 @@ public class Agent {
             currentTargetStateIndex++;
             spentTimeAtTheTarget = 0;
             return true;
+        }else{
+            currentTargetStateIndex=0;
+            return true;
         }
-        return false;
     }
 
     /**
@@ -184,6 +186,10 @@ public class Agent {
 
     public StateX getCurrentTarget() {
         return targetStates[currentTargetStateIndex];
+    }
+
+    public int getCurrentTargetStateIndex(){
+        return currentTargetStateIndex;
     }
 
     public int getTargetCounts() {

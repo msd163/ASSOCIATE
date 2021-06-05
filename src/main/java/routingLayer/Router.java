@@ -52,7 +52,7 @@ public class Router {
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
             if (!agent.isInFinalTarget()) {
-                if (agent.getSpentTimeAtTheTarget() > 5) {
+                if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
                     System.out.println("---> Assigning new target to agent (" + agent.getId() + "). current target: " + agent.getCurrentTarget().getId());
                     agent.assignNextTargetState();
                     System.out.println(">---             > next target: " + agent.getCurrentTarget().getId());

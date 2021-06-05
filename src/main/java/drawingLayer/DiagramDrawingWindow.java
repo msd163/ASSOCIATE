@@ -74,11 +74,29 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
         //============================//============================ Translate for panning and scaling
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-        g.drawString("mouse: " + mousePosition.x + " , " + mousePosition.y, 100, 60);
+      /*  g.drawString("mouse: " + mousePosition.x + " , " + mousePosition.y, 100, 60);
         g.drawString("pn: " + pnOffset.x + " , " + pnOffset.y, 100, 100);
         g.drawString("sc: " + scale, 100, 140);
-        g.drawString("scoff: " + scaleOffset.x + " , " + scaleOffset.y, 100, 180);
+        g.drawString("scoff: " + scaleOffset.x + " , " + scaleOffset.y, 100, 180);*/
 
+        g.translate(0, 200);
+        g.drawString("World Time                : " + Globals.WORLD_TIMER, 100, 50);
+        g.drawString("Episode                    : " + Globals.EPISODE, 100, 100);
+
+        g.setColor(Color.WHITE);
+        g.drawString("Agents In Targets ITT :   " + world.getStatistics()[Globals.WORLD_TIMER].getInTargetAgentsInThisTime(), 100, 200);
+        g.setColor(Color.YELLOW);
+        g.drawString("Success Travel ITT    :   " + world.getStatistics()[Globals.WORLD_TIMER].getSuccessTravelToGoToNeighbor(), 100, 250);
+        g.setColor(Color.GREEN);
+        g.drawString("Agents In Targets      :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllInTargetAgents(), 100, 350);
+        g.setColor(Color.RED);
+        g.drawString("Agents In Pitfall     :   " + world.getStatistics()[Globals.WORLD_TIMER].getAgentsInPitfall(), 100, 400);
+        g.setColor(Color.DARK_GRAY);
+        g.drawString("Random Travel         :   " + world.getStatistics()[Globals.WORLD_TIMER].getRandomTravelToNeighbors(), 100, 450);
+
+        g.translate(0, -200);
+
+        //============================//============================//============================
 
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
@@ -96,21 +114,23 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
             axisX += 5;
             //============================ Bound Rectangle
             //g.drawRect(0, 0, world.getWidth(), world.getHeight());
-            g.setColor(Color.WHITE);
+            g.setColor(Color.GREEN);
             g.fillOval(axisX, stat.getAllInTargetAgents(), 5, 5);
             //============================
-            g.setColor(Color.GREEN);
+            g.setColor(Color.WHITE);
             g.fillOval(axisX, stat.getInTargetAgentsInThisTime(), 5, 5);
             //============================
-            g.setColor(Color.DARK_GRAY);
+            g.setColor(Color.yellow);
             g.fillOval(axisX, stat.getSuccessTravelToGoToNeighbor(), 5, 5);
             //============================
             g.setColor(Color.RED);
             g.fillOval(axisX, stat.getAgentsInPitfall(), 5, 5);
             //============================
-            g.setColor(Color.yellow);
+            g.setColor(Color.DARK_GRAY);
             g.fillOval(axisX, stat.getRandomTravelToNeighbors(), 5, 5);
             //============================
+
+
 /*
             g2.setColor(Color.WHITE);
             g2.translate(0, 700);
@@ -167,7 +187,7 @@ public class DiagramDrawingWindow extends JPanel implements MouseMotionListener,
 
         if (sc > scale) {
 //            scaleOffset.y = -(int) ((mousePosition.y - pnOffset.y - scaleOffset.y) * (sc - scale));
-          //  pnOffset.y = -(int) ((mousePosition.y) * (sc - scale));
+            //  pnOffset.y = -(int) ((mousePosition.y) * (sc - scale));
             pnOffset.y -= (e.getY() * (sc - scale));
         } else if (sc < scale) {
             pnOffset.y += (int) (e.getY() * (scale - sc));

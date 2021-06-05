@@ -272,8 +272,40 @@ public class World {
                 }
             }
 
-            // System.out.println(statistic.toString());
             Globals.statGenerator.addStat(statistic);
+
+            //============================//============================//============================ Adding Episode of environment
+            // and exiting the agents from pitfalls
+            if (Globals.WORLD_TIMER % Globals.EPISODE_TIMOUT == 0 || statistic.getAllInTargetAgents() + statistic.getAgentsInPitfall() == agentsCount) {
+
+                Globals.EPISODE++;
+
+                for (StateX state : environment.getStates()) {
+                    if(state.isIsPitfall()){
+                        ArrayList<Agent> stateAgents = state.getAgents();
+                        for (int i = 0; i < stateAgents.size(); i++) {
+                            Agent agent = stateAgents.get(i);
+
+                            StateX randomState;
+                            int tryCount = 0;
+                            boolean isAddedToState;
+                            do {
+                                randomState = environment.getRandomState();
+                                if (randomState.isIsPitfall()) {
+                                    isAddedToState = false;
+                                } else {
+                                    // checking state capability and adding the agent to it.
+                                    isAddedToState = randomState.addAgent(agent);
+                                }
+                                if (isAddedToState) {
+                                    agent.setState(randomState);
+                                    state.getAgents().remove(i);
+                                }
+                            } while (!isAddedToState && tryCount++ < agentsCount);
+                        }
+                    }
+                }
+            }
 
             if (showMainWindow) {
                 mainWindow.repaint();

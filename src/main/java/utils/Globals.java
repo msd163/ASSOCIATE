@@ -16,6 +16,9 @@ public class Globals {
 
     public static int WORLD_TIMER;                                       // The timer of world which is increased by every run of world
 
+    public static int EPISODE = 0;
+    public final static int EPISODE_TIMOUT= 200;
+
     public static int STATE_TILE_WIDTH = 40;
 
     public static StatGenerator statGenerator = new StatGenerator();
