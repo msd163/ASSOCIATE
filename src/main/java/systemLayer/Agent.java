@@ -1,10 +1,13 @@
 package systemLayer;
 
+import _type.TtOutLogMethodSection;
+import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import stateLayer.StateX;
 import stateLayer.TravelHistory;
 import trustLayer.AgentTrust;
 import utils.Globals;
+import utils.OutLog____;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +170,8 @@ public class Agent {
         for (TravelHistory s : travelHistories) {
             sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
         }
-        System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + (getCurrentTarget() == null ? "NULL" : getCurrentTarget().getId()) + " ] #  maps: " + sIds);
+        OutLog____.pl(TtOutLogMethodSection.UpdateTravelHistory, TtOutLogStatus.SUCCESS, sIds,this,state,getCurrentTarget());
+        //System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + (getCurrentTarget() == null ? "NULL" : getCurrentTarget().getId()) + " ] #  maps: " + sIds);
 
     }
     //============================//============================ Routing

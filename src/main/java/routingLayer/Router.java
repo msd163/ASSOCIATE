@@ -1,5 +1,7 @@
 package routingLayer;
 
+import _type.TtOutLogMethodSection;
+import _type.TtOutLogStatus;
 import stateLayer.StateX;
 import stateLayer.TransitionX;
 import stateLayer.TravelHistory;
@@ -8,6 +10,7 @@ import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
 import systemLayer.World;
 import utils.Globals;
+import utils.OutLog____;
 import utils.WorldStatistics;
 
 import java.util.ArrayList;
@@ -53,9 +56,10 @@ public class Router {
             agent.addSpentTimeAtTheTarget();
             if (!agent.isInFinalTarget()) {
                 if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
-                    System.out.println("---> Assigning new target to agent (" + agent.getId() + "). current target: " + agent.getCurrentTarget().getId());
+                    int ct = agent.getCurrentTarget().getId();
                     agent.assignNextTargetState();
-                    System.out.println(">---             > next target: " + agent.getCurrentTarget().getId());
+                    OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
+                            "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
                 }
             }
             return state;
@@ -63,7 +67,13 @@ public class Router {
 
         if (state.isIsPitfall()) {
             statistics.addAgentsInPitfall();
-            System.out.println(">> WARN >> agent " + agent.getId() + " is in pitfall " + state.getId());
+
+            OutLog____.pl(
+                    TtOutLogMethodSection.TakeAStepTowardTheTarget,
+                    TtOutLogStatus.WARN,
+                    "In PITFALL",
+                    agent, state, agent.getCurrentTarget());
+
             return state;
         }
 
@@ -75,7 +85,13 @@ public class Router {
             for (TravelHistory s : agent.getTravelHistories()) {
                 sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
             }
-            System.out.println(">>ERR>> no target for agent:::gotoSate::agentId: " + agent.getId() + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
+            //System.out.println(">>ERR>> no target for agent:::gotoSate::agentId: " + agent.getId() + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
+            OutLog____.pl(
+                    TtOutLogMethodSection.TakeAStepTowardTheTarget,
+                    TtOutLogStatus.ERROR,
+                    "state has no target",
+                    agent, state, agent.getCurrentTarget());
+
 
             return state;
         }
@@ -108,7 +124,12 @@ public class Router {
 
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
             statistics.addFailedTravelToGoToNeighbor();
-            System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + agent.getId() + " state: " + state.getId() + "  nextState: " + nextState.getId());
+            //System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + agent.getId() + " state: " + state.getId() + "  nextState: " + nextState.getId());
+            OutLog____.pl(
+                    TtOutLogMethodSection.TakeAStepTowardTheTarget,
+                    TtOutLogStatus.ERROR,
+                    "Next state is not neighbor",
+                    agent, state, agent.getCurrentTarget());
 
             // Clearing agent next steps for regenerating next steps, in order to resolve problem.
             agent.clearNextSteps();
@@ -168,19 +189,20 @@ public class Router {
             for (WatchedState ws : watchedStates) {
                 if (ws.getStateX().getId() == goalState.getId()) {
                     agent.getNextSteps().addAll(ws.getPath());
-                    System.out.println(">> Self Visiting > Agent: " + agent.getId() + " | State: " + goalState.getId());
+                    OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.SUCCESS, "Self Visiting", agent, agent.getState(), goalState);
+//                    System.out.println("[UNS] (OK) ----------| Self Visiting > Agent: " + agent.getId() + " | State: " + agent.getState().getId() + " | GoalState: " + goalState.getId());
                     return;
                 }
             }
         }
 
         if (watchedAgents == null) {
+            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.FAILED, "watchedAgents is NULL", agent, agent.getState(), goalState);
             return;
         }
 
-        // Asking from watched list that is sorted according to trust level of watched agents.
+        // Asking from watched list and filling routingHelps. all watchedAgents than know where is the goal state
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
-        //todo: set the threshold of watchedAgents (5) as a configurable variable
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent wa = watchedAgents.get(i);
             routingHelp = doYouKnowWhereIs(wa.getAgent(), goalState);
@@ -196,6 +218,7 @@ public class Router {
 
         // If there is no routerHelper...
         if (routingHelps.isEmpty()) {
+            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.FAILED, "There is no routerHelp that know where is the goal state", agent, agent.getState(), goalState);
             return;
         }
 
@@ -227,7 +250,7 @@ public class Router {
         }
 
         if (srIndex == 0) {
-            System.out.println("!->> ERROR: can not found trustee in routerHelp.");
+            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.ERROR, "can not found trustee in routerHelp", agent, agent.getState(), goalState);
             return;
         }
 
@@ -242,60 +265,6 @@ public class Router {
             }
             return 0;
         });
-
-       /* boolean isSuccessFull = false;
-        for (RoutingHelp help : sortedRoutingHelps) {
-            agent.clearNextSteps();
-
-            // Adding path from agent state to helper (agent) state
-            for (WatchedAgent wa : watchedAgents) {
-                if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
-                    agent.getNextSteps().addAll(wa.getPath());
-                    agent.setHelper(help.getHelperAgent());
-                    break;
-                }
-            }
-
-            // Adding the output path to target that reported by helper.
-            // This path moves only one step towards the target.
-            if (help.getNextState() != null) {
-                agent.getNextSteps().add(help.getNextState());
-                agent.setHelper(help.getHelperAgent());
-            }
-
-
-            break;
-            //todo: have to be redesigned
-
-            // Check if this route has been taken before or not?
-            // If the suggested path (current help) contains steps that have already been taken by the agent, that path will be skipped.
-            // boolean isVisited = false;
-            for (int i = 0, nextStepsSize = agent.getNextSteps().size(); i < nextStepsSize; i++) {
-                StateX nextState = agent.getNextSteps().get(i);
-
-                int travelHistoryLastIndex = agent.getTravelHistories().size() - 1;
-                for (int j = travelHistoryLastIndex; j >= 0 && j > travelHistoryLastIndex - nextStepsSize - 2; j--) {
-                    TravelHistory travelHistory = agent.getTravelHistories().get(j);
-
-                    if (travelHistory.getStateX().getId() == nextState.getId()) {
-                        isVisited = true;
-                        break;
-                    }
-                }
-                if (isVisited) {
-                    break;
-                }
-
-            }
-            // Successful in finding routeHelper
-            if (!isVisited) {
-                isSuccessFull = true;
-                break;
-            }
-        }*/
-
-        // If all of routerHelps contain a loop, selecting the first one as a default
-//        if (!isSuccessFull) {
 
         agent.clearNextSteps();
         RoutingHelp help = sortedRoutingHelps.get(0);

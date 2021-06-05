@@ -108,7 +108,7 @@ public class World {
 
                 if (isAddedToState) {
 
-                    //============================ Adding state to agent
+                    //============================ Adding target states to agent
                     agents[i].setState(randomState);
 
                     int targetCounts = agents[i].getTargetCounts();
@@ -127,7 +127,10 @@ public class World {
                             }
                             if (isValidToAddAsTarget) {
                                 //-- check if added previously as target
-                                isValidToAddAsTarget = !agents[i].isAsTarget(randomState);
+                                //isValidToAddAsTarget = !agents[i].isAsTarget(randomState);
+
+                                //-- Check if this target state is equals to previously added target state
+                                isValidToAddAsTarget = randomState.getId()!= prevState.getId();
                             }
                         } while (!isValidToAddAsTarget && tryCount++ < agentsCount);
 
