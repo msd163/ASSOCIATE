@@ -1,9 +1,17 @@
 package _type;
 
 public enum TtBehaviorStrategy {
-    OnlyDishonest,
     OnlyHonest,
+    OnlyDishonest,
     Discrete,
-    Fuzzy
+    Fuzzy;
 
+    public static TtBehaviorStrategy getByOrdinal(int ordinal) {
+        for (TtBehaviorStrategy value : values()) {
+            if (value.ordinal() == ordinal) {
+                return value;
+            }
+        }
+        return OnlyHonest;
+    }
 }

@@ -8,15 +8,16 @@ import utils.Globals;
 public class AgentBehavior {
 
 
-    public AgentBehavior() {
-        switch (Config.TRUST_BEHAVIOR_STRATEGY) {
+    public AgentBehavior(TtBehaviorStrategy strategy, int honestDiscretePercentage) {
+        this.strategy = strategy;
+        switch (strategy) {
             case OnlyHonest:
                 honestDegree = 1.0f;
                 break;
             case OnlyDishonest:
                 honestDegree = 0.0f;
             case Discrete:
-                honestDegree = Globals.RANDOM.nextInt(100) < Config.TRUST_HONEST_DISCRETE_PERCENT ? 1.0f : 0.0f;
+                honestDegree = Globals.RANDOM.nextInt(100) < honestDiscretePercentage ? 1.0f : 0.0f;
                 break;
             case Fuzzy:
                 honestDegree = Globals.RANDOM.nextFloat();
@@ -25,13 +26,15 @@ public class AgentBehavior {
     }
 
     @Expose
+    private TtBehaviorStrategy strategy;
+    @Expose
     private float honestDegree;
     @Expose
     private boolean honestState;
 
     //============================//============================//============================
     public boolean updateHonestState() {
-        if (Config.TRUST_BEHAVIOR_STRATEGY == TtBehaviorStrategy.Fuzzy) {
+        if (strategy == TtBehaviorStrategy.Fuzzy) {
             honestState = Globals.RANDOM.nextFloat() < honestDegree;
             return honestState;
         }

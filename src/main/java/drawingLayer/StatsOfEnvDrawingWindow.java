@@ -1,15 +1,13 @@
 package drawingLayer;
 
 import systemLayer.World;
+import utils.Config;
 import utils.Globals;
-import utils.Point;
 import utils.WorldStatistics;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class DiagramDrawingWindow extends DrawingWindow {
+public class StatsOfEnvDrawingWindow extends DrawingWindow {
 
     private World world;
 
@@ -17,7 +15,7 @@ public class DiagramDrawingWindow extends DrawingWindow {
 
     //============================//============================  panning params
 
-    public DiagramDrawingWindow(World world) {
+    public StatsOfEnvDrawingWindow(World world) {
         super();
         this.world = world;
     }
@@ -47,17 +45,18 @@ public class DiagramDrawingWindow extends DrawingWindow {
         g.drawString("World Time                : " + Globals.WORLD_TIMER, 100, 50);
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 100);
 
-        g.setColor(Color.WHITE);
-        g.drawString("Agents In Targets ITT :   " + world.getStatistics()[Globals.WORLD_TIMER].getInTargetAgentsInThisTime(), 100, 200);
-        g.setColor(Color.YELLOW);
-        g.drawString("Success Travel ITT    :   " + world.getStatistics()[Globals.WORLD_TIMER].getSuccessTravelToGoToNeighbor(), 100, 250);
-        g.setColor(Color.GREEN);
-        g.drawString("Agents In Targets      :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllInTargetAgents(), 100, 350);
-        g.setColor(Color.RED);
-        g.drawString("Agents In Pitfall     :   " + world.getStatistics()[Globals.WORLD_TIMER].getAgentsInPitfall(), 100, 400);
-        g.setColor(Color.DARK_GRAY);
-        g.drawString("Random Travel         :   " + world.getStatistics()[Globals.WORLD_TIMER].getRandomTravelToNeighbors(), 100, 450);
-
+        if(Globals.WORLD_TIMER< Config.WORLD_LIFE_TIME) {
+            g.setColor(Color.WHITE);
+            g.drawString("Agents In Targets ITT :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttAgentsInTarget(), 100, 200);
+            g.setColor(Color.YELLOW);
+            g.drawString("Success Travel ITT    :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttSuccessTravelToNeighbor(), 100, 250);
+            g.setColor(Color.GREEN);
+            g.drawString("Agents In Targets      :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInTarget(), 100, 350);
+            g.setColor(Color.RED);
+            g.drawString("Agents In Pitfall     :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInPitfall(), 100, 400);
+            g.setColor(Color.DARK_GRAY);
+            g.drawString("Random Travel         :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttRandomTravelToNeighbors(), 100, 450);
+        }
         g.translate(0, -200);
 
         //============================//============================//============================
@@ -80,34 +79,20 @@ public class DiagramDrawingWindow extends DrawingWindow {
             //============================ Bound Rectangle
             //g.drawRect(0, 0, world.getWidth(), world.getHeight());
             g.setColor(Color.GREEN);
-            g.fillOval(axisX, stat.getAllInTargetAgents(), 5, 5);
+            g.fillOval(axisX, stat.getAllAgentsInTarget(), 5, 5);
             //============================
             g.setColor(Color.WHITE);
-            g.fillOval(axisX, stat.getInTargetAgentsInThisTime(), 5, 5);
+            g.fillOval(axisX, stat.getIttAgentsInTarget(), 5, 5);
             //============================
             g.setColor(Color.yellow);
-            g.fillOval(axisX, stat.getSuccessTravelToGoToNeighbor(), 5, 5);
+            g.fillOval(axisX, stat.getIttSuccessTravelToNeighbor(), 5, 5);
             //============================
             g.setColor(Color.RED);
-            g.fillOval(axisX, stat.getAgentsInPitfall(), 5, 5);
+            g.fillOval(axisX, stat.getAllAgentsInPitfall(), 5, 5);
             //============================
             g.setColor(Color.DARK_GRAY);
-            g.fillOval(axisX, stat.getRandomTravelToNeighbors(), 5, 5);
+            g.fillOval(axisX, stat.getIttRandomTravelToNeighbors(), 5, 5);
             //============================
-
-
-/*
-            g2.setColor(Color.WHITE);
-            g2.translate(0, 700);
-            g2.drawLine(0, 0, getWidth(), 0);
-
-            g2.setColor(Color.GREEN);
-            g2.fillOval(axisX, (int) (history.getHonestServiceRatio() * 1000), 5, 5);
-
-            g2.setColor(Color.RED);
-            g2.fillOval(axisX, (int) (history.getDishonestServiceRatio() * 1000), 5, 5);
-
-            g2.translate(0, -700);*/
         }
 
     }

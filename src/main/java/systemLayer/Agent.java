@@ -83,7 +83,10 @@ public class Agent {
         trust = new AgentTrust(capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap());
 
         int targetCount = Globals.profiler.getCurrentBunch().getTargetCountD().nextValue();
-        behavior = new AgentBehavior();
+        behavior = new AgentBehavior(
+                Globals.profiler.getCurrentBunch().getBehavioralStrategy(),
+                Globals.profiler.getCurrentBunch().getTrustHonestDiscretePercentageD().nextValue()
+        );
 
         targetStateIds = new int[targetCount];
         targetStates = new StateX[targetCount];
@@ -131,8 +134,8 @@ public class Agent {
             currentTargetStateIndex++;
             spentTimeAtTheTarget = 0;
             return true;
-        }else{
-            currentTargetStateIndex=0;
+        } else {
+            currentTargetStateIndex = 0;
             return true;
         }
     }
@@ -170,7 +173,7 @@ public class Agent {
         for (TravelHistory s : travelHistories) {
             sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
         }
-        OutLog____.pl(TtOutLogMethodSection.UpdateTravelHistory, TtOutLogStatus.SUCCESS, sIds,this,state,getCurrentTarget());
+        OutLog____.pl(TtOutLogMethodSection.UpdateTravelHistory, TtOutLogStatus.SUCCESS, sIds, this, state, getCurrentTarget());
         //System.out.println("agent:::updateStateMap::agentId: " + id + " [ c: " + state.getId() + " >  t: " + (getCurrentTarget() == null ? "NULL" : getCurrentTarget().getId()) + " ] #  maps: " + sIds);
 
     }
@@ -192,7 +195,7 @@ public class Agent {
         return targetStates[currentTargetStateIndex];
     }
 
-    public int getCurrentTargetStateIndex(){
+    public int getCurrentTargetStateIndex() {
         return currentTargetStateIndex;
     }
 
@@ -243,7 +246,7 @@ public class Agent {
     public void updateWatchList() {
         watchedAgents.clear();
         watchedStates.clear();
-       // ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
+        // ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
         ArrayList<StateX> parentPath = new ArrayList<>();
         state.getWatchListOfAgents(
                 watchedAgents,

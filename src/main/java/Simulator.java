@@ -57,9 +57,10 @@ public class Simulator {
             statName += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1,Config.FullEnvironmentDataFile.lastIndexOf("."));
 
             System.out.println(statName);
-            statName = ProjectPath.instance().statisticsDir() + "/" + statName + ".csv";
 
-            Globals.statGenerator.init(statName);
+            Globals.statsEnvGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName + ".csv");
+
+            Globals.statsTrustGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName + ".trust.csv");
         }
 
     }
@@ -80,7 +81,8 @@ public class Simulator {
 
         //============================//============================ Closing statistics file
         if (Config.STATISTICS_IS_GENERATE) {
-            Globals.statGenerator.close();
+            Globals.statsEnvGenerator.close();
+            Globals.statsTrustGenerator.close();
         }
     }
 }

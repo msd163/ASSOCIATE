@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
+import utils.Config;
 import utils.Globals;
 import utils.Point;
 import utils.RectangleX;
@@ -214,13 +215,13 @@ public class StateX {
     public Point getTileLocation(int index) {
         int bn = getBigness();
         return new Point(
-                (index % bn) * Globals.STATE_TILE_WIDTH + location.x - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4),
-                (index / bn) * Globals.STATE_TILE_WIDTH + location.y - (getWidth() / 2) + (Globals.STATE_TILE_WIDTH / 4)
+                (index % bn) * Config.STATE_TILE_WIDTH + location.x - (getWidth() / 2) + (Config.STATE_TILE_WIDTH / 4),
+                (index / bn) * Config.STATE_TILE_WIDTH + location.y - (getWidth() / 2) + (Config.STATE_TILE_WIDTH / 4)
         );
     }
 
     public int getWidth() {
-        return getBigness() * Globals.STATE_TILE_WIDTH;
+        return getBigness() * Config.STATE_TILE_WIDTH;
     }
 
     public RectangleX getBoundedRectangle() {

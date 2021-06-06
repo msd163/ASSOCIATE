@@ -1,13 +1,14 @@
 package systemLayer;
 
 import _type.TtSimulationMode;
-import drawingLayer.DiagramDrawingWindow;
-import drawingLayer.DrawingWindow;
-import drawingLayer.MainDrawingWindow;
+import drawingLayer.StatsOfEnvDrawingWindow;
+import drawingLayer.StateMachineDrawingWindow;
 import drawingLayer.TrustMatrixDrawingWindow;
+import drawingLayer.StatsOfTrustDrawingWindow;
 import routingLayer.Router;
 import stateLayer.Environment;
 import stateLayer.StateX;
+import trustLayer.TrustMatrix;
 import utils.*;
 
 import javax.swing.*;
@@ -32,14 +33,14 @@ public class World {
     private Router router;
 
 
-    TrustMatrixGenerator matrixGenerator = new TrustMatrixGenerator();
+    TrustMatrix matrixGenerator = new TrustMatrix();
 
     //============================//============================//============================
     private void init(Environment _environment) throws Exception {
         //============================
 
         // Identifying the agents that we want to trace in Main diagram.
-        traceAgentIds = new int[]{1};
+        traceAgentIds = new int[]{1,2};
 
         // Initializing the timer of the world.
         // Setting -1 for registering first history of travel time to -1;
@@ -218,11 +219,12 @@ public class World {
     public void run() {
 
         boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;           // Whether show MainWindow or not.
-        boolean showDiagramWindow = Config.DRAWING_SHOW_DIAGRAM_WINDOW;     // Whether show DrawingWindow or not.
+        boolean showDiagramWindow = Config.DRAWING_SHOW_ENV_STAT_WINDOW;     // Whether show DrawingWindow or not.
         boolean showTrustMatWindow = Config.DRAWING_SHOW_TRUST_MAT_WINDOW;     // Whether show TrustMatrixWindow or not.
+        boolean showTrustStatsWindow = Config.DRAWING_SHOW_TRUST_STAT_WINDOW;     // Whether show DrawingWindow or not.
 
         //============================ Initializing Main Drawing Windows
-        MainDrawingWindow mainWindow = new MainDrawingWindow(this);
+        StateMachineDrawingWindow mainWindow = new StateMachineDrawingWindow(this);
         mainWindow.setDoubleBuffered(true);
         if (showMainWindow) {
             JFrame mainFrame = new JFrame();
@@ -234,7 +236,7 @@ public class World {
             // boolean doubleBuffered = mainFrame.isDoubleBuffered();
         }
         //============================ Initializing Diagram Drawing Windows
-        DiagramDrawingWindow diagramWindow = new DiagramDrawingWindow(this);
+        StatsOfEnvDrawingWindow diagramWindow = new StatsOfEnvDrawingWindow(this);
         diagramWindow.setDoubleBuffered(true);
         if (showDiagramWindow) {
             JFrame diagramFrame = new JFrame();
@@ -253,6 +255,17 @@ public class World {
             diagramFrame.setMinimumSize(new Dimension(1500, 800));
             diagramFrame.setVisible(true);
         }
+        //============================ Initializing Diagram Drawing Windows
+        StatsOfTrustDrawingWindow trustStatsWindow = new StatsOfTrustDrawingWindow(this);
+        trustWindow.setDoubleBuffered(true);
+        if (showTrustStatsWindow) {
+            JFrame diagramFrame = new JFrame();
+            diagramFrame.getContentPane().add(trustStatsWindow);
+            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            diagramFrame.setMinimumSize(new Dimension(1500, 800));
+            diagramFrame.setVisible(true);
+        }
+
 
         /* ****************************
          *            MAIN LOOP      *
@@ -262,11 +275,13 @@ public class World {
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
             WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
             statistic.setWorldTime(Globals.WORLD_TIMER);
+            statistic.setEpisode(Globals.EPISODE);
             router.setStatistics(statistic);
 
             if (Globals.WORLD_TIMER == 0) {
-                Globals.statGenerator.addHeader(statistic);
-                Globals.statGenerator.addComment();
+                Globals.statsEnvGenerator.addHeader();
+                Globals.statsEnvGenerator.addComment();
+                Globals.statsTrustGenerator.addHeader();
             }
 
             System.out.println(Globals.WORLD_TIMER + " : World.run ------------------------------- ");
@@ -295,14 +310,17 @@ public class World {
                 }
             }
 
-            Globals.statGenerator.addStat(statistic);
+            Globals.statsEnvGenerator.addStat(statistic);
+            Globals.statsTrustGenerator.addStat(statistic);
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
-            if (Globals.WORLD_TIMER % Globals.EPISODE_TIMOUT == 0 || statistic.getAllInTargetAgents() + statistic.getAgentsInPitfall() == agentsCount) {
+            if (Globals.WORLD_TIMER % Config.EPISODE_TIMOUT == 0 || statistic.getAllAgentsInTarget() + statistic.getAllAgentsInPitfall() == agentsCount) {
 
+                //-- Increasing Episode
                 Globals.EPISODE++;
 
+                //-- Exiting agents that are in pitfall and taking in new state randomly.
                 for (StateX state : environment.getStates()) {
                     if (state.isIsPitfall()) {
                         ArrayList<Agent> stateAgents = state.getAgents();
@@ -330,6 +348,7 @@ public class World {
                 }
             }
 
+            //============================//============================ Repainting
             if (showMainWindow) {
                 mainWindow.repaint();
             }
@@ -342,22 +361,22 @@ public class World {
                 matrixGenerator.update();
                 trustWindow.repaint();
             }
+
+            if (showTrustStatsWindow) {
+                trustStatsWindow.repaint();
+            }
+
+            //============================//============================ Sleeping
             try {
                 Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
 
-        //============================//============================//============================ Creating trust matrix and saving in csv file
-        try {
-            Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mainWindow.repaint();
+        //============================//============================ Creating trust matrix and saving in csv file
 
-        //============================//============================ Generating Trust Matrix
 
         if (Config.TRUST_MATRIX_IS_GENERATE) {
             System.out.println("Generating Trust Matrix");
@@ -371,7 +390,6 @@ public class World {
 
             matrixPath = ProjectPath.instance().statisticsDir() + "/" + matrixPath + ".mat.csv";
 
-            System.out.println(matrixPath);
 
             matrixGenerator.update();
             matrixGenerator.write(matrixPath);
@@ -381,8 +399,9 @@ public class World {
 
         System.out.println("Finished");
 
+        //============================//============================ Running program after finishing lifeTime of the world.
 
-        while (true){
+        while (true) {
             if (showMainWindow) {
                 mainWindow.repaint();
             }
@@ -395,14 +414,16 @@ public class World {
                 matrixGenerator.update();
                 trustWindow.repaint();
             }
+            if (showTrustStatsWindow) {
+                trustStatsWindow.repaint();
+            }
             try {
                 Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-    }
+    }  //  End of running
 
     //============================//============================//============================
 

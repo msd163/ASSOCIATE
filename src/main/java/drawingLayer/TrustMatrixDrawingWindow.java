@@ -1,22 +1,21 @@
 package drawingLayer;
 
 import systemLayer.Agent;
-import utils.TrustMatrixGenerator;
+import trustLayer.TrustMatrix;
 
 import java.awt.*;
 
 public class TrustMatrixDrawingWindow extends DrawingWindow {
 
-    private TrustMatrixGenerator matrix;
+    private TrustMatrix matrix;
     Float[][] trustMatrix;
     private Agent[] agents;
-    private int axisX = 0;
 
     private int matCount;
     private int matWidth;
 
 
-    public TrustMatrixDrawingWindow(TrustMatrixGenerator matrixGenerator) {
+    public TrustMatrixDrawingWindow(TrustMatrix matrixGenerator) {
         super();
         this.matrix = matrixGenerator;
         matCount = this.matrix.getAgentCount();
@@ -31,8 +30,6 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
 
-
-        axisX = 0;
 
         g.clearRect(0, 0, getWidth(), getHeight());
 
@@ -49,7 +46,9 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
+        //-- (TOP-DOWN) Drawing vertical line for mouse pointer
         g.drawLine(mousePosition.x, 0, mousePosition.x, matWidth);
+        //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
         g.drawLine(0, mousePosition.y, matWidth, mousePosition.y);
 
         int pnY = (pnScl_y > 0 ? (int) (pnScl_y / scale) + 10 : 0) - 5;
@@ -94,13 +93,13 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
         g.setColor(Color.YELLOW);
 
-        g.scale(scale, -scale);
+        g.scale(1, -1);
         g.drawString("0", -35, -10);
         g.drawString("0", 10, 35);
 
-        g.drawString("Trustee", 100, -pnY/scale+50);
-        g.drawString("Trustier", pnX/scale-100, -100);
-        g.scale(scale, -scale);
+        g.drawString("Trustee", 100, -pnY+50);
+        g.drawString("Trustier", pnX-100, -100);
+        g.scale(1, -1);
 
     }
 }

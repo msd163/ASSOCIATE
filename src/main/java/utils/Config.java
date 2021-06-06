@@ -13,22 +13,21 @@ public class Config {
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME = 200;                        // time of execution in each world
+    public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
 
-    public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
-    public static final int TRUST_HONEST_DISCRETE_PERCENT = 60;   // if TtHonestStrategy.Discrete selected, this defines the percentage of honest agents
+    public final static int EPISODE_TIMOUT= 200;
+
+    public static int STATE_TILE_WIDTH = 40;
 
     public static final TtTrustReplaceHistoryMethod TRUST_REPLACE_HISTORY_METHOD = TtTrustReplaceHistoryMethod.Sequential_Circular;
 
     //============================ Dra`wing Windows
 
-    public static final boolean DRAWING_SHOW_MAIN_WINDOW = false;
-    public static final boolean DRAWING_SHOW_DIAGRAM_WINDOW = false;
+    public static final boolean DRAWING_SHOW_MAIN_WINDOW = true;
+    public static final boolean DRAWING_SHOW_ENV_STAT_WINDOW = true;
+    public static final boolean DRAWING_SHOW_TRUST_STAT_WINDOW = true;
     public static final boolean DRAWING_SHOW_TRUST_MAT_WINDOW = true;
-
-    public static final boolean DRAWING_SHOW_POWERFUL_AGENTS_RADIUS = true;
-    public static final int DRAWING_POWERFUL_AGENTS_THRESHOLD = 95;                // [1,100]
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE = true;

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Router {
 
-    private WorldStatistics statistics;
+    private WorldStatistics statistics___;
     private World world;
 
     public Router(World world) {
@@ -26,7 +26,7 @@ public class Router {
     }
 
     public void setStatistics(WorldStatistics statistics) {
-        this.statistics = statistics;
+        this.statistics___ = statistics;
     }
 
     /**
@@ -45,28 +45,28 @@ public class Router {
 
         // There is no targetState for this agent!
         if (targetState == null) {
-            statistics.addAgentsWithNoTargetState();
+            statistics___.addAgentsWithNoTargetState();
             return null;
         }
 
         // If the agent is in target agent
         if (agent.isInTargetState()) {
-            statistics.addAllInTargetAgents();
+            statistics___.add_All_AgentsInTarget();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
             //if (!agent.isInFinalTarget()) {
-                if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
-                    int ct = agent.getCurrentTarget().getId();
-                    agent.assignNextTargetState();
-                    OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
-                            "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
-                }
+            if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
+                int ct = agent.getCurrentTarget().getId();
+                agent.assignNextTargetState();
+                OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
+                        "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
+            }
             //}
             return state;
         }
 
         if (state.isIsPitfall()) {
-            statistics.addAgentsInPitfall();
+            statistics___.add_All_AgentsInPitfall();
 
             OutLog____.pl(
                     TtOutLogMethodSection.TakeAStepTowardTheTarget,
@@ -81,10 +81,10 @@ public class Router {
         if (state.getTargets().size() == 0) {
             agent.clearNextSteps();
             // Printing map
-            String sIds = "";
+      /*      String sIds = "";
             for (TravelHistory s : agent.getTravelHistories()) {
-                sIds += " | " + s.getStateX().getId() /*+ "-" + s.getVisitTime()*/;
-            }
+                sIds += " | " + s.getStateX().getId() *//*+ "-" + s.getVisitTime()*//*;
+            }*/
             //System.out.println(">>ERR>> no target for agent:::gotoSate::agentId: " + agent.getId() + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
             OutLog____.pl(
                     TtOutLogMethodSection.TakeAStepTowardTheTarget,
@@ -105,16 +105,20 @@ public class Router {
             //============================
             //============================//============================
             //============================//============================//============================
-            statistics.addUpdatedNextStepsOfAgents();
+            statistics___.add_Itt_UpdatedNextStep();
         }
 
         // If the nextSteps is empty after updating the nextSteps, the agent will go to one neighbor randomly.
         if (agent.getNextSteps().isEmpty()) {
             int targetIndex = Globals.RANDOM.nextInt(state.getTargets().size());
             StateX stateX = gotoNeighborState(agent, targetIndex);
-            statistics.addRandomTravelToNeighbors();
+            statistics___.addRandomTravelToNeighbors();
             if (stateX.getId() == agent.getCurrentTarget().getId()) {
-                statistics.addInTargetAgentsInThisTime();
+                statistics___.add_Itt_AgentsInTarget();
+                statistics___.add_All_AgentsInTarget();
+            } else if (stateX.isIsPitfall()) {
+                statistics___.add_Itt_AgentsInPitfall();
+                statistics___.add_All_AgentsInPitfall();
             }
             return stateX;
         }
@@ -123,7 +127,7 @@ public class Router {
         StateX nextState = agent.getNextSteps().get(0);
 
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
-            statistics.addFailedTravelToGoToNeighbor();
+            statistics___.add_Itt_FailedTravelToNeighbor();
             //System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + agent.getId() + " state: " + state.getId() + "  nextState: " + nextState.getId());
             OutLog____.pl(
                     TtOutLogMethodSection.TakeAStepTowardTheTarget,
@@ -138,26 +142,31 @@ public class Router {
         }
 
         int currentAgentStateId = agent.getState().getId();
+        /**============================
+         ==============================**/
         StateX finalState = gotoNeighborState(agent, nextState);
-        // Successfully traveling to neighbor.
+        /**============================
+         ==============================**/
+        //-- Successfully traveling to neighbor.
         if (finalState.getId() == nextState.getId()) {
             agent.getNextSteps().remove(0);
-            statistics.addSuccessTravelToGoToNeighbor();
+            statistics___.add_Itt_SuccessTravelToNeighbor();
             //
             if (finalState.isIsPitfall()) {
-                statistics.addInPitfallInThisTime();
+                statistics___.add_Itt_AgentsInPitfall();
+                statistics___.add_All_AgentsInPitfall();
                 Globals.trustManager.reduceTrustForPitfall(agent);
             }
             //
             else if (finalState.getId() == agent.getCurrentTarget().getId()) {
-                statistics.addInTargetAgentsInThisTime();
+                statistics___.add_Itt_AgentsInTarget();
+                statistics___.add_All_AgentsInTarget();
                 Globals.trustManager.increaseTrustForSuccessTarget(agent);
             }
-
         }
-        // Failed to travel to neighbor.
+        //-- Failed to travel to neighbor.
         else {
-            statistics.addFailedTravelToGoToNeighbor();
+            statistics___.add_Itt_FailedTravelToNeighbor();
             System.out.println(">> Router.takeAStepTowardTheTarget:: [Warning] Agent (" + agent.getId() +
                     ") can not travel from (" + currentAgentStateId +
                     ") to neighbor state (" + nextState.getId() +
@@ -282,6 +291,12 @@ public class Router {
         if (help.getNextState() != null) {
             agent.getNextSteps().add(help.getNextState());
             agent.setHelper(help.getHelperAgent());
+        }
+
+        if (help.getHelperAgent().getBehavior().getIsHonest()) {
+            statistics___.add_Itt_TrustToHonest();
+        } else {
+            statistics___.add_Itt_TrustToDishonest();
         }
 //        }
     }

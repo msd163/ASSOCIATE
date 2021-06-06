@@ -1,56 +1,66 @@
 package utils;
 
 public class WorldStatistics {
+
+
     private int worldTime;
-    private int allInTargetAgents;
-    private int inTargetAgentsInThisTime;
+    private int episode;
+    //============================
+    private int allAgentsInTarget;
+    private int allAgentsInPitfall;
+    //============================
+    private int ittAgentsInTarget;
+    private int ittAgentsInPitfall;
+    private int ittRandomTravelToNeighbors;
+    private int ittSuccessTravelToNeighbor;
+    private int ittFailedTravelToNeighbor;
+    private int ittUpdatedNextStep;
+    //============================
     private int fullStateCount;
-    private int successTravelToGoToNeighbor;
-    private int failedTravelToGoToNeighbor;
     private int agentsWithNoTargetState;
-    private int updatedNextStepsOfAgents;
-    private int randomTravelToNeighbors;
     private int statesWithNoTarget;
-    private int agentsInPitfall;
-    private int inPitfallInThisTime;
+    //============================
+    private int ittTrustToDishonest;
+    private int ittTrustToHonest;
 
     //============================//============================
 
-
     public WorldStatistics() {
         worldTime
-                = allInTargetAgents
-                = inTargetAgentsInThisTime
+                = allAgentsInTarget
+                = ittAgentsInTarget
                 = fullStateCount
-                = successTravelToGoToNeighbor
-                = failedTravelToGoToNeighbor
+                = ittSuccessTravelToNeighbor
+                = ittFailedTravelToNeighbor
                 = agentsWithNoTargetState
-                = updatedNextStepsOfAgents
-                = randomTravelToNeighbors
+                = ittUpdatedNextStep
+                = ittRandomTravelToNeighbors
                 = statesWithNoTarget
-                = agentsInPitfall
-                = inPitfallInThisTime
+                = allAgentsInPitfall
+                = ittAgentsInPitfall
+                = ittTrustToDishonest
+                = ittTrustToHonest
                 = 0;
     }
 
-    public void addAllInTargetAgents() {
-        allInTargetAgents++;
+    public void add_All_AgentsInTarget() {
+        allAgentsInTarget++;
     }
 
-    public void addInTargetAgentsInThisTime() {
-        inTargetAgentsInThisTime++;
+    public void add_Itt_AgentsInTarget() {
+        ittAgentsInTarget++;
     }
 
     public void addFullStateCount() {
         fullStateCount++;
     }
 
-    public void addSuccessTravelToGoToNeighbor() {
-        successTravelToGoToNeighbor++;
+    public void add_Itt_SuccessTravelToNeighbor() {
+        ittSuccessTravelToNeighbor++;
     }
 
-    public void addFailedTravelToGoToNeighbor() {
-        failedTravelToGoToNeighbor++;
+    public void add_Itt_FailedTravelToNeighbor() {
+        ittFailedTravelToNeighbor++;
     }
 
     public void addAgentsWithNoTargetState() {
@@ -61,25 +71,35 @@ public class WorldStatistics {
         statesWithNoTarget++;
     }
 
-    public void addUpdatedNextStepsOfAgents() {
-        updatedNextStepsOfAgents++;
+    public void add_Itt_UpdatedNextStep() {
+        ittUpdatedNextStep++;
     }
 
     public void addRandomTravelToNeighbors() {
-        randomTravelToNeighbors++;
+        ittRandomTravelToNeighbors++;
     }
 
-    public void addAgentsInPitfall() {
-        agentsInPitfall++;
+    public void add_All_AgentsInPitfall() {
+        allAgentsInPitfall++;
     }
 
     public int getTotalTravelToNeighbor() {
-        return randomTravelToNeighbors + successTravelToGoToNeighbor;
+        return ittRandomTravelToNeighbors + ittSuccessTravelToNeighbor;
     }
 
-    public void addInPitfallInThisTime() {
-
+    public void add_Itt_AgentsInPitfall() {
+        ittAgentsInPitfall++;
     }
+
+    public void add_Itt_TrustToHonest() {
+        ittTrustToHonest++;
+    }
+
+    public void add_Itt_TrustToDishonest() {
+        ittTrustToDishonest++;
+    }
+
+
     //============================//============================
     @Override
     public String toString() {
@@ -102,14 +122,14 @@ public class WorldStatistics {
                 ti + ", statesWithNoTarget = " + statesWithNoTarget +
                 ti + ", ------" +
                 ti + ", agentsWithNoTargetState = " + agentsWithNoTargetState +
-                ti + ", allInTargetAgents = " + allInTargetAgents +
-                ti + ", inTargetAgentsInThisTime = " + inTargetAgentsInThisTime +
-                ti + ", updatedNextStatesOfAgents = " + updatedNextStepsOfAgents +
-                ti + ", successTravelToGoToNeighbor = " + successTravelToGoToNeighbor +
-                ti + ", failedTravelToGoToNeighbor = " + failedTravelToGoToNeighbor +
-                ti + ", randomTravelToNeighbors = " + randomTravelToNeighbors +
-                ti + ", agentsInPitfall = " + agentsInPitfall +
-                ti + ", inPitfallInThisTime = " + inPitfallInThisTime +
+                ti + ", allInTargetAgents = " + allAgentsInTarget +
+                ti + ", ittAgentsInTarget = " + ittAgentsInTarget +
+                ti + ", ittUpdatedNextStep = " + ittUpdatedNextStep +
+                ti + ", ittSuccessTravelToNeighbor = " + ittSuccessTravelToNeighbor +
+                ti + ", ittFailedTravelToNeighbor = " + ittFailedTravelToNeighbor +
+                ti + ", ittRandomTravelToNeighbors = " + ittRandomTravelToNeighbors +
+                ti + ", allAgentsInPitfall = " + allAgentsInPitfall +
+                ti + ", ittAgentsInPitfall = " + ittAgentsInPitfall +
                 ti + ", totalTravelOfAgents = " + getTotalTravelToNeighbor() +
                 tx + '}';
 
@@ -124,44 +144,63 @@ public class WorldStatistics {
         this.worldTime = worldTime;
     }
 
-    public int getAllInTargetAgents() {
-        return allInTargetAgents;
+    public int getAllAgentsInTarget() {
+        return allAgentsInTarget;
     }
 
-    public int getInTargetAgentsInThisTime() {
-        return inTargetAgentsInThisTime;
+    public int getIttAgentsInTarget() {
+        return ittAgentsInTarget;
     }
 
     public int getFullStateCount() {
         return fullStateCount;
     }
 
-    public int getSuccessTravelToGoToNeighbor() {
-        return successTravelToGoToNeighbor;
+    public int getIttSuccessTravelToNeighbor() {
+        return ittSuccessTravelToNeighbor;
     }
 
-    public int getFailedTravelToGoToNeighbor() {
-        return failedTravelToGoToNeighbor;
+    public int getIttFailedTravelToNeighbor() {
+        return ittFailedTravelToNeighbor;
     }
 
     public int getAgentsWithNoTargetState() {
         return agentsWithNoTargetState;
     }
 
-    public int getUpdatedNextStepsOfAgents() {
-        return updatedNextStepsOfAgents;
+    public int getIttUpdatedNextStep() {
+        return ittUpdatedNextStep;
     }
 
-    public int getRandomTravelToNeighbors() {
-        return randomTravelToNeighbors;
+    public int getIttRandomTravelToNeighbors() {
+        return ittRandomTravelToNeighbors;
     }
 
     public int getStatesWithNoTarget() {
         return statesWithNoTarget;
     }
 
-    public int getAgentsInPitfall() {
-        return agentsInPitfall;
+    public int getAllAgentsInPitfall() {
+        return allAgentsInPitfall;
     }
 
+    public int getIttAgentsInPitfall() {
+        return ittAgentsInPitfall;
+    }
+
+    public int getIttTrustToDishonest() {
+        return ittTrustToDishonest;
+    }
+
+    public int getIttTrustToHonest() {
+        return ittTrustToHonest;
+    }
+
+    public int getEpisode() {
+        return episode;
+    }
+
+    public void setEpisode(int episode) {
+        this.episode = episode;
+    }
 }

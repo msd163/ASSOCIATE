@@ -1,5 +1,7 @@
 package systemLayer.profiler;
 
+import _type.TtBehaviorStrategy;
+
 public class PopulationBunch {
     private String bunchCount;
     private String trustHistoryItemCap;
@@ -8,6 +10,8 @@ public class PopulationBunch {
     private String watchDepth;
     private String travelHistory;
     private String targetCount;
+    private String trustBehavioralStrategy;
+    private String trustHonestDiscretePercentage;
 
     //============================
     private DefParameter bunchCountD;
@@ -17,6 +21,8 @@ public class PopulationBunch {
     private DefParameter watchDepthD;
     private DefParameter travelHistoryCapD;
     private DefParameter targetCountD;
+    private DefParameter trustBehavioralStrategyD;
+    private DefParameter trustHonestDiscretePercentageD;
 
 
     //============================//============================
@@ -29,6 +35,8 @@ public class PopulationBunch {
         watchDepthD = new DefParameter(watchDepth);
         travelHistoryCapD = new DefParameter(travelHistory);
         targetCountD = new DefParameter(targetCount);
+        trustBehavioralStrategyD = new DefParameter(trustBehavioralStrategy);
+        trustHonestDiscretePercentageD = new DefParameter(trustHonestDiscretePercentage);
     }
 
     //============================//============================
@@ -67,6 +75,14 @@ public class PopulationBunch {
         return targetCountD;
     }
 
+    public DefParameter getTrustHonestDiscretePercentageD() {
+        return trustHonestDiscretePercentageD;
+    }
+
+    public TtBehaviorStrategy  getBehavioralStrategy(){
+        int i = trustBehavioralStrategyD.nextValue();
+        return TtBehaviorStrategy.getByOrdinal(i);
+    }
 
     //============================//============================
     public String toString(int tabIndex) {
@@ -94,6 +110,8 @@ public class PopulationBunch {
                 ti + ", watchDepthD=" + watchDepthD.toString(tabIndex) +
                 ti + ", travelHistoryD=" + travelHistoryCapD.toString(tabIndex) +
                 ti + ", targetCountD=" + targetCountD.toString(tabIndex) +
+                ti + ", trustBehavioralStrategyD=" + trustBehavioralStrategyD.toString(tabIndex) +
+                ti + ", trustHonestDiscretePercentageD=" + trustHonestDiscretePercentageD.toString(tabIndex) +
                 tx + '}';
     }
 

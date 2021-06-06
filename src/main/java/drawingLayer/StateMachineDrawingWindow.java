@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class MainDrawingWindow extends DrawingWindow{
+public class StateMachineDrawingWindow extends DrawingWindow{
 
     private static final Random random = new Random();
 
@@ -27,7 +27,7 @@ public class MainDrawingWindow extends DrawingWindow{
     private int _colorIndex = 0;
 
     //============================//============================//============================
-    public MainDrawingWindow(World world) {
+    public StateMachineDrawingWindow(World world) {
         super();
         this.world = world;
         this.environment = world.getEnvironment();
@@ -71,11 +71,12 @@ public class MainDrawingWindow extends DrawingWindow{
                 _colorIndex = 0;
             }
 
-            g.setColor(colors[_colorIndex]);
             if (trans.isDrawIsActive()) {
+                g.setColor(colors[_colorIndex]);
                 g.setStroke(new BasicStroke(10));
                 trans.setDrawIsActive(false);
             } else {
+                g.setColor(Color.DARK_GRAY);
                 g.setStroke(new BasicStroke(2));
             }
 
@@ -85,6 +86,7 @@ public class MainDrawingWindow extends DrawingWindow{
                     Arc2D.OPEN));
 
             g.setStroke(new BasicStroke(6));
+            g.setColor(colors[_colorIndex]);
 
             g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
                     trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
@@ -95,11 +97,9 @@ public class MainDrawingWindow extends DrawingWindow{
 
         }
 
-        //============================//============================ Drawing states
+        //============================//============================ Drawing states and their agents
         for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
             StateX stateX = environment.getState(stateIndex);
-
-           // tempColor = g.getColor();
 
             if (stateX.isIsPitfall()) {
                 g.setColor(Color.RED);
@@ -108,9 +108,8 @@ public class MainDrawingWindow extends DrawingWindow{
             }
             RectangleX rec = stateX.getBoundedRectangle();
 
-            // g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-
-           /* g.setColor(Color.RED);
+             /* g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+           g.setColor(Color.RED);
             g.drawString(
                     "TL " + rec.topLeft().x + "," + rec.topLeft().y,
                     rec.topLeft().x - 10,
@@ -139,10 +138,11 @@ public class MainDrawingWindow extends DrawingWindow{
                     rec.bottomLeft().y + 30
             );*/
 
+            //-- Drawing state and its ID
             g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
             g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
-           // g.setColor(tempColor);
 
+            //-- Drawing agents of state
             if (!stateX.getAgents().isEmpty()) {
                 int index = 0;
                 for (Agent agent : stateX.getAgents()) {
@@ -151,7 +151,7 @@ public class MainDrawingWindow extends DrawingWindow{
             }
         }
 
-        //============================//============================ Drawing agents
+        //============================//============================ Creating Blue state for the state of agent that are traceable.
         for (Agent agent : world.getAgents()) {
 
             if (agent.isSimConfigShowTargetState()) {
@@ -174,8 +174,6 @@ public class MainDrawingWindow extends DrawingWindow{
     Color honestForeColor;
     Color honestBorderColor;
 
-    private boolean isCapCandid = false;
-
     public void drawAgent(Agent agent, Graphics2D g, int index) {
 
         StateX state = agent.getState();
@@ -195,17 +193,6 @@ public class MainDrawingWindow extends DrawingWindow{
         honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : new Color(255, 71, 71);
         honestForeColor = behavior.getIsHonest() ? new Color(36, 151, 9) : new Color(255, 196, 166);
         honestBorderColor = behavior.getIsHonest() ? new Color(29, 102, 0) : new Color(160, 0, 0);
-        isCapCandid = Config.DRAWING_SHOW_POWERFUL_AGENTS_RADIUS && capacity.getCapPower() > Config.DRAWING_POWERFUL_AGENTS_THRESHOLD;
-        // Drawing watch radius
-        if (isCapCandid || agent.isSimConfigShowWatchRadius()) {
-            g.setColor(isCapCandid ? (behavior.getIsHonest() ? Color.GREEN : Color.RED) : agent.isSimConfigTraceable() ? Color.CYAN : Color.lightGray);
-            g.drawOval(
-                    loc_x - capacity.getWatchDepth(),
-                    loc_y - capacity.getWatchDepth(),
-                    capacity.getWatchDepth() * 2,
-                    capacity.getWatchDepth() * 2
-            );
-        }
 
         // Drawing links to watched agents
         if (agent.isSimConfigLinkToWatchedAgents()) {

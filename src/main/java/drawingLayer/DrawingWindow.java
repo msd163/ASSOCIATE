@@ -92,7 +92,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     @Override
     public void mouseMoved(MouseEvent e) {
 //        mousePosition.x = e.getX();
-        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + getHeight() - 100;
+        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + (int)(getHeight()/scale) - 100;
         mousePosition.x = (int) ((e.getX() - pnOffset.x - scaleOffset.x) / scale) - 100;
     }
 

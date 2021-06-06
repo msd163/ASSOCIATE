@@ -1,13 +1,12 @@
-package utils;
+package trustLayer;
 
 import systemLayer.Agent;
-import trustLayer.TrustHistory;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class TrustMatrixGenerator {
+public class TrustMatrix {
 
     Float[][] trustMatrix;
     int agentCount = 0;
@@ -16,7 +15,7 @@ public class TrustMatrixGenerator {
     File file;
     FileWriter writer;
 
-    public void init( Agent[] agents) {
+    public void init(Agent[] agents) {
         this.agentCount = agents.length;
         this.agents = agents;
         trustMatrix = new Float[agentCount][agentCount];
@@ -47,7 +46,7 @@ public class TrustMatrixGenerator {
     }
 
     public void write(String matrixFilePath) {
-         file = new File(matrixFilePath);
+        file = new File(matrixFilePath);
         try {
             writer = new FileWriter(file);
         } catch (IOException ignored) {
@@ -69,34 +68,6 @@ public class TrustMatrixGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void addComment() {
-       /* try {
-            writer.write("\n# Agent Trust Matrix,,,,,,,,,,,\n# Date:," + ParsCalendar.getInstance().getShortDateTime() + ",,,,,,,,,,");
-            writer.flush();
-
-        } catch (IOException ignored) {
-        }*/
-    }
-
-    public void addHeader() {
-
-        try {
-            writer.write(getCsvHeader());
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private String getCsvHeader() {
-        String hiss = "R\\C";  // Row:0 and Col:0
-        for (int i = 0; i < agentCount; i++) {
-            hiss = "," + i;
-        }
-        return hiss;
     }
 
 
