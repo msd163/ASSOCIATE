@@ -191,6 +191,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         loc_x = tileIndex.x;
         loc_y = tileIndex.y;
 
+        agent.setLoc(loc_x, loc_y);
 
         honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : new Color(255, 71, 71);
         honestForeColor = behavior.getIsHonest() ? new Color(36, 151, 9) : new Color(255, 196, 166);
@@ -200,7 +201,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         if (agent.isSimConfigLinkToWatchedAgents()) {
             g.setColor(Color.GRAY);
             for (WatchedAgent wa : watchedAgents) {
-                g.drawLine(loc_x, loc_y, wa.getAgent().getLoc_x(), wa.getAgent().getLoc_y());
+                g.drawLine(agent.getLocX(), agent.getLocY(), wa.getAgent().getLocX(), wa.getAgent().getLocY());
             }
         }
 

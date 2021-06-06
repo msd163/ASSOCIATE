@@ -34,7 +34,10 @@ public class Agent {
     private boolean simConfigTraceable;
     private boolean simConfigShowRequestedService;
     private boolean simConfigShowTargetState;
+    //============================
 
+    private int locX;
+    private int locY;
     //============================
     @Expose
     private int id;
@@ -246,41 +249,31 @@ public class Agent {
     public void updateWatchList() {
         watchedAgents.clear();
         watchedStates.clear();
-        // ArrayList<StateX> visitedStates = new ArrayList<>();    // list of visited states in navigation of states, this list is for preventing duplicate visiting.
         ArrayList<StateX> parentPath = new ArrayList<>();
-        state.getWatchListOfAgents(
+
+        System.out.println("-" + id + "---------------------- capacity.getWatchListCapacity()  " + capacity.getWatchListCapacity()+ "  w size:" + watchedAgents.size());
+
+        int remainedAgents = state.fillAgentsOfState(
                 watchedAgents,
                 watchedStates,
                 capacity.getWatchDepth(),
                 capacity.getWatchDepth(),
                 capacity.getWatchListCapacity(),
                 this,
+                parentPath);
+
+        System.out.println("remainedAgents1  " + remainedAgents + "  w size:" + watchedAgents.size());
+
+        remainedAgents = state.getWatchListOfAgents(
+                watchedAgents,
+                watchedStates,
+                capacity.getWatchDepth(),
+                capacity.getWatchDepth(),
+                remainedAgents,
+                this,
                 parentPath
         );
-        //state.getWatchListOfStates(capacity.getWatchDepth(), watchedStates, null);
-   /*     // Sorting watched agents according trust level of this agent to them.
-        watchedAgents.sort((WatchedAgent w1, WatchedAgent w2) -> {
-            float t1 = w1.getTrust();
-            float t2 = w2.getTrust();
-
-            if (t1 > t2) {
-                return 1;
-            } else if (t1 < t2) {
-                return -1;
-            }
-            return 0;
-        });*/
-    }
-
-    public boolean canWatch(Agent agent) {
-        if (watchedAgents != null) {
-            for (int i = 0; i < watchedAgents.size(); i++) {
-                if (watchedAgents.get(i).getAgent().id == agent.id) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        System.out.println("remainedAgents2  " + remainedAgents+ "  w size:" + watchedAgents.size());
     }
 
     //============================ Doing
@@ -324,13 +317,19 @@ public class Agent {
         return id;
     }
 
-    public int getLoc_x() {
-        return (int) state.getLocation().getX();
+    public int getLocX() {
+        return locX;
     }
 
-    public int getLoc_y() {
-        return (int) state.getLocation().getY();
+    public void setLoc(int locX, int locY) {
+        this.locX = locX;
+        this.locY = locY;
     }
+
+    public int getLocY() {
+        return locY;
+    }
+
 
     public World getWorld() {
         return world;

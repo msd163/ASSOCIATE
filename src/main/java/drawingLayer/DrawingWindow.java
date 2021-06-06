@@ -1,5 +1,6 @@
 package drawingLayer;
 
+import utils.Globals;
 import utils.Point;
 
 import javax.swing.*;
@@ -39,6 +40,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             pnOffsetOld.y = pnOffset.y;
                             scaleOffset = new Point(0, 0);
                             scale = 1f;
+                        }
+
+                        if(e.isControlDown()){
+                            Globals.PAUSE = !Globals.PAUSE;
                         }
                     }
                 });

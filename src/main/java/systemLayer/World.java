@@ -41,7 +41,7 @@ public class World {
         //============================
 
         // Identifying the agents that we want to trace in Main diagram.
-        traceAgentIds = new int[]{1, 2};
+        traceAgentIds = new int[]{1};
 
         // Initializing the timer of the world.
         // Setting -1 for registering first history of travel time to -1;
@@ -176,7 +176,7 @@ public class World {
                     }
 
                     //============================  if agentId is in 'traceAgentIds', it will set as traceable
-                    if (isTraceable(i)) {
+                    if (isTraceable(agent.getId())) {
                         agent.setAsTraceable();
                     }
 
@@ -294,6 +294,10 @@ public class World {
 
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
+            while (Globals.PAUSE) {
+                updateWindows(showMainWindow, showDiagramWindow, showTrustMatWindow, showTrustStatsWindow, mainWindow, diagramWindow, trustMatWindow, trustStatsWindow);
+            }
+
             WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
             statistic.setWorldTime(Globals.WORLD_TIMER);
             statistic.init(Globals.EPISODE);
@@ -370,29 +374,7 @@ public class World {
             }
 
             //============================//============================ Repainting
-            if (showMainWindow) {
-                mainWindow.repaint();
-            }
-
-            if (showDiagramWindow) {
-                diagramWindow.repaint();
-            }
-
-            if (showTrustMatWindow) {
-                matrixGenerator.update();
-                trustMatWindow.repaint();
-            }
-
-            if (showTrustStatsWindow) {
-                trustStatsWindow.repaint();
-            }
-
-            //============================//============================ Sleeping
-            try {
-                Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            updateWindows(showMainWindow, showDiagramWindow, showTrustMatWindow, showTrustStatsWindow, mainWindow, diagramWindow, trustMatWindow, trustStatsWindow);
 
         }
 
@@ -423,28 +405,32 @@ public class World {
         //============================//============================ Running program after finishing lifeTime of the world.
 
         while (true) {
-            if (showMainWindow) {
-                mainWindow.repaint();
-            }
-
-            if (showDiagramWindow) {
-                diagramWindow.repaint();
-            }
-
-            if (showTrustMatWindow) {
-                matrixGenerator.update();
-                trustMatWindow.repaint();
-            }
-            if (showTrustStatsWindow) {
-                trustStatsWindow.repaint();
-            }
-            try {
-                Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            updateWindows(showMainWindow, showDiagramWindow, showTrustMatWindow, showTrustStatsWindow, mainWindow, diagramWindow, trustMatWindow, trustStatsWindow);
         }
     }  //  End of running
+
+    private void updateWindows(boolean showMainWindow, boolean showDiagramWindow, boolean showTrustMatWindow, boolean showTrustStatsWindow, StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow) {
+        if (showMainWindow) {
+            mainWindow.repaint();
+        }
+
+        if (showDiagramWindow) {
+            diagramWindow.repaint();
+        }
+
+        if (showTrustMatWindow) {
+            matrixGenerator.update();
+            trustMatWindow.repaint();
+        }
+        if (showTrustStatsWindow) {
+            trustStatsWindow.repaint();
+        }
+        try {
+            Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     //============================//============================//============================
 

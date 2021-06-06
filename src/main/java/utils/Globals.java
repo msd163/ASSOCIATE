@@ -9,6 +9,8 @@ import java.util.Random;
 public class Globals {
     public static Random RANDOM = new Random(new Date().getTime());
 
+    public static boolean PAUSE = false;
+
     public static TrustManager trustManager;
     public static CapacityProfiler profiler = new CapacityProfiler();
 
