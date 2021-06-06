@@ -35,29 +35,27 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
 
         //============================//============================ Translate for panning and scaling
 
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
       /*  g.drawString("mouse: " + mousePosition.x + " , " + mousePosition.y, 100, 60);
         g.drawString("pn: " + pnOffset.x + " , " + pnOffset.y, 100, 100);
         g.drawString("sc: " + scale, 100, 140);
         g.drawString("scoff: " + scaleOffset.x + " , " + scaleOffset.y, 100, 180);*/
 
-        g.translate(0, 200);
         g.drawString("World Time                : " + Globals.WORLD_TIMER, 100, 50);
-        g.drawString("Episode                    : " + Globals.EPISODE, 100, 100);
+        g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
         if(Globals.WORLD_TIMER< Config.WORLD_LIFE_TIME) {
             g.setColor(Color.WHITE);
-            g.drawString("Agents In Targets ITT :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttAgentsInTarget(), 100, 200);
+            g.drawString("Agents In Targets ITT :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttAgentsInTarget(), 100, 160);
             g.setColor(Color.YELLOW);
-            g.drawString("Success Travel ITT    :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttSuccessTravelToNeighbor(), 100, 250);
+            g.drawString("Success Travel ITT    :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttSuccessTravelToNeighbor(), 100, 200);
             g.setColor(Color.GREEN);
-            g.drawString("Agents In Targets      :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInTarget(), 100, 350);
+            g.drawString("Agents In Targets      :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInTarget(), 100, 240);
             g.setColor(Color.RED);
-            g.drawString("Agents In Pitfall     :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInPitfall(), 100, 400);
+            g.drawString("Agents In Pitfall     :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInPitfall(), 100, 280);
             g.setColor(Color.DARK_GRAY);
-            g.drawString("Random Travel         :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttRandomTravelToNeighbors(), 100, 450);
+            g.drawString("Random Travel         :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttRandomTravelToNeighbors(), 100, 320);
         }
-        g.translate(0, -200);
 
         //============================//============================//============================
 

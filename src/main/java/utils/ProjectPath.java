@@ -40,9 +40,11 @@ public class ProjectPath {
         return envtDir() + "/environment-" + i + ".json";
     }
 
+/*
     public String autoEnvGeneratorData() {
         return resourcesDir() + "/autoEnvGen.json";
     }
+*/
 
     public String simulationData(int i) {
         return resourcesDir() + "/simulation-" + i + ".json";

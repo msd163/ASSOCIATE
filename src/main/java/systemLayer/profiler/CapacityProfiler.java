@@ -4,20 +4,41 @@ import java.util.ArrayList;
 
 public class CapacityProfiler {
 
-    private String agentsCount;
-    private String simulationRound;
 
+    private String simulationRound;
+    private DefParameter simulationRoundD;
+    private String sleepInTarget;
+    private DefParameter sleepInTargetD;
+
+    //============================
+    private String stateCount;
+    private DefParameter stateCountD;
+    private String stateCapacity;
+    private DefParameter stateCapacityD;
+    private String stateTargetCount;
+    private DefParameter stateTargetCountD;
+    private String pitfallCount;
+    private DefParameter pitfallCountD;
+
+    //============================
+    private String agentsCount;
+    private DefParameter agentsCountD;
+
+    //============================
     private ArrayList<PopulationBunch> bunches;
 
-    private DefParameter agentsCountD;
-    private DefParameter simulationRoundD;
 
     private int currentBunchIndex;
 
     //============================//============================
 
     public CapacityProfiler() {
-        agentsCount
+        pitfallCount
+                = stateTargetCount
+                = stateCapacity
+                = stateCount
+                = sleepInTarget
+                = agentsCount
                 = simulationRound
                 = "";
         currentBunchIndex = 0;
@@ -28,6 +49,12 @@ public class CapacityProfiler {
 
         agentsCountD = new DefParameter(agentsCount);
         simulationRoundD = new DefParameter(simulationRound);
+        pitfallCountD = new DefParameter(pitfallCount);
+        stateTargetCountD = new DefParameter(stateTargetCount);
+        stateCapacityD = new DefParameter(stateCapacity);
+        stateCountD = new DefParameter(stateCount);
+        sleepInTargetD = new DefParameter(sleepInTarget);
+
 
         if (bunches == null || bunches.isEmpty()) {
             System.out.println(">> ERROR: Profiler bunch is empty.");
@@ -60,12 +87,32 @@ public class CapacityProfiler {
     }
     //============================//============================
 
-    public int getSimulationRound() {
+    public int getSimulationRoundValue() {
         return simulationRoundD.nextValue();
     }
 
-    public int getAgentsCount() {
+    public int getAgentsCountValue() {
         return agentsCountD.nextValue();
+    }
+
+    public int getSleepInTargetValue() {
+        return sleepInTargetD.nextValue();
+    }
+
+    public int getStateCountValue() {
+        return stateCountD.nextValue();
+    }
+
+    public int getStateCapacityValue() {
+        return stateCapacityD.nextValue();
+    }
+
+    public int getStateTargetCountValue() {
+        return stateTargetCountD.nextValue();
+    }
+
+    public int getPitfallCountValue() {
+        return pitfallCountD.nextValue();
     }
 
     //============================//============================

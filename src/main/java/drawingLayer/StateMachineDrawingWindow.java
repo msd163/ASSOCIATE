@@ -4,19 +4,16 @@ import stateLayer.Environment;
 import stateLayer.StateX;
 import stateLayer.TransitionX;
 import systemLayer.*;
-import utils.Config;
 import utils.Point;
 import utils.RectangleX;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.geom.Arc2D;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class StateMachineDrawingWindow extends DrawingWindow{
+public class StateMachineDrawingWindow extends DrawingWindow {
 
     private static final Random random = new Random();
 
@@ -38,6 +35,10 @@ public class StateMachineDrawingWindow extends DrawingWindow{
         for (int i = 0; i < colors.length; i++) {
             colors[i] = getRandColor();
         }
+
+        pnOffset.x = 400;
+        pnOffset.y = -200;
+        scale = 0.03f;
     }
 
     //============================//============================//============================
@@ -54,8 +55,8 @@ public class StateMachineDrawingWindow extends DrawingWindow{
         g.setColor(Color.YELLOW);
 
         //============================ Title
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-        g.drawString(world.toString(), 40, 40);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        g.drawString(world.toString(), 10, 10);
 
         //============================//============================ Translate for panning and scaling
 

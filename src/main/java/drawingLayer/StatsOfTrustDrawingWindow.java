@@ -39,23 +39,21 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
 
         //============================//============================ Translate for panning and scaling
 
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        g.translate(0, 200);
         g.drawString("World Time                : " + Globals.WORLD_TIMER, 100, 50);
-        g.drawString("Episode                    : " + Globals.EPISODE, 100, 100);
+        g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
         if (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
             g.setColor(Color.GREEN);
-            g.drawString("Total Trust To HONEST :   " + totalHonestTrust, 100, 200);
+            g.drawString("Total Trust To HONEST :   " + totalHonestTrust, 100, 150);
             g.setColor(Color.YELLOW);
-            g.drawString("Trust To HONEST           :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToHonest(), 100, 250);
+            g.drawString("Trust To HONEST           :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToHonest(), 100, 190);
             g.setColor(Color.RED);
-            g.drawString("Total Trust To DisHONEST  :   " + totalDishonestTrust, 100, 350);
+            g.drawString("Total Trust To DisHONEST  :   " + totalDishonestTrust, 100, 230);
             g.setColor(Color.ORANGE);
-            g.drawString("Trust To DisHONEST :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToDishonest(), 100, 400);
+            g.drawString("Trust To DisHONEST :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToDishonest(), 100, 270);
         }
-        g.translate(0, -200);
 
         //============================//============================//============================
 

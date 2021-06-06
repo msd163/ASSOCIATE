@@ -103,6 +103,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         if (sc > 1) {
             sc += -0.5 * e.getWheelRotation();
+        } else if (sc < 0.1) {
+            sc += -0.01 * e.getWheelRotation();
         } else if (sc < 1) {
             sc += -0.05 * e.getWheelRotation();
         } else {
@@ -112,10 +114,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 sc += -0.05 * e.getWheelRotation();
             }
         }
-        if (sc > 5) {
-            sc = 5;
-        } else if (sc < 0.09f) {
-            sc = 0.05f;
+        if (sc > 10) {
+            sc = 10;
+        } else if (sc < 0.009f) {
+            sc = 0.01f;
         }
 
 

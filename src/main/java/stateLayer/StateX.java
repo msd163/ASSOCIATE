@@ -50,31 +50,6 @@ public class StateX {
 
     //============================//============================
 
-    public boolean I_am_in(Agent agent) {
-        if (getTraffic() < capacity) {
-            boolean add = true;
-            for (int i = 0; i < agents.size(); i++) {
-                if (agents.get(i).getId() == agent.getId()) {
-                    add = false;
-                }
-            }
-            if (add)
-                agents.add(agent);
-            return true;
-        }
-        return false;
-
-    }
-
-    public void I_am_out(Agent agent) {
-        for (int i = 0; i < agents.size(); i++) {
-            if (agents.get(i).getId() == agent.getId()) {
-                agents.remove(i);
-                break;
-            }
-        }
-    }
-
     public int getTraffic() {
         return agents.size();
     }

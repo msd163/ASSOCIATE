@@ -1,14 +1,18 @@
 package trustLayer;
 
+import _type.TtTrustReplaceHistoryMethod;
 import stateLayer.TravelHistory;
 import systemLayer.Agent;
-import utils.Config;
 
 import java.util.ArrayList;
 
 public class TrustManager {
 
-    public TrustManager() {
+    private TtTrustReplaceHistoryMethod replaceHistoryMethod;
+
+
+    public TrustManager(TtTrustReplaceHistoryMethod replaceHistoryMethod) {
+        this.replaceHistoryMethod = replaceHistoryMethod;
     }
 
     public static int calculateTrust(Agent agent) {
@@ -82,7 +86,7 @@ public class TrustManager {
             __trust.addHistorySizeIfPossible();
 
             // Replacing new history item with an exist one according selected method.
-            switch (Config.TRUST_REPLACE_HISTORY_METHOD) {
+            switch (replaceHistoryMethod) {
 
                 case Sequential_Circular:
                     __trust.addHistoryIndex();

@@ -35,8 +35,8 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
         setBackground(Color.BLACK);
         g.setColor(Color.YELLOW);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-        g.drawString(mousePosition.toString(), 100, 100);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        g.drawString(mousePosition.toString(), 10, 10);
 
         //============================//============================//============================
 

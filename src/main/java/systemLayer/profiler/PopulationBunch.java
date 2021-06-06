@@ -1,6 +1,7 @@
 package systemLayer.profiler;
 
 import _type.TtBehaviorStrategy;
+import _type.TtTrustReplaceHistoryMethod;
 
 public class PopulationBunch {
     private String bunchCount;
@@ -12,6 +13,7 @@ public class PopulationBunch {
     private String targetCount;
     private String trustBehavioralStrategy;
     private String trustHonestDiscretePercentage;
+    private String trustReplaceHistoryMethod;
 
     //============================
     private DefParameter bunchCountD;
@@ -23,6 +25,7 @@ public class PopulationBunch {
     private DefParameter targetCountD;
     private DefParameter trustBehavioralStrategyD;
     private DefParameter trustHonestDiscretePercentageD;
+    private DefParameter trustReplaceHistoryMethodD;
 
 
     //============================//============================
@@ -37,6 +40,7 @@ public class PopulationBunch {
         targetCountD = new DefParameter(targetCount);
         trustBehavioralStrategyD = new DefParameter(trustBehavioralStrategy);
         trustHonestDiscretePercentageD = new DefParameter(trustHonestDiscretePercentage);
+        trustReplaceHistoryMethodD = new DefParameter(trustReplaceHistoryMethod);
     }
 
     //============================//============================
@@ -84,6 +88,11 @@ public class PopulationBunch {
         return TtBehaviorStrategy.getByOrdinal(i);
     }
 
+    public TtTrustReplaceHistoryMethod getTrustReplaceHistoryMethod(){
+        int i = trustReplaceHistoryMethodD.nextValue();
+        return TtTrustReplaceHistoryMethod.getByOrdinal(i);
+    }
+
     //============================//============================
     public String toString(int tabIndex) {
         tabIndex++;
@@ -112,6 +121,7 @@ public class PopulationBunch {
                 ti + ", targetCountD=" + targetCountD.toString(tabIndex) +
                 ti + ", trustBehavioralStrategyD=" + trustBehavioralStrategyD.toString(tabIndex) +
                 ti + ", trustHonestDiscretePercentageD=" + trustHonestDiscretePercentageD.toString(tabIndex) +
+                ti + ", trustReplaceHistoryMethodD=" + trustReplaceHistoryMethodD.toString(tabIndex) +
                 tx + '}';
     }
 

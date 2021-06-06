@@ -20,8 +20,6 @@ public class Config {
 
     public static int STATE_TILE_WIDTH = 40;
 
-    public static final TtTrustReplaceHistoryMethod TRUST_REPLACE_HISTORY_METHOD = TtTrustReplaceHistoryMethod.Sequential_Circular;
-
     //============================ Dra`wing Windows
 
     public static final boolean DRAWING_SHOW_MAIN_WINDOW = true;

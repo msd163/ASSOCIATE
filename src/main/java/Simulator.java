@@ -40,7 +40,7 @@ public class Simulator {
         System.out.println("Environment loaded from file.");
 
         //============================ Initializing wrolds
-        worlds = new World[Globals.profiler.getSimulationRound()];
+        worlds = new World[Globals.profiler.getSimulationRoundValue()];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
             worlds[i] = new World(environment);

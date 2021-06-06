@@ -1,13 +1,14 @@
 package systemLayer;
 
 import _type.TtSimulationMode;
-import drawingLayer.StatsOfEnvDrawingWindow;
 import drawingLayer.StateMachineDrawingWindow;
-import drawingLayer.TrustMatrixDrawingWindow;
+import drawingLayer.StatsOfEnvDrawingWindow;
 import drawingLayer.StatsOfTrustDrawingWindow;
+import drawingLayer.TrustMatrixDrawingWindow;
 import routingLayer.Router;
 import stateLayer.Environment;
 import stateLayer.StateX;
+import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
 import utils.*;
 
@@ -40,7 +41,7 @@ public class World {
         //============================
 
         // Identifying the agents that we want to trace in Main diagram.
-        traceAgentIds = new int[]{1,2};
+        traceAgentIds = new int[]{1, 2};
 
         // Initializing the timer of the world.
         // Setting -1 for registering first history of travel time to -1;
@@ -63,7 +64,7 @@ public class World {
                 }
             }
         } else {
-            agentsCount = Globals.profiler.getAgentsCount();
+            agentsCount = _environment.getAgentsCount();
         }
         agents = new Agent[agentsCount];
 
@@ -194,6 +195,8 @@ public class World {
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
 
+        Globals.trustManager = new TrustManager(Globals.profiler.getCurrentBunch().getTrustReplaceHistoryMethod());
+
         //============================//============================ Init trust matrix
         initTrustMatrix();
     }
@@ -223,47 +226,61 @@ public class World {
         boolean showTrustMatWindow = Config.DRAWING_SHOW_TRUST_MAT_WINDOW;     // Whether show TrustMatrixWindow or not.
         boolean showTrustStatsWindow = Config.DRAWING_SHOW_TRUST_STAT_WINDOW;     // Whether show DrawingWindow or not.
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        int widthHalf = (int) width / 2;
+        int heightHalf = (int) height / 2;
         //============================ Initializing Main Drawing Windows
         StateMachineDrawingWindow mainWindow = new StateMachineDrawingWindow(this);
         mainWindow.setDoubleBuffered(true);
         if (showMainWindow) {
             JFrame mainFrame = new JFrame();
             mainFrame.getContentPane().add(mainWindow);
-            mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            mainFrame.setMinimumSize(new Dimension(1500, 800));
+            // mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            mainFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
             mainFrame.setVisible(true);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            // boolean doubleBuffered = mainFrame.isDoubleBuffered();
+            mainFrame.setLocation(0, 0);
+            mainFrame.setTitle("State Machine Map");
         }
         //============================ Initializing Diagram Drawing Windows
         StatsOfEnvDrawingWindow diagramWindow = new StatsOfEnvDrawingWindow(this);
         diagramWindow.setDoubleBuffered(true);
         if (showDiagramWindow) {
-            JFrame diagramFrame = new JFrame();
-            diagramFrame.getContentPane().add(diagramWindow);
-            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            diagramFrame.setMinimumSize(new Dimension(1500, 800));
-            diagramFrame.setVisible(true);
+            JFrame statsFrame = new JFrame();
+            statsFrame.getContentPane().add(diagramWindow);
+//            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            statsFrame.setVisible(true);
+            statsFrame.setLocation(0, heightHalf);
+            statsFrame.setTitle("Environment Statistics");
         }
+
         //============================ Initializing Diagram Drawing Windows
-        TrustMatrixDrawingWindow trustWindow = new TrustMatrixDrawingWindow(matrixGenerator);
-        trustWindow.setDoubleBuffered(true);
+        TrustMatrixDrawingWindow trustMatWindow = new TrustMatrixDrawingWindow(matrixGenerator);
+        trustMatWindow.setDoubleBuffered(true);
         if (showTrustMatWindow) {
-            JFrame diagramFrame = new JFrame();
-            diagramFrame.getContentPane().add(trustWindow);
-            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            diagramFrame.setMinimumSize(new Dimension(1500, 800));
-            diagramFrame.setVisible(true);
+            JFrame trustMatFrame = new JFrame();
+            trustMatFrame.getContentPane().add(trustMatWindow);
+//            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            trustMatFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            trustMatFrame.setVisible(true);
+            trustMatFrame.setLocation(widthHalf, 0);
+            trustMatFrame.setTitle("Trust Matrix");
         }
+
         //============================ Initializing Diagram Drawing Windows
         StatsOfTrustDrawingWindow trustStatsWindow = new StatsOfTrustDrawingWindow(this);
-        trustWindow.setDoubleBuffered(true);
+        trustMatWindow.setDoubleBuffered(true);
         if (showTrustStatsWindow) {
-            JFrame diagramFrame = new JFrame();
-            diagramFrame.getContentPane().add(trustStatsWindow);
-            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            diagramFrame.setMinimumSize(new Dimension(1500, 800));
-            diagramFrame.setVisible(true);
+            JFrame trustStats = new JFrame();
+            trustStats.getContentPane().add(trustStatsWindow);
+//            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            trustStats.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            trustStats.setVisible(true);
+            trustStats.setLocation(widthHalf, heightHalf);
+            trustStats.setTitle("Trust Statistics");
         }
 
 
@@ -359,7 +376,7 @@ public class World {
 
             if (showTrustMatWindow) {
                 matrixGenerator.update();
-                trustWindow.repaint();
+                trustMatWindow.repaint();
             }
 
             if (showTrustStatsWindow) {
@@ -412,7 +429,7 @@ public class World {
 
             if (showTrustMatWindow) {
                 matrixGenerator.update();
-                trustWindow.repaint();
+                trustMatWindow.repaint();
             }
             if (showTrustStatsWindow) {
                 trustStatsWindow.repaint();
