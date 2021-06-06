@@ -54,14 +54,14 @@ public class Router {
             statistics.addAllInTargetAgents();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
-            if (!agent.isInFinalTarget()) {
+            //if (!agent.isInFinalTarget()) {
                 if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
                     int ct = agent.getCurrentTarget().getId();
                     agent.assignNextTargetState();
                     OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
                             "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
                 }
-            }
+            //}
             return state;
         }
 

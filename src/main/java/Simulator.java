@@ -2,10 +2,7 @@ import com.google.gson.Gson;
 import stateLayer.Environment;
 import systemLayer.World;
 import systemLayer.profiler.CapacityProfiler;
-import utils.Config;
-import utils.Globals;
-import utils.ParsCalendar;
-import utils.ProjectPath;
+import utils.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -41,17 +38,15 @@ public class Simulator {
         }
 
         System.out.println("Environment loaded from file.");
-        // System.out.println(environment.toString());
 
-
-        //============================
+        //============================ Initializing wrolds
         worlds = new World[Globals.profiler.getSimulationRound()];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
             worlds[i] = new World(environment);
         }
 
-        //============================
+        //============================//============================ Initializing statistics report file
         if (Config.STATISTICS_IS_GENERATE) {
             String statName = ParsCalendar.getInstance().getShortDateTime();
             statName = statName
@@ -59,7 +54,7 @@ public class Simulator {
                     .replaceAll("[:/]", "")
             ;
 
-            statName += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1);
+            statName += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1,Config.FullEnvironmentDataFile.lastIndexOf("."));
 
             System.out.println(statName);
             statName = ProjectPath.instance().statisticsDir() + "/" + statName + ".csv";
@@ -83,6 +78,7 @@ public class Simulator {
             world.run();
         }
 
+        //============================//============================ Closing statistics file
         if (Config.STATISTICS_IS_GENERATE) {
             Globals.statGenerator.close();
         }

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class MainDrawingWindow extends JPanel implements MouseMotionListener, MouseWheelListener {
+public class MainDrawingWindow extends DrawingWindow{
 
     private static final Random random = new Random();
 
@@ -24,19 +24,11 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
     private Environment environment;
     private Color[] colors;
 
-    //============================//============================  panning params
-    private utils.Point scaleOffset = new utils.Point(0, 0);
-    private utils.Point pnOffset = new utils.Point(0, 0);
-    private utils.Point pnOffsetOld = new utils.Point(0, 0);
-    private utils.Point pnStartPoint = new utils.Point(0, 0);
-
-    private float scale = 1f;
     private int _colorIndex = 0;
-
-    Graphics2D g;
 
     //============================//============================//============================
     public MainDrawingWindow(World world) {
+        super();
         this.world = world;
         this.environment = world.getEnvironment();
         colors = new Color[environment.getStateCount() * 2];
@@ -46,36 +38,9 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         for (int i = 0; i < colors.length; i++) {
             colors[i] = getRandColor();
         }
-
-        //============================//============================
-        addMouseListener(
-                new MouseAdapter() {
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        pnStartPoint.x = (int) (e.getPoint().getX());
-                        pnStartPoint.y = (int) (e.getPoint().getY());
-                        pnOffsetOld.x = pnOffset.x;
-                        pnOffsetOld.y = pnOffset.y;
-
-                        // For resetting screen by double click
-                        if (e.getClickCount() == 2) {
-                            pnOffset = new utils.Point(0, 0);
-                            pnOffsetOld = new utils.Point(0, 0);
-                            pnStartPoint = new utils.Point(0, 0);
-                            pnOffsetOld.x = pnOffset.x;
-                            pnOffsetOld.y = pnOffset.y;
-                            scale = 1f;
-                        }
-                    }
-                });
-
-        this.addMouseMotionListener(this);
-        this.addMouseWheelListener(this);
     }
 
     //============================//============================//============================
-    Color tempColor;
 
     @Override
     public void paint(Graphics gr) {
@@ -302,47 +267,4 @@ public class MainDrawingWindow extends JPanel implements MouseMotionListener, Mo
         );
     }
 
-    //============================//============================//============================ Mouse events
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        pnOffset.x = pnOffsetOld.x + e.getPoint().x - pnStartPoint.x;
-        pnOffset.y = pnOffsetOld.y + e.getPoint().y - pnStartPoint.y;
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-
-        float sc = scale;
-
-        if (sc > 1) {
-            sc += -0.5 * e.getWheelRotation();
-        } else if (sc < 1) {
-            sc += -0.05 * e.getWheelRotation();
-        } else {
-            if (e.getWheelRotation() < 0) {
-                sc += -0.5 * e.getWheelRotation();
-            } else {
-                sc += -0.05 * e.getWheelRotation();
-            }
-        }
-        if (sc > 5) {
-            sc = 5;
-        } else if (sc < 0.09f) {
-            sc = 0.05f;
-        }
-
-        if (sc > scale) {
-            scaleOffset.y = -(int) ((e.getY()+ pnOffset.y) * (sc - scale));
-//            pnOffset.x -= (e.getX() * (sc - scale));
-        } else if (sc < scale) {
-            scaleOffset.y = (int) (e.getY() * (scale - sc));
-//            pnOffset.x += (e.getX() * (scale - sc));
-        }
-
-        scale = sc;
-    }
 }

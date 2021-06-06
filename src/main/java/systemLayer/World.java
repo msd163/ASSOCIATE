@@ -2,15 +2,13 @@ package systemLayer;
 
 import _type.TtSimulationMode;
 import drawingLayer.DiagramDrawingWindow;
+import drawingLayer.DrawingWindow;
 import drawingLayer.MainDrawingWindow;
+import drawingLayer.TrustMatrixDrawingWindow;
 import routingLayer.Router;
 import stateLayer.Environment;
 import stateLayer.StateX;
-import trustLayer.TrustHistory;
-import trustLayer.TrustHistoryItem;
-import utils.Config;
-import utils.Globals;
-import utils.WorldStatistics;
+import utils.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +30,9 @@ public class World {
     private WorldStatistics[] statistics;
 
     private Router router;
+
+
+    TrustMatrixGenerator matrixGenerator = new TrustMatrixGenerator();
 
     //============================//============================//============================
     private void init(Environment _environment) throws Exception {
@@ -130,7 +131,7 @@ public class World {
                                 //isValidToAddAsTarget = !agents[i].isAsTarget(randomState);
 
                                 //-- Check if this target state is equals to previously added target state
-                                isValidToAddAsTarget = randomState.getId()!= prevState.getId();
+                                isValidToAddAsTarget = randomState.getId() != prevState.getId();
                             }
                         } while (!isValidToAddAsTarget && tryCount++ < agentsCount);
 
@@ -191,6 +192,14 @@ public class World {
 
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
+
+        //============================//============================ Init trust matrix
+        initTrustMatrix();
+    }
+
+    private void initTrustMatrix() {
+        matrixGenerator.init(agents);
+
     }
 
     private boolean isTraceable(int i) {
@@ -210,6 +219,7 @@ public class World {
 
         boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;           // Whether show MainWindow or not.
         boolean showDiagramWindow = Config.DRAWING_SHOW_DIAGRAM_WINDOW;     // Whether show DrawingWindow or not.
+        boolean showTrustMatWindow = Config.DRAWING_SHOW_TRUST_MAT_WINDOW;     // Whether show TrustMatrixWindow or not.
 
         //============================ Initializing Main Drawing Windows
         MainDrawingWindow mainWindow = new MainDrawingWindow(this);
@@ -229,6 +239,16 @@ public class World {
         if (showDiagramWindow) {
             JFrame diagramFrame = new JFrame();
             diagramFrame.getContentPane().add(diagramWindow);
+            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            diagramFrame.setMinimumSize(new Dimension(1500, 800));
+            diagramFrame.setVisible(true);
+        }
+        //============================ Initializing Diagram Drawing Windows
+        TrustMatrixDrawingWindow trustWindow = new TrustMatrixDrawingWindow(matrixGenerator);
+        trustWindow.setDoubleBuffered(true);
+        if (showTrustMatWindow) {
+            JFrame diagramFrame = new JFrame();
+            diagramFrame.getContentPane().add(trustWindow);
             diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             diagramFrame.setMinimumSize(new Dimension(1500, 800));
             diagramFrame.setVisible(true);
@@ -284,7 +304,7 @@ public class World {
                 Globals.EPISODE++;
 
                 for (StateX state : environment.getStates()) {
-                    if(state.isIsPitfall()){
+                    if (state.isIsPitfall()) {
                         ArrayList<Agent> stateAgents = state.getAgents();
                         for (int i = 0; i < stateAgents.size(); i++) {
                             Agent agent = stateAgents.get(i);
@@ -317,6 +337,11 @@ public class World {
             if (showDiagramWindow) {
                 diagramWindow.repaint();
             }
+
+            if (showTrustMatWindow) {
+                matrixGenerator.update();
+                trustWindow.repaint();
+            }
             try {
                 Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
             } catch (InterruptedException e) {
@@ -324,25 +349,7 @@ public class World {
             }
         }
 
-        for (Agent agent : agents) {
-            TrustHistory[] histories = agent.getTrust().getHistories();
-            String hiss = "";
-            System.out.println(agent.getId() + "------------------------------");
-            for (int i = 0; i < histories.length; i++) {
-                TrustHistory history = histories[i];
-                if (history != null) {
-                    hiss += " | " + history.getAgent().getId() + " > " + history.getFinalTrustLevel() + " : ";
-                    for (TrustHistoryItem item : history.getItems()) {
-                        if (item != null) {
-                            hiss += item.getTrustScore() + ", ";
-                        }
-                    }
-                }
-            }
-            System.out.println(hiss);
-
-        }
-
+        //============================//============================//============================ Creating trust matrix and saving in csv file
         try {
             Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
         } catch (InterruptedException e) {
@@ -350,8 +357,50 @@ public class World {
         }
         mainWindow.repaint();
 
+        //============================//============================ Generating Trust Matrix
+
+        if (Config.TRUST_MATRIX_IS_GENERATE) {
+            System.out.println("Generating Trust Matrix");
+            String matrixPath = ParsCalendar.getInstance().getShortDateTime();
+            matrixPath = matrixPath
+                    .replaceAll("[ ]", "-")
+                    .replaceAll("[:/]", "")
+            ;
+
+            matrixPath += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1, Config.FullEnvironmentDataFile.lastIndexOf("."));
+
+            matrixPath = ProjectPath.instance().statisticsDir() + "/" + matrixPath + ".mat.csv";
+
+            System.out.println(matrixPath);
+
+            matrixGenerator.update();
+            matrixGenerator.write(matrixPath);
+            matrixGenerator.close();
+            System.out.println("Trust Matrix Generated.");
+        }
+
         System.out.println("Finished");
 
+
+        while (true){
+            if (showMainWindow) {
+                mainWindow.repaint();
+            }
+
+            if (showDiagramWindow) {
+                diagramWindow.repaint();
+            }
+
+            if (showTrustMatWindow) {
+                matrixGenerator.update();
+                trustWindow.repaint();
+            }
+            try {
+                Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

@@ -9,11 +9,11 @@ public class Config {
     public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.SimulateMode;
 
     public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().envData(2);
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().envData();
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME = 10000;                        // time of execution in each world
+    public static int WORLD_LIFE_TIME = 200;                        // time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
 
     public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
@@ -23,13 +23,15 @@ public class Config {
 
     //============================ Dra`wing Windows
 
-    public static final boolean DRAWING_SHOW_MAIN_WINDOW = true;
-    public static final boolean DRAWING_SHOW_DIAGRAM_WINDOW = true;
+    public static final boolean DRAWING_SHOW_MAIN_WINDOW = false;
+    public static final boolean DRAWING_SHOW_DIAGRAM_WINDOW = false;
+    public static final boolean DRAWING_SHOW_TRUST_MAT_WINDOW = true;
 
     public static final boolean DRAWING_SHOW_POWERFUL_AGENTS_RADIUS = true;
     public static final int DRAWING_POWERFUL_AGENTS_THRESHOLD = 95;                // [1,100]
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE = true;
+    public static final boolean TRUST_MATRIX_IS_GENERATE = true;
 
 }
