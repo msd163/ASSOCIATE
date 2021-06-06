@@ -50,7 +50,11 @@ public class World {
 
         statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
         for (int i = 0; i < statistics.length; i++) {
-            statistics[i] = new WorldStatistics();
+            if (i == 0) {
+                statistics[i] = new WorldStatistics(null);
+            } else {
+                statistics[i] = new WorldStatistics(statistics[i - 1]);
+            }
         }
 
         router = new Router(this);
@@ -292,7 +296,7 @@ public class World {
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
             WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
             statistic.setWorldTime(Globals.WORLD_TIMER);
-            statistic.setEpisode(Globals.EPISODE);
+            statistic.init(Globals.EPISODE);
             router.setStatistics(statistic);
 
             if (Globals.WORLD_TIMER == 0) {

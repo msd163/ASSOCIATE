@@ -34,6 +34,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
 
         for (int i = 0; i < colors.length; i++) {
             colors[i] = getRandColor();
+
         }
 
         pnOffset.x = 400;

@@ -3,6 +3,8 @@ package utils;
 public class WorldStatistics {
 
 
+    private WorldStatistics prevStats;
+
     private int worldTime;
     private int episode;
     //============================
@@ -20,12 +22,15 @@ public class WorldStatistics {
     private int agentsWithNoTargetState;
     private int statesWithNoTarget;
     //============================
+    private int allTrustToDishonest;
+    private int allTrustToHonest;
     private int ittTrustToDishonest;
     private int ittTrustToHonest;
 
     //============================//============================
 
-    public WorldStatistics() {
+    public WorldStatistics(WorldStatistics prevStats) {
+        this.prevStats = prevStats;
         worldTime
                 = allAgentsInTarget
                 = ittAgentsInTarget
@@ -41,6 +46,20 @@ public class WorldStatistics {
                 = ittTrustToDishonest
                 = ittTrustToHonest
                 = 0;
+
+
+    }
+
+    public void init(int episode) {
+        this.episode = episode;
+
+        if (prevStats != null && prevStats.episode == episode) {
+            allTrustToDishonest = prevStats.getAllTrustToDishonest();
+            allTrustToHonest = prevStats.getAllTrustToHonest();
+        } else {
+            allTrustToDishonest
+                    = allTrustToHonest = 0;
+        }
     }
 
     public void add_All_AgentsInTarget() {
@@ -93,10 +112,13 @@ public class WorldStatistics {
 
     public void add_Itt_TrustToHonest() {
         ittTrustToHonest++;
+        allTrustToHonest++;
     }
+
 
     public void add_Itt_TrustToDishonest() {
         ittTrustToDishonest++;
+        allTrustToDishonest++;
     }
 
 
@@ -200,7 +222,11 @@ public class WorldStatistics {
         return episode;
     }
 
-    public void setEpisode(int episode) {
-        this.episode = episode;
+    public int getAllTrustToDishonest() {
+        return allTrustToDishonest;
+    }
+
+    public int getAllTrustToHonest() {
+        return allTrustToHonest;
     }
 }
