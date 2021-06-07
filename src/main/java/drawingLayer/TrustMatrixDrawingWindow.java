@@ -70,9 +70,17 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             for (int j = 0; j < matCount; j++) {
                 float trVal = this.trustMatrix[i][j];
                 if (trVal > 0) {
+                    if (!agents[j].getBehavior().getIsHonest()) {
+                        g.setColor(Color.RED);
+                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
+                    }
                     g.setColor(Color.GREEN);
+
                 } else if (trVal < 0) {
-                    g.setColor(Color.RED);
+                    if (agents[j].getBehavior().getIsHonest()) {
+                        g.setColor(Color.GREEN);
+                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
+                    } g.setColor(Color.RED);
                 } else {
                     g.setColor(Color.DARK_GRAY);
                 }
@@ -97,8 +105,8 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         g.drawString("0", -35, -10);
         g.drawString("0", 10, 35);
 
-        g.drawString("Trustee", 100, -pnY+50);
-        g.drawString("Trustier", pnX-100, -100);
+        g.drawString("Trustee", 100, -pnY + 50);
+        g.drawString("Trustier", pnX - 100, -100);
         g.scale(1, -1);
 
     }

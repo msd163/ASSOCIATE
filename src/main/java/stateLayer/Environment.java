@@ -3,7 +3,6 @@ package stateLayer;
 import _type.TtSimulationMode;
 import com.google.gson.annotations.Expose;
 import systemLayer.World;
-import systemLayer.profiler.DefParameter;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
@@ -212,7 +211,12 @@ public class Environment {
     }
 
     public StateX getState(int stateId) {
-        return states.get(stateId);
+        for (StateX state : states) {
+            if (state.getId() == stateId) {
+                return state;
+            }
+        }
+        return null;
     }
 
 

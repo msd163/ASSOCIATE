@@ -100,7 +100,7 @@ public class World {
                 }
 
                 //============================ Creating new state
-                agents[i] = new Agent(this, ++id);
+                agents[i] = new Agent(this, id++);
                 agents[i].init();
 
                 //============================  Adding agent to an state

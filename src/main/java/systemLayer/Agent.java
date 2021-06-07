@@ -251,29 +251,31 @@ public class Agent {
         watchedStates.clear();
         ArrayList<StateX> parentPath = new ArrayList<>();
 
-        System.out.println("-" + id + "---------------------- capacity.getWatchListCapacity()  " + capacity.getWatchListCapacity()+ "  w size:" + watchedAgents.size());
+       // System.out.println("-" + id + "---------------------- capacity.getWatchListCapacity()  " + capacity.getWatchListCapacity()+ "  w size:" + watchedAgents.size());
 
+        //============================
         int remainedAgents = state.fillAgentsOfState(
                 watchedAgents,
-                watchedStates,
-                capacity.getWatchDepth(),
-                capacity.getWatchDepth(),
                 capacity.getWatchListCapacity(),
                 this,
                 parentPath);
 
-        System.out.println("remainedAgents1  " + remainedAgents + "  w size:" + watchedAgents.size());
+       // System.out.println("remainedAgents1  " + remainedAgents + "  w size:" + watchedAgents.size());
 
-        remainedAgents = state.getWatchListOfAgents(
+        //============================  adding current stated to visited states list
+        WatchedState ws = new WatchedState();
+        ws.setStateX(state);
+        watchedStates.add(ws);
+
+        remainedAgents = state.fillStateWatchList(
                 watchedAgents,
                 watchedStates,
-                capacity.getWatchDepth(),
                 capacity.getWatchDepth(),
                 remainedAgents,
                 this,
                 parentPath
         );
-        System.out.println("remainedAgents2  " + remainedAgents+ "  w size:" + watchedAgents.size());
+       // System.out.println("remainedAgents2  " + remainedAgents+ "  w size:" + watchedAgents.size());
     }
 
     //============================ Doing

@@ -123,19 +123,18 @@ public class Router {
             return stateX;
         }
 
-        // Getting first entity of the nextSteps of the agent.
+        //-- Getting first entity of the nextSteps of the agent.
         StateX nextState = agent.getNextSteps().get(0);
 
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
             statistics___.add_Itt_FailedTravelToNeighbor();
-            //System.out.println("Agent.gotoTarget:: Error:  next state is not neighbor. agent: " + agent.getId() + " state: " + state.getId() + "  nextState: " + nextState.getId());
             OutLog____.pl(
                     TtOutLogMethodSection.TakeAStepTowardTheTarget,
                     TtOutLogStatus.ERROR,
-                    "Next state is not neighbor",
+                    "Next state (" + nextState.getId() + ") is not neighbor",
                     agent, state, agent.getCurrentTarget());
 
-            // Clearing agent next steps for regenerating next steps, in order to resolve problem.
+            //-- Clearing agent next steps for regenerating next steps, in order to resolve problem.
             agent.clearNextSteps();
 
             return null;
@@ -183,34 +182,34 @@ public class Router {
      */
     public void updateNextSteps(Agent agent, StateX goalState) {
 
-        //============================
+        //============================//============================  WatchedStates
         List<WatchedState> watchedStates = agent.getWatchedStates();
-        List<WatchedAgent> watchedAgents = agent.getWatchedAgents();
 
         //============================
-
         agent.clearNextSteps();
-
-        RoutingHelp routingHelp;
-
         //============================ (1) If the agent can watch the goalState in its target.
         if (watchedStates != null) {
             for (WatchedState ws : watchedStates) {
                 if (ws.getStateX().getId() == goalState.getId()) {
                     agent.getNextSteps().addAll(ws.getPath());
                     OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.SUCCESS, "Self Visiting", agent, agent.getState(), goalState);
-//                    System.out.println("[UNS] (OK) ----------| Self Visiting > Agent: " + agent.getId() + " | State: " + agent.getState().getId() + " | GoalState: " + goalState.getId());
                     return;
                 }
             }
         }
+
+
+        //============================//============================ WatchedAgents
+        List<WatchedAgent> watchedAgents = agent.getWatchedAgents();
 
         if (watchedAgents == null) {
             OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.FAILED, "watchedAgents is NULL", agent, agent.getState(), goalState);
             return;
         }
 
-        // Asking from watched list and filling routingHelps. all watchedAgents than know where is the goal state
+        RoutingHelp routingHelp;
+
+        //-- Asking from watched list and filling routingHelps. all watchedAgents than know where is the goal state
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent wa = watchedAgents.get(i);

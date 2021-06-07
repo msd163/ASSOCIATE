@@ -1,13 +1,13 @@
 package _type;
 
-public enum TtBehaviorStrategy {
+public enum TtTrustBehavioralStrategy {
     OnlyHonest,
     OnlyDishonest,
     Discrete,
     Fuzzy;
 
-    public static TtBehaviorStrategy getByOrdinal(int ordinal) {
-        for (TtBehaviorStrategy value : values()) {
+    public static TtTrustBehavioralStrategy getByOrdinal(int ordinal) {
+        for (TtTrustBehavioralStrategy value : values()) {
             if (value.ordinal() == ordinal) {
                 return value;
             }

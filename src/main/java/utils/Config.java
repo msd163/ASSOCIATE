@@ -1,8 +1,6 @@
 package utils;
 
-import _type.TtBehaviorStrategy;
 import _type.TtSimulationMode;
-import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {
 

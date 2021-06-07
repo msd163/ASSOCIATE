@@ -1,6 +1,6 @@
 package systemLayer.profiler;
 
-import _type.TtBehaviorStrategy;
+import _type.TtTrustBehavioralStrategy;
 import _type.TtTrustReplaceHistoryMethod;
 
 public class PopulationBunch {
@@ -83,9 +83,9 @@ public class PopulationBunch {
         return trustHonestDiscretePercentageD;
     }
 
-    public TtBehaviorStrategy  getBehavioralStrategy(){
+    public TtTrustBehavioralStrategy getBehavioralStrategy(){
         int i = trustBehavioralStrategyD.nextValue();
-        return TtBehaviorStrategy.getByOrdinal(i);
+        return TtTrustBehavioralStrategy.getByOrdinal(i);
     }
 
     public TtTrustReplaceHistoryMethod getTrustReplaceHistoryMethod(){

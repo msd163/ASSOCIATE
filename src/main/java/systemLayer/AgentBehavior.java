@@ -1,14 +1,13 @@
 package systemLayer;
 
-import _type.TtBehaviorStrategy;
+import _type.TtTrustBehavioralStrategy;
 import com.google.gson.annotations.Expose;
-import utils.Config;
 import utils.Globals;
 
 public class AgentBehavior {
 
 
-    public AgentBehavior(TtBehaviorStrategy strategy, int honestDiscretePercentage) {
+    public AgentBehavior(TtTrustBehavioralStrategy strategy, int honestDiscretePercentage) {
         this.strategy = strategy;
         switch (strategy) {
             case OnlyHonest:
@@ -26,7 +25,7 @@ public class AgentBehavior {
     }
 
     @Expose
-    private TtBehaviorStrategy strategy;
+    private TtTrustBehavioralStrategy strategy;
     @Expose
     private float honestDegree;
     @Expose
@@ -34,7 +33,7 @@ public class AgentBehavior {
 
     //============================//============================//============================
     public boolean updateHonestState() {
-        if (strategy == TtBehaviorStrategy.Fuzzy) {
+        if (strategy == TtTrustBehavioralStrategy.Fuzzy) {
             honestState = Globals.RANDOM.nextFloat() < honestDegree;
             return honestState;
         }

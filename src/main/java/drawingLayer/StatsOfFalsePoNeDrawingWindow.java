@@ -41,12 +41,12 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
         if (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
-            g.setColor(Color.white);
-            g.drawString("Total False Positive :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalsePositiveTrust(), 100, 150);
+//            g.setColor(Color.white);
+//            g.drawString("Total False Positive :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalsePositiveTrust(), 100, 150);
             g.setColor(Color.YELLOW);
             g.drawString("False Positive            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalsePositiveTrust(), 100, 190);
-            g.setColor(Color.RED);
-            g.drawString("Total False Negative  :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalseNegativeTrust(), 100, 230);
+//            g.setColor(Color.RED);
+//            g.drawString("Total False Negative  :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalseNegativeTrust(), 100, 230);
             g.setColor(Color.pink);
             g.drawString("False Negative            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalseNegativeTrust(), 100, 270);
         }
@@ -72,14 +72,14 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
             g.setColor(Color.YELLOW);
             g.fillOval(axisX, stat.getIttFalsePositiveTrust(), 5, 5);
             ///
-            g.setColor(Color.WHITE);
-            g.fillOval(axisX, stat.getAllFalsePositiveTrust(), 5, 5);
+//            g.setColor(Color.WHITE);
+//            g.fillOval(axisX, stat.getAllFalsePositiveTrust(), 5, 5);
             //============================
             g.setColor(Color.pink);
             g.fillOval(axisX, stat.getIttFalseNegativeTrust(), 5, 5);
             ///
-            g.setColor(Color.RED);
-            g.fillOval(axisX, stat.getAllFalseNegativeTrust(), 5, 5);
+//            g.setColor(Color.RED);
+//            g.fillOval(axisX, stat.getAllFalseNegativeTrust(), 5, 5);
 
         }
 
