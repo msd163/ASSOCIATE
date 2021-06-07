@@ -12,7 +12,7 @@ public class Config {
 
     //============================ World
     public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
-    public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
+    public static int WORLD_SLEEP_MILLISECOND = 10;                 // time of execution in each world
 
     public final static int EPISODE_TIMOUT= 200;
 

@@ -267,6 +267,15 @@ public class Environment {
         return states.get(i);
     }
 
+    public StateX getRandomSafeState() {
+
+        int i = Globals.RANDOM.nextInt(stateCount);
+
+
+
+        return states.get(i);
+    }
+
     public World getWorld() {
         return world;
     }

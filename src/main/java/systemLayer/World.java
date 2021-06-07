@@ -366,11 +366,13 @@ public class World {
                 Globals.EPISODE++;
 
                 //-- Exiting agents that are in pitfall and taking in new state randomly.
-                for (StateX state : environment.getStates()) {
+                ArrayList<StateX> states = environment.getStates();
+                for (int j = 0, statesSize = states.size(); j < statesSize; j++) {
+                    StateX state = states.get(j);
                     if (state.isIsPitfall()) {
-                        ArrayList<Agent> stateAgents = state.getAgents();
-                        for (int i = 0; i < stateAgents.size(); i++) {
-                            Agent agent = stateAgents.get(i);
+
+                        for (int i = 0, aSize = state.getAgents().size(); i < aSize; i++) {
+                            Agent agent = state.getAgents().get(i);
 
                             StateX randomState;
                             int tryCount = 0;
@@ -384,11 +386,11 @@ public class World {
                                     isAddedToState = randomState.addAgent(agent);
                                 }
                                 if (isAddedToState) {
-                                    agent.setState(randomState);
-                                    state.getAgents().remove(i);
+                                    state.getAgents().get(i).setState(randomState);
                                 }
-                            } while (!isAddedToState && tryCount++ < agentsCount);
+                            } while (!isAddedToState && tryCount++ < agentsCount*2);
                         }
+                        state.getAgents().clear();
                     }
                 }
             }

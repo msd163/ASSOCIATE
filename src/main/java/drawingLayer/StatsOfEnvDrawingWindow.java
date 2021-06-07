@@ -41,20 +41,26 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
         g.drawString("sc: " + scale, 100, 140);
         g.drawString("scoff: " + scaleOffset.x + " , " + scaleOffset.y, 100, 180);*/
 
-        g.drawString("World Time                : " + Globals.WORLD_TIMER, 100, 50);
-        g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
+        g.drawString("World Time                  : " + Globals.WORLD_TIMER, 100, 50);
+        g.drawString("Episode                       : " + Globals.EPISODE, 100, 90);
 
-        if(Globals.WORLD_TIMER< Config.WORLD_LIFE_TIME) {
+        if (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
             g.setColor(Color.WHITE);
-            g.drawString("Agents In Targets ITT :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttAgentsInTarget(), 100, 160);
+            g.drawString("Agents In Targets ITT   :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttAgentsInTarget(), 100, 160);
             g.setColor(Color.YELLOW);
-            g.drawString("Success Travel ITT    :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttSuccessTravelToNeighbor(), 100, 200);
+            g.drawString("Success Travel ITT       :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttSuccessTravelToNeighbor(), 100, 200);
+
             g.setColor(Color.GREEN);
-            g.drawString("Agents In Targets      :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInTarget(), 100, 240);
+            int allAgentsInTarget = world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInTarget();
+            g.drawString("Agents In Targets         :   " + allAgentsInTarget + "  %" + 100 * (float) allAgentsInTarget / world.getAgentsCount(), 100, 240);
+
             g.setColor(Color.RED);
-            g.drawString("Agents In Pitfall     :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInPitfall(), 100, 280);
-            g.setColor(Color.DARK_GRAY);
-            g.drawString("Random Travel         :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttRandomTravelToNeighbors(), 100, 320);
+            int allAgentsInPitfall = world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInPitfall();
+            g.drawString("Agents In Pitfall            :   " + allAgentsInPitfall + "  %" + 100 * (float) allAgentsInPitfall / world.getAgentsCount(), 100, 280);
+
+            g.setColor(Color.PINK);
+            int ittRandomTravelToNeighbors = world.getStatistics()[Globals.WORLD_TIMER].getIttRandomTravelToNeighbors();
+            g.drawString("Random Travel               :   " + ittRandomTravelToNeighbors + "  %" + 100 * (float) ittRandomTravelToNeighbors / world.getAgentsCount(), 100, 320);
         }
 
         //============================//============================//============================
@@ -88,7 +94,7 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
             g.setColor(Color.RED);
             g.fillOval(axisX, stat.getAllAgentsInPitfall(), 5, 5);
             //============================
-            g.setColor(Color.DARK_GRAY);
+            g.setColor(Color.PINK);
             g.fillOval(axisX, stat.getIttRandomTravelToNeighbors(), 5, 5);
             //============================
         }
