@@ -1,6 +1,7 @@
 package trustLayer;
 
 import systemLayer.Agent;
+import utils.WorldStatistics;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,7 +28,7 @@ public class TrustMatrix {
         }
     }
 
-    public void update() {
+    public void update(WorldStatistics statistics) {
         for (int i = 0, agentsSize = agents.length; i < agentsSize; i++) {
             Agent agent = agents[i];
             TrustHistory[] histories = agent.getTrust().getHistories();
@@ -38,6 +39,12 @@ public class TrustMatrix {
                     if (history != null) {
                         if (trustee.getId() == history.getAgent().getId()) {
                             trustMatrix[i][j] = history.getFinalTrustLevel();
+                            if (history.getFinalTrustLevel() > 0 && !trustee.getBehavior().getIsHonest()) {
+                                statistics.add_Itt_FalseNegativeTrust();
+                            }
+                            if (history.getFinalTrustLevel() < 0 && trustee.getBehavior().getIsHonest()) {
+                                statistics.add_Itt_FalsePositiveTrust();
+                            }
                         }
                     }
                 }

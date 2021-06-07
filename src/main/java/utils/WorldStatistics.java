@@ -3,12 +3,12 @@ package utils;
 public class WorldStatistics {
 
 
-    private WorldStatistics prevStats;
+    private WorldStatistics prevStats;      // previous statistics for calculating 'allTrustToHonest' and 'allTrustToDishonest'
 
-    private int worldTime;
-    private int episode;
+    private int worldTime;                  // time of world in this statistics
+    private int episode;                    // episode of world in this statistics
     //============================
-    private int allAgentsInTarget;
+    private int allAgentsInTarget;          //
     private int allAgentsInPitfall;
     //============================
     private int ittAgentsInTarget;
@@ -22,11 +22,15 @@ public class WorldStatistics {
     private int agentsWithNoTargetState;
     private int statesWithNoTarget;
     //============================
-    private int allTrustToDishonest;
-    private int allTrustToHonest;
-    private int ittTrustToDishonest;
-    private int ittTrustToHonest;
-
+    private int allTrustToDishonest;        // all agents that trust to a 'dishonest' agent
+    private int allTrustToHonest;           // all agents that trust to a 'honest' agent
+    private int ittTrustToDishonest;        // agents that trust to a 'dishonest' agent in this time
+    private int ittTrustToHonest;           // agents that trust to a 'honest' agent in this time
+    //============================
+    private int allFalsePositiveTrust;         // the number of trusts that calculated as negative trust (identified as dishonest), while the target agent was 'honest'
+    private int allFalseNegativeTrust;         // the number of trusts that calculated as positive trust (identified as honest), while the target agent was 'dishonest'
+    private int ittFalsePositiveTrust;
+    private int ittFalseNegativeTrust;
     //============================//============================
 
     public WorldStatistics(WorldStatistics prevStats) {
@@ -45,6 +49,8 @@ public class WorldStatistics {
                 = ittAgentsInPitfall
                 = ittTrustToDishonest
                 = ittTrustToHonest
+                = ittFalsePositiveTrust
+                = ittFalseNegativeTrust
                 = 0;
 
 
@@ -56,9 +62,15 @@ public class WorldStatistics {
         if (prevStats != null && prevStats.episode == episode) {
             allTrustToDishonest = prevStats.getAllTrustToDishonest();
             allTrustToHonest = prevStats.getAllTrustToHonest();
+            allFalsePositiveTrust = prevStats.getAllFalsePositiveTrust();
+            allFalseNegativeTrust = prevStats.getAllFalseNegativeTrust();
         } else {
+
             allTrustToDishonest
-                    = allTrustToHonest = 0;
+                    = allTrustToHonest
+                    = allFalseNegativeTrust
+                    = allFalsePositiveTrust
+                    = 0;
         }
     }
 
@@ -119,6 +131,17 @@ public class WorldStatistics {
     public void add_Itt_TrustToDishonest() {
         ittTrustToDishonest++;
         allTrustToDishonest++;
+    }
+
+    public void add_Itt_FalsePositiveTrust() {
+        ittFalsePositiveTrust++;
+        allFalsePositiveTrust++;
+    }
+
+
+    public void add_Itt_FalseNegativeTrust() {
+        ittFalseNegativeTrust++;
+        allFalseNegativeTrust++;
     }
 
 
@@ -228,5 +251,21 @@ public class WorldStatistics {
 
     public int getAllTrustToHonest() {
         return allTrustToHonest;
+    }
+
+    public int getAllFalsePositiveTrust() {
+        return allFalsePositiveTrust;
+    }
+
+    public int getAllFalseNegativeTrust() {
+        return allFalseNegativeTrust;
+    }
+
+    public int getIttFalsePositiveTrust() {
+        return ittFalsePositiveTrust;
+    }
+
+    public int getIttFalseNegativeTrust() {
+        return ittFalseNegativeTrust;
     }
 }

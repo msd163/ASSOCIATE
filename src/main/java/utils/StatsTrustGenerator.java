@@ -49,9 +49,13 @@ public class StatsTrustGenerator {
         return
                 "WorldTime," +
                         "IttTrustToHonest," +
-                        "IttTrustToDishonest,"+
-                        "AllTrustToHonest,"+
-                        "AllTrustToDishonest"
+                        "IttTrustToDishonest," +
+                        "AllTrustToHonest," +
+                        "AllTrustToDishonest," +
+                        "IttFalsePositiveTrust," +
+                        "IttFalseNegativeTrust," +
+                        "AllFalsePositiveTrust," +
+                        "AllFalseNegativeTrust"
 
                 ;
     }
@@ -62,7 +66,11 @@ public class StatsTrustGenerator {
                         stat.getIttTrustToHonest() + "," +
                         stat.getIttTrustToDishonest() + "," +
                         stat.getAllTrustToHonest() + "," +
-                        stat.getAllTrustToDishonest()
+                        stat.getAllTrustToDishonest() + "," +
+                        stat.getIttFalsePositiveTrust() + "," +
+                        stat.getIttFalseNegativeTrust() + "," +
+                        stat.getAllFalsePositiveTrust() + "," +
+                        stat.getAllFalseNegativeTrust()
 
                 ;
     }

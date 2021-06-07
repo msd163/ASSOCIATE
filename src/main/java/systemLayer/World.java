@@ -1,10 +1,7 @@
 package systemLayer;
 
 import _type.TtSimulationMode;
-import drawingLayer.StateMachineDrawingWindow;
-import drawingLayer.StatsOfEnvDrawingWindow;
-import drawingLayer.StatsOfTrustDrawingWindow;
-import drawingLayer.TrustMatrixDrawingWindow;
+import drawingLayer.*;
 import routingLayer.Router;
 import stateLayer.Environment;
 import stateLayer.StateX;
@@ -35,6 +32,13 @@ public class World {
 
 
     TrustMatrix matrixGenerator = new TrustMatrix();
+
+    boolean showMainWindow;         // Whether show MainWindow or not.
+    boolean showDiagramWindow;      // Whether show DrawingWindow or not.
+    boolean showTrustMatWindow;     // Whether show TrustMatrixWindow or not.
+    boolean showTrustStatsWindow;   // Whether show DrawingWindow or not.
+    boolean showTrustPoNeWindow;    // Whether show DrawingWindow or not.
+
 
     //============================//============================//============================
     private void init(Environment _environment) throws Exception {
@@ -225,10 +229,11 @@ public class World {
 
     public void run() {
 
-        boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;           // Whether show MainWindow or not.
-        boolean showDiagramWindow = Config.DRAWING_SHOW_ENV_STAT_WINDOW;     // Whether show DrawingWindow or not.
-        boolean showTrustMatWindow = Config.DRAWING_SHOW_TRUST_MAT_WINDOW;     // Whether show TrustMatrixWindow or not.
-        boolean showTrustStatsWindow = Config.DRAWING_SHOW_TRUST_STAT_WINDOW;     // Whether show DrawingWindow or not.
+        showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;
+        showDiagramWindow = Config.DRAWING_SHOW_ENV_STAT_WINDOW;
+        showTrustMatWindow = Config.DRAWING_SHOW_TRUST_MAT_WINDOW;
+        showTrustStatsWindow = Config.DRAWING_SHOW_TRUST_STAT_WINDOW;
+        showTrustPoNeWindow = Config.DRAWING_SHOW_TRUST_PoNe_WINDOW;
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
@@ -287,6 +292,19 @@ public class World {
             trustStats.setTitle("Trust Statistics");
         }
 
+        //============================ Initializing Diagram Drawing Windows
+        StatsOfFalsePoNeDrawingWindow poNeStatsWindow = new StatsOfFalsePoNeDrawingWindow(this);
+        poNeStatsWindow.setDoubleBuffered(true);
+        if (showTrustPoNeWindow) {
+            JFrame poNeStats = new JFrame();
+            poNeStats.getContentPane().add(poNeStatsWindow);
+//            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            poNeStats.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            poNeStats.setVisible(true);
+            poNeStats.setLocation(widthHalf, heightHalf);
+            poNeStats.setTitle("False Positive and False Negative Statistics");
+        }
+
 
         /* ****************************
          *            MAIN LOOP      *
@@ -295,7 +313,7 @@ public class World {
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
             while (Globals.PAUSE) {
-                updateWindows(showMainWindow, showDiagramWindow, showTrustMatWindow, showTrustStatsWindow, mainWindow, diagramWindow, trustMatWindow, trustStatsWindow);
+                updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow);
             }
 
             WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
@@ -334,6 +352,8 @@ public class World {
                     statistic.addStatesWithNoTarget();
                 }
             }
+
+            matrixGenerator.update(statistic);
 
             Globals.statsEnvGenerator.addStat(statistic);
             Globals.statsTrustGenerator.addStat(statistic);
@@ -374,7 +394,7 @@ public class World {
             }
 
             //============================//============================ Repainting
-            updateWindows(showMainWindow, showDiagramWindow, showTrustMatWindow, showTrustStatsWindow, mainWindow, diagramWindow, trustMatWindow, trustStatsWindow);
+            updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow);
 
         }
 
@@ -394,7 +414,7 @@ public class World {
             matrixPath = ProjectPath.instance().statisticsDir() + "/" + matrixPath + ".mat.csv";
 
 
-            matrixGenerator.update();
+            //matrixGenerator.update(null);
             matrixGenerator.write(matrixPath);
             matrixGenerator.close();
             System.out.println("Trust Matrix Generated.");
@@ -405,25 +425,25 @@ public class World {
         //============================//============================ Running program after finishing lifeTime of the world.
 
         while (true) {
-            updateWindows(showMainWindow, showDiagramWindow, showTrustMatWindow, showTrustStatsWindow, mainWindow, diagramWindow, trustMatWindow, trustStatsWindow);
+            updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow);
         }
     }  //  End of running
 
-    private void updateWindows(boolean showMainWindow, boolean showDiagramWindow, boolean showTrustMatWindow, boolean showTrustStatsWindow, StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow) {
+    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow) {
         if (showMainWindow) {
             mainWindow.repaint();
         }
-
         if (showDiagramWindow) {
             diagramWindow.repaint();
         }
-
         if (showTrustMatWindow) {
-            matrixGenerator.update();
             trustMatWindow.repaint();
         }
         if (showTrustStatsWindow) {
             trustStatsWindow.repaint();
+        }
+        if (showTrustPoNeWindow) {
+            poNeStatsWindow.repaint();
         }
         try {
             Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);

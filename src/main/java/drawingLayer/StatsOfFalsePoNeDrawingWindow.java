@@ -7,7 +7,7 @@ import utils.WorldStatistics;
 
 import java.awt.*;
 
-public class StatsOfTrustDrawingWindow extends DrawingWindow {
+public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
 
     private World world;
 
@@ -15,7 +15,7 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
 
     //============================//============================  panning params
 
-    public StatsOfTrustDrawingWindow(World world) {
+    public StatsOfFalsePoNeDrawingWindow(World world) {
         super();
         this.world = world;
     }
@@ -41,14 +41,14 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
         if (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
-            g.setColor(Color.GREEN);
-            g.drawString("Total Trust To HONEST :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllTrustToHonest(), 100, 150);
+            g.setColor(Color.white);
+            g.drawString("Total False Positive :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalsePositiveTrust(), 100, 150);
             g.setColor(Color.YELLOW);
-            g.drawString("Trust To HONEST           :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToHonest(), 100, 190);
+            g.drawString("False Positive            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalsePositiveTrust(), 100, 190);
             g.setColor(Color.RED);
-            g.drawString("Total Trust To DisHONEST  :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllTrustToDishonest(), 100, 230);
+            g.drawString("Total False Negative  :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalseNegativeTrust(), 100, 230);
             g.setColor(Color.pink);
-            g.drawString("Trust To DisHONEST :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToDishonest(), 100, 270);
+            g.drawString("False Negative            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalseNegativeTrust(), 100, 270);
         }
 
         //============================//============================//============================
@@ -70,16 +70,16 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
             //============================ Bound Rectangle
             //g.drawRect(0, 0, world.getWidth(), world.getHeight());
             g.setColor(Color.YELLOW);
-            g.fillOval(axisX, stat.getIttTrustToHonest(), 5, 5);
+            g.fillOval(axisX, stat.getIttFalsePositiveTrust(), 5, 5);
             ///
-            g.setColor(Color.GREEN);
-            g.fillOval(axisX, stat.getAllTrustToHonest(), 5, 5);
+            g.setColor(Color.WHITE);
+            g.fillOval(axisX, stat.getAllFalsePositiveTrust(), 5, 5);
             //============================
             g.setColor(Color.pink);
-            g.fillOval(axisX, stat.getIttTrustToDishonest(), 5, 5);
+            g.fillOval(axisX, stat.getIttFalseNegativeTrust(), 5, 5);
             ///
             g.setColor(Color.RED);
-            g.fillOval(axisX, stat.getAllTrustToDishonest(), 5, 5);
+            g.fillOval(axisX, stat.getAllFalseNegativeTrust(), 5, 5);
 
         }
 

@@ -26,6 +26,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_ENV_STAT_WINDOW = true;
     public static final boolean DRAWING_SHOW_TRUST_STAT_WINDOW = true;
     public static final boolean DRAWING_SHOW_TRUST_MAT_WINDOW = true;
+    public static final boolean DRAWING_SHOW_TRUST_PoNe_WINDOW = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE = true;
