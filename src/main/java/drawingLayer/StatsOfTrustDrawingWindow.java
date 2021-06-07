@@ -53,13 +53,20 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================
 
+        //============================ Translate
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
-        //============================ Translate
-
         g.drawLine(0, 0, getWidth(), 0);
+
+        //============================ Draw mouse plus
+        g.setColor(Color.YELLOW);
+        //-- (TOP-DOWN) Drawing vertical line for mouse pointer
+        g.drawLine(mousePosition.x, 0, mousePosition.x, getHeight());
+        //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
+        g.drawLine(0, mousePosition.y, getWidth(), mousePosition.y);
+
 
         WorldStatistics[] statistics = world.getStatistics();
 

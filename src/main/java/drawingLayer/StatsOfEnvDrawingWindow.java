@@ -65,14 +65,18 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================
 
+        //============================ Translate
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
-        //============================ Translate
-      /*  // g2.translate(SHIFT_X, SHIFT_Y);
-        g.scale(1.0, -1.0);
-        g.translate(0, -getHeight()+100);*/
+        //============================ Draw mouse plus
+        g.setColor(Color.YELLOW);
+        //-- (TOP-DOWN) Drawing vertical line for mouse pointer
+        g.drawLine(mousePosition.x, 0, mousePosition.x, getHeight());
+        //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
+        g.drawLine(0, mousePosition.y, getWidth(), mousePosition.y);
+
 
         g.drawLine(0, 0, getWidth(), 0);
 
