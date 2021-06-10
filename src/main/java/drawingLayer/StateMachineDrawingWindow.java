@@ -48,16 +48,16 @@ public class StateMachineDrawingWindow extends DrawingWindow {
     public void paint(Graphics gr) {
         //============================//============================ Preparing
         g = (Graphics2D) gr;
-
         g.setBackground(Color.BLACK);
-
         g.clearRect(0, 0, getWidth(), getHeight());
+        pauseNotice(g);
+
 
         g.setColor(Color.YELLOW);
 
         //============================ Title
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-        g.drawString(world.toString(), 10, 10);
+        //g.drawString(world.toString(), 10, 10);
 
         //============================//============================ Translate for panning and scaling
 

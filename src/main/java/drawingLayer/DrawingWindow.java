@@ -42,7 +42,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             scale = 1f;
                         }
 
-                        if(e.isControlDown()){
+                        if (e.isControlDown()) {
                             Globals.PAUSE = !Globals.PAUSE;
                         }
                     }
@@ -86,6 +86,13 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.drawRect(0, 0, 100, 100);*/
     }
 
+    protected void pauseNotice(Graphics2D g) {
+        if (Globals.PAUSE) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+            g.setColor(Color.GREEN);
+            g.drawString("PAUSED ", 400, 100);
+        }
+    }
     //============================//============================//============================ Mouse events
 
     @Override
@@ -97,7 +104,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     @Override
     public void mouseMoved(MouseEvent e) {
 //        mousePosition.x = e.getX();
-        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + (int)(getHeight()/scale) - 100;
+        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + (int) (getHeight() / scale) - 100;
         mousePosition.x = (int) ((e.getX() - pnOffset.x - scaleOffset.x) / scale) - 100;
     }
 

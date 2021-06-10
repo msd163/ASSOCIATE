@@ -1,7 +1,6 @@
 package drawingLayer;
 
 import systemLayer.World;
-import utils.Config;
 import utils.Globals;
 import utils.WorldStatistics;
 
@@ -20,18 +19,25 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
         this.world = world;
     }
 
+    private int worldTimer;
+
     @Override
     public void paint(Graphics gr) {
 
+        worldTimer = Globals.WORLD_TIMER - 1;
+
+        if (worldTimer < 0) {
+            return;
+        }
+
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
+        g.clearRect(0, 0, getWidth(), getHeight());
+        pauseNotice(g);
+
+        g.setColor(Color.YELLOW);
 
         axisX = 0;
-
-        g.clearRect(0, 0, getWidth(), getHeight());
-
-        setBackground(Color.BLACK);
-        g.setColor(Color.YELLOW);
 
         //============================//============================ Translate for panning and scaling
 
@@ -41,27 +47,26 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
         g.drawString("sc: " + scale, 100, 140);
         g.drawString("scoff: " + scaleOffset.x + " , " + scaleOffset.y, 100, 180);*/
 
-        g.drawString("World Time                  : " + Globals.WORLD_TIMER, 100, 50);
+        g.drawString("World Time                  : " + worldTimer, 100, 50);
         g.drawString("Episode                       : " + Globals.EPISODE, 100, 90);
 
-        if (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
-            g.setColor(Color.WHITE);
-            g.drawString("Agents In Targets ITT   :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttAgentsInTarget(), 100, 160);
-            g.setColor(Color.YELLOW);
-            g.drawString("Success Travel ITT       :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttSuccessTravelToNeighbor(), 100, 200);
+        g.setColor(Color.WHITE);
+        g.drawString("Agents In Targets ITT   :   " + world.getStatistics()[worldTimer].getIttAgentsInTarget(), 100, 160);
+        g.setColor(Color.YELLOW);
+        g.drawString("Success Travel ITT       :   " + world.getStatistics()[worldTimer].getIttSuccessTravelToNeighbor(), 100, 200);
 
-            g.setColor(Color.GREEN);
-            int allAgentsInTarget = world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInTarget();
-            g.drawString("Agents In Targets         :   " + allAgentsInTarget + "  %" + 100 * (float) allAgentsInTarget / world.getAgentsCount(), 100, 240);
+        g.setColor(Color.GREEN);
+        int allAgentsInTarget = world.getStatistics()[worldTimer].getAllAgentsInTarget();
+        g.drawString("Agents In Targets         :   " + allAgentsInTarget + "  %" + 100 * (float) allAgentsInTarget / world.getAgentsCount(), 100, 240);
 
-            g.setColor(Color.RED);
-            int allAgentsInPitfall = world.getStatistics()[Globals.WORLD_TIMER].getAllAgentsInPitfall();
-            g.drawString("Agents In Pitfall            :   " + allAgentsInPitfall + "  %" + 100 * (float) allAgentsInPitfall / world.getAgentsCount(), 100, 280);
+        g.setColor(Color.RED);
+        int allAgentsInPitfall = world.getStatistics()[worldTimer].getAllAgentsInPitfall();
+        g.drawString("Agents In Pitfall            :   " + allAgentsInPitfall + "  %" + 100 * (float) allAgentsInPitfall / world.getAgentsCount(), 100, 280);
 
-            g.setColor(Color.PINK);
-            int ittRandomTravelToNeighbors = world.getStatistics()[Globals.WORLD_TIMER].getIttRandomTravelToNeighbors();
-            g.drawString("Random Travel               :   " + ittRandomTravelToNeighbors + "  %" + 100 * (float) ittRandomTravelToNeighbors / world.getAgentsCount(), 100, 320);
-        }
+        g.setColor(Color.PINK);
+        int ittRandomTravelToNeighbors = world.getStatistics()[worldTimer].getIttRandomTravelToNeighbors();
+        g.drawString("Random Travel               :   " + ittRandomTravelToNeighbors + "  %" + 100 * (float) ittRandomTravelToNeighbors / world.getAgentsCount(), 100, 320);
+
 
         //============================//============================//============================
 

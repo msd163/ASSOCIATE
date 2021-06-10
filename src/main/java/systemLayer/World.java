@@ -38,6 +38,7 @@ public class World {
     boolean showTrustMatWindow;     // Whether show TrustMatrixWindow or not.
     boolean showTrustStatsWindow;   // Whether show DrawingWindow or not.
     boolean showTrustPoNeWindow;    // Whether show DrawingWindow or not.
+    boolean showTrustParamWindow;    // Whether show DrawingWindow or not.
 
 
     //============================//============================//============================
@@ -234,6 +235,7 @@ public class World {
         showTrustMatWindow = Config.DRAWING_SHOW_TRUST_MAT_WINDOW;
         showTrustStatsWindow = Config.DRAWING_SHOW_TRUST_STAT_WINDOW;
         showTrustPoNeWindow = Config.DRAWING_SHOW_TRUST_PoNe_WINDOW;
+        showTrustParamWindow = Config.DRAWING_SHOW_TRUST_Param_WINDOW;
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
@@ -305,6 +307,18 @@ public class World {
             poNeStats.setTitle("False Positive and False Negative Statistics");
         }
 
+        //============================ Initializing Diagram Drawing Windows
+        StatsOfParamsDrawingWindow paramsDrawingWindow = new StatsOfParamsDrawingWindow(this);
+        paramsDrawingWindow.setDoubleBuffered(true);
+        if (showTrustParamWindow) {
+            JFrame paramStats = new JFrame();
+            paramStats.getContentPane().add(paramsDrawingWindow);
+            paramStats.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            paramStats.setVisible(true);
+            paramStats.setLocation(widthHalf, heightHalf);
+            paramStats.setTitle("Trust Params (Accuracy | Sensitivity | Specificity)");
+        }
+
 
         /* ****************************
          *            MAIN LOOP      *
@@ -312,16 +326,13 @@ public class World {
 
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
-            while (Globals.PAUSE) {
-                updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow);
-            }
 
             WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
             statistic.setWorldTime(Globals.WORLD_TIMER);
             statistic.init(Globals.EPISODE);
             router.setStatistics(statistic);
 
-            if (Globals.WORLD_TIMER == 0) {
+            if (Globals.WORLD_TIMER == 0 && Config.STATISTICS_IS_GENERATE) {
                 Globals.statsEnvGenerator.addHeader();
                 Globals.statsEnvGenerator.addComment();
                 Globals.statsTrustGenerator.addHeader();
@@ -355,8 +366,12 @@ public class World {
 
             matrixGenerator.update(statistic);
 
-            Globals.statsEnvGenerator.addStat(statistic);
-            Globals.statsTrustGenerator.addStat(statistic);
+            if (Config.STATISTICS_IS_GENERATE) {
+                Globals.statsEnvGenerator.addStat(statistic);
+                Globals.statsTrustGenerator.addStat(statistic);
+            }
+            //============================//============================ Repainting
+            updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow, paramsDrawingWindow);
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
@@ -388,15 +403,16 @@ public class World {
                                 if (isAddedToState) {
                                     state.getAgents().get(i).setState(randomState);
                                 }
-                            } while (!isAddedToState && tryCount++ < agentsCount*2);
+                            } while (!isAddedToState && tryCount++ < agentsCount * 2);
                         }
                         state.getAgents().clear();
                     }
                 }
             }
 
-            //============================//============================ Repainting
-            updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow);
+            while (Globals.PAUSE) {
+                updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow, paramsDrawingWindow);
+            }
 
         }
 
@@ -427,11 +443,16 @@ public class World {
         //============================//============================ Running program after finishing lifeTime of the world.
 
         while (true) {
-            updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow);
+            updateWindows(mainWindow, diagramWindow, trustMatWindow, trustStatsWindow, poNeStatsWindow, paramsDrawingWindow);
         }
     }  //  End of running
 
-    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow) {
+    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, StatsOfParamsDrawingWindow paramsDrawingWindow) {
+        try {
+            Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (showMainWindow) {
             mainWindow.repaint();
         }
@@ -447,10 +468,8 @@ public class World {
         if (showTrustPoNeWindow) {
             poNeStatsWindow.repaint();
         }
-        try {
-            Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (showTrustParamWindow) {
+            paramsDrawingWindow.repaint();
         }
     }
 

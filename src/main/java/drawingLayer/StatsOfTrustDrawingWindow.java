@@ -1,7 +1,6 @@
 package drawingLayer;
 
 import systemLayer.World;
-import utils.Config;
 import utils.Globals;
 import utils.WorldStatistics;
 
@@ -20,36 +19,42 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
         this.world = world;
     }
 
+    private int worldTimer;
+
     @Override
     public void paint(Graphics gr) {
 
+        worldTimer = Globals.WORLD_TIMER - 1;
+
+        if (worldTimer < 0) {
+            return;
+        }
+
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
+        g.clearRect(0, 0, getWidth(), getHeight());
+        pauseNotice(g);
 
         axisX = 0;
 
-        g.clearRect(0, 0, getWidth(), getHeight());
-
-        setBackground(Color.BLACK);
         g.setColor(Color.YELLOW);
 
         //============================//============================ Translate for panning and scaling
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        g.drawString("World Time                : " + Globals.WORLD_TIMER, 100, 50);
+        g.drawString("World Time                : " + worldTimer, 100, 50);
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
-        if (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
-            g.setColor(Color.GREEN);
-            g.drawString("Total Trust To HONEST :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllTrustToHonest(), 100, 150);
-            g.setColor(Color.YELLOW);
-            g.drawString("Trust To HONEST           :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToHonest(), 100, 190);
-            g.setColor(Color.RED);
-            g.drawString("Total Trust To DisHONEST  :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllTrustToDishonest(), 100, 230);
-            g.setColor(Color.pink);
-            g.drawString("Trust To DisHONEST :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttTrustToDishonest(), 100, 270);
-        }
+        g.setColor(Color.GREEN);
+        g.drawString("Total Trust To HONEST :   " + world.getStatistics()[worldTimer].getAllTrustToHonest(), 100, 150);
+        g.setColor(Color.YELLOW);
+        g.drawString("Trust To HONEST           :   " + world.getStatistics()[worldTimer].getIttTrustToHonest(), 100, 190);
+        g.setColor(Color.RED);
+        g.drawString("Total Trust To DisHONEST  :   " + world.getStatistics()[worldTimer].getAllTrustToDishonest(), 100, 230);
+        g.setColor(Color.pink);
+        g.drawString("Trust To DisHONEST :   " + world.getStatistics()[worldTimer].getIttTrustToDishonest(), 100, 270);
+
 
         //============================//============================//============================
 

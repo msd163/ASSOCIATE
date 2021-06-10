@@ -45,6 +45,12 @@ public class TrustMatrix {
                             if (history.getFinalTrustLevel() < 0 && trustee.getBehavior().getIsHonest()) {
                                 statistics.add_Itt_FalsePositiveTrust();
                             }
+                            if (history.getFinalTrustLevel() > 0 && trustee.getBehavior().getIsHonest()) {
+                                statistics.add_Itt_TrueNegativeTrust();
+                            }
+                            if (history.getFinalTrustLevel() < 0 && !trustee.getBehavior().getIsHonest()) {
+                                statistics.add_Itt_TruePositiveTrust();
+                            }
                         }
                     }
                 }

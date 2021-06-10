@@ -31,6 +31,10 @@ public class WorldStatistics {
     private int allFalseNegativeTrust;         // the number of trusts that calculated as positive trust (identified as honest), while the target agent was 'dishonest'
     private int ittFalsePositiveTrust;
     private int ittFalseNegativeTrust;
+    private int ittTruePositiveTrust;
+    private int ittTrueNegativeTrust;
+
+
     //============================//============================
 
     public WorldStatistics(WorldStatistics prevStats) {
@@ -51,6 +55,8 @@ public class WorldStatistics {
                 = ittTrustToHonest
                 = ittFalsePositiveTrust
                 = ittFalseNegativeTrust
+                = ittTruePositiveTrust
+                = ittTrueNegativeTrust
                 = 0;
 
 
@@ -142,6 +148,15 @@ public class WorldStatistics {
     public void add_Itt_FalseNegativeTrust() {
         ittFalseNegativeTrust++;
         allFalseNegativeTrust++;
+    }
+
+    public void add_Itt_TruePositiveTrust() {
+        ittTruePositiveTrust++;
+    }
+
+
+    public void add_Itt_TrueNegativeTrust() {
+        ittTrueNegativeTrust++;
     }
 
 
@@ -267,5 +282,13 @@ public class WorldStatistics {
 
     public int getIttFalseNegativeTrust() {
         return ittFalseNegativeTrust;
+    }
+
+    public int getIttTruePositiveTrust() {
+        return ittTruePositiveTrust;
+    }
+
+    public int getIttTrueNegativeTrust() {
+        return ittTrueNegativeTrust;
     }
 }

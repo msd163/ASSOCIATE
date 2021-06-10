@@ -1,7 +1,6 @@
 package drawingLayer;
 
 import systemLayer.World;
-import utils.Config;
 import utils.Globals;
 import utils.WorldStatistics;
 
@@ -20,36 +19,42 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
         this.world = world;
     }
 
+    private int worldTimer;
+
     @Override
     public void paint(Graphics gr) {
 
+        worldTimer = Globals.WORLD_TIMER - 1;
+
+        if (worldTimer < 0) {
+            return;
+        }
+
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
+        g.clearRect(0, 0, getWidth(), getHeight());
+        pauseNotice(g);
 
         axisX = 0;
 
-        g.clearRect(0, 0, getWidth(), getHeight());
-
-        setBackground(Color.BLACK);
         g.setColor(Color.YELLOW);
 
         //============================//============================ Translate for panning and scaling
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        g.drawString("World Time                : " + Globals.WORLD_TIMER, 100, 50);
+        g.drawString("World Time                : " + worldTimer, 100, 50);
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
-        if (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
 //            g.setColor(Color.white);
 //            g.drawString("Total False Positive :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalsePositiveTrust(), 100, 150);
-            g.setColor(Color.YELLOW);
-            g.drawString("False Positive            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalsePositiveTrust(), 100, 190);
+        g.setColor(Color.YELLOW);
+        g.drawString("False Positive            :   " + world.getStatistics()[worldTimer].getIttFalsePositiveTrust(), 100, 190);
 //            g.setColor(Color.RED);
-//            g.drawString("Total False Negative  :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalseNegativeTrust(), 100, 230);
-            g.setColor(Color.pink);
-            g.drawString("False Negative            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalseNegativeTrust(), 100, 270);
-        }
+//            g.drawString("Total False Negative  :   " + world.getStatistics()[worldTimer].getAllFalseNegativeTrust(), 100, 230);
+        g.setColor(Color.pink);
+        g.drawString("False Negative            :   " + world.getStatistics()[worldTimer].getIttFalseNegativeTrust(), 100, 270);
+
 
         //============================//============================//============================
 

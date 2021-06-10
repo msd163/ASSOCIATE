@@ -26,14 +26,12 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
     @Override
     public void paint(Graphics gr) {
-        // super.paint(gr);
+
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
-
-
         g.clearRect(0, 0, getWidth(), getHeight());
+        pauseNotice(g);
 
-        setBackground(Color.BLACK);
         g.setColor(Color.YELLOW);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
         g.drawString(mousePosition.toString(), 10, 10);
