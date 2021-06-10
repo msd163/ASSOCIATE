@@ -55,7 +55,6 @@ public class CapacityProfiler {
         stateCountD = new DefParameter(stateCount);
         sleepInTargetD = new DefParameter(sleepInTarget);
 
-
         if (bunches == null || bunches.isEmpty()) {
             System.out.println(">> ERROR: Profiler bunch is empty.");
             return;

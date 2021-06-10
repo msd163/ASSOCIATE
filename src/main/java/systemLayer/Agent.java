@@ -5,6 +5,7 @@ import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import stateLayer.StateX;
 import stateLayer.TravelHistory;
+import systemLayer.profiler.CapacityProfiler;
 import trustLayer.AgentTrust;
 import utils.Globals;
 import utils.OutLog____;
@@ -81,14 +82,18 @@ public class Agent {
 
     //============================//============================//============================
 
-    public void init() {
-        capacity = new AgentCapacity(this);
-        trust = new AgentTrust(capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap());
+    public void initForGenerator(CapacityProfiler profiler) {
+        capacity = new AgentCapacity(this,profiler);
+        trust = new AgentTrust(
+                capacity.getTrustHistoryCap(),
+                capacity.getTrustHistoryItemCap(),
+                profiler.getCurrentBunch().getTrustReplaceHistoryMethod()
+        );
 
-        int targetCount = Globals.profiler.getCurrentBunch().getTargetCountD().nextValue();
+        int targetCount = profiler.getCurrentBunch().getTargetCountD().nextValue();
         behavior = new AgentBehavior(
-                Globals.profiler.getCurrentBunch().getBehavioralStrategy(),
-                Globals.profiler.getCurrentBunch().getTrustHonestDiscretePercentageD().nextValue()
+                profiler.getCurrentBunch().getBehavioralStrategy(),
+                profiler.getCurrentBunch().getTrustHonestDiscretePercentageD().nextValue()
         );
 
         targetStateIds = new int[targetCount];
@@ -251,7 +256,7 @@ public class Agent {
         watchedStates.clear();
         ArrayList<StateX> parentPath = new ArrayList<>();
 
-       // System.out.println("-" + id + "---------------------- capacity.getWatchListCapacity()  " + capacity.getWatchListCapacity()+ "  w size:" + watchedAgents.size());
+        // System.out.println("-" + id + "---------------------- capacity.getWatchListCapacity()  " + capacity.getWatchListCapacity()+ "  w size:" + watchedAgents.size());
 
         //============================
         int remainedAgents = state.fillAgentsOfState(
@@ -260,7 +265,7 @@ public class Agent {
                 this,
                 parentPath);
 
-       // System.out.println("remainedAgents1  " + remainedAgents + "  w size:" + watchedAgents.size());
+        // System.out.println("remainedAgents1  " + remainedAgents + "  w size:" + watchedAgents.size());
 
         //============================  adding current stated to visited states list
         WatchedState ws = new WatchedState();
@@ -275,7 +280,7 @@ public class Agent {
                 this,
                 parentPath
         );
-       // System.out.println("remainedAgents2  " + remainedAgents+ "  w size:" + watchedAgents.size());
+        // System.out.println("remainedAgents2  " + remainedAgents+ "  w size:" + watchedAgents.size());
     }
 
     //============================ Doing

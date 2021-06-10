@@ -12,7 +12,6 @@ public class Globals {
     public static boolean PAUSE = false;
 
     public static TrustManager trustManager;
-    public static CapacityProfiler profiler = new CapacityProfiler();
 
     public static int WORLD_TIMER;              // The timer of world which is increased by every run of world
 

@@ -1,10 +1,13 @@
 package stateLayer;
 
+import _type.TtOutLogMethodSection;
+import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
 import utils.Config;
+import utils.OutLog____;
 import utils.Point;
 import utils.RectangleX;
 
@@ -84,7 +87,7 @@ public class StateX {
                     }
                 }
                 if (!isFound) {
-                    System.out.println(">> Failed: State with ID '" + ti + "' is not in States.");
+                    OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.FAILED, "State with ID '" + ti + "' is not in States.");
                 }
             }
         }
@@ -231,8 +234,6 @@ public class StateX {
             if (target.isAnyPathTo(goalState, visitedStates)) {
                 return true;
             }
-
-
         }
 
         return false;

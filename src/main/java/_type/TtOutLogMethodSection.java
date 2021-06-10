@@ -5,6 +5,8 @@ public enum TtOutLogMethodSection {
     UpdateNextStep("UpNxSt"),
     UpdateTravelHistory("UpTrvHis"),
     TakeAStepTowardTheTarget("TTTrg"),
+    Generator_InitializingStates("Gn-InSt"),
+    updateTargets("UpTrgs"),
     //
     ;
 

@@ -17,17 +17,8 @@ public class Simulator {
 
         Environment environment;
 
-        //============================
-        FileReader prfReader = new FileReader(Config.SimulatingFile);
-        Globals.profiler = gson.fromJson(prfReader, CapacityProfiler.class);
-
-        if (Globals.profiler == null) {
-            System.out.println(">> Simulator.init");
-            System.out.println("> Error: profiler not found.");
-            return;
-        }
-        Globals.profiler.init();
-
+        //============================//============================
+        //-- Loading Environment from file
         FileReader envReader = new FileReader(Config.FullEnvironmentDataFile);
         environment = gson.fromJson(envReader, Environment.class);
 
@@ -39,8 +30,8 @@ public class Simulator {
 
         System.out.println("Environment loaded from file.");
 
-        //============================ Initializing wrolds
-        worlds = new World[Globals.profiler.getSimulationRoundValue()];
+        //============================ Initializing worlds
+        worlds = new World[environment.getSimulationRound()];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
             worlds[i] = new World(environment);
@@ -75,7 +66,7 @@ public class Simulator {
         }
 
         for (World world : worlds) {
-            Globals.profiler.ResetBunch();
+           // Globals.profiler.ResetBunch();
             world.run();
         }
 

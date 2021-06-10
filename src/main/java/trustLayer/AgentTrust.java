@@ -1,5 +1,6 @@
 package trustLayer;
 
+import _type.TtTrustReplaceHistoryMethod;
 import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 
@@ -8,9 +9,10 @@ import java.util.Arrays;
 
 public class AgentTrust {
 
-    public AgentTrust(int trustHistoryCap, int historyItemCap) {
+    public AgentTrust(int trustHistoryCap, int historyItemCap, TtTrustReplaceHistoryMethod replaceHistoryMethod) {
         this.historyCap = trustHistoryCap;
         this.historyItemCap = historyItemCap;
+        this.trustReplaceHistoryMethod = replaceHistoryMethod;
     }
 
     public void init(Agent parentAgent) {
@@ -47,6 +49,9 @@ public class AgentTrust {
 
     private int historyIndex;   // current index of history that will be fill
     private int historySize;    // current capacity of history
+
+    @Expose
+    private TtTrustReplaceHistoryMethod trustReplaceHistoryMethod;
 
     //============================//============================//============================
 
@@ -140,7 +145,7 @@ public class AgentTrust {
 
 
     protected AgentTrust clone() {
-        AgentTrust trust = new AgentTrust(historyCap, historyItemCap);
+        AgentTrust trust = new AgentTrust(historyCap, historyItemCap, trustReplaceHistoryMethod);
         trust.init(agent);
         trust.histories = this.histories;
         trust.historyIndex = this.historyIndex;
@@ -202,4 +207,11 @@ public class AgentTrust {
         this.historyIndex = historyIndex;
     }
 
+    public TtTrustReplaceHistoryMethod getTrustReplaceHistoryMethod() {
+        return trustReplaceHistoryMethod;
+    }
+
+    public void setTrustReplaceHistoryMethod(TtTrustReplaceHistoryMethod trustReplaceHistoryMethod) {
+        this.trustReplaceHistoryMethod = trustReplaceHistoryMethod;
+    }
 }

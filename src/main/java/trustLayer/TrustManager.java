@@ -8,11 +8,8 @@ import java.util.ArrayList;
 
 public class TrustManager {
 
-    private TtTrustReplaceHistoryMethod replaceHistoryMethod;
 
-
-    public TrustManager(TtTrustReplaceHistoryMethod replaceHistoryMethod) {
-        this.replaceHistoryMethod = replaceHistoryMethod;
+    public TrustManager() {
     }
 
     public static int calculateTrust(Agent agent) {
@@ -86,7 +83,7 @@ public class TrustManager {
             __trust.addHistorySizeIfPossible();
 
             // Replacing new history item with an exist one according selected method.
-            switch (replaceHistoryMethod) {
+            switch (__trust.getTrustReplaceHistoryMethod()) {
 
                 case Sequential_Circular:
                     __trust.addHistoryIndex();

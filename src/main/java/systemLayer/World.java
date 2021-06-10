@@ -1,6 +1,5 @@
 package systemLayer;
 
-import _type.TtSimulationMode;
 import drawingLayer.*;
 import routingLayer.Router;
 import stateLayer.Environment;
@@ -43,14 +42,15 @@ public class World {
 
     //============================//============================//============================
     private void init(Environment _environment) throws Exception {
-        //============================
 
-        // Identifying the agents that we want to trace in Main diagram.
+
+        //-- Identifying the agents that we want to trace in Main diagram.
+        //-- Indicating the agent and it's communications in environments with different colors
         traceAgentIds = new int[]{1};
 
-        // Initializing the timer of the world.
-        // Setting -1 for registering first history of travel time to -1;
-        // it used in initVar() of agent
+        //-- Initializing the timer of the world.
+        //-- Setting -1 for registering first history of travel time to -1;
+        //-- it used in initVar() of agent
         Globals.WORLD_TIMER = -1;
 
         statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
@@ -65,146 +65,52 @@ public class World {
         router = new Router(this);
         //============================ Setting agents count
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.SimulateMode) {
-            agentsCount = 0;
-            for (StateX state : _environment.getStates()) {
-                if (state.getAgents() != null) {
-                    agentsCount += state.getAgents().size();
-                }
-            }
-        } else {
-            agentsCount = _environment.getAgentsCount();
-        }
-        agents = new Agent[agentsCount];
-
+        agentsCount = _environment.getAgentsCount();
+        agents= new Agent[agentsCount];
         //============================ Initializing Environment
-        this.environment = new Environment(_environment);
-        this.environment.init(this);
-
-
-        if (environment.getMaximumAgentCapability() < agentsCount) {
-            throw new Exception(">> Error: Agents count is bigger than maximum capability of environment:  " + agentsCount + " > " + environment.getMaximumAgentCapability() + ". simulation_X.json -> \"agentsCount\": " + agentsCount);
-        }
+        this.environment = _environment;
+        this.environment.initForSimulation(this);
 
         //============================//============================  Initializing agents
         System.out.println(
                 " | agentsCount: " + agentsCount
         );
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.GenerateMode) {
-            int id = 0;
-            int thisBunchFinished = Globals.profiler.getCurrentBunch().getBunchCount();
+        ArrayList<StateX> states = environment.getStates();
 
-            for (int i = 0; i < agentsCount; i++) {
-                if (i >= thisBunchFinished) {
-                    thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
-                }
+        int i = 0;
+        for (StateX state : states) {
+            for (Agent agent : state.getAgents()) {
+                agent.setState(state);
+                agent.setWorld(this);
+                agent.initVars();
 
-                //============================ Creating new state
-                agents[i] = new Agent(this, id++);
-                agents[i].init();
+                //============================ filling state array according to stateId array
+                agent.updateTargets();
 
-                //============================  Adding agent to an state
-                StateX randomState;
-                int tryCount = 0;
-                boolean isAddedToState;
-                do {
-                    randomState = environment.getRandomState();
-                    if (randomState.isIsPitfall()) {
-                        isAddedToState = false;
-                    } else {
-                        // checking state capability and adding the agent to it.
-                        isAddedToState = randomState.addAgent(agents[i]);
-                    }
-                } while (!isAddedToState && tryCount++ < agentsCount);
-
-                if (isAddedToState) {
-
-                    //============================ Adding target states to agent
-                    agents[i].setState(randomState);
-
-                    int targetCounts = agents[i].getTargetCounts();
-                    StateX prevState = agents[i].getState();
-                    for (int tc = 0; tc < targetCounts; tc++) {
-                        boolean isValidToAddAsTarget;
-                        //============================ Adding target state to agents
-                        do {
-                            randomState = environment.getRandomState();
-                            //
-                            if (randomState.isIsPitfall()) {
-                                isValidToAddAsTarget = false;
-                            } else {
-                                //-- checking state capability and adding the agent to it.
-                                isValidToAddAsTarget = prevState.isAnyPathTo(randomState);
-                            }
-                            if (isValidToAddAsTarget) {
-                                //-- check if added previously as target
-                                //isValidToAddAsTarget = !agents[i].isAsTarget(randomState);
-
-                                //-- Check if this target state is equals to previously added target state
-                                isValidToAddAsTarget = randomState.getId() != prevState.getId();
-                            }
-                        } while (!isValidToAddAsTarget && tryCount++ < agentsCount);
-
-                        if (isValidToAddAsTarget) {
-                            agents[i].addTarget(randomState);
-                            prevState = randomState;
-                        }
-                    }
+                //-- First updating travel history as initialization state
+                if (agent.getState() != null) {
+                    agent.updateTravelHistory();
                 }
 
                 //============================  if agentId is in 'traceAgentIds', it will set as traceable
-//            Agent agent = agents[i];
-                if (isTraceable(i)) {
-                    agents[i].setAsTraceable();
+                if (isTraceable(agent.getId())) {
+                    agent.setAsTraceable();
                 }
-                System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getCurrentTarget() != null ? agents[i].getCurrentTarget().getId() : "NULL"));
+
+                System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
+
+                agents[i++] = agent;
+
             }
         }
-        //============================  FullEnv
-        else {
-            ArrayList<StateX> states = environment.getStates();
-
-            int i = 0;
-            for (StateX state : states) {
-                for (Agent agent : state.getAgents()) {
-                    agent.setState(state);
-                    agent.setWorld(this);
-                    agent.initVars();
-
-                    //============================ filling state array according to stateId array
-                    agent.updateTargets();
-
-                    //-- First updating travel history as initialization state
-                    if (agent.getState() != null) {
-                        agent.updateTravelHistory();
-                    }
-
-                    //============================  if agentId is in 'traceAgentIds', it will set as traceable
-                    if (isTraceable(agent.getId())) {
-                        agent.setAsTraceable();
-                    }
-
-                    System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
-
-                    agents[i++] = agent;
-
-                }
-            }
-        }
-
-      /*  for (Agent agent : agents) {
-            System.out.println("agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + agent.getTargetState().getId());
-        }*/
-
-        environment.updateAgentsCount();
 
         environment.reassigningStateLocationAndTransPath();
 
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
 
-        Globals.trustManager = new TrustManager(Globals.profiler.getCurrentBunch().getTrustReplaceHistoryMethod());
+        Globals.trustManager = new TrustManager();
 
         //============================//============================ Init trust matrix
         initTrustMatrix();

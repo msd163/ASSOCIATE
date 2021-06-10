@@ -1,6 +1,7 @@
 package systemLayer;
 
 import com.google.gson.annotations.Expose;
+import systemLayer.profiler.CapacityProfiler;
 import utils.Globals;
 
 public class AgentCapacity {
@@ -8,25 +9,25 @@ public class AgentCapacity {
     public AgentCapacity() {
     }
 
-    public AgentCapacity(Agent parentAgent) {
+    public AgentCapacity(Agent parentAgent, CapacityProfiler profiler) {
 
         this.agent = parentAgent;
 
-        watchDepth = Globals.profiler.getCurrentBunch().getWatchRadiusD().nextValue();
+        watchDepth = profiler.getCurrentBunch().getWatchRadiusD().nextValue();
 
-        travelHistoryCap = Globals.profiler.getCurrentBunch().getTravelHistoryCapD().nextValue();
+        travelHistoryCap = profiler.getCurrentBunch().getTravelHistoryCapD().nextValue();
 
-        watchListCapacity = Globals.profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
+        watchListCapacity = profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
 
 
 
-        trustHistoryCap = Globals.profiler.getCurrentBunch().getTrustHistoryCapD().nextValue();
-        trustHistoryItemCap = Globals.profiler.getCurrentBunch().getTrustHistoryItemCapD().nextValue();
+        trustHistoryCap = profiler.getCurrentBunch().getTrustHistoryCapD().nextValue();
+        trustHistoryItemCap = profiler.getCurrentBunch().getTrustHistoryItemCapD().nextValue();
 
         // capPower is between 0 and 100
         capPower =
-                (int) (60 * ((float) travelHistoryCap / Globals.profiler.getCurrentBunch().getTravelHistoryCapD().getMaxValue())) +
-                        (int) (40 * ((float) watchDepth / Globals.profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
+                (int) (60 * ((float) travelHistoryCap / profiler.getCurrentBunch().getTravelHistoryCapD().getMaxValue())) +
+                        (int) (40 * ((float) watchDepth / profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
         ;
 
         /*System.out.println(
