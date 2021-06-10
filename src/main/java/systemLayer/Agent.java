@@ -5,7 +5,7 @@ import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import stateLayer.StateX;
 import stateLayer.TravelHistory;
-import systemLayer.profiler.CapacityProfiler;
+import utils.profiler.SimulationProfiler;
 import trustLayer.AgentTrust;
 import utils.Globals;
 import utils.OutLog____;
@@ -82,7 +82,7 @@ public class Agent {
 
     //============================//============================//============================
 
-    public void initForGenerator(CapacityProfiler profiler) {
+    public void initForGenerator(SimulationProfiler profiler) {
         capacity = new AgentCapacity(this,profiler);
         trust = new AgentTrust(
                 capacity.getTrustHistoryCap(),

@@ -1,22 +1,18 @@
 package utils;
 
-import _type.TtSimulationMode;
-
 public class Config {
 
-   // public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.SimulateMode;
-
-    public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().envData();
+    public static final String SimulatingFile = ProjectPath.instance().simulationProfileData(1);
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().environmentData();
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME = 1000;                        // time of execution in each world
-    public static int WORLD_SLEEP_MILLISECOND = 10;                 // time of execution in each world
+    public static int WORLD_LIFE_TIME           = 1000;         // Time of execution in each world
+    public static int WORLD_SLEEP_MILLISECOND   = 500;           // Sleep time in each run of world
 
-    public final static int EPISODE_TIMOUT= 200;
+    public final static int EPISODE_TIMOUT      = 200;
 
-    public static int STATE_TILE_WIDTH = 40;
+    public static int STATE_TILE_WIDTH          = 40;
 
     //============================ Dra`wing Windows
 
@@ -28,7 +24,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_TRUST_Param_WINDOW = true;
 
     //============================ Statistics
-    public static final boolean STATISTICS_IS_GENERATE   = true;
-    public static final boolean TRUST_MATRIX_IS_GENERATE = true;
+    public static final boolean STATISTICS_IS_GENERATE      = true;
+    public static final boolean TRUST_MATRIX_IS_GENERATE    = true;
 
 }

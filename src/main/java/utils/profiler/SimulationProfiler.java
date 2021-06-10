@@ -1,8 +1,8 @@
-package systemLayer.profiler;
+package utils.profiler;
 
 import java.util.ArrayList;
 
-public class CapacityProfiler {
+public class SimulationProfiler {
 
 
     private String simulationRound;
@@ -32,7 +32,7 @@ public class CapacityProfiler {
 
     //============================//============================
 
-    public CapacityProfiler() {
+    public SimulationProfiler() {
         pitfallCount
                 = stateTargetCount
                 = stateCapacity

@@ -1,6 +1,5 @@
 package utils;
 
-import systemLayer.profiler.CapacityProfiler;
 import trustLayer.TrustManager;
 
 import java.util.Date;

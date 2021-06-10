@@ -1,7 +1,6 @@
 import com.google.gson.Gson;
 import stateLayer.Environment;
 import systemLayer.World;
-import systemLayer.profiler.CapacityProfiler;
 import utils.*;
 
 import java.io.FileNotFoundException;

@@ -2,23 +2,23 @@
   "simulationRound": "1",
   "sleepInTarget": "2",
   "------------------1": "",
-  "stateCount": 100,
-  "stateCapacity": "#10..200",
-  "stateTargetCount": "#2..10",
-  "pitfallCount": "1",
+  "stateCount": 10,
+  "stateCapacity": "1000",
+  "stateTargetCount": "5",
+  "pitfallCount": "5",
   "------------------2": "",
-  "agentsCount": "400",
+  "agentsCount": "10",
   "bunches": [
     {
       "bunchCount": "%100@200",
       "targetCount": "100",
-      "watchDepth": "0",
-      "watchListCapacity": "200",
+      "watchDepth": "1",
+      "watchListCapacity": "1000",
       "travelHistory": "#1000..1500",
       "trustHistoryCap": "#100..200",
       "trustHistoryItemCap": "250",
       "trustBehavioralStrategy": "2",
-      "trustHonestDiscretePercentage": "60",
+      "trustHonestDiscretePercentage": "80",
       "trustReplaceHistoryMethod": "1"
     }
   ]

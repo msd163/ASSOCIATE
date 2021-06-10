@@ -21,33 +21,27 @@ public class ProjectPath {
     }
 
 
-    public String envtDir() {
+    public String environmentDir() {
         return root() + "/src/main/resources/environment";
     }
 
-    public String envData(int i) {
-        return envtDir() + "/environment-" + i + ".json";
+    public String environmentData(int i) {
+        return environmentDir() + "/environment-" + i + ".json";
     }
 
-    public String envData() {
+    public String environmentData() {
         int i = 100;
         for (; i > 0; i--) {
-            if (new File(envtDir() + "/environment-" + i + ".json").exists()) {
+            if (new File(environmentDir() + "/environment-" + i + ".json").exists()) {
                 break;
             }
         }
-        System.out.println("|>  Selected FullEnvironment file: " + envtDir() + "/environment-" + i + ".json");
-        return envtDir() + "/environment-" + i + ".json";
+        System.out.println("|>  Selected FullEnvironment file: " + environmentDir() + "/environment-" + i + ".json");
+        return environmentDir() + "/environment-" + i + ".json";
     }
 
-/*
-    public String autoEnvGeneratorData() {
-        return resourcesDir() + "/autoEnvGen.json";
-    }
-*/
-
-    public String simulationData(int i) {
-        return resourcesDir() + "/simulation-" + i + ".json";
+    public String simulationProfileData(int i) {
+        return resourcesDir() + "/simulation-profile-" + i + ".json";
     }
 
     //============================//============================

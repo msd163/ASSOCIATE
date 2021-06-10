@@ -5,11 +5,11 @@ import com.google.gson.GsonBuilder;
 import stateLayer.Environment;
 import stateLayer.StateX;
 import systemLayer.Agent;
-import systemLayer.profiler.CapacityProfiler;
 import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 import utils.ProjectPath;
+import utils.profiler.SimulationProfiler;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class EnvGenerator {
 
-    private static CapacityProfiler profiler = new CapacityProfiler();
+    private static SimulationProfiler profiler = new SimulationProfiler();
 
     public static void main(String[] args) throws Exception {
 
@@ -27,7 +27,7 @@ public class EnvGenerator {
 
         //============================//============================  Loading Profiler from file
         FileReader prfReader = new FileReader(Config.SimulatingFile);
-        profiler = gson.fromJson(prfReader, CapacityProfiler.class);
+        profiler = gson.fromJson(prfReader, SimulationProfiler.class);
 
         if (profiler == null) {
             System.out.println(">> Simulator.init");
@@ -68,7 +68,7 @@ public class EnvGenerator {
 
         int envFileCounter = 0;
         String envFileName = "environment";
-        String envFilePath = ProjectPath.instance().envtDir() + "/" + envFileName;
+        String envFilePath = ProjectPath.instance().environmentDir() + "/" + envFileName;
 
         File file;
 
@@ -87,7 +87,7 @@ public class EnvGenerator {
 
     private static void InitializingAgents(Environment environment) {
 
-        int agentsCount =environment.getAgentsCount();
+        int agentsCount = environment.getAgentsCount();
 
         Agent[] agents = new Agent[agentsCount];
 
@@ -156,7 +156,7 @@ public class EnvGenerator {
         }
     }
 
-    private static void InitializingStates(Environment environment) {
+    private static void InitializingStates(Environment environment) throws Exception {
 
         int stateCount = environment.getStateCount();
 
@@ -196,6 +196,11 @@ public class EnvGenerator {
             }
 
             int targetCount = profiler.getStateTargetCountValue();
+
+            if (targetCount >= stateCount) {
+                OutLog____.pl(TtOutLogMethodSection.Generator_InitializingStates, TtOutLogStatus.ERROR, "Target count (" + targetCount + ") is bigger than state count (" + stateCount + ").");
+                throw new Exception("Target count (" + targetCount + ") is bigger than state count (" + stateCount + ").");
+            }
 
             for (int j = 0; j < targetCount; ) {
 

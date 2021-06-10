@@ -1,15 +1,14 @@
 package systemLayer;
 
 import com.google.gson.annotations.Expose;
-import systemLayer.profiler.CapacityProfiler;
-import utils.Globals;
+import utils.profiler.SimulationProfiler;
 
 public class AgentCapacity {
 
     public AgentCapacity() {
     }
 
-    public AgentCapacity(Agent parentAgent, CapacityProfiler profiler) {
+    public AgentCapacity(Agent parentAgent, SimulationProfiler profiler) {
 
         this.agent = parentAgent;
 
