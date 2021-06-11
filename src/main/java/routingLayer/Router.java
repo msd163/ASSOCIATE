@@ -9,6 +9,7 @@ import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
 import systemLayer.World;
+import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 import utils.WorldStatistics;
@@ -96,7 +97,7 @@ public class Router {
             return state;
         }
 
-        // If there is not any states in the agent history, the nextSteps of agent have to be updated.
+     /*   // If there is not any states in the agent history, the nextSteps of agent have to be updated.
         if (agent.getNextSteps().isEmpty()) {
             //============================//============================//============================
             //============================//============================
@@ -106,7 +107,7 @@ public class Router {
             //============================//============================
             //============================//============================//============================
             statistics___.add_Itt_UpdatedNextStep();
-        }
+        }*/
 
         // If the nextSteps is empty after updating the nextSteps, the agent will go to one neighbor randomly.
         if (agent.getNextSteps().isEmpty()) {
@@ -178,9 +179,14 @@ public class Router {
      * Updating next states to reach the 'goalState;.
      *
      * @param agent     The agent to be navigated.
-     * @param goalState Goal state.
      */
-    public void updateNextSteps(Agent agent, StateX goalState) {
+    public void updateNextSteps(Agent agent) {
+
+        if (!agent.getNextSteps().isEmpty()) {
+            return;
+        }
+
+        StateX goalState = agent.getCurrentTarget();
 
         //============================//============================  WatchedStates
         List<WatchedState> watchedStates = agent.getWatchedStates();
@@ -232,7 +238,48 @@ public class Router {
 
         //todo: Implementing trust mechanism
 
+        List<RoutingHelp> sortedRoutingHelps = routingHelps;
+        switch (Config.TRUST_METHODOLOGY) {
 
+            case BasicTrust_OnlyByItsHistory:
+                sortedRoutingHelps = basicTrustMechanism(agent, goalState, routingHelps);
+                if (sortedRoutingHelps == null) return;
+                break;
+
+            case NoTrust:
+            default:
+                break;
+
+        }
+
+
+        agent.clearNextSteps();
+        RoutingHelp help = sortedRoutingHelps.get(0);
+        // Adding path from agent state to helper (agent) state
+        for (WatchedAgent wa : watchedAgents) {
+            if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
+                agent.getNextSteps().addAll(wa.getPath());
+                agent.setHelper(help.getHelperAgent());
+                break;
+            }
+        }
+
+        // Adding the output path to target that reported by helper.
+        // This path moves only one step towards the target.
+        if (help.getNextState() != null) {
+            agent.getNextSteps().add(help.getNextState());
+            agent.setHelper(help.getHelperAgent());
+        }
+
+        if (help.getHelperAgent().getBehavior().getIsHonest()) {
+            statistics___.add_Itt_TrustToHonest();
+        } else {
+            statistics___.add_Itt_TrustToDishonest();
+        }
+//        }
+    }
+
+    private List<RoutingHelp> basicTrustMechanism(Agent agent, StateX goalState, ArrayList<RoutingHelp> routingHelps) {
         // Sorting routerHelpers based on bigger trust level.
         routingHelps.sort((c1, c2) -> {
             if (c1.getTrustLevel() > c2.getTrustLevel()) {
@@ -259,7 +306,7 @@ public class Router {
 
         if (srIndex == 0) {
             OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.ERROR, "can not found trustee in routerHelp", agent, agent.getState(), goalState);
-            return;
+            return null;
         }
 
         List<RoutingHelp> sortedRoutingHelps = routingHelps.subList(0, srIndex);
@@ -273,31 +320,7 @@ public class Router {
             }
             return 0;
         });
-
-        agent.clearNextSteps();
-        RoutingHelp help = sortedRoutingHelps.get(0);
-        // Adding path from agent state to helper (agent) state
-        for (WatchedAgent wa : watchedAgents) {
-            if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
-                agent.getNextSteps().addAll(wa.getPath());
-                agent.setHelper(help.getHelperAgent());
-                break;
-            }
-        }
-
-        // Adding the output path to target that reported by helper.
-        // This path moves only one step towards the target.
-        if (help.getNextState() != null) {
-            agent.getNextSteps().add(help.getNextState());
-            agent.setHelper(help.getHelperAgent());
-        }
-
-        if (help.getHelperAgent().getBehavior().getIsHonest()) {
-            statistics___.add_Itt_TrustToHonest();
-        } else {
-            statistics___.add_Itt_TrustToDishonest();
-        }
-//        }
+        return sortedRoutingHelps;
     }
 
     /**

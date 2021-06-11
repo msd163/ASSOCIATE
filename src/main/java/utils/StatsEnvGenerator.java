@@ -18,9 +18,10 @@ public class StatsEnvGenerator {
         }
     }
 
-    public void addComment() {
+    public void addComment(String description) {
         try {
-            writer.write("\n# Simulation report.,,,,,,,,,,,,\n# Date:," + ParsCalendar.getInstance().getShortDateTime() + ",,,,,,,,,,,,");
+            writer.write("# Simulation report.," + Config.TRUST_METHODOLOGY + ",,,,,,,,,,,\n# Date:,"
+                    + ParsCalendar.getInstance().getShortDateTime() + "," + description + ",,,,,,,,,,,\n");
             writer.flush();
 
         } catch (IOException ignored) {

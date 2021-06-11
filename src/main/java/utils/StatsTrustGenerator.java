@@ -54,8 +54,11 @@ public class StatsTrustGenerator {
                         "AllTrustToDishonest," +
                         "IttFalsePositiveTrust," +
                         "IttFalseNegativeTrust," +
-                        "AllFalsePositiveTrust," +
-                        "AllFalseNegativeTrust"
+                        "IttTruePositiveTrust," +
+                        "IttTrueNegativeTrust," +
+                        "Accuracy," +
+                        "Sensitivity," +
+                        "Specificity"
 
                 ;
     }
@@ -69,8 +72,11 @@ public class StatsTrustGenerator {
                         stat.getAllTrustToDishonest() + "," +
                         stat.getIttFalsePositiveTrust() + "," +
                         stat.getIttFalseNegativeTrust() + "," +
-                        stat.getAllFalsePositiveTrust() + "," +
-                        stat.getAllFalseNegativeTrust()
+                        stat.getIttTruePositiveTrust() + "," +
+                        stat.getIttTrueNegativeTrust()+ "," +
+                        stat.getTrustAccuracy()+ "," +
+                        stat.getTrustSensitivity()+ "," +
+                        stat.getTrustSpecificity()
 
                 ;
     }

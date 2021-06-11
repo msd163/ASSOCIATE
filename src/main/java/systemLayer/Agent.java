@@ -272,7 +272,7 @@ public class Agent {
         ws.setStateX(state);
         watchedStates.add(ws);
 
-        remainedAgents = state.fillStateWatchList(
+        state.fillStateWatchList(
                 watchedAgents,
                 watchedStates,
                 capacity.getWatchDepth(),
@@ -280,7 +280,6 @@ public class Agent {
                 this,
                 parentPath
         );
-        // System.out.println("remainedAgents2  " + remainedAgents+ "  w size:" + watchedAgents.size());
     }
 
     //============================ Doing
@@ -432,4 +431,7 @@ public class Agent {
         this.helper = helper;
     }
 
+    public int[] getTargetStateIds() {
+        return targetStateIds;
+    }
 }

@@ -19,14 +19,16 @@ public class AgentCapacity {
         watchListCapacity = profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
 
 
-
         trustHistoryCap = profiler.getCurrentBunch().getTrustHistoryCapD().nextValue();
         trustHistoryItemCap = profiler.getCurrentBunch().getTrustHistoryItemCapD().nextValue();
 
         // capPower is between 0 and 100
         capPower =
-                (int) (60 * ((float) travelHistoryCap / profiler.getCurrentBunch().getTravelHistoryCapD().getMaxValue())) +
-                        (int) (40 * ((float) watchDepth / profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
+                (int) (20 * ((float) trustHistoryCap / profiler.getCurrentBunch().getTrustHistoryCapD().getMaxValue())) +
+                        (int) (10 * ((float) trustHistoryItemCap / profiler.getCurrentBunch().getTrustHistoryItemCapD().getMaxValue())) +
+                        (int) (20 * ((float) travelHistoryCap / profiler.getCurrentBunch().getTravelHistoryCapD().getMaxValue())) +
+                        (int) (20 * ((float) watchListCapacity / profiler.getCurrentBunch().getWatchListCapacityD().getMaxValue())) +
+                        (int) (30 * ((float) watchDepth / profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
         ;
 
         /*System.out.println(

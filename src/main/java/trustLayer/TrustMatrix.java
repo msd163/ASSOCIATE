@@ -56,6 +56,7 @@ public class TrustMatrix {
                 }
             }
         }
+        statistics.calcTrustParams();
     }
 
     public void write(String matrixFilePath) {

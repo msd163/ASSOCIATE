@@ -27,13 +27,14 @@ public class WorldStatistics {
     private int ittTrustToDishonest;        // agents that trust to a 'dishonest' agent in this time
     private int ittTrustToHonest;           // agents that trust to a 'honest' agent in this time
     //============================
-    private int allFalsePositiveTrust;         // the number of trusts that calculated as negative trust (identified as dishonest), while the target agent was 'honest'
-    private int allFalseNegativeTrust;         // the number of trusts that calculated as positive trust (identified as honest), while the target agent was 'dishonest'
     private int ittFalsePositiveTrust;
     private int ittFalseNegativeTrust;
     private int ittTruePositiveTrust;
     private int ittTrueNegativeTrust;
 
+    private float trustAccuracy;
+    private float trustSensitivity;
+    private float trustSpecificity;
 
     //============================//============================
 
@@ -68,14 +69,10 @@ public class WorldStatistics {
         if (prevStats != null && prevStats.episode == episode) {
             allTrustToDishonest = prevStats.getAllTrustToDishonest();
             allTrustToHonest = prevStats.getAllTrustToHonest();
-            allFalsePositiveTrust = prevStats.getAllFalsePositiveTrust();
-            allFalseNegativeTrust = prevStats.getAllFalseNegativeTrust();
         } else {
 
             allTrustToDishonest
                     = allTrustToHonest
-                    = allFalseNegativeTrust
-                    = allFalsePositiveTrust
                     = 0;
         }
     }
@@ -141,13 +138,11 @@ public class WorldStatistics {
 
     public void add_Itt_FalsePositiveTrust() {
         ittFalsePositiveTrust++;
-        allFalsePositiveTrust++;
     }
 
 
     public void add_Itt_FalseNegativeTrust() {
         ittFalseNegativeTrust++;
-        allFalseNegativeTrust++;
     }
 
     public void add_Itt_TruePositiveTrust() {
@@ -159,6 +154,11 @@ public class WorldStatistics {
         ittTrueNegativeTrust++;
     }
 
+    public void calcTrustParams() {
+        trustSensitivity = (float) ittTruePositiveTrust / (ittTruePositiveTrust + ittFalseNegativeTrust);
+        trustSpecificity = (float) ittTrueNegativeTrust / (ittTrueNegativeTrust + ittFalsePositiveTrust);
+        trustAccuracy = (float) (ittTruePositiveTrust + ittTrueNegativeTrust) / (ittTruePositiveTrust + ittTrueNegativeTrust + ittFalsePositiveTrust + ittFalseNegativeTrust);
+    }
 
     //============================//============================
     @Override
@@ -268,14 +268,6 @@ public class WorldStatistics {
         return allTrustToHonest;
     }
 
-    public int getAllFalsePositiveTrust() {
-        return allFalsePositiveTrust;
-    }
-
-    public int getAllFalseNegativeTrust() {
-        return allFalseNegativeTrust;
-    }
-
     public int getIttFalsePositiveTrust() {
         return ittFalsePositiveTrust;
     }
@@ -290,5 +282,17 @@ public class WorldStatistics {
 
     public int getIttTrueNegativeTrust() {
         return ittTrueNegativeTrust;
+    }
+
+    public float getTrustAccuracy() {
+        return trustAccuracy;
+    }
+
+    public float getTrustSensitivity() {
+        return trustSensitivity;
+    }
+
+    public float getTrustSpecificity() {
+        return trustSpecificity;
     }
 }

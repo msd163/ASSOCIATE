@@ -11,11 +11,13 @@ import utils.OutLog____;
 import utils.ProjectPath;
 import utils.profiler.SimulationProfiler;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class EnvGenerator {
 
@@ -56,11 +58,10 @@ public class EnvGenerator {
         //============================//============================ Creating Agents
         InitializingAgents(environment);
 
-        //============================ Creating the world and initializing the world and environment
-
+        //============================//============================ Initializing Environment
         environment.initForGenerate();
 
-        //============================ Saving environment
+        //============================//============================  Saving environment
         gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
@@ -83,6 +84,35 @@ public class EnvGenerator {
             writer.close();
         } catch (IOException ignored) {
         }
+
+        //============================//============================ Saving simulation-profiler.json as archived source of environment.json
+        try {
+
+            String simProf = readFile(Config.SimulatingFile);
+
+            file = new File(envFilePath + "-" + envFileCounter + ".simPro.json");
+            FileWriter writer = new FileWriter(file);
+            writer.write(simProf);
+            writer.close();
+        } catch (IOException ignored) {
+        }
+
+    }
+
+    private static String readFile(String filePath)
+    {
+        StringBuilder contentBuilder = new StringBuilder();
+
+        try (Stream<String> stream = Files.lines( Paths.get(filePath), StandardCharsets.UTF_8))
+        {
+            stream.forEach(s -> contentBuilder.append(s).append("\n"));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return contentBuilder.toString();
     }
 
     private static void InitializingAgents(Environment environment) {
@@ -96,6 +126,7 @@ public class EnvGenerator {
 
         for (int i = 0; i < agentsCount; i++) {
             if (i >= thisBunchFinished) {
+                profiler.NextBunch();
                 thisBunchFinished = thisBunchFinished + profiler.getCurrentBunch().getBunchCount();
             }
 
@@ -122,13 +153,20 @@ public class EnvGenerator {
                 //============================ Adding target states to agent
                 agents[i].setState(randomState);
 
+                //============================//============================//============================  Adding Targets to agent
                 int targetCounts = agents[i].getTargetCounts();
                 StateX prevState = agents[i].getState();
                 for (int tc = 0; tc < targetCounts; tc++) {
+                    tryCount = 0;
                     boolean isValidToAddAsTarget;
                     //============================ Adding target state to agents
                     do {
-                        randomState = environment.getRandomState();
+                        if (tryCount > agentsCount * 0.8 && prevState.hasTarget()) {
+                            int i1 = Globals.RANDOM.nextInt(prevState.getTargets().size());
+                            randomState = prevState.getTargets().get(i1);
+                        } else {
+                            randomState = environment.getRandomState();
+                        }
                         //
                         if (randomState.isIsPitfall()) {
                             isValidToAddAsTarget = false;
@@ -145,6 +183,7 @@ public class EnvGenerator {
                         }
                     } while (!isValidToAddAsTarget && tryCount++ < agentsCount);
 
+
                     if (isValidToAddAsTarget) {
                         agents[i].addTarget(randomState);
                         prevState = randomState;
@@ -152,6 +191,8 @@ public class EnvGenerator {
                 }
 
                 System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getCurrentTarget() != null ? agents[i].getCurrentTarget().getId() : "NULL"));
+
+                System.out.println(Arrays.toString(agents[i].getTargetStateIds()));
             }
         }
     }
@@ -175,9 +216,10 @@ public class EnvGenerator {
             int i = 1;
             for (; i <= pitfallCountValue && i < stateCount; ) {
                 int stateId = Globals.RANDOM.nextInt(stateCount);
-                if (!environment.getStates().get(stateId).isIsPitfall()) {
-                    environment.getStates().get(stateId).setIsPitfall(true);
-                    environment.getStates().get(stateId).setCapacity(profiler.getAgentsCountValue());
+                StateX pitfall = environment.getStates().get(stateId);
+                if (!pitfall.isIsPitfall()) {
+                    pitfall.setIsPitfall(true);
+                    pitfall.setCapacity(profiler.getAgentsCountValue());
                     i++;
                 }
             }
@@ -210,6 +252,24 @@ public class EnvGenerator {
                 if (targetId == stateX.getId()) {
                     continue;
                 }
+
+               /* //-- For ignoring unsafe targets.
+                //-- Preventing to select pitfall states for states that are only on target as output.
+                boolean isSafeTarget = true;
+                StateX target = environment.getState(targetId);
+                if (target.isIsPitfall() && targetCount <= pitfallCountValue) {
+                    isSafeTarget = false;
+                    for (int k = 0; k < j; k++) {
+                        Integer tid = stateX.getTargetIds().get(k);
+                        StateX tst = environment.getState(tid);
+                        if (tst != null && !tst.isIsPitfall()) {
+                            isSafeTarget = true;
+                        }
+                    }
+                }
+                if (!isSafeTarget) {
+                    continue;
+                }*/
 
                 //-- ignoring previously added target to list
                 boolean isExist = false;

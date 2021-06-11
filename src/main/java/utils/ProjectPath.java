@@ -13,7 +13,7 @@ public class ProjectPath {
     public String root() {
         String hostPath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
 
-        return hostPath.substring(0, hostPath.indexOf("/target"));
+        return hostPath.substring(1, hostPath.indexOf("/target"));
     }
 
     public String resourcesDir() {
