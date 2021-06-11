@@ -8,8 +8,11 @@ import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
 import utils.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
 public class World {
@@ -136,6 +139,7 @@ public class World {
         //============================ Initializing Main Drawing Windows
         StateMachineDrawingWindow stateMachineWindow = new StateMachineDrawingWindow(this);
         stateMachineWindow.setDoubleBuffered(true);
+        stateMachineWindow.setName("st_mc");
         if (Config.DRAWING_SHOW_STATE_MACHINE) {
             JFrame mainFrame = new JFrame();
             mainFrame.getContentPane().add(stateMachineWindow);
@@ -149,6 +153,7 @@ public class World {
         //============================ Initializing Diagram Drawing Windows
         StatsOfEnvDrawingWindow statsOfEnvWindow = new StatsOfEnvDrawingWindow(this);
         statsOfEnvWindow.setDoubleBuffered(true);
+        statsOfEnvWindow.setName("s_env");
         if (Config.DRAWING_SHOW_STAT_OF_ENV) {
             JFrame statsFrame = new JFrame();
             statsFrame.getContentPane().add(statsOfEnvWindow);
@@ -162,6 +167,7 @@ public class World {
         //============================ Initializing Diagram Drawing Windows
         TrustMatrixDrawingWindow trustMatrixWindow = new TrustMatrixDrawingWindow(matrixGenerator);
         trustMatrixWindow.setDoubleBuffered(true);
+        trustMatrixWindow.setName("t_mtx");
         if (Config.DRAWING_SHOW_TRUST_MATRIX) {
             JFrame trustMatFrame = new JFrame();
             trustMatFrame.getContentPane().add(trustMatrixWindow);
@@ -174,7 +180,8 @@ public class World {
 
         //============================ Initializing Diagram Drawing Windows
         StatsOfTrustDrawingWindow trustStatsWindow = new StatsOfTrustDrawingWindow(this);
-        trustMatrixWindow.setDoubleBuffered(true);
+        trustStatsWindow.setDoubleBuffered(true);
+        trustStatsWindow.setName("t_stt");
         if (Config.DRAWING_SHOW_STATS_OF_TRUST) {
             JFrame trustStats = new JFrame();
             trustStats.getContentPane().add(trustStatsWindow);
@@ -188,6 +195,7 @@ public class World {
         //============================ Initializing Diagram Drawing Windows
         StatsOfFalsePoNeDrawingWindow poNeStatsWindow = new StatsOfFalsePoNeDrawingWindow(this);
         poNeStatsWindow.setDoubleBuffered(true);
+        poNeStatsWindow.setName("t_pon");
         if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
             JFrame poNeStats = new JFrame();
             poNeStats.getContentPane().add(poNeStatsWindow);
@@ -201,6 +209,7 @@ public class World {
         //============================ Initializing Diagram Drawing Windows
         StatsOfTrustParamsDrawingWindow trustParamsDrawingWindow = new StatsOfTrustParamsDrawingWindow(this);
         trustParamsDrawingWindow.setDoubleBuffered(true);
+        trustParamsDrawingWindow.setName("t_prm");
         if (Config.DRAWING_SHOW_STATS_OF_TRUST_PARAM) {
             JFrame paramStats = new JFrame();
             paramStats.getContentPane().add(trustParamsDrawingWindow);
@@ -314,13 +323,7 @@ public class World {
 
         if (Config.TRUST_MATRIX_IS_GENERATE) {
             System.out.println("Generating Trust Matrix");
-            String matrixPath = ParsCalendar.getInstance().getShortDateTime();
-            matrixPath = matrixPath
-                    .replaceAll("[ ]", "-")
-                    .replaceAll("[:/]", "")
-            ;
-
-            matrixPath += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1, Config.FullEnvironmentDataFile.lastIndexOf("."));
+            String matrixPath = Globals.STATS_FILE_NAME;
 
             matrixPath = ProjectPath.instance().statisticsDir() + "/" + matrixPath + ".mat.csv";
 
@@ -331,7 +334,10 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
+        generateStatisticsImages(stateMachineWindow, statsOfEnvWindow, trustMatrixWindow, trustStatsWindow, poNeStatsWindow, trustParamsDrawingWindow);
+
         System.out.println("Finished");
+
 
         //============================//============================ Running program after finishing lifeTime of the world.
 
@@ -339,6 +345,42 @@ public class World {
             updateWindows(stateMachineWindow, statsOfEnvWindow, trustMatrixWindow, trustStatsWindow, poNeStatsWindow, trustParamsDrawingWindow);
         }
     }  //  End of running
+
+    private void generateStatisticsImages(StateMachineDrawingWindow stateMachineWindow, StatsOfEnvDrawingWindow statsOfEnvWindow, TrustMatrixDrawingWindow trustMatrixWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, StatsOfTrustParamsDrawingWindow trustParamsDrawingWindow) {
+        if (Config.DRAWING_SHOW_STATE_MACHINE) {
+            generateStatisticsImage(stateMachineWindow);
+        }
+        if (Config.DRAWING_SHOW_STAT_OF_ENV) {
+            generateStatisticsImage(statsOfEnvWindow);
+        }
+        if (Config.DRAWING_SHOW_TRUST_MATRIX) {
+            generateStatisticsImage(trustMatrixWindow);
+        }
+        if (Config.DRAWING_SHOW_STATS_OF_TRUST) {
+            generateStatisticsImage(trustStatsWindow);
+        }
+        if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
+            generateStatisticsImage(poNeStatsWindow);
+        }
+        if (Config.DRAWING_SHOW_STATS_OF_TRUST_PARAM) {
+            generateStatisticsImage(trustParamsDrawingWindow);
+        }
+    }
+
+    private void generateStatisticsImage(DrawingWindow drawingWindow) {
+        try {
+            drawingWindow.resetParams();
+
+            BufferedImage image = new BufferedImage(drawingWindow.getRealWith(), 2 * drawingWindow.getRealHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics2D = image.createGraphics();
+            graphics2D.translate(100, drawingWindow.getRealHeight());
+            drawingWindow.paint(graphics2D);
+
+            ImageIO.write(ImageTrimmer.trim(image), "jpeg", new File(ProjectPath.instance().statisticsDir() + "/" + Globals.STATS_FILE_NAME + ".xmg." + drawingWindow.getName() + ".jpg"));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
 
     private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, StatsOfTrustParamsDrawingWindow paramsDrawingWindow) {
         try {

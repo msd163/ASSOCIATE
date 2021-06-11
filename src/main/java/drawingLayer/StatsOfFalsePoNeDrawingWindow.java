@@ -10,8 +10,6 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
 
     private World world;
 
-    private int axisX = 0;
-
     //============================//============================  panning params
 
     public StatsOfFalsePoNeDrawingWindow(World world) {

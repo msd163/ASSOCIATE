@@ -15,6 +15,10 @@ public class Globals {
     public static int WORLD_TIMER;              // The timer of world which is increased by every run of world
 
     public static int EPISODE = 0;
+    public static String STATS_FILE_NAME = ParsCalendar.getInstance().getShortDateTime()
+            .replaceAll("[ ]", "-")
+            .replaceAll("[:/]", "")
+            +"_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1, Config.FullEnvironmentDataFile.lastIndexOf("."));
 
     public static StatsEnvGenerator statsEnvGenerator = new StatsEnvGenerator();
     public static StatsTrustGenerator statsTrustGenerator = new StatsTrustGenerator();

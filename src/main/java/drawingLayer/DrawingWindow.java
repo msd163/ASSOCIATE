@@ -16,8 +16,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected utils.Point pnStartPoint = new utils.Point(0, 0);
     protected utils.Point mousePosition = new utils.Point(0, 0);
 
-    protected float scale = 1f;
+    protected int axisX = 0;
+    protected int axisY = 0;
 
+    protected float scale = 1f;
 
     public DrawingWindow() {
         //============================//============================
@@ -33,13 +35,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
                         // For resetting screen by double click
                         if (e.getClickCount() == 2) {
-                            pnOffset = new utils.Point(0, 0);
-                            pnOffsetOld = new utils.Point(0, 0);
-                            pnStartPoint = new utils.Point(0, 0);
-                            pnOffsetOld.x = pnOffset.x;
-                            pnOffsetOld.y = pnOffset.y;
-                            scaleOffset = new Point(0, 0);
-                            scale = 1f;
+                            resetParams();
                         }
 
                         if (e.isControlDown()) {
@@ -50,6 +46,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
+
     }
 
     protected Graphics2D g;
@@ -85,6 +82,26 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         g.drawRect(0, 0, 100, 100);*/
     }
+
+    //============================//============================
+    public void resetParams() {
+        pnOffset = new utils.Point(0, 0);
+        pnOffsetOld = new utils.Point(0, 0);
+        pnStartPoint = new utils.Point(0, 0);
+        pnOffsetOld.x = pnOffset.x;
+        pnOffsetOld.y = pnOffset.y;
+        scaleOffset = new Point(0, 0);
+        scale = 1f;
+    }
+
+    public int getRealWith() {
+        return axisX + 800;
+    }
+
+    public int getRealHeight() {
+        return axisY > 0 ? axisY + 1500 : getHeight();//axisY;
+    }
+    //============================//============================
 
     protected void pauseNotice(Graphics2D g) {
         if (Globals.PAUSE) {

@@ -12,7 +12,6 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
     private Agent[] agents;
 
     private int matCount;
-    private int matWidth;
 
 
     public TrustMatrixDrawingWindow(TrustMatrix matrixGenerator) {
@@ -21,7 +20,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         matCount = this.matrix.getAgentCount();
         trustMatrix = this.matrix.getTrustMatrix();
         agents = matrixGenerator.getAgents();
-        matWidth = matCount * 5;
+        axisY= axisX = matCount * 5;
     }
 
     @Override

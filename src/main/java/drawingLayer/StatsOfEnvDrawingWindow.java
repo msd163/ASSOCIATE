@@ -10,7 +10,6 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
 
     private World world;
 
-    private int axisX = 0;
 
     //============================//============================  panning params
 
@@ -38,7 +37,7 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
         g.setColor(Color.YELLOW);
 
         axisX = 0;
-
+        axisY = 0;
         //============================//============================ Translate for panning and scaling
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));

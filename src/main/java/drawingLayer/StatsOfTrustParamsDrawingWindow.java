@@ -10,8 +10,6 @@ public class StatsOfTrustParamsDrawingWindow extends DrawingWindow {
 
     private World world;
 
-    private int axisX = 0;
-
     private float fp;
     private float fn;
     private float tp;

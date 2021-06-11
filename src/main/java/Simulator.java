@@ -1,7 +1,9 @@
 import com.google.gson.Gson;
 import stateLayer.Environment;
 import systemLayer.World;
-import utils.*;
+import utils.Config;
+import utils.Globals;
+import utils.ProjectPath;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -36,15 +38,10 @@ public class Simulator {
             worlds[i] = new World(environment);
         }
 
+
         //============================//============================ Initializing statistics report file
         if (Config.STATISTICS_IS_GENERATE) {
-            String statName = ParsCalendar.getInstance().getShortDateTime();
-            statName = statName
-                    .replaceAll("[ ]", "-")
-                    .replaceAll("[:/]", "")
-            ;
-
-            statName += "_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1,Config.FullEnvironmentDataFile.lastIndexOf("."));
+            String statName = Globals.STATS_FILE_NAME;
 
             System.out.println(statName);
 
@@ -65,7 +62,7 @@ public class Simulator {
         }
 
         for (World world : worlds) {
-           // Globals.profiler.ResetBunch();
+            // Globals.profiler.ResetBunch();
             world.run();
         }
 

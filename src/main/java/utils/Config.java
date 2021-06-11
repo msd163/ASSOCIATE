@@ -5,10 +5,10 @@ import _type.TtTrustMethodology;
 public class Config {
 
 
-    public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.FullyRandomly;
+    public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.BasicTrust_OnlyByItsHistory;
 
     public static final String SimulatingFile = ProjectPath.instance().simulationProfileData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().environmentData();
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().environmentData(2);
 
 
     //============================ World
@@ -23,9 +23,9 @@ public class Config {
 
     public static final boolean DRAWING_SHOW_STATE_MACHINE          = false;
     public static final boolean DRAWING_SHOW_STAT_OF_ENV            = true;
-    public static final boolean DRAWING_SHOW_STATS_OF_TRUST         = false;
+    public static final boolean DRAWING_SHOW_STATS_OF_TRUST         = true;
     public static final boolean DRAWING_SHOW_TRUST_MATRIX           = true;
-    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE         = false;
+    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE         = true;
     public static final boolean DRAWING_SHOW_STATS_OF_TRUST_PARAM   = true;
 
     //============================ Statistics
