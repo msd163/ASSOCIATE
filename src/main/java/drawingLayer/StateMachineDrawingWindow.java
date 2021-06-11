@@ -43,6 +43,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
     }
 
     //============================//============================//============================
+    int index = 0;
 
     @Override
     public void paint(Graphics gr) {
@@ -51,7 +52,6 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         g.setBackground(Color.BLACK);
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
-
 
         g.setColor(Color.YELLOW);
 
@@ -100,57 +100,30 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         }
 
         //============================//============================ Drawing states and their agents
-        for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
-            StateX stateX = environment.getState(stateIndex);
+        try {
+            for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
+                StateX stateX = environment.getState(stateIndex);
 
-            if (stateX.isIsPitfall()) {
-                g.setColor(Color.RED);
-            } else {
-                g.setColor(Color.GREEN);
-            }
-            RectangleX rec = stateX.getBoundedRectangle();
+                if (stateX.isIsPitfall()) {
+                    g.setColor(Color.RED);
+                } else {
+                    g.setColor(Color.GREEN);
+                }
+                RectangleX rec = stateX.getBoundedRectangle();
 
-             /* g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-           g.setColor(Color.RED);
-            g.drawString(
-                    "TL " + rec.topLeft().x + "," + rec.topLeft().y,
-                    rec.topLeft().x - 10,
-                    rec.topLeft().y - 10);
+                //-- Drawing state and its ID
+                g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
+                g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
 
-            g.setColor(Color.YELLOW);
-            g.drawString(
-                    "TR " + rec.topRight().x + "," + rec.topRight().y,
-                    rec.topRight().x - 10,
-                    rec.topRight().y - 10
-            );
-
-
-            g.setColor(Color.cyan);
-            g.drawString(
-                    "BR " + rec.bottomRight().x + "," + rec.bottomRight().y,
-                    rec.bottomRight().x ,
-                    rec.bottomRight().y + 20
-            );
-
-
-            g.setColor(Color.orange);
-            g.drawString(
-                    "BL " + rec.bottomLeft().x + "," + rec.bottomLeft().y,
-                    rec.bottomLeft().x ,
-                    rec.bottomLeft().y + 30
-            );*/
-
-            //-- Drawing state and its ID
-            g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
-            g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
-
-            //-- Drawing agents of state
-            if (!stateX.getAgents().isEmpty()) {
-                int index = 0;
-                for (Agent agent : stateX.getAgents()) {
-                    drawAgent(agent, g, index++);
+                //-- Drawing agents of state
+                if (!stateX.getAgents().isEmpty()) {
+                    index = 0;
+                    for (Agent agent : stateX.getAgents()) {
+                        drawAgent(agent, g, index++);
+                    }
                 }
             }
+        } catch (Exception e) {
         }
 
         //============================//============================ Creating Blue state for the state of agent that are traceable.

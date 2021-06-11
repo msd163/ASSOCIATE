@@ -6,7 +6,7 @@ import utils.WorldStatistics;
 
 import java.awt.*;
 
-public class StatsOfParamsDrawingWindow extends DrawingWindow {
+public class StatsOfTrustParamsDrawingWindow extends DrawingWindow {
 
     private World world;
 
@@ -35,7 +35,7 @@ public class StatsOfParamsDrawingWindow extends DrawingWindow {
     private float falseDiscoveryRate;*/
     //============================//============================  panning params
 
-    public StatsOfParamsDrawingWindow(World world) {
+    public StatsOfTrustParamsDrawingWindow(World world) {
         super();
         this.world = world;
     }
@@ -67,14 +67,9 @@ public class StatsOfParamsDrawingWindow extends DrawingWindow {
         g.drawString("World Time                : " + (worldTimer), 100, 50);
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
-        fp = world.getStatistics()[worldTimer].getIttFalsePositiveTrust();
-        fn = world.getStatistics()[worldTimer].getIttFalseNegativeTrust();
-        tp = world.getStatistics()[worldTimer].getIttTruePositiveTrust();
-        tn = world.getStatistics()[worldTimer].getIttTrueNegativeTrust();
-
-        sensitivity = tp / (tp + fn);
-        specificity = tn / (tn + fp);
-        accuracy = (tp + tn) / (tp + tn + fp + fn);
+        sensitivity =  world.getStatistics()[worldTimer].getTrustSensitivity();
+        specificity =  world.getStatistics()[worldTimer].getTrustSpecificity();
+        accuracy =  world.getStatistics()[worldTimer].getTrustAccuracy();
 
        /*     precision = tp / (fp + tp);
             recall = tp / (tp + fp);
@@ -89,20 +84,22 @@ public class StatsOfParamsDrawingWindow extends DrawingWindow {
 
 
         //============================//============================//============================
+        //============================ Draw mouse plus
+        Point mousePoint = getMousePosition();
+        if (mousePoint != null) {
+            g.setColor(Color.WHITE);
+            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
+            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
+            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
+            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
+        }
 
         //============================ Translate
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
-        //============================ Draw mouse plus
         g.setColor(Color.YELLOW);
-        //-- (TOP-DOWN) Drawing vertical line for mouse pointer
-        g.drawLine(mousePosition.x, 0, mousePosition.x, getHeight());
-        //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
-        g.drawLine(0, mousePosition.y, getWidth(), mousePosition.y);
-
-
         g.drawLine(0, 0, getWidth(), 0);
 
         WorldStatistics[] statistics = world.getStatistics();

@@ -37,17 +37,21 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         g.drawString(mousePosition.toString(), 10, 10);
 
         //============================//============================//============================
+        //============================ Draw mouse plus
+        Point mousePoint = getMousePosition();
+        if (mousePoint != null) {
+            g.setColor(Color.WHITE);
+            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
+            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
+            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
+            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
+        }
 
         int pnScl_x = pnOffset.x + scaleOffset.x;
         int pnScl_y = pnOffset.y + scaleOffset.y;
         g.translate(pnScl_x, pnScl_y);
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
-
-        //-- (TOP-DOWN) Drawing vertical line for mouse pointer
-        g.drawLine(mousePosition.x, 0, mousePosition.x, matWidth);
-        //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
-        g.drawLine(0, mousePosition.y, matWidth, mousePosition.y);
 
         int pnY = (pnScl_y > 0 ? (int) (pnScl_y / scale) + 10 : 0) - 5;
         int pnX = (pnScl_x < 0 ? -(int) (pnScl_x / scale) + 10 : 0) - 5;

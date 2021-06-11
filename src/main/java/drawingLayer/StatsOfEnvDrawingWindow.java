@@ -57,32 +57,36 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
 
         g.setColor(Color.GREEN);
         int allAgentsInTarget = world.getStatistics()[worldTimer].getAllAgentsInTarget();
-        g.drawString("Agents In Targets         :   " + allAgentsInTarget + "  %" + 100 * (float) allAgentsInTarget / world.getAgentsCount(), 100, 240);
+        g.drawString("Agents In Targets         :   " + allAgentsInTarget + "        %" + 100 * (float) allAgentsInTarget / world.getAgentsCount(), 100, 240);
 
         g.setColor(Color.RED);
         int allAgentsInPitfall = world.getStatistics()[worldTimer].getAllAgentsInPitfall();
-        g.drawString("Agents In Pitfall            :   " + allAgentsInPitfall + "  %" + 100 * (float) allAgentsInPitfall / world.getAgentsCount(), 100, 280);
+        g.drawString("Agents In Pitfall            :   " + allAgentsInPitfall + "        %" + 100 * (float) allAgentsInPitfall / world.getAgentsCount(), 100, 280);
 
         g.setColor(Color.PINK);
         int ittRandomTravelToNeighbors = world.getStatistics()[worldTimer].getIttRandomTravelToNeighbors();
-        g.drawString("Random Travel               :   " + ittRandomTravelToNeighbors + "  %" + 100 * (float) ittRandomTravelToNeighbors / world.getAgentsCount(), 100, 320);
+        g.drawString("Random Travel              :   " + ittRandomTravelToNeighbors + "        %" + 100 * (float) ittRandomTravelToNeighbors / world.getAgentsCount(), 100, 320);
 
 
         //============================//============================//============================
+
+        //============================ Draw mouse plus
+        Point mousePoint = getMousePosition();
+        if (mousePoint != null) {
+            g.setColor(Color.WHITE);
+            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
+            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
+            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
+            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
+        }
 
         //============================ Translate
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
-        //============================ Draw mouse plus
+
         g.setColor(Color.YELLOW);
-        //-- (TOP-DOWN) Drawing vertical line for mouse pointer
-        g.drawLine(mousePosition.x, 0, mousePosition.x, getHeight());
-        //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
-        g.drawLine(0, mousePosition.y, getWidth(), mousePosition.y);
-
-
         g.drawLine(0, 0, getWidth(), 0);
 
         WorldStatistics[] statistics = world.getStatistics();
