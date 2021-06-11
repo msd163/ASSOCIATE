@@ -6,7 +6,8 @@ public enum TtOutLogMethodSection {
     UpdateTravelHistory("UpTrvHis"),
     TakeAStepTowardTheTarget("TTTrg"),
     Generator_InitializingStates("Gn-InSt"),
-    updateTargets("UpTrgs"),
+    UpdateTargets("UpTrgs"),
+    UpdateWatchList("UpWtch"),
     //
     ;
 

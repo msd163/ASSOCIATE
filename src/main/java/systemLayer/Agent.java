@@ -5,10 +5,10 @@ import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import stateLayer.StateX;
 import stateLayer.TravelHistory;
-import utils.profiler.SimulationProfiler;
 import trustLayer.AgentTrust;
 import utils.Globals;
 import utils.OutLog____;
+import utils.profiler.SimulationProfiler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +83,7 @@ public class Agent {
     //============================//============================//============================
 
     public void initForGenerator(SimulationProfiler profiler) {
-        capacity = new AgentCapacity(this,profiler);
+        capacity = new AgentCapacity(this, profiler);
         trust = new AgentTrust(
                 capacity.getTrustHistoryCap(),
                 capacity.getTrustHistoryItemCap(),
@@ -256,16 +256,12 @@ public class Agent {
         watchedStates.clear();
         ArrayList<StateX> parentPath = new ArrayList<>();
 
-        // System.out.println("-" + id + "---------------------- capacity.getWatchListCapacity()  " + capacity.getWatchListCapacity()+ "  w size:" + watchedAgents.size());
-
         //============================
         int remainedAgents = state.fillAgentsOfState(
                 watchedAgents,
                 capacity.getWatchListCapacity(),
                 this,
                 parentPath);
-
-        // System.out.println("remainedAgents1  " + remainedAgents + "  w size:" + watchedAgents.size());
 
         //============================  adding current stated to visited states list
         WatchedState ws = new WatchedState();
@@ -280,6 +276,13 @@ public class Agent {
                 this,
                 parentPath
         );
+
+        if (watchedStates.isEmpty()) {
+            OutLog____.pl(TtOutLogMethodSection.UpdateWatchList, TtOutLogStatus.ERROR, "state watch list is empty", this, state, getCurrentTarget());
+        }
+        if (watchedAgents.isEmpty()) {
+            OutLog____.pl(TtOutLogMethodSection.UpdateWatchList, TtOutLogStatus.WARN, "agent watch list is empty", this, state, getCurrentTarget());
+        }
     }
 
     //============================ Doing

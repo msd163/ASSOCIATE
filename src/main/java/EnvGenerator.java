@@ -253,7 +253,7 @@ public class EnvGenerator {
                     continue;
                 }
 
-               /* //-- For ignoring unsafe targets.
+                //-- For ignoring unsafe targets.
                 //-- Preventing to select pitfall states for states that are only on target as output.
                 boolean isSafeTarget = true;
                 StateX target = environment.getState(targetId);
@@ -269,7 +269,7 @@ public class EnvGenerator {
                 }
                 if (!isSafeTarget) {
                     continue;
-                }*/
+                }
 
                 //-- ignoring previously added target to list
                 boolean isExist = false;

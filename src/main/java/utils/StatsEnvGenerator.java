@@ -1,5 +1,7 @@
 package utils;
 
+import stateLayer.Environment;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,10 +20,17 @@ public class StatsEnvGenerator {
         }
     }
 
-    public void addComment(String description) {
+    public void addComment(Environment environment) {
         try {
-            writer.write("# Simulation report.," + Config.TRUST_METHODOLOGY + ",,,,,,,,,,,\n# Date:,"
-                    + ParsCalendar.getInstance().getShortDateTime() + "," + description + ",,,,,,,,,,,\n");
+            writer.write("# Simulation Report,Env.Code: " + environment.getCode() + ", " + ParsCalendar.getInstance().getShortDateTime() + ", Des: " + environment.getDescription()
+                    + "\n# Method: " + Config.TRUST_METHODOLOGY
+                    + ", StateCount: " + environment.getStateCount()
+                    + ", PitfallCount: " + environment.getPitfallCount()
+                    + ", TransitionCount: " + environment.getTransitionCount()
+                    + ", AgentCount: " + environment.getAgentsCount()
+                    + ", HonestCount: " + environment.getHonestCount()
+                    + ", DishonestCount: " + environment.getDishonestCount()
+                    + "\n");
             writer.flush();
 
         } catch (IOException ignored) {

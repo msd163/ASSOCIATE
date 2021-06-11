@@ -224,7 +224,7 @@ public class World {
             router.setStatistics(statistic);
 
             if (Globals.WORLD_TIMER == 0 && Config.STATISTICS_IS_GENERATE) {
-                Globals.statsEnvGenerator.addComment(environment.getDescription());
+                Globals.statsEnvGenerator.addComment(environment);
                 Globals.statsEnvGenerator.addHeader();
                 Globals.statsTrustGenerator.addHeader();
             }
@@ -233,10 +233,11 @@ public class World {
 
             //============================//============================  Updating agents statuses
             for (Agent agent : agents) {
+                //todo: adding doing service capacity to agents as capacity param
                 agent.resetParams();
                 //agent.updateTravelHistory();
-                agent.updateWatchList();
                 agent.updateProfile();
+                agent.updateWatchList();
                 router.updateNextSteps(agent);
             }
 

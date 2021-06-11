@@ -2,6 +2,7 @@ package routingLayer;
 
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
+import _type.TtTrustMethodology;
 import stateLayer.StateX;
 import stateLayer.TransitionX;
 import stateLayer.TravelHistory;
@@ -178,11 +179,15 @@ public class Router {
     /**
      * Updating next states to reach the 'goalState;.
      *
-     * @param agent     The agent to be navigated.
+     * @param agent The agent to be navigated.
      */
     public void updateNextSteps(Agent agent) {
 
         if (!agent.getNextSteps().isEmpty()) {
+            return;
+        }
+
+        if (Config.TRUST_METHODOLOGY == TtTrustMethodology.FullyRandomly) {
             return;
         }
 
@@ -203,7 +208,6 @@ public class Router {
                 }
             }
         }
-
 
         //============================//============================ WatchedAgents
         List<WatchedAgent> watchedAgents = agent.getWatchedAgents();
@@ -246,12 +250,13 @@ public class Router {
                 if (sortedRoutingHelps == null) return;
                 break;
 
-            case NoTrust:
+            case NoTrust_ShortPath:
+                sortRoutingByShortestPath(sortedRoutingHelps);
+            case NoTrust_RandomPath:
             default:
                 break;
 
         }
-
 
         agent.clearNextSteps();
         RoutingHelp help = sortedRoutingHelps.get(0);
@@ -277,6 +282,18 @@ public class Router {
             statistics___.add_Itt_TrustToDishonest();
         }
 //        }
+    }
+
+    private void sortRoutingByShortestPath(List<RoutingHelp> sortedRoutingHelps) {
+        // Sorting routerHelpers based on shortest path.
+        sortedRoutingHelps.sort((c1, c2) -> {
+            if (c1.getFinalStepFromAgentToTarget() < c2.getFinalStepFromAgentToTarget()) {
+                return -1;
+            } else if (c1.getFinalStepFromAgentToTarget() > c2.getFinalStepFromAgentToTarget()) {
+                return 1;
+            }
+            return 0;
+        });
     }
 
     private List<RoutingHelp> basicTrustMechanism(Agent agent, StateX goalState, ArrayList<RoutingHelp> routingHelps) {
@@ -309,18 +326,7 @@ public class Router {
             return null;
         }
 
-        List<RoutingHelp> sortedRoutingHelps = routingHelps.subList(0, srIndex);
-
-        // Sorting routerHelpers based on shortest path.
-        sortedRoutingHelps.sort((c1, c2) -> {
-            if (c1.getFinalStepFromAgentToTarget() < c2.getFinalStepFromAgentToTarget()) {
-                return -1;
-            } else if (c1.getFinalStepFromAgentToTarget() > c2.getFinalStepFromAgentToTarget()) {
-                return 1;
-            }
-            return 0;
-        });
-        return sortedRoutingHelps;
+        return routingHelps.subList(0, srIndex);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 import systemLayer.World;
 import utils.Globals;
+import utils.ParsCalendar;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -13,16 +14,18 @@ public class Environment {
     private static final double PI = 3.14159;
 
     public Environment() {
+        String month = ParsCalendar.getInstance().getMonth();
+        String day = ParsCalendar.getInstance().getDay();
+
+        String hours = ParsCalendar.getInstance().getHours();
+        String minutes = ParsCalendar.getInstance().getMinutes();
+
+
+        code = month + day + "-" + hours + minutes;
     }
 
-    public Environment(Environment _environment) {
-        states = _environment.getStates();
-        stateCount = _environment.getStateCount();
-        agentsCount = _environment.getAgentsCount();
-        pitfallCount = _environment.getPitfallCount();
-        simulationRound = _environment.getSimulationRound();
-
-    }
+    @Expose
+    private String code = "";                               // unique code for identifying and tracing reports
 
     @Expose
     private String description = "";                          // Only for generating environment-x.json file
@@ -238,6 +241,26 @@ public class Environment {
         return pitfallCount;
     }
 
+    public int getTransitionCount() {
+        return transitionCount;
+    }
+
+    public int getMinimumTarget() {
+        return minimumTarget;
+    }
+
+    public int getMaximumTarget() {
+        return maximumTarget;
+    }
+
+    public int getDishonestCount() {
+        return dishonestCount;
+    }
+
+    public int getHonestCount() {
+        return honestCount;
+    }
+
     public void setPitfallCount(int pitfallCount) {
         this.pitfallCount = pitfallCount;
     }
@@ -365,5 +388,9 @@ public class Environment {
 
     public void setSimulationRound(int simulationRound) {
         this.simulationRound = simulationRound;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

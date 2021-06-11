@@ -1,7 +1,11 @@
 package _type;
 
 public enum TtTrustMethodology {
-    NoTrust,
+    FullyRandomly,
+    //--
+    NoTrust_RandomPath,
+    NoTrust_ShortPath,
+    //--
     BasicTrust_OnlyByItsHistory
     ;
 
@@ -11,6 +15,6 @@ public enum TtTrustMethodology {
                 return value;
             }
         }
-        return NoTrust;
+        return NoTrust_RandomPath;
     }
 }
