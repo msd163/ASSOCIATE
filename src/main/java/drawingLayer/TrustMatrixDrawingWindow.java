@@ -20,7 +20,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         matCount = this.matrix.getAgentCount();
         trustMatrix = this.matrix.getTrustMatrix();
         agents = matrixGenerator.getAgents();
-        axisY= axisX = matCount * 5;
+        axisY = axisX = matCount * 5;
     }
 
     @Override
@@ -58,10 +58,17 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         //============================//============================
 
         for (int i = 0; i < matCount; i++) {
-            if (agents[i].getBehavior().getIsHonest()) {
+            Agent agent = agents[i];
+            if (agent.getBehavior().getHasHonestState()) {
                 g.setColor(Color.GREEN);
-            } else {
+            } else if (agent.getBehavior().getHasAdversaryState()) {
                 g.setColor(Color.RED);
+            } else if (agent.getBehavior().getHasMischief()) {
+                g.setColor(Color.WHITE);
+            } else if (agent.getBehavior().getHasIntelligentAdversaryState()) {
+                g.setColor(Color.MAGENTA);
+            } else {
+                g.setColor(Color.YELLOW);
             }
 
             g.fillRect(i * 5, pnY, 5, 5);
@@ -69,19 +76,27 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             g.fillRect(pnX, i * 5, 5, 5);
 
             for (int j = 0; j < matCount; j++) {
+                Agent agentJ = agents[j];
                 float trVal = this.trustMatrix[i][j];
                 if (trVal > 0) {
-                    if (!agents[j].getBehavior().getIsHonest()) {
+                    if (agentJ.getBehavior().getHasAdversaryState()) {
                         g.setColor(Color.RED);
+                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
+                    } else if (agentJ.getBehavior().getHasMischief()) {
+                        g.setColor(Color.WHITE);
+                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
+                    } else if (agentJ.getBehavior().getHasIntelligentAdversaryState()) {
+                        g.setColor(Color.MAGENTA);
                         g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
                     }
                     g.setColor(Color.GREEN);
 
                 } else if (trVal < 0) {
-                    if (agents[j].getBehavior().getIsHonest()) {
+                    if (agentJ.getBehavior().getHasHonestState()) {
                         g.setColor(Color.GREEN);
                         g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
-                    } g.setColor(Color.RED);
+                    }
+                    g.setColor(Color.RED);
                 } else {
                     g.setColor(Color.DARK_GRAY);
                 }

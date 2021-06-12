@@ -1,57 +1,78 @@
 package systemLayer;
 
-import _type.TtTrustBehavioralStrategy;
+import _type.TtBehaviorState;
 import com.google.gson.annotations.Expose;
 import utils.Globals;
+import utils.profiler.IntelligentAdversaryBehavior;
+import utils.profiler.PopulationBunchBehaviorParam;
 
 public class AgentBehavior {
 
 
-    public AgentBehavior(TtTrustBehavioralStrategy strategy, int honestDiscretePercentage) {
-        this.strategy = strategy;
-        switch (strategy) {
-            case OnlyHonest:
-                honestDegree = 1.0f;
-                break;
-            case OnlyDishonest:
-                honestDegree = 0.0f;
-            case Discrete:
-                honestDegree = Globals.RANDOM.nextInt(100) < honestDiscretePercentage ? 1.0f : 0.0f;
-                break;
-            case Fuzzy:
-                honestDegree = Globals.RANDOM.nextFloat();
-                break;
+    public AgentBehavior(PopulationBunchBehaviorParam behavior) {
+        int rand = Globals.RANDOM.nextInt(100);
+
+        if (rand < behavior.getAdversaryPercent()) {
+            behaviorState = TtBehaviorState.Adversary;
+        } else if (rand < behavior.getMischiefPercent() + behavior.getAdversaryPercent()) {
+            behaviorState = TtBehaviorState.Mischief;
+        } else if (rand < behavior.getMischiefPercent() + behavior.getAdversaryPercent() + behavior.getHonestPercent()) {
+            behaviorState = TtBehaviorState.Honest;
+        } else {
+            behaviorState = TtBehaviorState.IntelligentAdversary;
+            adversaryBehavior = behavior.getIntelligentAdversary();
         }
+        updateBehaviorState();
     }
 
     @Expose
-    private TtTrustBehavioralStrategy strategy;
+    private TtBehaviorState behaviorState;
+
+    private TtBehaviorState currentBehaviorState;
+
     @Expose
-    private float honestDegree;
-    @Expose
-    private boolean honestState;
+    private IntelligentAdversaryBehavior adversaryBehavior;
+
+    public boolean getHasHonestState() {
+        return behaviorState == TtBehaviorState.Honest;
+    }
+
+    public boolean getHasAdversaryState() {
+        return behaviorState == TtBehaviorState.Adversary;
+    }
+
+    public boolean getHasIntelligentAdversaryState() {
+        return behaviorState == TtBehaviorState.IntelligentAdversary;
+    }
+
+    public boolean getHasMischief() {
+        return behaviorState == TtBehaviorState.Mischief;
+    }
+
+    public TtBehaviorState getCurrentBehaviorState() {
+        return currentBehaviorState;
+    }
 
     //============================//============================//============================
-    public boolean updateHonestState() {
-        if (strategy == TtTrustBehavioralStrategy.Fuzzy) {
-            honestState = Globals.RANDOM.nextFloat() < honestDegree;
-            return honestState;
+    public TtBehaviorState updateBehaviorState() {
+        if (behaviorState == TtBehaviorState.IntelligentAdversary) {
+            int rand = Globals.RANDOM.nextInt(100);
+
+            if (rand < adversaryBehavior.getAdversaryPercent()) {
+                currentBehaviorState = TtBehaviorState.Adversary;
+            } else if (rand < adversaryBehavior.getMischiefPercent() + adversaryBehavior.getAdversaryPercent()) {
+                currentBehaviorState = TtBehaviorState.Mischief;
+            } else {
+                currentBehaviorState = TtBehaviorState.Honest;
+            }
+
+            return currentBehaviorState;
         }
-        honestState = honestDegree == 1.f;
-        return honestState;
+
+        currentBehaviorState = behaviorState;
+        return currentBehaviorState;
     }
 
-    public boolean getIsHonest() {
-        return honestState;
-    }
     //============================//============================//============================
 
-
-    @Override
-    public String toString() {
-        return "\n\tAgentProfile{" +
-                "\n\t\thonestDegree=" + honestDegree +
-                ",\n\t\thonestState=" + honestState +
-                '}';
-    }
 }

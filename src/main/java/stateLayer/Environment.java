@@ -59,9 +59,13 @@ public class Environment {
     @Expose
     private int agentsCount;
     @Expose
-    private int dishonestCount;                             // Only for generating environment-x.json file
+    private int adversaryCount;                             // Only for generating environment-x.json file
     @Expose
     private int honestCount;                                // Only for generating environment-x.json file
+    @Expose
+    private int intelligentAdversaryCount;                   // Only for generating environment-x.json file
+    @Expose
+    private int mischiefCount;                                // Only for generating environment-x.json file
 
     @Expose
     private String _C3 = "______________________________";    // Only for generating environment-x.json file
@@ -195,19 +199,28 @@ public class Environment {
     }
 
     public void updateAgentsCount() {
-        agentsCount = 0;
-        dishonestCount = 0;
-        honestCount = 0;
+        agentsCount
+                = mischiefCount
+                = honestCount
+                = adversaryCount
+                = intelligentAdversaryCount = 0;
+
         for (StateX state : states) {
             if (state.getAgents() != null) {
                 agentsCount += state.getAgents().size();
                 for (Agent agent : state.getAgents()) {
                     agent.updateProfile();
-                    if (agent.getBehavior().getIsHonest()) {
+                    if (agent.getBehavior().getHasIntelligentAdversaryState()) {
+                        intelligentAdversaryCount++;
+                    } else if (agent.getBehavior().getHasHonestState()) {
                         honestCount++;
-                    } else {
-                        dishonestCount++;
+                    } else if (agent.getBehavior().getHasAdversaryState()) {
+                        adversaryCount++;
+                    } else if (agent.getBehavior().getHasMischief()) {
+                        mischiefCount++;
                     }
+
+
                 }
             }
         }
@@ -253,8 +266,16 @@ public class Environment {
         return maximumTarget;
     }
 
-    public int getDishonestCount() {
-        return dishonestCount;
+    public int getAdversaryCount() {
+        return adversaryCount;
+    }
+
+    public int getIntelligentAdversaryCount() {
+        return intelligentAdversaryCount;
+    }
+
+    public int getMischiefCount() {
+        return mischiefCount;
     }
 
     public int getHonestCount() {
@@ -364,14 +385,6 @@ public class Environment {
 
     public void setAgentsCount(int agentsCount) {
         this.agentsCount = agentsCount;
-    }
-
-    public void setDishonestCount(int dishonestCount) {
-        this.dishonestCount = dishonestCount;
-    }
-
-    public void setHonestCount(int honestCount) {
-        this.honestCount = honestCount;
     }
 
     public String getDescription() {

@@ -18,7 +18,7 @@ public class TravelHistory {
     //============================//============================//============================
 
 
-    public TravelHistory(StateX stateX, int visitTime, ArrayList<StateX> targets, Agent helper, boolean isTarget, boolean isPitfall,int targetIndex) {
+    public TravelHistory(StateX stateX, int visitTime, ArrayList<StateX> targets, Agent helper, boolean isTarget, boolean isPitfall, int targetIndex) {
         this.stateX = stateX;
         this.visitTime = visitTime;
         this.targets = targets;
@@ -49,6 +49,19 @@ public class TravelHistory {
         return false;
     }
 
+    public StateX getPitfallIfExist() {
+        if (stateX.isIsPitfall()) {
+            return stateX;
+        }
+        if (targets != null) {
+            for (StateX target : targets) {
+                if (target.isIsPitfall()) {
+                    return target;
+                }
+            }
+        }
+        return null;
+    }
     //============================//============================//============================
 
 

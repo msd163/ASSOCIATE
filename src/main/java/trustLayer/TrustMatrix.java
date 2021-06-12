@@ -1,6 +1,7 @@
 package trustLayer;
 
 import systemLayer.Agent;
+import utils.Globals;
 import utils.WorldStatistics;
 
 import java.io.File;
@@ -32,25 +33,25 @@ public class TrustMatrix {
         for (int i = 0, agentsSize = agents.length; i < agentsSize; i++) {
             Agent agent = agents[i];
             TrustHistory[] histories = agent.getTrust().getHistories();
-            for (int j = 0, size = agents.length; j < size; j++) {
-                Agent trustee = agents[j];
-                for (int x = 0; x < histories.length; x++) {
-                    TrustHistory history = histories[x];
-                    if (history != null) {
+            for (TrustHistory history : histories) {
+                if (history != null && history.getLastVisitTime() == Globals.WORLD_TIMER) {
+                    for (int j = 0, size = agents.length; j < size; j++) {
+                        Agent trustee = agents[j];
                         if (trustee.getId() == history.getAgent().getId()) {
                             trustMatrix[i][j] = history.getFinalTrustLevel();
-                            if (history.getFinalTrustLevel() > 0 && !trustee.getBehavior().getIsHonest()) {
+                            if (history.getFinalTrustLevel() > 0 && !trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_FalseNegativeTrust();
                             }
-                            if (history.getFinalTrustLevel() < 0 && trustee.getBehavior().getIsHonest()) {
+                            if (history.getFinalTrustLevel() < 0 && trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_FalsePositiveTrust();
                             }
-                            if (history.getFinalTrustLevel() > 0 && trustee.getBehavior().getIsHonest()) {
+                            if (history.getFinalTrustLevel() > 0 && trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_TrueNegativeTrust();
                             }
-                            if (history.getFinalTrustLevel() < 0 && !trustee.getBehavior().getIsHonest()) {
+                            if (history.getFinalTrustLevel() < 0 && !trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_TruePositiveTrust();
                             }
+                            break;
                         }
                     }
                 }

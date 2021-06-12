@@ -49,9 +49,9 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
         g.setColor(Color.YELLOW);
         g.drawString("Trust To HONEST           :   " + world.getStatistics()[worldTimer].getIttTrustToHonest(), 100, 190);
         g.setColor(Color.RED);
-        g.drawString("Total Trust To DisHONEST  :   " + world.getStatistics()[worldTimer].getAllTrustToDishonest(), 100, 230);
+        g.drawString("Total Trust To DisHONEST  :   " + world.getStatistics()[worldTimer].getAllTrustToAdversary(), 100, 230);
         g.setColor(Color.pink);
-        g.drawString("Trust To DisHONEST :   " + world.getStatistics()[worldTimer].getIttTrustToDishonest(), 100, 270);
+        g.drawString("Trust To DisHONEST :   " + world.getStatistics()[worldTimer].getIttTrustToAdversary(), 100, 270);
 
 
         //============================//============================//============================
@@ -81,17 +81,17 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
 
             //============================ Bound Rectangle
             //g.drawRect(0, 0, world.getWidth(), world.getHeight());
-            g.setColor(Color.YELLOW);
-            g.fillOval(axisX, stat.getIttTrustToHonest(), 5, 5);
+            g.setColor(Color.WHITE);
+            g.fillOval(axisX, stat.getAllTrustToMischief(), 5, 5);
             ///
             g.setColor(Color.GREEN);
             g.fillOval(axisX, stat.getAllTrustToHonest(), 5, 5);
             //============================
-            g.setColor(Color.pink);
-            g.fillOval(axisX, stat.getIttTrustToDishonest(), 5, 5);
+            g.setColor(Color.MAGENTA);
+            g.fillOval(axisX, stat.getAllTrustToIntelligentAdversary(), 5, 5);
             ///
             g.setColor(Color.RED);
-            g.fillOval(axisX, stat.getAllTrustToDishonest(), 5, 5);
+            g.fillOval(axisX, stat.getAllTrustToAdversary(), 5, 5);
 
         }
 

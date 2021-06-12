@@ -75,9 +75,9 @@ public class StatsTrustGenerator {
         return
                 stat.getWorldTime() + "," +
                         stat.getIttTrustToHonest() + "," +
-                        stat.getIttTrustToDishonest() + "," +
+                        stat.getIttTrustToAdversary() + "," +
                         stat.getAllTrustToHonest() + "," +
-                        stat.getAllTrustToDishonest() + "," +
+                        stat.getAllTrustToAdversary() + "," +
                         stat.getIttFalsePositiveTrust() + "," +
                         stat.getIttFalseNegativeTrust() + "," +
                         stat.getIttTruePositiveTrust() + "," +

@@ -2,48 +2,32 @@
   "simulationRound": "1",
   "sleepInTarget": "2",
   "------------------1": "",
-  "stateCount": 100,
+  "stateCount": 50,
   "stateCapacity": "100",
-  "stateTargetCount": "#2..10",
+  "stateTargetCount": "#2..5",
   "pitfallCount": "2",
   "------------------2": "",
-  "agentsCount": "1000",
+  "agentsCount": "500",
   "bunches": [
     {
-      "bunchCount": "%10@1000",
-      "targetCount": "100",
+      "bunchCount": "%100@100",
+      "targetCount": "200",
       "watchDepth": "2",
       "watchListCapacity": "#800..1000",
-      "travelHistory": "#8000..10000",
+      "travelHistory": "#80000..100000",
       "trustHistoryCap": "#800..1000",
       "trustHistoryItemCap": "#800..1000",
-      "trustBehavioralStrategy": "0",
-      "trustHonestDiscretePercentage": "100",
-      "trustReplaceHistoryMethod": "1"
-    },
-    {
-      "bunchCount": "%60@1000",
-      "targetCount": "100",
-      "watchDepth": "#0..1",
-      "watchListCapacity": "#100..800",
-      "travelHistory": "#1000..8000",
-      "trustHistoryCap": "#100..800",
-      "trustHistoryItemCap": "#100..800",
-      "trustBehavioralStrategy": "0",
-      "trustHonestDiscretePercentage": "100",
-      "trustReplaceHistoryMethod": "1"
-    },
-    {
-      "bunchCount": "%30@1000",
-      "targetCount": "100",
-      "watchDepth": "0",
-      "watchListCapacity": "#0..100",
-      "travelHistory": "#100..1000",
-      "trustHistoryCap": "#0..100",
-      "trustHistoryItemCap": "#0..100",
-      "trustBehavioralStrategy": "0",
-      "trustHonestDiscretePercentage": "100",
-      "trustReplaceHistoryMethod": "1"
+      "trustReplaceHistoryMethod": 1,
+      "behavior": {
+        "honestPercent": 90,
+        "adversaryPercent": 3,
+        "mischiefPercent": 5,
+        "intelligentAdversary": {
+          "honestPercent": 50,
+          "adversaryPercent": 30,
+          "mischiefPercent": 20
+        }
+      }
     }
   ]
 }

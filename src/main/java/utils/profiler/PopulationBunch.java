@@ -11,9 +11,8 @@ public class PopulationBunch {
     private String watchDepth;
     private String travelHistory;
     private String targetCount;
-    private String trustBehavioralStrategy;
-    private String trustHonestDiscretePercentage;
     private String trustReplaceHistoryMethod;
+    private PopulationBunchBehaviorParam behavior;
 
     //============================
     private DefParameter bunchCountD;
@@ -23,8 +22,6 @@ public class PopulationBunch {
     private DefParameter watchDepthD;
     private DefParameter travelHistoryCapD;
     private DefParameter targetCountD;
-    private DefParameter trustBehavioralStrategyD;
-    private DefParameter trustHonestDiscretePercentageD;
     private DefParameter trustReplaceHistoryMethodD;
 
 
@@ -38,8 +35,6 @@ public class PopulationBunch {
         watchDepthD = new DefParameter(watchDepth);
         travelHistoryCapD = new DefParameter(travelHistory);
         targetCountD = new DefParameter(targetCount);
-        trustBehavioralStrategyD = new DefParameter(trustBehavioralStrategy);
-        trustHonestDiscretePercentageD = new DefParameter(trustHonestDiscretePercentage);
         trustReplaceHistoryMethodD = new DefParameter(trustReplaceHistoryMethod);
     }
 
@@ -79,18 +74,13 @@ public class PopulationBunch {
         return targetCountD;
     }
 
-    public DefParameter getTrustHonestDiscretePercentageD() {
-        return trustHonestDiscretePercentageD;
-    }
-
-    public TtTrustBehavioralStrategy getBehavioralStrategy(){
-        int i = trustBehavioralStrategyD.nextValue();
-        return TtTrustBehavioralStrategy.getByOrdinal(i);
-    }
-
-    public TtTrustReplaceHistoryMethod getTrustReplaceHistoryMethod(){
+    public TtTrustReplaceHistoryMethod getTrustReplaceHistoryMethod() {
         int i = trustReplaceHistoryMethodD.nextValue();
         return TtTrustReplaceHistoryMethod.getByOrdinal(i);
+    }
+
+    public PopulationBunchBehaviorParam getBehavior() {
+        return behavior;
     }
 
     //============================//============================
@@ -119,8 +109,6 @@ public class PopulationBunch {
                 ti + ", watchDepthD=" + watchDepthD.toString(tabIndex) +
                 ti + ", travelHistoryD=" + travelHistoryCapD.toString(tabIndex) +
                 ti + ", targetCountD=" + targetCountD.toString(tabIndex) +
-                ti + ", trustBehavioralStrategyD=" + trustBehavioralStrategyD.toString(tabIndex) +
-                ti + ", trustHonestDiscretePercentageD=" + trustHonestDiscretePercentageD.toString(tabIndex) +
                 ti + ", trustReplaceHistoryMethodD=" + trustReplaceHistoryMethodD.toString(tabIndex) +
                 tx + '}';
     }

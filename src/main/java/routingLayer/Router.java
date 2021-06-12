@@ -242,7 +242,7 @@ public class Router {
 
         int cc = 0;
         for (RoutingHelp help : routingHelps) {
-            boolean isHonest = help.getHelperAgent().getBehavior().getIsHonest();
+            boolean isHonest = help.getHelperAgent().getBehavior().getHasHonestState();
             if (isHonest) {
                 System.out.println(cc + "     " + help.getHelperAgent().getId());
             }
@@ -285,10 +285,14 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
-        if (help.getHelperAgent().getBehavior().getIsHonest()) {
+        if (help.getHelperAgent().getBehavior().getHasHonestState()) {
             statistics___.add_Itt_TrustToHonest();
-        } else {
-            statistics___.add_Itt_TrustToDishonest();
+        } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
+            statistics___.add_Itt_TrustToAdversary();
+        } else if (help.getHelperAgent().getBehavior().getHasIntelligentAdversaryState()) {
+            statistics___.add_Itt_TrustToIntelligentAdversary();
+        } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
+            statistics___.add_Itt_TrustToMischief();
         }
 //        }
     }
@@ -439,25 +443,66 @@ public class Router {
      */
     private RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
 
-        if (agent.getBehavior().getIsHonest()) {
-            return responseAsHonest(agent, goalState);
+        switch (agent.getBehavior().getCurrentBehaviorState()) {
+            case Honest:
+                return responseAsHonest(agent, goalState);
+            case Adversary:
+                return responseAsAdversary(agent);
+            case Mischief:
+                return responseAsMischief(agent);
         }
-        return responseAsDishonest(agent, goalState);
-
+        return null;
     }
 
-    private RoutingHelp responseAsDishonest(Agent agent, StateX goalState) {
+    private StateX findPitfallForAdversary(Agent agent) {
 
-        StateX pitState = null;
-        for (StateX state : world.getEnvironment().getStates()) {
-            if (state.isIsPitfall()) {
-                pitState = state;
+        //-- If there is no pitfall in the world environment, the adversary agent will select a random pitfall
+        if (world.getEnvironment().getPitfallCount() <= 0) {
+            OutLog____.pl(TtOutLogMethodSection.DoYouKnowWhereIs, TtOutLogStatus.FAILED, "The agent (" + agent.getId() + ") is Adversary but there is no pitfall.");
+            return world.getEnvironment().getRandomState();
+        }
+
+        //-- Finding a pitfall in travel history of adversary agent.
+        ArrayList<TravelHistory> travelHistories = agent.getTravelHistories();
+        int lastIndex = travelHistories.size() - 1;
+        for (int i = lastIndex; i >= 0; i--) {
+            //-- if there is no reverse path for backward to previous state
+            if (i < lastIndex && !travelHistories.get(i + 1).hasPathTo(travelHistories.get(i))) {
+                break;
+            }
+            TravelHistory travelHistory = travelHistories.get(i);
+            StateX pitState = travelHistory.getPitfallIfExist();
+            if (pitState != null) {
+                return pitState;
             }
         }
-        if (pitState == null) {
-            pitState = world.getEnvironment().getRandomState();
+
+        //-- Selecting a random pitfall
+        int pitfallIndex = Globals.RANDOM.nextInt(world.getEnvironment().getPitfallCount());
+        int pid = 0;
+        for (StateX state : world.getEnvironment().getStates()) {
+            if (state.isIsPitfall()) {
+                if (pid != pitfallIndex) {
+                    pid++;
+                    continue;
+                }
+                return state;
+            }
         }
-        return responseAsHonest(agent, pitState);
+
+        //-- If can not find a pitfall state, any random state will be returned.
+        OutLog____.pl(TtOutLogMethodSection.DoYouKnowWhereIs, TtOutLogStatus.ERROR, "Unable to get a pitfall with index " + pitfallIndex + " for agent (" + agent.getId() + "). current index is " + pid + ". pitfall count is " + world.getEnvironment().getPitfallCount());
+        return world.getEnvironment().getRandomState();
+    }
+
+    private RoutingHelp responseAsAdversary(Agent agent) {
+
+        return responseAsHonest(agent, findPitfallForAdversary(agent));
+    }
+
+    private RoutingHelp responseAsMischief(Agent agent) {
+
+        return responseAsHonest(agent, world.getEnvironment().getRandomState());
     }
 
     private RoutingHelp responseAsHonest(Agent agent, StateX goalState) {

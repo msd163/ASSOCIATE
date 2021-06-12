@@ -22,11 +22,17 @@ public class WorldStatistics {
     private int agentsWithNoTargetState;
     private int statesWithNoTarget;
     //============================
-    private int allTrustToDishonest;        // all agents that trust to a 'dishonest' agent
-    private int allTrustToHonest;           // all agents that trust to a 'honest' agent
-    private int ittTrustToDishonest;        // agents that trust to a 'dishonest' agent in this time
-    private int ittTrustToHonest;           // agents that trust to a 'honest' agent in this time
-    //============================
+    private int allTrustToHonest;                   // all agents that trust to a 'honest' agent
+    private int allTrustToAdversary;                // all agents that trust to a 'adversary' agent
+    private int allTrustToIntelligentAdversary;     // all agents that trust to a 'int.adversary' agent
+    private int allTrustToMischief;                 // all agents that trust to a 'mischief' agent
+
+    private int ittTrustToHonest;                   // agents that trust to a 'honest' agent in this time
+    private int ittTrustToAdversary;                // agents that trust to a 'dishonest' agent in this time
+    private int ittTrustToIntelligentAdversary;     // agents that trust to a 'int.adversary' agent
+    private int ittTrustToMischief;                 // agents that trust to a 'mischief' agent
+
+    // ============================
     private int ittFalsePositiveTrust;
     private int ittFalseNegativeTrust;
     private int ittTruePositiveTrust;
@@ -37,6 +43,7 @@ public class WorldStatistics {
     private float trustSpecificity;
 
     //============================//============================
+
 
     public WorldStatistics(WorldStatistics prevStats) {
         this.prevStats = prevStats;
@@ -52,7 +59,7 @@ public class WorldStatistics {
                 = statesWithNoTarget
                 = allAgentsInPitfall
                 = ittAgentsInPitfall
-                = ittTrustToDishonest
+                = ittTrustToAdversary
                 = ittTrustToHonest
                 = ittFalsePositiveTrust
                 = ittFalseNegativeTrust
@@ -67,12 +74,15 @@ public class WorldStatistics {
         this.episode = episode;
 
         if (prevStats != null && prevStats.episode == episode) {
-            allTrustToDishonest = prevStats.getAllTrustToDishonest();
             allTrustToHonest = prevStats.getAllTrustToHonest();
+            allTrustToIntelligentAdversary = prevStats.getAllTrustToIntelligentAdversary();
+            allTrustToMischief = prevStats.getAllTrustToMischief();
         } else {
 
-            allTrustToDishonest
+            allTrustToAdversary
                     = allTrustToHonest
+                    = allTrustToIntelligentAdversary
+                    = allTrustToMischief
                     = 0;
         }
     }
@@ -130,10 +140,19 @@ public class WorldStatistics {
         allTrustToHonest++;
     }
 
+    public void add_Itt_TrustToAdversary() {
+        ittTrustToAdversary++;
+        allTrustToAdversary++;
+    }
 
-    public void add_Itt_TrustToDishonest() {
-        ittTrustToDishonest++;
-        allTrustToDishonest++;
+    public void add_Itt_TrustToIntelligentAdversary() {
+        ittTrustToIntelligentAdversary++;
+        allTrustToIntelligentAdversary++;
+    }
+
+    public void add_Itt_TrustToMischief() {
+        ittTrustToMischief++;
+        allTrustToMischief++;
     }
 
     public void add_Itt_FalsePositiveTrust() {
@@ -248,8 +267,8 @@ public class WorldStatistics {
         return ittAgentsInPitfall;
     }
 
-    public int getIttTrustToDishonest() {
-        return ittTrustToDishonest;
+    public int getIttTrustToAdversary() {
+        return ittTrustToAdversary;
     }
 
     public int getIttTrustToHonest() {
@@ -260,8 +279,8 @@ public class WorldStatistics {
         return episode;
     }
 
-    public int getAllTrustToDishonest() {
-        return allTrustToDishonest;
+    public int getAllTrustToAdversary() {
+        return allTrustToAdversary;
     }
 
     public int getAllTrustToHonest() {
@@ -294,5 +313,21 @@ public class WorldStatistics {
 
     public float getTrustSpecificity() {
         return trustSpecificity;
+    }
+
+    public int getAllTrustToMischief() {
+        return allTrustToMischief;
+    }
+
+    public int getAllTrustToIntelligentAdversary() {
+        return allTrustToIntelligentAdversary;
+    }
+
+    public int getIttTrustToIntelligentAdversary() {
+        return ittTrustToIntelligentAdversary;
+    }
+
+    public int getIttTrustToMischief() {
+        return ittTrustToMischief;
     }
 }

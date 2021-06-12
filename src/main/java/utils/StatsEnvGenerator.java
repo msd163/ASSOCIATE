@@ -35,9 +35,11 @@ public class StatsEnvGenerator {
                     + ", StateCount: " + environment.getStateCount()
                     + ", PitfallCount: " + environment.getPitfallCount()
                     + ", TransitionCount: " + environment.getTransitionCount()
-                    + ", AgentCount: " + environment.getAgentsCount()
-                    + ", HonestCount: " + environment.getHonestCount()
-                    + ", DishonestCount: " + environment.getDishonestCount()
+                    + ", Agents: " + environment.getAgentsCount()
+                    + ", Honest: " + environment.getHonestCount()
+                    + ", Adversary: " + environment.getAdversaryCount()
+                    + ", Int.Adversary: " + environment.getIntelligentAdversaryCount()
+                    + ", Mischief: " + environment.getMischiefCount()
                     + "\n");
             writer.flush();
 

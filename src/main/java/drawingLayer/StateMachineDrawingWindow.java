@@ -166,9 +166,9 @@ public class StateMachineDrawingWindow extends DrawingWindow {
 
         agent.setLoc(loc_x, loc_y);
 
-        honestBackColor = behavior.getIsHonest() ? new Color(0, 255, 85) : new Color(255, 71, 71);
-        honestForeColor = behavior.getIsHonest() ? new Color(36, 151, 9) : new Color(255, 196, 166);
-        honestBorderColor = behavior.getIsHonest() ? new Color(29, 102, 0) : new Color(160, 0, 0);
+        honestBackColor = behavior.getHasHonestState() ? new Color(0, 255, 85) : new Color(255, 71, 71);
+        honestForeColor = behavior.getHasHonestState() ? new Color(36, 151, 9) : new Color(255, 196, 166);
+        honestBorderColor = behavior.getHasHonestState() ? new Color(29, 102, 0) : new Color(160, 0, 0);
 
         // Drawing links to watched agents
         if (agent.isSimConfigLinkToWatchedAgents()) {

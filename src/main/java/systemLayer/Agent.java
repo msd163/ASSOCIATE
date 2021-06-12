@@ -91,10 +91,7 @@ public class Agent {
         );
 
         int targetCount = profiler.getCurrentBunch().getTargetCountD().nextValue();
-        behavior = new AgentBehavior(
-                profiler.getCurrentBunch().getBehavioralStrategy(),
-                profiler.getCurrentBunch().getTrustHonestDiscretePercentageD().nextValue()
-        );
+        behavior = new AgentBehavior(profiler.getCurrentBunch().getBehavior());
 
         targetStateIds = new int[targetCount];
         targetStates = new StateX[targetCount];
@@ -125,7 +122,7 @@ public class Agent {
 
     public void updateProfile() {
 
-        behavior.updateHonestState();
+        behavior.updateBehaviorState();
     }
 
     public void resetParams() {
@@ -143,7 +140,7 @@ public class Agent {
             spentTimeAtTheTarget = 0;
             return true;
         } else {
-            currentTargetStateIndex = 0;
+            //currentTargetStateIndex = 0;
             return true;
         }
     }

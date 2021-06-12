@@ -8,6 +8,7 @@ public enum TtOutLogMethodSection {
     Generator_InitializingStates("Gn-InSt"),
     UpdateTargets("UpTrgs"),
     UpdateWatchList("UpWtch"),
+    DoYouKnowWhereIs("DoYouKn"),
     //
     ;
 
