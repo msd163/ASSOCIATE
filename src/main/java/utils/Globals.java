@@ -18,7 +18,7 @@ public class Globals {
     public static String STATS_FILE_NAME = ParsCalendar.getInstance().getShortDateTime()
             .replaceAll("[ ]", "-")
             .replaceAll("[:/]", "")
-            +"_" + Config.FullEnvironmentDataFile.substring(Config.FullEnvironmentDataFile.lastIndexOf("/") + 1, Config.FullEnvironmentDataFile.lastIndexOf("."));
+            +"_" + Config.EnvironmentDataFilePath.substring(Config.EnvironmentDataFilePath.lastIndexOf("/") + 1, Config.EnvironmentDataFilePath.lastIndexOf("."));
 
     public static StatsEnvGenerator statsEnvGenerator = new StatsEnvGenerator();
     public static StatsTrustGenerator statsTrustGenerator = new StatsTrustGenerator();

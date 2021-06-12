@@ -240,6 +240,15 @@ public class Router {
             return;
         }
 
+        int cc = 0;
+        for (RoutingHelp help : routingHelps) {
+            boolean isHonest = help.getHelperAgent().getBehavior().getIsHonest();
+            if (isHonest) {
+                System.out.println(cc + "     " + help.getHelperAgent().getId());
+            }
+            cc++;
+        }
+
         //todo: Implementing trust mechanism
 
         List<RoutingHelp> sortedRoutingHelps = routingHelps;
@@ -258,10 +267,10 @@ public class Router {
 
         }
 
-        agent.clearNextSteps();
-        RoutingHelp help = sortedRoutingHelps.get(0);
+        agent.clearNextSteps(); //fp
+        RoutingHelp help = sortedRoutingHelps.get(0); //zn
         // Adding path from agent state to helper (agent) state
-        for (WatchedAgent wa : watchedAgents) {
+        for (WatchedAgent wa : watchedAgents) { //fn
             if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
                 agent.getNextSteps().addAll(wa.getPath());
                 agent.setHelper(help.getHelperAgent());

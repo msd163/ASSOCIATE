@@ -28,7 +28,7 @@ public class EnvGenerator {
         Gson gson = new Gson();
 
         //============================//============================  Loading Profiler from file
-        FileReader prfReader = new FileReader(Config.SimulatingFile);
+        FileReader prfReader = new FileReader(Config.SimulatingFilePath);
         profiler = gson.fromJson(prfReader, SimulationProfiler.class);
 
         if (profiler == null) {
@@ -88,7 +88,7 @@ public class EnvGenerator {
         //============================//============================ Saving simulation-profiler.json as archived source of environment.json
         try {
 
-            String simProf = readFile(Config.SimulatingFile);
+            String simProf = readFile(Config.SimulatingFilePath);
 
             file = new File(envFilePath + "-" + envFileCounter + ".simPro.json");
             FileWriter writer = new FileWriter(file);
