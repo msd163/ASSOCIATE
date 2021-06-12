@@ -86,7 +86,7 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
 
 
         g.setColor(Color.YELLOW);
-        g.drawLine(0, 0, getWidth(), 0);
+        g.drawLine(0, 0, getRealWith(), 0);
 
         WorldStatistics[] statistics = world.getStatistics();
         for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {

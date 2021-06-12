@@ -72,7 +72,7 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
         g.translate(100, -getHeight() / scale + 100);
 
         g.setColor(Color.YELLOW);
-        g.drawLine(0, 0, getWidth(), 0);
+        g.drawLine(0, 0, getRealWith(), 0);
 
         WorldStatistics[] statistics = world.getStatistics();
 

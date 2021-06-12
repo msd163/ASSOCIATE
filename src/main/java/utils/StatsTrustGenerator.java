@@ -9,9 +9,17 @@ public class StatsTrustGenerator {
     File file;
     FileWriter writer;
 
-    public void init(String statPath) {
+    public void init(String statPath, String name) {
         file = new File(statPath);
 
+        if (!file.exists()) {
+            boolean mkdir = file.mkdir();
+            if (mkdir) {
+                System.out.println("Statistics directory created: " + statPath);
+            }
+        }
+
+        file = new File(statPath + "/" + name);
         try {
             writer = new FileWriter(file);
         } catch (IOException ignored) {
@@ -39,7 +47,7 @@ public class StatsTrustGenerator {
     public void addStat(WorldStatistics stat) {
         try {
             writer.write("\n" + getCsvRec(stat));
-            writer.flush();
+            // writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,9 +81,9 @@ public class StatsTrustGenerator {
                         stat.getIttFalsePositiveTrust() + "," +
                         stat.getIttFalseNegativeTrust() + "," +
                         stat.getIttTruePositiveTrust() + "," +
-                        stat.getIttTrueNegativeTrust()+ "," +
-                        stat.getTrustAccuracy()+ "," +
-                        stat.getTrustSensitivity()+ "," +
+                        stat.getIttTrueNegativeTrust() + "," +
+                        stat.getTrustAccuracy() + "," +
+                        stat.getTrustSensitivity() + "," +
                         stat.getTrustSpecificity()
 
                 ;

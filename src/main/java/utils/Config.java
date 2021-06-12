@@ -4,16 +4,15 @@ import _type.TtTrustMethodology;
 
 public class Config {
 
-
     public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.BasicTrust_OnlyByItsHistory;
 
     public static final String SimulatingFile = ProjectPath.instance().simulationProfileData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().environmentData(2);
+    public static final String FullEnvironmentDataFile = ProjectPath.instance().environmentData();
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME           = 1000;         // Time of execution in each world
-    public static int WORLD_SLEEP_MILLISECOND   = 10;           // Sleep time in each run of world
+    public static int WORLD_LIFE_TIME           = 200;         // Time of execution in each world
+    public static int WORLD_SLEEP_MILLISECOND   = 1;           // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT      = 200;
 

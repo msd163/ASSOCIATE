@@ -5,7 +5,7 @@
   "stateCount": 100,
   "stateCapacity": "100",
   "stateTargetCount": "#2..10",
-  "pitfallCount": "2",
+  "pitfallCount": "5",
   "------------------2": "",
   "agentsCount": "1000",
   "bunches": [
@@ -17,8 +17,8 @@
       "travelHistory": "#8000..10000",
       "trustHistoryCap": "#800..1000",
       "trustHistoryItemCap": "#800..1000",
-      "trustBehavioralStrategy": "2",
-      "trustHonestDiscretePercentage": "95",
+      "trustBehavioralStrategy": "0",
+      "trustHonestDiscretePercentage": "100",
       "trustReplaceHistoryMethod": "1"
     },
     {
@@ -29,8 +29,8 @@
       "travelHistory": "#1000..8000",
       "trustHistoryCap": "#100..800",
       "trustHistoryItemCap": "#100..800",
-      "trustBehavioralStrategy": "2",
-      "trustHonestDiscretePercentage": "80",
+      "trustBehavioralStrategy": "0",
+      "trustHonestDiscretePercentage": "100",
       "trustReplaceHistoryMethod": "1"
     },
     {
@@ -41,8 +41,8 @@
       "travelHistory": "#100..1000",
       "trustHistoryCap": "#0..100",
       "trustHistoryItemCap": "#0..100",
-      "trustBehavioralStrategy": "2",
-      "trustHonestDiscretePercentage": "60",
+      "trustBehavioralStrategy": "0",
+      "trustHonestDiscretePercentage": "100",
       "trustReplaceHistoryMethod": "1"
     }
   ]

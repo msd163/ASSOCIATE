@@ -45,9 +45,9 @@ public class Simulator {
 
             System.out.println(statName);
 
-            Globals.statsEnvGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName + ".csv");
+            Globals.statsEnvGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".csv");
 
-            Globals.statsTrustGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName + ".trust.csv");
+            Globals.statsTrustGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".trust.csv");
         }
 
     }

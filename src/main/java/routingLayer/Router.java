@@ -322,7 +322,7 @@ public class Router {
         }
 
         if (srIndex == 0) {
-            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.ERROR, "can not found trustee in routerHelp", agent, agent.getState(), goalState);
+            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.WARN, "can not found trustee in routerHelp", agent, agent.getState(), goalState);
             return null;
         }
 
