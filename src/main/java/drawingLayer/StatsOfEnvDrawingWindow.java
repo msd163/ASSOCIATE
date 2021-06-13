@@ -84,10 +84,6 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
-
-        g.setColor(Color.YELLOW);
-        g.drawLine(0, 0, getRealWith(), 0);
-
         WorldStatistics[] statistics = world.getStatistics();
         for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {
             WorldStatistics stat = statistics[i];
@@ -110,6 +106,10 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
             g.fillOval(axisX, stat.getIttRandomTravelToNeighbors(), 5, 5);
             //============================
         }
+
+        //============================//============================ Draw X-axis line
+        g.setColor(Color.YELLOW);
+        g.drawLine(0, 0, getRealWith(), 0);
 
     }
 }

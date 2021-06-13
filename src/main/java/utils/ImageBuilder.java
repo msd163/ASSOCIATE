@@ -9,7 +9,7 @@ import java.io.File;
 
 public class ImageBuilder {
 
-    public static void generateStatisticsImages(StateMachineDrawingWindow stateMachineWindow, StatsOfEnvDrawingWindow statsOfEnvWindow, TrustMatrixDrawingWindow trustMatrixWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, StatsOfTrustParamsDrawingWindow trustParamsDrawingWindow) {
+    public static void generateStatisticsImages(StateMachineDrawingWindow stateMachineWindow, StatsOfEnvDrawingWindow statsOfEnvWindow, TrustMatrixDrawingWindow trustMatrixWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, AnalysisOfTrustParamsDrawingWindow trustParamsDrawingWindow) {
         if (Config.DRAWING_SHOW_STATE_MACHINE) {
             generateStatisticsImage(stateMachineWindow);
         }
@@ -25,7 +25,7 @@ public class ImageBuilder {
         if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
             generateStatisticsImage(poNeStatsWindow);
         }
-        if (Config.DRAWING_SHOW_STATS_OF_TRUST_PARAM) {
+        if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
             generateStatisticsImage(trustParamsDrawingWindow);
         }
     }

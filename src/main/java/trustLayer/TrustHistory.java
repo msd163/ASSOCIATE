@@ -9,6 +9,7 @@ public class TrustHistory {
 
     private Agent agent;
     private int lastVisitTime;
+    private int lastEpisode;
     private float finalTrustLevel;
     private ArrayList<TrustHistoryItem> items;
 
@@ -18,12 +19,14 @@ public class TrustHistory {
     public TrustHistory(Agent agent) {
         this.agent = agent;
         lastVisitTime = Globals.WORLD_TIMER;
+        lastEpisode = Globals.EPISODE;
         finalTrustLevel = 0;
         items = new ArrayList<>();
     }
 
     public void addHistory(float trustScore) {
         lastVisitTime = Globals.WORLD_TIMER;
+        lastEpisode = Globals.EPISODE;
         finalTrustLevel += trustScore;
         items.add(new TrustHistoryItem(
                 Globals.WORLD_TIMER,
@@ -64,5 +67,9 @@ public class TrustHistory {
 
     public void setItems(ArrayList<TrustHistoryItem> items) {
         this.items = items;
+    }
+
+    public int getLastEpisode() {
+        return lastEpisode;
     }
 }

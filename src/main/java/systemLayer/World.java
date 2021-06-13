@@ -134,12 +134,12 @@ public class World {
         int widthHalf = (int) width / 2;
         int heightHalf = (int) height / 2;
         //============================ Initializing Main Drawing Windows
-        StateMachineDrawingWindow stateMachineWindow = new StateMachineDrawingWindow(this);
-        stateMachineWindow.setDoubleBuffered(true);
-        stateMachineWindow.setName("st_mc");
+        StateMachineDrawingWindow stateMachineDW = new StateMachineDrawingWindow(this);
+        stateMachineDW.setDoubleBuffered(true);
+        stateMachineDW.setName("st_mc");
         if (Config.DRAWING_SHOW_STATE_MACHINE) {
             JFrame mainFrame = new JFrame();
-            mainFrame.getContentPane().add(stateMachineWindow);
+            mainFrame.getContentPane().add(stateMachineDW);
             // mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             mainFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
             mainFrame.setVisible(true);
@@ -148,12 +148,12 @@ public class World {
             mainFrame.setTitle("State Machine Map");
         }
         //============================ Initializing Diagram Drawing Windows
-        StatsOfEnvDrawingWindow statsOfEnvWindow = new StatsOfEnvDrawingWindow(this);
-        statsOfEnvWindow.setDoubleBuffered(true);
-        statsOfEnvWindow.setName("s_env");
+        StatsOfEnvDrawingWindow statsOfEnvDW = new StatsOfEnvDrawingWindow(this);
+        statsOfEnvDW.setDoubleBuffered(true);
+        statsOfEnvDW.setName("s_env");
         if (Config.DRAWING_SHOW_STAT_OF_ENV) {
             JFrame statsFrame = new JFrame();
-            statsFrame.getContentPane().add(statsOfEnvWindow);
+            statsFrame.getContentPane().add(statsOfEnvDW);
 //            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
             statsFrame.setVisible(true);
@@ -162,12 +162,12 @@ public class World {
         }
 
         //============================ Initializing Diagram Drawing Windows
-        TrustMatrixDrawingWindow trustMatrixWindow = new TrustMatrixDrawingWindow(matrixGenerator);
-        trustMatrixWindow.setDoubleBuffered(true);
-        trustMatrixWindow.setName("t_mtx");
+        TrustMatrixDrawingWindow trustMatrixDW = new TrustMatrixDrawingWindow(matrixGenerator);
+        trustMatrixDW.setDoubleBuffered(true);
+        trustMatrixDW.setName("t_mtx");
         if (Config.DRAWING_SHOW_TRUST_MATRIX) {
             JFrame trustMatFrame = new JFrame();
-            trustMatFrame.getContentPane().add(trustMatrixWindow);
+            trustMatFrame.getContentPane().add(trustMatrixDW);
 //            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             trustMatFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
             trustMatFrame.setVisible(true);
@@ -176,12 +176,12 @@ public class World {
         }
 
         //============================ Initializing Diagram Drawing Windows
-        StatsOfTrustDrawingWindow trustStatsWindow = new StatsOfTrustDrawingWindow(this);
-        trustStatsWindow.setDoubleBuffered(true);
-        trustStatsWindow.setName("t_stt");
+        StatsOfTrustDrawingWindow statsOfTrustDW = new StatsOfTrustDrawingWindow(this);
+        statsOfTrustDW.setDoubleBuffered(true);
+        statsOfTrustDW.setName("t_stt");
         if (Config.DRAWING_SHOW_STATS_OF_TRUST) {
             JFrame trustStats = new JFrame();
-            trustStats.getContentPane().add(trustStatsWindow);
+            trustStats.getContentPane().add(statsOfTrustDW);
 //            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             trustStats.setMinimumSize(new Dimension(widthHalf, heightHalf));
             trustStats.setVisible(true);
@@ -190,30 +190,30 @@ public class World {
         }
 
         //============================ Initializing Diagram Drawing Windows
-        StatsOfFalsePoNeDrawingWindow poNeStatsWindow = new StatsOfFalsePoNeDrawingWindow(this);
-        poNeStatsWindow.setDoubleBuffered(true);
-        poNeStatsWindow.setName("t_pon");
+        StatsOfFalsePoNeDrawingWindow statsOfFalsePoNeDW = new StatsOfFalsePoNeDrawingWindow(this);
+        statsOfFalsePoNeDW.setDoubleBuffered(true);
+        statsOfFalsePoNeDW.setName("t_pon");
         if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
             JFrame poNeStats = new JFrame();
-            poNeStats.getContentPane().add(poNeStatsWindow);
+            poNeStats.getContentPane().add(statsOfFalsePoNeDW);
 //            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             poNeStats.setMinimumSize(new Dimension(widthHalf, heightHalf));
             poNeStats.setVisible(true);
             poNeStats.setLocation(widthHalf, heightHalf);
-            poNeStats.setTitle("False Positive and False Negative Statistics");
+            poNeStats.setTitle("(TP | TN | FP | FN) Statistics");
         }
 
         //============================ Initializing Diagram Drawing Windows
-        StatsOfTrustParamsDrawingWindow trustParamsDrawingWindow = new StatsOfTrustParamsDrawingWindow(this);
-        trustParamsDrawingWindow.setDoubleBuffered(true);
-        trustParamsDrawingWindow.setName("t_prm");
-        if (Config.DRAWING_SHOW_STATS_OF_TRUST_PARAM) {
-            JFrame paramStats = new JFrame();
-            paramStats.getContentPane().add(trustParamsDrawingWindow);
-            paramStats.setMinimumSize(new Dimension(widthHalf, heightHalf));
-            paramStats.setVisible(true);
-            paramStats.setLocation(widthHalf, heightHalf);
-            paramStats.setTitle("Trust Params (Accuracy | Sensitivity | Specificity)");
+        AnalysisOfTrustParamsDrawingWindow analysisOfTrustParamsDW = new AnalysisOfTrustParamsDrawingWindow(this);
+        analysisOfTrustParamsDW.setDoubleBuffered(true);
+        analysisOfTrustParamsDW.setName("t_anl");
+        if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
+            JFrame anOfTrPrJFrame = new JFrame();
+            anOfTrPrJFrame.getContentPane().add(analysisOfTrustParamsDW);
+            anOfTrPrJFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            anOfTrPrJFrame.setVisible(true);
+            anOfTrPrJFrame.setLocation(widthHalf, heightHalf);
+            anOfTrPrJFrame.setTitle("Trust Analyzing (Accuracy | Sensitivity | Specificity)");
         }
 
 
@@ -270,7 +270,7 @@ public class World {
                 Globals.statsTrustGenerator.addStat(statistic);
             }
             //============================//============================ Repainting
-            updateWindows(stateMachineWindow, statsOfEnvWindow, trustMatrixWindow, trustStatsWindow, poNeStatsWindow, trustParamsDrawingWindow);
+            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
@@ -310,7 +310,7 @@ public class World {
             }
 
             while (Globals.PAUSE) {
-                updateWindows(stateMachineWindow, statsOfEnvWindow, trustMatrixWindow, trustStatsWindow, poNeStatsWindow, trustParamsDrawingWindow);
+                updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
             }
 
         }
@@ -329,7 +329,7 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
-        ImageBuilder.generateStatisticsImages(stateMachineWindow, statsOfEnvWindow, trustMatrixWindow, trustStatsWindow, poNeStatsWindow, trustParamsDrawingWindow);
+        ImageBuilder.generateStatisticsImages(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
 
         System.out.println("Finished");
 
@@ -337,12 +337,12 @@ public class World {
         //============================//============================ Running program after finishing lifeTime of the world.
 
         while (true) {
-            updateWindows(stateMachineWindow, statsOfEnvWindow, trustMatrixWindow, trustStatsWindow, poNeStatsWindow, trustParamsDrawingWindow);
+            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
         }
     }  //  End of running
 
 
-    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, StatsOfTrustParamsDrawingWindow paramsDrawingWindow) {
+    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, AnalysisOfTrustParamsDrawingWindow paramsDrawingWindow) {
         try {
             Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
         } catch (InterruptedException e) {
@@ -363,7 +363,7 @@ public class World {
         if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
             poNeStatsWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_STATS_OF_TRUST_PARAM) {
+        if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
             paramsDrawingWindow.repaint();
         }
     }

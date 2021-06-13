@@ -38,8 +38,19 @@ public class WorldStatistics {
     private int ittTruePositiveTrust;
     private int ittTrueNegativeTrust;
 
+
+
+    //--  (Number of correct assessments)/Number of all assessments)
     private float trustAccuracy;
+
+    //--  Sensitivity refers to the test's ability to correctly detect ill patients who do have the condition
+    //--  (Number of true positive assessment)/(Number of all positive assessment)
+    //--  True Positive rate
     private float trustSensitivity;
+
+    //--  Specificity relates to the test's ability to correctly reject healthy patients without a condition. Specificity of a test is the proportion of who truly do not have the condition who test negative for the condition.
+    //--  (Number of true negative assessment)/(Number of all negative assessment)
+    //--  True Negative rate
     private float trustSpecificity;
 
     //============================//============================

@@ -6,13 +6,13 @@ import utils.WorldStatistics;
 
 import java.awt.*;
 
-public class StatsOfTrustDrawingWindow extends DrawingWindow {
+public class AnalysisOfTrustParamsDrawingWindow extends DrawingWindow {
 
     private World world;
 
     //============================//============================  panning params
 
-    public StatsOfTrustDrawingWindow(World world) {
+    public AnalysisOfTrustParamsDrawingWindow(World world) {
         super();
         this.world = world;
     }
@@ -33,25 +33,27 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
 
-        axisX = 0;
-
         g.setColor(Color.YELLOW);
+
+        axisX = 0;
 
         //============================//============================ Translate for panning and scaling
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        g.drawString("World Time                : " + worldTimer, 100, 50);
+        g.drawString("World Time                : " + (worldTimer), 100, 50);
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
+
         g.setColor(Color.GREEN);
-        g.drawString("All Trust To HONEST                  :   " + world.getStatistics()[worldTimer].getAllTrustToHonest(), 100, 150);
-        g.setColor(Color.RED);
-        g.drawString("All Trust To Adversary             :   " + world.getStatistics()[worldTimer].getAllTrustToAdversary(), 100, 190);
-        g.setColor(Color.MAGENTA);
-        g.drawString("All Trust To Int.Adversary       :   " + world.getStatistics()[worldTimer].getAllTrustToIntelligentAdversary(), 100, 230);
+        g.drawString("Accuracy (#of correct/#of all))               :   " + world.getStatistics()[worldTimer].getTrustAccuracy(), 100, 150);
+        g.setColor(Color.YELLOW);
+        g.drawString("Sensitivity (#of TP/#of all P)                  :   " + world.getStatistics()[worldTimer].getTrustSensitivity(), 100, 190);
+        g.setColor(Color.PINK);
+        g.drawString("Specificity (#of TN/#of all N)                  :   " + world.getStatistics()[worldTimer].getTrustSpecificity(), 100, 230);
+
         g.setColor(Color.WHITE);
-        g.drawString("Trust To Mischief                     :   " + world.getStatistics()[worldTimer].getAllTrustToMischief(), 100, 270);
+        g.drawString("[ X200 Scale ]" , 100, 300);
 
 
         //============================//============================//============================
@@ -70,31 +72,25 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
-
         WorldStatistics[] statistics = world.getStatistics();
 
         for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {
             WorldStatistics stat = statistics[i];
             axisX += 5;
 
-            //============================ Bound Rectangle
-            //g.drawRect(0, 0, world.getWidth(), world.getHeight());
-            g.setColor(Color.WHITE);
-            g.fillOval(axisX, stat.getAllTrustToMischief(), 5, 5);
-            ///
             g.setColor(Color.GREEN);
-            g.fillOval(axisX, stat.getAllTrustToHonest(), 5, 5);
-            //============================
-            g.setColor(Color.MAGENTA);
-            g.fillOval(axisX, stat.getAllTrustToIntelligentAdversary(), 5, 5);
-            ///
-            g.setColor(Color.RED);
-            g.fillOval(axisX, stat.getAllTrustToAdversary(), 5, 5);
+            g.fillOval(axisX, (int) (stat.getTrustAccuracy() * 200), 5, 5);
+
+            g.setColor(Color.YELLOW);
+            g.fillOval(axisX, (int) (stat.getTrustSensitivity() * 200), 5, 5);
+
+            g.setColor(Color.PINK);
+            g.fillOval(axisX, (int) (stat.getTrustSpecificity() * 200), 5, 5);
+
         }
 
         //============================//============================ Draw X-axis line
         g.setColor(Color.YELLOW);
         g.drawLine(0, 0, getRealWith(), 0);
-
     }
 }

@@ -28,7 +28,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_STATS_OF_TRUST = true;
     public static final boolean DRAWING_SHOW_TRUST_MATRIX = true;
     public static final boolean DRAWING_SHOW_STATS_OF_PO_NE = true;
-    public static final boolean DRAWING_SHOW_STATS_OF_TRUST_PARAM = true;
+    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE = true;

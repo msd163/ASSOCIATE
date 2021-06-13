@@ -240,14 +240,6 @@ public class Router {
             return;
         }
 
-        int cc = 0;
-        for (RoutingHelp help : routingHelps) {
-            boolean isHonest = help.getHelperAgent().getBehavior().getHasHonestState();
-            if (isHonest) {
-                System.out.println(cc + "     " + help.getHelperAgent().getId());
-            }
-            cc++;
-        }
 
         //todo: Implementing trust mechanism
 

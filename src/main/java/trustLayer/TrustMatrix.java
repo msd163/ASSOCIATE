@@ -34,7 +34,7 @@ public class TrustMatrix {
             Agent agent = agents[i];
             TrustHistory[] histories = agent.getTrust().getHistories();
             for (TrustHistory history : histories) {
-                if (history != null && history.getLastVisitTime() == Globals.WORLD_TIMER) {
+                if (history != null && history.getLastEpisode() == Globals.EPISODE) {
                     for (int j = 0, size = agents.length; j < size; j++) {
                         Agent trustee = agents[j];
                         if (trustee.getId() == history.getAgent().getId()) {

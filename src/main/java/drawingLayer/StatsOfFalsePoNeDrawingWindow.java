@@ -44,14 +44,14 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
         g.drawString("World Time                : " + worldTimer, 100, 50);
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
-//            g.setColor(Color.white);
-//            g.drawString("Total False Positive :   " + world.getStatistics()[Globals.WORLD_TIMER].getAllFalsePositiveTrust(), 100, 150);
+        g.setColor(Color.PINK);
+        g.drawString("False Positive            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalsePositiveTrust(), 100, 150);
+        g.setColor(Color.RED);
+        g.drawString("False Negative            :   " + world.getStatistics()[worldTimer].getIttFalseNegativeTrust(), 100, 190);
         g.setColor(Color.YELLOW);
-        g.drawString("False Positive            :   " + world.getStatistics()[worldTimer].getIttFalsePositiveTrust(), 100, 190);
-//            g.setColor(Color.RED);
-//            g.drawString("Total False Negative  :   " + world.getStatistics()[worldTimer].getAllFalseNegativeTrust(), 100, 230);
-        g.setColor(Color.pink);
-        g.drawString("False Negative            :   " + world.getStatistics()[worldTimer].getIttFalseNegativeTrust(), 100, 270);
+        g.drawString("True Positive              :   " + world.getStatistics()[worldTimer].getIttTruePositiveTrust(), 100, 230);
+        g.setColor(Color.GREEN);
+        g.drawString("True Negative              :   " + world.getStatistics()[worldTimer].getIttTrueNegativeTrust(), 100, 270);
 
 
         //============================//============================//============================
@@ -71,9 +71,6 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
 
-        g.setColor(Color.YELLOW);
-        g.drawLine(0, 0, getRealWith(), 0);
-
         WorldStatistics[] statistics = world.getStatistics();
 
         for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {
@@ -82,19 +79,23 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
 
             //============================ Bound Rectangle
             //g.drawRect(0, 0, world.getWidth(), world.getHeight());
-            g.setColor(Color.YELLOW);
+            g.setColor(Color.PINK);
             g.fillOval(axisX, stat.getIttFalsePositiveTrust(), 5, 5);
             ///
-//            g.setColor(Color.WHITE);
-//            g.fillOval(axisX, stat.getAllFalsePositiveTrust(), 5, 5);
-            //============================
-            g.setColor(Color.pink);
+            g.setColor(Color.RED);
             g.fillOval(axisX, stat.getIttFalseNegativeTrust(), 5, 5);
+            //
+            g.setColor(Color.YELLOW);
+            g.fillOval(axisX, stat.getIttTruePositiveTrust(), 5, 5);
             ///
-//            g.setColor(Color.RED);
-//            g.fillOval(axisX, stat.getAllFalseNegativeTrust(), 5, 5);
+            g.setColor(Color.GREEN);
+            g.fillOval(axisX, stat.getIttTrueNegativeTrust(), 5, 5);
 
         }
+
+        //============================//============================ Draw X-axis line
+        g.setColor(Color.YELLOW);
+        g.drawLine(0, 0, getRealWith(), 0);
 
     }
 }

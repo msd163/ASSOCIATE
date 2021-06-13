@@ -95,7 +95,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public int getRealWith() {
-        return axisX + 800;
+        return axisX + 400;
     }
 
     public int getRealHeight() {
