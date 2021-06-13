@@ -45,7 +45,7 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
 
         g.setColor(Color.PINK);
-        g.drawString("False Positive            :   " + world.getStatistics()[Globals.WORLD_TIMER].getIttFalsePositiveTrust(), 100, 150);
+        g.drawString("False Positive            :   " + world.getStatistics()[worldTimer].getIttFalsePositiveTrust(), 100, 150);
         g.setColor(Color.RED);
         g.drawString("False Negative            :   " + world.getStatistics()[worldTimer].getIttFalseNegativeTrust(), 100, 190);
         g.setColor(Color.YELLOW);
