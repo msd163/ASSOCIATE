@@ -25,13 +25,19 @@ public class AgentBehavior {
         updateBehaviorState();
     }
 
+    //-- Actual behavior state of the agent
     @Expose
     private TtBehaviorState behaviorState;
 
+    //-- current behavior of the agent according it's strategy
     private TtBehaviorState currentBehaviorState;
 
     @Expose
     private IntelligentAdversaryBehavior adversaryBehavior;
+
+    public TtBehaviorState getBehaviorState() {
+        return behaviorState;
+    }
 
     public boolean getHasHonestState() {
         return behaviorState == TtBehaviorState.Honest;

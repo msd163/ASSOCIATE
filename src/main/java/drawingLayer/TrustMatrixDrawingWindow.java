@@ -59,16 +59,21 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
         for (int i = 0; i < matCount; i++) {
             Agent agent = agents[i];
-            if (agent.getBehavior().getHasHonestState()) {
-                g.setColor(Color.GREEN);
-            } else if (agent.getBehavior().getHasAdversaryState()) {
-                g.setColor(Color.RED);
-            } else if (agent.getBehavior().getHasMischief()) {
-                g.setColor(Color.WHITE);
-            } else if (agent.getBehavior().getHasIntelligentAdversaryState()) {
-                g.setColor(Color.MAGENTA);
-            } else {
-                g.setColor(Color.YELLOW);
+            switch (agent.getBehavior().getBehaviorState()) {
+                case Honest:
+                    g.setColor(Color.GREEN);
+                    break;
+                case Adversary:
+                    g.setColor(Color.RED);
+                    break;
+                case Mischief:
+                    g.setColor(Color.WHITE);
+                    break;
+                case IntelligentAdversary:
+                    g.setColor(Color.MAGENTA);
+                    break;
+                default:
+                    g.setColor(Color.YELLOW);
             }
 
             g.fillRect(i * 5, pnY, 5, 5);

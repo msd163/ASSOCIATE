@@ -143,8 +143,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 sc += -0.05 * e.getWheelRotation();
             }
         }
-        if (sc > 10) {
-            sc = 10;
+        if (sc > 20) {
+            sc = 20;
         } else if (sc < 0.009f) {
             sc = 0.01f;
         }

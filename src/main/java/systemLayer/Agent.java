@@ -76,6 +76,7 @@ public class Agent {
     // first agent (zero position) is agent with maximum trust level.
     private List<WatchedAgent> watchedAgents;
 
+
     // States that will be watched according to watchDepth capacity of this agent.
     // If watchDepth is Zero, watchStates will be empty
     private List<WatchedState> watchedStates;

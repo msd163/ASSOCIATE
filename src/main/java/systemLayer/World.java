@@ -11,6 +11,7 @@ import utils.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class World {
 
@@ -19,6 +20,8 @@ public class World {
     }
 
     private Agent[] agents;
+    private List<Agent> sortedAgentsByCapPower;
+
     private int agentsCount;
 
     private int[] traceAgentIds;            // Ids that will be traced in simulation time, in the MainDiagram window
@@ -69,7 +72,7 @@ public class World {
         );
 
         ArrayList<StateX> states = environment.getStates();
-
+        sortedAgentsByCapPower = new ArrayList<>();
         int i = 0;
         for (StateX state : states) {
             for (Agent agent : state.getAgents()) {
@@ -93,9 +96,19 @@ public class World {
                 System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
 
                 agents[i++] = agent;
-
+                sortedAgentsByCapPower.add(agent);
             }
         }
+
+        sortedAgentsByCapPower.sort((Agent a1, Agent a2) -> {
+            if (a1.getCapacity().getCapPower() > a2.getCapacity().getCapPower()) {
+                return 1;
+            }
+            if (a1.getCapacity().getCapPower() < a2.getCapacity().getCapPower()) {
+                return -1;
+            }
+            return 0;
+        });
 
         environment.reassigningStateLocationAndTransPath();
 
@@ -216,6 +229,32 @@ public class World {
             anOfTrPrJFrame.setTitle("Trust Analyzing (Accuracy | Sensitivity | Specificity)");
         }
 
+        //============================ Initializing Diagram Drawing Windows
+        AgentTravelInfoDrawingWindow agentTravelInfoDW = new AgentTravelInfoDrawingWindow(this);
+        agentTravelInfoDW.setDoubleBuffered(true);
+        agentTravelInfoDW.setName("a_trv");
+        if (Config.DRAWING_SHOW_AGENT_TRAVEL_INFO) {
+            JFrame agTravelInfoPrJFrame = new JFrame();
+            agTravelInfoPrJFrame.getContentPane().add(agentTravelInfoDW);
+            agTravelInfoPrJFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            agTravelInfoPrJFrame.setVisible(true);
+            agTravelInfoPrJFrame.setLocation(widthHalf, heightHalf);
+            agTravelInfoPrJFrame.setTitle("Agent Travel Info");
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        AgentTrustDataDrawingWindow agentTrustDW = new AgentTrustDataDrawingWindow(this);
+        agentTrustDW.setDoubleBuffered(true);
+        agentTrustDW.setName("a_trt");
+        if (Config.DRAWING_SHOW_AGENT_TRUST_DATA) {
+            JFrame agTravelInfoPrJFrame = new JFrame();
+            agTravelInfoPrJFrame.getContentPane().add(agentTrustDW);
+            agTravelInfoPrJFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            agTravelInfoPrJFrame.setVisible(true);
+            agTravelInfoPrJFrame.setLocation(widthHalf, heightHalf);
+            agTravelInfoPrJFrame.setTitle("Agent Trust Data");
+        }
+
 
         /* ****************************
          *            MAIN LOOP      *
@@ -270,7 +309,7 @@ public class World {
                 Globals.statsTrustGenerator.addStat(statistic);
             }
             //============================//============================ Repainting
-            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
+            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW);
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
@@ -310,7 +349,7 @@ public class World {
             }
 
             while (Globals.PAUSE) {
-                updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
+                updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW);
             }
 
         }
@@ -337,12 +376,12 @@ public class World {
         //============================//============================ Running program after finishing lifeTime of the world.
 
         while (true) {
-            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
+            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW);
         }
     }  //  End of running
 
 
-    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, AnalysisOfTrustParamsDrawingWindow paramsDrawingWindow) {
+    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, AnalysisOfTrustParamsDrawingWindow paramsDrawingWindow, AgentTravelInfoDrawingWindow agentTravelInfoDW, AgentTrustDataDrawingWindow agentTrustDW) {
         try {
             Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
         } catch (InterruptedException e) {
@@ -365,6 +404,12 @@ public class World {
         }
         if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
             paramsDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_AGENT_TRAVEL_INFO) {
+            agentTravelInfoDW.repaint();
+        }
+        if (Config.DRAWING_SHOW_AGENT_TRUST_DATA) {
+            agentTrustDW.repaint();
         }
     }
 
@@ -416,5 +461,9 @@ public class World {
 
     public WorldStatistics[] getStatistics() {
         return statistics;
+    }
+
+    public List<Agent> getSortedAgentsByCapPower() {
+        return sortedAgentsByCapPower;
     }
 }
