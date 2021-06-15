@@ -17,6 +17,8 @@
       "travelHistory": "#80000..100000",
       "trustHistoryCap": "#800..1000",
       "trustHistoryItemCap": "#800..1000",
+      "trustRecommendationCap": "#800..1000",
+      "trustRecommendationItemCap": "#80..100",
       "trustReplaceHistoryMethod": 1,
       "behavior": {
         "honestPercent": 97,
@@ -30,13 +32,15 @@
       }
     },
     {
-      "bunchCount": "%60@1000",
+      "bunchCount": "%40@1000",
       "targetCount": "200",
       "watchDepth": "#0..1",
       "watchListCapacity": "#100..800",
       "travelHistory": "#10000..80000",
       "trustHistoryCap": "#100..800",
       "trustHistoryItemCap": "#100..800",
+      "trustRecommendationCap": "#10..50",
+      "trustRecommendationItemCap": "#10..50",
       "trustReplaceHistoryMethod": 1,
       "behavior": {
         "honestPercent": 94,
@@ -50,13 +54,15 @@
       }
     },
     {
-      "bunchCount": "%30@100",
+      "bunchCount": "%50@100",
       "targetCount": "200",
-      "watchDepth": "2",
+      "watchDepth": "0",
       "watchListCapacity": "#1..100",
-      "travelHistory": "#1..100",
-      "trustHistoryCap": "#1..100",
-      "trustHistoryItemCap": "#1..1000",
+      "travelHistory": "#1..5",
+      "trustHistoryCap": "#1..5",
+      "trustHistoryItemCap": "#1..10",
+      "trustRecommendationCap": "#100..200",
+      "trustRecommendationItemCap": "#100..200",
       "trustReplaceHistoryMethod": 1,
       "behavior": {
         "honestPercent": 90,

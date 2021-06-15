@@ -12,7 +12,7 @@ public class Globals {
     public static class Color$ {
         public static Color green = new Color(113, 253, 14);
         public static Color red = new Color(238, 38, 21);
-        public static Color gray = new Color(161, 161, 161);
+        public static Color gray = new Color(158, 158, 158);
         public static Color magenta = new Color(252, 72, 248);
         public static Color yellow = new Color(247, 255, 68);
 

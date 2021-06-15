@@ -88,7 +88,9 @@ public class Agent {
         trust = new AgentTrust(
                 capacity.getTrustHistoryCap(),
                 capacity.getTrustHistoryItemCap(),
-                profiler.getCurrentBunch().getTrustReplaceHistoryMethod()
+                profiler.getCurrentBunch().getTrustReplaceHistoryMethod(),
+                capacity.getTrustRecommendationCap(),
+                capacity.getTrustRecommendationItemCap()
         );
 
         int targetCount = profiler.getCurrentBunch().getTargetCountD().nextValue();
@@ -102,7 +104,9 @@ public class Agent {
     }
 
     public void initVars() {
+        trust.setTrustParams(capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap(), capacity.getTrustRecommendationCap(), capacity.getTrustRecommendationItemCap());
         trust.init(this);
+
         watchedAgents = new ArrayList<>();
         watchedStates = new ArrayList<>();
 

@@ -18,17 +18,21 @@ public class AgentCapacity {
 
         watchListCapacity = profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
 
+        trustRecommendationCap = profiler.getCurrentBunch().getTrustRecommendationCapD().nextValue();
+        trustRecommendationItemCap = profiler.getCurrentBunch().getTrustRecommendationItemCapD().nextValue();
 
         trustHistoryCap = profiler.getCurrentBunch().getTrustHistoryCapD().nextValue();
         trustHistoryItemCap = profiler.getCurrentBunch().getTrustHistoryItemCapD().nextValue();
 
         // capPower is between 0 and 100
         capPower =
-                (int) (20 * ((float) trustHistoryCap / profiler.getCurrentBunch().getTrustHistoryCapD().getMaxValue())) +
+                (int) (15 * ((float) trustHistoryCap / profiler.getCurrentBunch().getTrustHistoryCapD().getMaxValue())) +
                         (int) (10 * ((float) trustHistoryItemCap / profiler.getCurrentBunch().getTrustHistoryItemCapD().getMaxValue())) +
+                        (int) (10 * ((float) trustRecommendationCap / profiler.getCurrentBunch().getTrustRecommendationCapD().getMaxValue())) +
+                        (int) (10 * ((float) trustRecommendationItemCap / profiler.getCurrentBunch().getTrustRecommendationItemCapD().getMaxValue())) +
                         (int) (20 * ((float) travelHistoryCap / profiler.getCurrentBunch().getTravelHistoryCapD().getMaxValue())) +
                         (int) (20 * ((float) watchListCapacity / profiler.getCurrentBunch().getWatchListCapacityD().getMaxValue())) +
-                        (int) (30 * ((float) watchDepth / profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
+                        (int) (15 * ((float) watchDepth / profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
         ;
 
         /*System.out.println(
@@ -47,6 +51,10 @@ public class AgentCapacity {
     private int trustHistoryItemCap;        //size of trust items in each trust history. trust items is score of trust for one agent (helper)
     @Expose
     private int trustHistoryCap;
+    @Expose
+    private int trustRecommendationItemCap;        //size of recommendation items in each trust history. trust items is score of trust for one agent (helper)
+    @Expose
+    private int trustRecommendationCap;
     @Expose
     private int watchListCapacity;
     @Expose
@@ -84,7 +92,6 @@ public class AgentCapacity {
                 '}';
     }
 
-
     public int getTrustHistoryItemCap() {
         return trustHistoryItemCap;
     }
@@ -93,7 +100,6 @@ public class AgentCapacity {
         this.trustHistoryItemCap = trustHistoryItemCap;
     }
 
-
     public int getTrustHistoryCap() {
         return trustHistoryCap;
     }
@@ -101,7 +107,6 @@ public class AgentCapacity {
     public void setTrustHistoryCap(int trustHistoryCap) {
         this.trustHistoryCap = trustHistoryCap;
     }
-
 
     public void setWatchListCapacity(int watchListCapacity) {
         this.watchListCapacity = watchListCapacity;
@@ -115,4 +120,19 @@ public class AgentCapacity {
         this.travelHistoryCap = travelHistoryCap;
     }
 
+    public int getTrustRecommendationItemCap() {
+        return trustRecommendationItemCap;
+    }
+
+    public void setTrustRecommendationItemCap(int trustRecommendationItemCap) {
+        this.trustRecommendationItemCap = trustRecommendationItemCap;
+    }
+
+    public int getTrustRecommendationCap() {
+        return trustRecommendationCap;
+    }
+
+    public void setTrustRecommendationCap(int trustRecommendationCap) {
+        this.trustRecommendationCap = trustRecommendationCap;
+    }
 }

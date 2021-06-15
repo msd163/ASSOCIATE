@@ -6,13 +6,23 @@ import systemLayer.Agent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AgentTrust {
 
-    public AgentTrust(int trustHistoryCap, int historyItemCap, TtTrustReplaceHistoryMethod replaceHistoryMethod) {
+    public AgentTrust(int trustHistoryCap, int historyItemCap, TtTrustReplaceHistoryMethod replaceHistoryMethod, int recommendationCap, int recommendationItemCap) {
         this.historyCap = trustHistoryCap;
         this.historyItemCap = historyItemCap;
         this.trustReplaceHistoryMethod = replaceHistoryMethod;
+        this.recommendationCap = recommendationCap;
+        this.recommendationItemCap = recommendationItemCap;
+    }
+
+    public void setTrustParams(int trustHistoryCap, int historyItemCap, int recommendationCap, int recommendationItemCap) {
+        this.historyCap = trustHistoryCap;
+        this.historyItemCap = historyItemCap;
+        this.recommendationCap = recommendationCap;
+        this.recommendationItemCap = recommendationItemCap;
     }
 
     public void init(Agent parentAgent) {
@@ -32,19 +42,23 @@ public class AgentTrust {
         for (int i = 0; i < historyCap; i++) {
             historiesSortedIndex[i] = i;
         }
+
+        recommendations = new ArrayList<>();
     }
 
 
     private Agent agent;
+
+    private List<TrustRecommendation> recommendations;
+    private int recommendationCap;
+    private int recommendationItemCap;
 
     // all services received by this agent across world run
     private TrustHistory[] histories;
     // An array of history indic that are sorted based on trustScore
     private int[] historiesSortedIndex;
 
-    @Expose
     private int historyCap;     // maximum size of history
-    @Expose
     private int historyItemCap; // max size of services in each history
 
     private int historyIndex;   // current index of history that will be fill
@@ -143,9 +157,11 @@ public class AgentTrust {
 
     //============================//============================//============================
 
+    //============================//============================//============================
+
 
     protected AgentTrust clone() {
-        AgentTrust trust = new AgentTrust(historyCap, historyItemCap, trustReplaceHistoryMethod);
+        AgentTrust trust = new AgentTrust(historyCap, historyItemCap, trustReplaceHistoryMethod, recommendationCap, recommendationItemCap);
         trust.init(agent);
         trust.histories = this.histories;
         trust.historyIndex = this.historyIndex;
@@ -213,5 +229,17 @@ public class AgentTrust {
 
     public void setTrustReplaceHistoryMethod(TtTrustReplaceHistoryMethod trustReplaceHistoryMethod) {
         this.trustReplaceHistoryMethod = trustReplaceHistoryMethod;
+    }
+
+    public List<TrustRecommendation> getRecommendations() {
+        return recommendations;
+    }
+
+    public int getRecommendationCap() {
+        return recommendationCap;
+    }
+
+    public int getRecommendationItemCap() {
+        return recommendationItemCap;
     }
 }

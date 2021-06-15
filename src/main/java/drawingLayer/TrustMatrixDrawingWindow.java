@@ -2,6 +2,7 @@ package drawingLayer;
 
 import systemLayer.Agent;
 import trustLayer.TrustMatrix;
+import utils.Globals;
 
 import java.awt.*;
 
@@ -21,7 +22,12 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         trustMatrix = this.matrix.getTrustMatrix();
         agents = matrixGenerator.getAgents();
         axisY = axisX = matCount * 5;
+        trusteeData = new int[matCount][3];     // 0: totalTrust  |  1: FP | 2: FN
     }
+
+    Agent agentInCol;
+    Agent agentInRow;
+    int trusteeData[][];
 
     @Override
     public void paint(Graphics gr) {
@@ -32,8 +38,8 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         pauseNotice(g);
 
         g.setColor(Color.YELLOW);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-        g.drawString(mousePosition.toString(), 10, 10);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
+        g.drawString(mousePosition.toString(), 100, 100);
 
         //============================//============================//============================
         //============================ Draw mouse plus
@@ -50,56 +56,57 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         int pnScl_y = pnOffset.y + scaleOffset.y;
         g.translate(pnScl_x, pnScl_y);
         g.scale(scale, -scale);
-        g.translate(100, -getHeight() / scale + 100);
+        g.translate(110, -getHeight() / scale + 110);
 
         int pnY = (pnScl_y > 0 ? (int) (pnScl_y / scale) + 10 : 0) - 5;
         int pnX = (pnScl_x < 0 ? -(int) (pnScl_x / scale) + 10 : 0) - 5;
 
+        for (int i = 0, trusteeDataLength = trusteeData.length; i < trusteeDataLength; i++) {
+            trusteeData[i][0] = trusteeData[i][1] = trusteeData[i][2] = 0;
+        }
         //============================//============================
 
-        for (int i = 0; i < matCount; i++) {
-            Agent agent = agents[i];
-            switch (agent.getBehavior().getBehaviorState()) {
-                case Honest:
-                    g.setColor(Color.GREEN);
-                    break;
-                case Adversary:
-                    g.setColor(Color.RED);
-                    break;
-                case Mischief:
-                    g.setColor(Color.WHITE);
-                    break;
-                case IntelligentAdversary:
-                    g.setColor(Color.MAGENTA);
-                    break;
-                default:
-                    g.setColor(Color.YELLOW);
-            }
+        for (int row = 0; row < matCount; row++) {
+            agentInRow = agents[row];
 
-            g.fillRect(i * 5, pnY, 5, 5);
+            g.setColor(Globals.Color$.getNormal(agentInRow.getBehavior().getBehaviorState()));
 
-            g.fillRect(pnX, i * 5, 5, 5);
+            //============================ axisX
+            g.fillRect(row * 5, pnY, 5, 5);
 
-            for (int j = 0; j < matCount; j++) {
-                Agent agentJ = agents[j];
-                float trVal = this.trustMatrix[i][j];
+            //============================ axisY
+            //-- drawing axis Y
+            g.fillRect(pnX, row * 5, 5, 5);
+            //-- drawing capPower in side of axis Y
+            g.setColor(Globals.Color$.getLight(agentInRow.getBehavior().getCurrentBehaviorState()));
+            g.fillRect(pnX - agentInRow.getCapacity().getCapPower() - 10, row * 5 + 1, agentInRow.getCapacity().getCapPower(), 3);
+
+            for (int col = 0; col < matCount; col++) {
+                agentInCol = agents[col];
+                float trVal = this.trustMatrix[row][col];
                 if (trVal > 0) {
-                    if (agentJ.getBehavior().getHasAdversaryState()) {
+                    trusteeData[col][0]++;
+                    if (agentInCol.getBehavior().getHasAdversaryState()) {
+                        trusteeData[col][2]++;
                         g.setColor(Color.RED);
-                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
-                    } else if (agentJ.getBehavior().getHasMischief()) {
+                        g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
+                    } else if (agentInCol.getBehavior().getHasMischief()) {
+                        trusteeData[col][2]++;
                         g.setColor(Color.WHITE);
-                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
-                    } else if (agentJ.getBehavior().getHasIntelligentAdversaryState()) {
+                        g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
+                    } else if (agentInCol.getBehavior().getHasIntelligentAdversaryState()) {
+                        trusteeData[col][2]++;
                         g.setColor(Color.MAGENTA);
-                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
+                        g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
                     }
                     g.setColor(Color.GREEN);
 
                 } else if (trVal < 0) {
-                    if (agentJ.getBehavior().getHasHonestState()) {
+                    trusteeData[col][0]++;
+                    if (agentInCol.getBehavior().getHasHonestState()) {
+                        trusteeData[col][1]++;
                         g.setColor(Color.GREEN);
-                        g.drawOval(j * 5 - 2, i * 5 - 2, 9, 9);
+                        g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
                     }
                     g.setColor(Color.RED);
                 } else {
@@ -115,9 +122,19 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
                                 : trVal <= 2 ? 4
                                 : 5;
 
-                g.fillRect(j * 5 + ((5 - bigness) / 2), i * 5 + ((5 - bigness) / 2), bigness, bigness);
+                g.fillRect(col * 5 + ((5 - bigness) / 2), row * 5 + ((5 - bigness) / 2), bigness, bigness);
 
             }
+        }
+
+        for (int i = 0, trusteeDataLength = trusteeData.length; i < trusteeDataLength; i++) {
+            int[] td = trusteeData[i];
+            g.setColor(Globals.Color$.getLight(agents[i].getBehavior().getCurrentBehaviorState()));
+            g.fillRect(i * 5, pnY - td[0] - 10, 5, td[0]);
+            g.setColor(Color.CYAN);
+            g.fillRect(i * 5, pnY - td[1] - 10, 2, td[1]);
+            g.setColor(Color.RED);
+            g.fillRect(i * 5, pnY - td[2] - 10, 2, td[2]);
         }
 
         g.setColor(Color.YELLOW);

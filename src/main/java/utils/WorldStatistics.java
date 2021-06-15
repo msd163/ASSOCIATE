@@ -1,5 +1,7 @@
 package utils;
 
+import systemLayer.Agent;
+
 public class WorldStatistics {
 
 
@@ -37,7 +39,8 @@ public class WorldStatistics {
     private int ittFalseNegativeTrust;
     private int ittTruePositiveTrust;
     private int ittTrueNegativeTrust;
-
+    //============================
+    private AgentStatistics agentStatistics[];
 
 
     //--  (Number of correct assessments)/Number of all assessments)
@@ -56,7 +59,7 @@ public class WorldStatistics {
     //============================//============================
 
 
-    public WorldStatistics(WorldStatistics prevStats) {
+    public WorldStatistics(WorldStatistics prevStats, int agentCount) {
         this.prevStats = prevStats;
         worldTime
                 = allAgentsInTarget
@@ -78,16 +81,20 @@ public class WorldStatistics {
                 = ittTrueNegativeTrust
                 = 0;
 
+        agentStatistics = new AgentStatistics[agentCount];
 
     }
 
-    public void init(int episode) {
+    public void init(int episode, Agent[] agents) {
         this.episode = episode;
 
         if (prevStats != null && prevStats.episode == episode) {
             allTrustToHonest = prevStats.getAllTrustToHonest();
             allTrustToIntelligentAdversary = prevStats.getAllTrustToIntelligentAdversary();
             allTrustToMischief = prevStats.getAllTrustToMischief();
+           /* for (int i = 0, agentStatisticsLength = agentStatistics.length; i < agentStatisticsLength; i++) {
+                agentStatistics[i] = new AgentStatistics(agents[i], prevStats.getAgentStatistics()[i]);
+            }*/
         } else {
 
             allTrustToAdversary
@@ -95,6 +102,9 @@ public class WorldStatistics {
                     = allTrustToIntelligentAdversary
                     = allTrustToMischief
                     = 0;
+            /*for (int i = 0, agentStatisticsLength = agentStatistics.length; i < agentStatisticsLength; i++) {
+                agentStatistics[i] = new AgentStatistics(agents[i]);
+            }*/
         }
     }
 
@@ -340,5 +350,9 @@ public class WorldStatistics {
 
     public int getIttTrustToMischief() {
         return ittTrustToMischief;
+    }
+
+    public AgentStatistics[] getAgentStatistics() {
+        return agentStatistics;
     }
 }

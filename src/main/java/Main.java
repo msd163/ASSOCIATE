@@ -1,5 +1,3 @@
-import java.net.URISyntaxException;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -15,8 +13,8 @@ public class Main {
         System.out.print("\n");
 
 
-          Simulator simulator = new Simulator();
-          simulator.simulate();
+        Simulator simulator = new Simulator();
+        simulator.simulate();
 
     }
 

@@ -7,6 +7,8 @@ public class PopulationBunch {
     private String bunchCount;
     private String trustHistoryItemCap;
     private String trustHistoryCap;
+    private String trustRecommendationItemCap;
+    private String trustRecommendationCap;
     private String watchListCapacity;
     private String watchDepth;
     private String travelHistory;
@@ -19,6 +21,8 @@ public class PopulationBunch {
     private DefParameter trustHistoryItemCapD;
     private DefParameter trustHistoryCapD;
     private DefParameter watchListCapacityD;
+    private DefParameter trustRecommendationCapD;
+    private DefParameter trustRecommendationItemCapD;
     private DefParameter watchDepthD;
     private DefParameter travelHistoryCapD;
     private DefParameter targetCountD;
@@ -31,6 +35,8 @@ public class PopulationBunch {
         bunchCountD = new DefParameter(bunchCount);
         trustHistoryItemCapD = new DefParameter(trustHistoryItemCap);
         trustHistoryCapD = new DefParameter(trustHistoryCap);
+        trustRecommendationItemCapD = new DefParameter(trustRecommendationItemCap);
+        trustRecommendationCapD = new DefParameter(trustRecommendationCap);
         watchListCapacityD = new DefParameter(watchListCapacity);
         watchDepthD = new DefParameter(watchDepth);
         travelHistoryCapD = new DefParameter(travelHistory);
@@ -81,6 +87,14 @@ public class PopulationBunch {
 
     public PopulationBunchBehaviorParam getBehavior() {
         return behavior;
+    }
+
+    public DefParameter getTrustRecommendationCapD() {
+        return trustRecommendationCapD;
+    }
+
+    public DefParameter getTrustRecommendationItemCapD() {
+        return trustRecommendationItemCapD;
     }
 
     //============================//============================

@@ -259,10 +259,10 @@ public class Router {
 
         }
 
-        agent.clearNextSteps(); //fp
-        RoutingHelp help = sortedRoutingHelps.get(0); //zn
+        agent.clearNextSteps();
+        RoutingHelp help = sortedRoutingHelps.get(0);
         // Adding path from agent state to helper (agent) state
-        for (WatchedAgent wa : watchedAgents) { //fn
+        for (WatchedAgent wa : watchedAgents) {
             if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
                 agent.getNextSteps().addAll(wa.getPath());
                 agent.setHelper(help.getHelperAgent());
@@ -275,6 +275,11 @@ public class Router {
         if (help.getNextState() != null) {
             agent.getNextSteps().add(help.getNextState());
             agent.setHelper(help.getHelperAgent());
+        }
+
+        if (Config.TRUST_SHARE_Recommendation) {
+            Globals.trustManager.shareRecommendation(agent, help.getHelperAgent());
+            Globals.trustManager.shareRecommendation(help.getHelperAgent(), agent);
         }
 
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {

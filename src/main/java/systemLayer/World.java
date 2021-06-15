@@ -32,12 +32,10 @@ public class World {
 
     private Router router;
 
-
     TrustMatrix matrixGenerator = new TrustMatrix();
 
     //============================//============================//============================
     private void init(Environment _environment) throws Exception {
-
 
         //-- Identifying the agents that we want to trace in Main diagram.
         //-- Indicating the agent and it's communications in environments with different colors
@@ -47,15 +45,6 @@ public class World {
         //-- Setting -1 for registering first history of travel time to -1;
         //-- it used in initVar() of agent
         Globals.WORLD_TIMER = -1;
-
-        statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
-        for (int i = 0; i < statistics.length; i++) {
-            if (i == 0) {
-                statistics[i] = new WorldStatistics(null);
-            } else {
-                statistics[i] = new WorldStatistics(statistics[i - 1]);
-            }
-        }
 
         router = new Router(this);
         //============================ Setting agents count
@@ -116,6 +105,15 @@ public class World {
         Globals.WORLD_TIMER = 0;
 
         Globals.trustManager = new TrustManager();
+
+        statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
+        for (i = 0; i < statistics.length; i++) {
+            if (i == 0) {
+                statistics[i] = new WorldStatistics(null, agentsCount);
+            } else {
+                statistics[i] = new WorldStatistics(statistics[i - 1], agentsCount);
+            }
+        }
 
         //============================//============================ Init trust matrix
         initTrustMatrix();
@@ -255,6 +253,19 @@ public class World {
             agTravelInfoPrJFrame.setTitle("Agent Trust Data");
         }
 
+        //============================ Initializing Recommendation Drawing Windows
+        AgentRecommendationDataDrawingWindow agentRecommendationDW = new AgentRecommendationDataDrawingWindow(this);
+        agentRecommendationDW.setDoubleBuffered(true);
+        agentRecommendationDW.setName("a_rec");
+        if (Config.DRAWING_SHOW_AGENT_RECOMMENDATION_DATA) {
+            JFrame agTravelInfoPrJFrame = new JFrame();
+            agTravelInfoPrJFrame.getContentPane().add(agentRecommendationDW);
+            agTravelInfoPrJFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            agTravelInfoPrJFrame.setVisible(true);
+            agTravelInfoPrJFrame.setLocation(widthHalf, heightHalf);
+            agTravelInfoPrJFrame.setTitle("Agent Recommendation Data");
+        }
+
 
         /* ****************************
          *            MAIN LOOP      *
@@ -265,7 +276,7 @@ public class World {
 
             WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
             statistic.setWorldTime(Globals.WORLD_TIMER);
-            statistic.init(Globals.EPISODE);
+            statistic.init(Globals.EPISODE,agents);
             router.setStatistics(statistic);
 
             if (Globals.WORLD_TIMER == 0 && Config.STATISTICS_IS_GENERATE) {
@@ -309,7 +320,8 @@ public class World {
                 Globals.statsTrustGenerator.addStat(statistic);
             }
             //============================//============================ Repainting
-            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW);
+            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
+                    analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW);
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
@@ -349,7 +361,8 @@ public class World {
             }
 
             while (Globals.PAUSE) {
-                updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW);
+                updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
+                        analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW);
             }
 
         }
@@ -376,12 +389,22 @@ public class World {
         //============================//============================ Running program after finishing lifeTime of the world.
 
         while (true) {
-            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW);
+            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
+                    analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW);
         }
     }  //  End of running
 
 
-    private void updateWindows(StateMachineDrawingWindow mainWindow, StatsOfEnvDrawingWindow diagramWindow, TrustMatrixDrawingWindow trustMatWindow, StatsOfTrustDrawingWindow trustStatsWindow, StatsOfFalsePoNeDrawingWindow poNeStatsWindow, AnalysisOfTrustParamsDrawingWindow paramsDrawingWindow, AgentTravelInfoDrawingWindow agentTravelInfoDW, AgentTrustDataDrawingWindow agentTrustDW) {
+    private void updateWindows(StateMachineDrawingWindow mainWindow,
+                               StatsOfEnvDrawingWindow diagramWindow,
+                               TrustMatrixDrawingWindow trustMatWindow,
+                               StatsOfTrustDrawingWindow trustStatsWindow,
+                               StatsOfFalsePoNeDrawingWindow poNeStatsWindow,
+                               AnalysisOfTrustParamsDrawingWindow paramsDrawingWindow,
+                               AgentTravelInfoDrawingWindow agentTravelInfoDW,
+                               AgentTrustDataDrawingWindow agentTrustDW,
+                               AgentRecommendationDataDrawingWindow agentRecommendationDataDW
+    ) {
         try {
             Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
         } catch (InterruptedException e) {
@@ -410,6 +433,9 @@ public class World {
         }
         if (Config.DRAWING_SHOW_AGENT_TRUST_DATA) {
             agentTrustDW.repaint();
+        }
+        if (Config.DRAWING_SHOW_AGENT_RECOMMENDATION_DATA) {
+            agentRecommendationDataDW.repaint();
         }
     }
 

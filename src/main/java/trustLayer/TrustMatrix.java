@@ -41,15 +41,19 @@ public class TrustMatrix {
                             trustMatrix[i][j] = history.getFinalTrustLevel();
                             if (history.getFinalTrustLevel() > 0 && !trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_FalseNegativeTrust();
+                               // statistics.getAgentStatistics()[j].addAsTrustee_FN();
                             }
                             if (history.getFinalTrustLevel() < 0 && trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_FalsePositiveTrust();
+                              //  statistics.getAgentStatistics()[j].addAsTrustee_FP();
                             }
                             if (history.getFinalTrustLevel() > 0 && trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_TrueNegativeTrust();
+                              //  statistics.getAgentStatistics()[j].addAsTrustee_TN();
                             }
                             if (history.getFinalTrustLevel() < 0 && !trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_TruePositiveTrust();
+                              //  statistics.getAgentStatistics()[j].addAsTrustee_TP();
                             }
                             break;
                         }

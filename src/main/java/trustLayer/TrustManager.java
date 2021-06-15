@@ -1,8 +1,9 @@
 package trustLayer;
 
-import _type.TtTrustReplaceHistoryMethod;
 import stateLayer.TravelHistory;
 import systemLayer.Agent;
+import utils.Config;
+import utils.Globals;
 
 import java.util.ArrayList;
 
@@ -117,10 +118,7 @@ public class TrustManager {
             __trust.createNewHistory(tvh.getHelper(), effect * getScoreByOrder(consideredHistoryCount++));
             travelHistory.get(tvhIndex).setIsTrustCalculated(true);
 
-
         }
-
-
     }
 
     private int getIndexOfHistory(ArrayList<TrustHistory> history, int agentId) {
@@ -138,19 +136,91 @@ public class TrustManager {
         if (index < 0) {
             System.out.println(">> Error::getScoreByOrder: index is less than ZERO: " + index);
         }
-        return 1 / (float) (index + 1);
+        return 1 / (float) ((index + 1) * (index + 1));
 
     }
 
     public float getTrustLevel(Agent master, Agent trustee) {
         TrustHistory[] histories = master.getTrust().getHistories();
+
+        float calculatedTrust = 0;
         if (histories != null) {
             for (TrustHistory hh : histories) {
                 if (hh != null && hh.getAgent().getId() == trustee.getId()) {
-                    return hh.getFinalTrustLevel();
+                    calculatedTrust = hh.getFinalTrustLevel();
+                    break;
                 }
             }
         }
-        return 0;
+        if (Config.TRUST_SHARE_Recommendation) {
+            for (TrustRecommendation recommendation : master.getTrust().getRecommendations()) {
+                if (recommendation.getTrustee().getId() == trustee.getId()) {
+                    calculatedTrust =
+                            (1 - Config.TRUST_RECOMMENDATION_COEFF) * calculatedTrust
+                                    + Config.TRUST_RECOMMENDATION_COEFF * recommendation.getFinalRecommendedTrustLevel();
+                    break;
+                }
+            }
+        }
+
+        return calculatedTrust;
+    }
+
+    //============================//============================//============================ Recommendation
+
+    public void shareRecommendation(Agent from, Agent to) {
+        //-- If recommendation capacity of receiver is zero
+        if (to.getTrust().getRecommendationCap() == 0 || to.getTrust().getRecommendationItemCap() == 0) {
+            return;
+        }
+
+        //-- If receiver of recommendation hos no trust to recommender
+        float trustLevelOfRecommender = getTrustLevel(to, from);
+        if (trustLevelOfRecommender <= 0) {
+            return;
+        }
+
+        //-- Sending results of all trust histories to receiver
+        for (TrustHistory history : from.getTrust().getHistories()) {
+            if (history != null) {
+                sendRecommendationTo(from, to, history.getAgent(), history.getFinalTrustLevel());
+            }
+        }
+    }
+
+    private void sendRecommendationTo(Agent recommender, Agent receiver, Agent trustee, float trustLevelOfTrustee) {
+
+        boolean isAppended = false;
+        //-- Check whether the trustee has already been recommended to the receiver
+        for (TrustRecommendation rec : receiver.getTrust().getRecommendations()) {
+            if (rec.getTrustee().getId() == trustee.getId()) {
+                isAppended = true;
+                if (rec.getItems().size() >= receiver.getTrust().getRecommendationItemCap()) {
+                    rec.getItems().remove(0);
+                }
+                rec.getItems().add(new TrustRecommendationItem(recommender, trustLevelOfTrustee)
+                );
+                rec.setLastRecommendTime(Globals.WORLD_TIMER);
+                rec.setLastEpisode(Globals.EPISODE);
+                break;
+            }
+        }
+        if (isAppended) {
+            return;
+        }
+
+        //todo: adding remove strategy for recommendations
+        if (receiver.getTrust().getRecommendations().size() >= receiver.getTrust().getRecommendationCap()) {
+            receiver.getTrust().getRecommendations().remove(0);
+        }
+
+        //-- If this recommendation is new
+        TrustRecommendation tr = new TrustRecommendation(
+                receiver,
+                trustee,
+                new TrustRecommendationItem(recommender, trustLevelOfTrustee)
+        );
+
+        receiver.getTrust().getRecommendations().add(tr);
     }
 }

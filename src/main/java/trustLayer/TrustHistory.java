@@ -1,6 +1,7 @@
 package trustLayer;
 
 import systemLayer.Agent;
+import utils.Config;
 import utils.Globals;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class TrustHistory {
     private int lastEpisode;
     private float finalTrustLevel;
     private ArrayList<TrustHistoryItem> items;
-
+    private int finalTrustLevelUpdateTime;
     //============================//============================//============================
 
 
@@ -54,6 +55,18 @@ public class TrustHistory {
     }
 
     public float getFinalTrustLevel() {
+        if (Config.TRUST_USE_FORGOTTEN_COEFF) {
+            //-- For preventing stack over flow problem and unlimited loop
+            if (finalTrustLevelUpdateTime == Globals.WORLD_TIMER) {
+                return finalTrustLevel;
+            }
+            finalTrustLevelUpdateTime = Globals.WORLD_TIMER;
+            finalTrustLevel = 0;
+            for (TrustHistoryItem item : items) {
+                finalTrustLevel += item.getTrustScore() * Math.pow(Config.TRUST_FORGOTTEN_COEFF, Globals.WORLD_TIMER - item.getVisitTime());
+            }
+            return finalTrustLevel;
+        }
         return finalTrustLevel;
     }
 
