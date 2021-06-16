@@ -2,6 +2,8 @@ package utils;
 
 import _type.TtBehaviorState;
 import trustLayer.TrustManager;
+import utils.statistics.StatsEnvGenerator;
+import utils.statistics.StatsTrustGenerator;
 
 import java.awt.*;
 import java.util.Date;

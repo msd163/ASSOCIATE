@@ -7,6 +7,7 @@ import stateLayer.StateX;
 import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
 import utils.*;
+import utils.statistics.WorldStatistics;
 
 import javax.swing.*;
 import java.awt.*;

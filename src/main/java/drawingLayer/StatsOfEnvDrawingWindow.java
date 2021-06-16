@@ -2,7 +2,7 @@ package drawingLayer;
 
 import systemLayer.World;
 import utils.Globals;
-import utils.WorldStatistics;
+import utils.statistics.WorldStatistics;
 
 import java.awt.*;
 

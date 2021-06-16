@@ -2,7 +2,7 @@ package trustLayer;
 
 import systemLayer.Agent;
 import utils.Globals;
-import utils.WorldStatistics;
+import utils.statistics.WorldStatistics;
 
 import java.io.File;
 import java.io.FileWriter;
