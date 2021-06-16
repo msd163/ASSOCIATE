@@ -65,8 +65,8 @@ public class AgentTravelInfoDrawingWindow extends DrawingWindow {
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
         List<Agent> agents = world.getSortedAgentsByCapPower();
-        for (int i = 0, agentsLength = agents.size(); i < agentsLength; i++) {
-            Agent agent = agents.get(i);
+        for (int i = 0, jj = agents.size() - 1, agentsLength = agents.size(); i < agentsLength; jj--, i++) {
+            Agent agent = agents.get(jj);
 
             g.setColor(Globals.Color$.getNormal(agent.getBehavior().getBehaviorState()));
 

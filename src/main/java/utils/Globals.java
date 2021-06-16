@@ -35,7 +35,7 @@ public class Globals {
         public static Color lightMagenta = new Color(224, 186, 223);
         public static Color lightYellow = new Color(232, 223, 168);
 
-        public static Color darkGreen= new Color(0, 158, 0);
+        public static Color darkGreen = new Color(0, 158, 0);
 
         public static Color getLight(TtBehaviorState state) {
             switch (state) {
@@ -73,11 +73,19 @@ public class Globals {
 
     public static boolean PAUSE = false;
 
-    public static TrustManager trustManager;
-
+    //============================//============================//============================
     public static int WORLD_TIMER;              // The timer of world which is increased by every run of world
 
+    public static int SIMULATION_ROUND = 1;     // This value filled by environment profile as input parameter. number of simulation. starts from one.
+    public static int SIMULATION_TIMER = 0;     // Index of simulation. starts from zero
+
     public static int EPISODE = 0;
+
+
+
+    //============================//============================//============================
+
+
     public static String STATS_FILE_NAME = ParsCalendar.getInstance().getShortDateTime()
             .replaceAll("[ ]", "-")
             .replaceAll("[:/]", "")
@@ -85,4 +93,17 @@ public class Globals {
 
     public static StatsEnvGenerator statsEnvGenerator = new StatsEnvGenerator();
     public static StatsTrustGenerator statsTrustGenerator = new StatsTrustGenerator();
+    public static TrustManager trustManager;
+
+
+    public static void reset() {
+        RANDOM = new Random(new Date().getTime());
+        EPISODE = 0;
+        //-- Initializing the timer of the world.
+        //-- Setting -1 for registering first history of travel time to -1;
+        //-- it used in initVar() of agent
+        WORLD_TIMER = -1;
+        PAUSE = false;
+
+    }
 }

@@ -1,5 +1,6 @@
 package utils.statistics;
 
+import utils.Globals;
 import utils.ParsCalendar;
 
 import java.io.File;
@@ -12,6 +13,16 @@ public class StatsTrustGenerator {
     FileWriter writer;
 
     public void init(String statPath, String name) {
+        file = new File(statPath);
+
+        if (!file.exists()) {
+            boolean mkdir = file.mkdir();
+            if (mkdir) {
+                System.out.println("Statistics directory created: " + statPath);
+            }
+        }
+
+        statPath += "/sim-" + (Globals.SIMULATION_TIMER < 10 ? "0" + Globals.SIMULATION_TIMER : Globals.SIMULATION_TIMER);
         file = new File(statPath);
 
         if (!file.exists()) {

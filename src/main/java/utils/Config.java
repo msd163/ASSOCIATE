@@ -5,11 +5,11 @@ import _type.TtTrustMethodology;
 public class Config {
 
     public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.TrustMode;
-    public static final boolean TRUST_USE_FORGOTTEN_COEFF = false;
-    public static final boolean TRUST_SHARE_Recommendation = false;
-    public static final boolean TRUST_OBSERVATION = false;
+    public static final boolean TRUST_USE_FORGOTTEN_COEFF = true;
+    public static final boolean TRUST_SHARE_Recommendation = true;
+    public static final boolean TRUST_OBSERVATION = true;
     public static final float TRUST_FORGOTTEN_COEFF = 1.0f;
-    public static final float TRUST_RECOMMENDATION_COEFF = 0.0f;
+    public static final float TRUST_RECOMMENDATION_COEFF = 0.5f;
 
 
     //============================//============================
@@ -21,25 +21,25 @@ public class Config {
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME = 10000;         // Time of execution in each world
-    public static int WORLD_SLEEP_MILLISECOND = 1;           // Sleep time in each run of world
+    public static int WORLD_LIFE_TIME = 3000;          // Time of execution in each world
+    public static int WORLD_SLEEP_MILLISECOND = 1;     // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
 
     public static int STATE_TILE_WIDTH = 40;
 
-    //============================ Dra`wing Windows
+    //============================ Drawing Windows
 
-    public static final boolean DRAWING_SHOW_STATE_MACHINE /*               */ = false;
+    public static final boolean DRAWING_SHOW_STATE_MACHINE /*               */ = true;
     public static final boolean DRAWING_SHOW_STAT_OF_ENV /*                 */ = true;
-    public static final boolean DRAWING_SHOW_STATS_OF_TRUST/*               */ = false;
-    public static final boolean DRAWING_SHOW_TRUST_MATRIX /*                */ = false;
-    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE /*              */ = false;
-    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM/*      */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO /*           */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_TRUST_DATA /*            */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_RECOMMENDATION_DATA /*   */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_OBSERVATION_DATA /*      */ = false;
+    public static final boolean DRAWING_SHOW_STATS_OF_TRUST/*               */ = true;
+    public static final boolean DRAWING_SHOW_TRUST_MATRIX /*                */ = true;
+    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE /*              */ = true;
+    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM/*      */ = true;
+    public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO /*           */ = true;
+    public static final boolean DRAWING_SHOW_AGENT_TRUST_DATA /*            */ = true;
+    public static final boolean DRAWING_SHOW_AGENT_RECOMMENDATION_DATA /*   */ = true;
+    public static final boolean DRAWING_SHOW_AGENT_OBSERVATION_DATA /*      */ = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;

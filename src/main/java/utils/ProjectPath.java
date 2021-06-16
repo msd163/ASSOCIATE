@@ -49,4 +49,15 @@ public class ProjectPath {
     public String statisticsDir() {
         return root() + "/statistics";
     }
+
+    public void createDirectoryIfNotExist(String statPath) {
+        File file = new File(statPath);
+
+        if (!file.exists()) {
+            boolean mkdir = file.mkdir();
+            if (mkdir) {
+                System.out.println("Statistics directory created: " + statPath);
+            }
+        }
+    }
 }

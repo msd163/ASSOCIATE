@@ -19,8 +19,8 @@ import java.util.List;
 
 public class World {
 
-    public World(Environment environment) throws Exception {
-        init(environment);
+    public World() {
+
     }
 
     private Agent[] agents;
@@ -39,16 +39,13 @@ public class World {
     TrustMatrix matrixGenerator = new TrustMatrix();
 
     //============================//============================//============================
-    private void init(Environment _environment) throws Exception {
+    public void init(Environment _environment) throws Exception {
+
+        initStatistics();
 
         //-- Identifying the agents that we want to trace in Main diagram.
         //-- Indicating the agent and it's communications in environments with different colors
         traceAgentIds = new int[]{};
-
-        //-- Initializing the timer of the world.
-        //-- Setting -1 for registering first history of travel time to -1;
-        //-- it used in initVar() of agent
-        Globals.WORLD_TIMER = -1;
 
         router = new Router(this);
         //============================ Setting agents count
@@ -121,6 +118,24 @@ public class World {
 
         //============================//============================ Init trust matrix
         initTrustMatrix();
+    }
+
+
+    private void initStatistics() {
+        //============================//============================ Initializing statistics report file
+        if (Config.STATISTICS_IS_GENERATE) {
+
+            String statName = Globals.STATS_FILE_NAME;
+
+            System.out.println(statName);
+
+            //-- Creating environment statistics file
+            Globals.statsEnvGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".csv");
+
+            //-- Creating trust statistics file
+            Globals.statsTrustGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".trust.csv");
+
+        }
     }
 
     private void initTrustMatrix() {
@@ -398,7 +413,9 @@ public class World {
             System.out.println("Generating Trust Matrix");
             String matrixPath = Globals.STATS_FILE_NAME;
 
-            matrixPath = ProjectPath.instance().statisticsDir() + "/" + matrixPath + "/" + matrixPath + ".mat.csv";
+            String simDir = "/sim-" + (Globals.SIMULATION_TIMER < 10 ? "0" + Globals.SIMULATION_TIMER : Globals.SIMULATION_TIMER);
+
+            matrixPath = ProjectPath.instance().statisticsDir() + "/" + matrixPath + simDir + "/" + matrixPath + ".mat.csv";
 
             //matrixGenerator.update(null);
             matrixGenerator.write(matrixPath);
@@ -406,14 +423,17 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
-        ImageBuilder.generateStatisticsImages(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW);
+        ImageBuilder.generateStatisticsImages(stateMachineDW, statsOfEnvDW, trustMatrixDW,
+                statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentObservationDW, agentRecommendationDW,
+                agentTravelInfoDW, agentTrustDW
+        );
 
         System.out.println("Finished");
 
 
         //============================//============================ Running program after finishing lifeTime of the world.
 
-        while (true) {
+        while (Globals.SIMULATION_TIMER == Globals.SIMULATION_ROUND - 1) {
             updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
                     analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW, agentObservationDW);
         }
@@ -521,4 +541,5 @@ public class World {
     public List<Agent> getSortedAgentsByCapPower() {
         return sortedAgentsByCapPower;
     }
+
 }

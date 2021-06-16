@@ -14,31 +14,31 @@ import java.nio.file.Paths;
 public class Simulator {
 
     private World[] worlds;
+    private Environment loadedEnvironmentFromJson;
+    FileReader envReader;
+    Gson gson = new Gson();
 
     private void init() throws Exception {
 
-        Gson gson = new Gson();
-
-        Environment environment;
-
         //============================//============================
         //-- Loading Environment from file
-        FileReader envReader = new FileReader(Config.EnvironmentDataFilePath);
-        environment = gson.fromJson(envReader, Environment.class);
+        envReader = new FileReader(Config.EnvironmentDataFilePath);
+        loadedEnvironmentFromJson = gson.fromJson(envReader, Environment.class);
 
-        if (environment == null) {
+        if (loadedEnvironmentFromJson == null) {
             System.out.println(">> Simulator.init");
             System.out.println("> Error: environment not found.");
             return;
         }
 
-        System.out.println("Environment loaded from file.");
+        System.out.println("> Environment loaded from file.");
 
         //============================ Initializing worlds
-        worlds = new World[environment.getSimulationRound()];
+        Globals.SIMULATION_ROUND = loadedEnvironmentFromJson.getSimulationRound();
+        worlds = new World[Globals.SIMULATION_ROUND];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
-            worlds[i] = new World(environment);
+            worlds[i] = new World();
         }
 
 
@@ -47,13 +47,9 @@ public class Simulator {
 
             String statName = Globals.STATS_FILE_NAME;
 
-            System.out.println(statName);
+            System.out.println("Statistics file name: " + statName);
 
-            //-- Creating environment statistics file
-            Globals.statsEnvGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".csv");
-
-            //-- Creating trust statistics file
-            Globals.statsTrustGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".trust.csv");
+            ProjectPath.instance().createDirectoryIfNotExist(ProjectPath.instance().statisticsDir() + "/" + statName);
 
             //-- Copying environment-x.json to statistics directory
             Path sourcePath = Paths.get(Config.EnvironmentDataFilePath);
@@ -68,6 +64,20 @@ public class Simulator {
         }
     }
 
+    private void reInit() throws FileNotFoundException {
+
+        envReader = new FileReader(Config.EnvironmentDataFilePath);
+        loadedEnvironmentFromJson = gson.fromJson(envReader, Environment.class);
+
+        if (loadedEnvironmentFromJson == null) {
+            System.out.println(">> Simulator.reInit");
+            System.out.println("> Error: environment not found.");
+            return;
+        }
+
+        System.out.println("> Environment reloaded from file. simulationTimer");
+    }
+
     public void simulate() throws Exception {
 
         try {
@@ -78,8 +88,16 @@ public class Simulator {
         }
 
         for (World world : worlds) {
-            // Globals.profiler.ResetBunch();
+            if (Globals.SIMULATION_TIMER > 0) {
+                reInit();
+            }
+            Globals.reset();
+            world.init(loadedEnvironmentFromJson);
             world.run();
+            Globals.SIMULATION_TIMER++;
+            if (Globals.SIMULATION_ROUND <= Globals.SIMULATION_TIMER) {
+                break;
+            }
         }
 
         //============================//============================ Closing statistics file

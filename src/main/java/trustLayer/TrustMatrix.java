@@ -21,7 +21,7 @@ public class TrustMatrix {
     public void init(List<Agent> agents) {
         this.agentCount = agents.size();
         this.sAgents = agents;
-        trustMatrix = new Float[agentCount][agentCount];
+        this.trustMatrix = new Float[agentCount][agentCount];
 
         for (int i = 0; i < agentCount; i++) {
             for (int j = 0; j < agentCount; j++) {

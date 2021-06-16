@@ -240,8 +240,7 @@ public class Environment {
         }
 
         //-- updating transaction path
-        int x = 0;
-        System.out.println(":: " + getTransitions().length);
+        System.out.println("Transition count: " + getTransitions().length);
 
         for (TransitionX transition : getTransitions()) {
             transition.updatePath();
