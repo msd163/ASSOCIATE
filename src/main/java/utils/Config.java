@@ -4,11 +4,12 @@ import _type.TtTrustMethodology;
 
 public class Config {
 
-    public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.BasicTrust_OnlyByItsHistory;
+    public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.TrustMode;
     public static final boolean TRUST_USE_FORGOTTEN_COEFF = true;
     public static final boolean TRUST_SHARE_Recommendation = true;
+    public static final boolean TRUST_OBSERVATION = true;
     public static final float TRUST_FORGOTTEN_COEFF = 1.0f;
-    public static final float TRUST_RECOMMENDATION_COEFF = 1.0f;
+    public static final float TRUST_RECOMMENDATION_COEFF = 0.0f;
 
 
     //============================//============================
@@ -29,18 +30,19 @@ public class Config {
 
     //============================ Dra`wing Windows
 
-    public static final boolean DRAWING_SHOW_STATE_MACHINE = false;
-    public static final boolean DRAWING_SHOW_STAT_OF_ENV = true;
-    public static final boolean DRAWING_SHOW_STATS_OF_TRUST = true;
-    public static final boolean DRAWING_SHOW_TRUST_MATRIX = true;
-    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE = true;
-    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM = true;
-    public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO = false;
-    public static final boolean DRAWING_SHOW_AGENT_TRUST_DATA = false;
-    public static final boolean DRAWING_SHOW_AGENT_RECOMMENDATION_DATA = true;
+    public static final boolean DRAWING_SHOW_STATE_MACHINE /*               */ = false;
+    public static final boolean DRAWING_SHOW_STAT_OF_ENV /*                 */ = true;
+    public static final boolean DRAWING_SHOW_STATS_OF_TRUST/*               */ = false;
+    public static final boolean DRAWING_SHOW_TRUST_MATRIX /*                */ = true;
+    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE /*              */ = true;
+    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM/*      */ = false;
+    public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO /*           */ = false;
+    public static final boolean DRAWING_SHOW_AGENT_TRUST_DATA /*            */ = false;
+    public static final boolean DRAWING_SHOW_AGENT_RECOMMENDATION_DATA /*   */ = false;
+    public static final boolean DRAWING_SHOW_AGENT_OBSERVATION_DATA /*      */ = true;
 
     //============================ Statistics
-    public static final boolean STATISTICS_IS_GENERATE = true;
-    public static final boolean TRUST_MATRIX_IS_GENERATE = true;
+    public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
+    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
 
 }

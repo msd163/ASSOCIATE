@@ -18,11 +18,12 @@ public class AgentTrust {
         this.recommendationItemCap = recommendationItemCap;
     }
 
-    public void setTrustParams(int trustHistoryCap, int historyItemCap, int recommendationCap, int recommendationItemCap) {
+    public void setTrustParams(int trustHistoryCap, int historyItemCap, int recommendationCap, int recommendationItemCap, int observationCap) {
         this.historyCap = trustHistoryCap;
         this.historyItemCap = historyItemCap;
         this.recommendationCap = recommendationCap;
         this.recommendationItemCap = recommendationItemCap;
+        this.observationCap = observationCap;
     }
 
     public void init(Agent parentAgent) {
@@ -44,15 +45,19 @@ public class AgentTrust {
         }
 
         recommendations = new ArrayList<>();
+
+        observations = new ArrayList<>();
     }
 
 
     private Agent agent;
 
+    //============================
     private List<TrustRecommendation> recommendations;
     private int recommendationCap;
     private int recommendationItemCap;
 
+    //============================
     // all services received by this agent across world run
     private TrustHistory[] histories;
     // An array of history indic that are sorted based on trustScore
@@ -64,74 +69,17 @@ public class AgentTrust {
     private int historyIndex;   // current index of history that will be fill
     private int historySize;    // current capacity of history
 
+    //============================
     @Expose
     private TtTrustReplaceHistoryMethod trustReplaceHistoryMethod;
 
-    //============================//============================//============================
-
-    public boolean canTrustToAgent(Agent agent) {
-        return false;
-    }
-
-    /***
-     * Sorting Indexing array of the history.
-     * according to the values of history array, indexing array will be rearranged
-     */
-    public void sortHistoryByTrustLevel() {
-        final int size = historyCap;
-
-        for (int i = 0; i < size; i++)
-            historiesSortedIndex[i] = i;
-
-       /* boolean sorted;
-        do {
-            sorted = true;
-            int bubble = historiesSortedIndex[0];
-            for (int i = 0; i < size - 1; i++) {
-                if (
-                        (histories[bubble] != null
-                                && histories[historiesSortedIndex[i + 1]] != null
-                                && histories[bubble].getEffectiveTrustLevel() < histories[historiesSortedIndex[i + 1]].getEffectiveTrustLevel()
-                        ) || (
-                                histories[bubble] == null
-                                        && histories[historiesSortedIndex[i + 1]] != null
-                        )
-                ) {
-                    historiesSortedIndex[i] = historiesSortedIndex[i + 1];
-                    historiesSortedIndex[i + 1] = bubble;
-                    sorted = false;
-                } else {
-                    bubble = historiesSortedIndex[i + 1];
-                }
-            }
-        } while (!sorted);*/
-
-   /*     System.out.println("======= sorted list for " + agent.getId());
-        for (int index : historiesSortedIndex) {
-            System.out.println(index + ": " + (histories[index] == null ? "NUL" : histories[index].getTrustScore()));
-        }*/
-        /*for (AgentHistory history : histories) {
-            System.out.println(history == null ? "NULL" : history.getTrustScore());
-        }*/
-    }
-
+    //============================
+    private int observationCap;
+    private List<TrustObservation> observations;
 
     //============================//============================//============================
 
-    /**
-     * @param agent
-     * @return If there is not the input agent in the history: return 0;
-     */
-    public float getTrustScore(Agent agent) {
-       /* for (AgentHistory history : histories) {
-            if (history != null && history.getDoerAgent().getId() == agent.getId()) {
-                return history.getEffectiveTrustLevel();
-            }
-        }*/
-
-        return 0;
-    }
-
+    //============================//============================//============================
 
     public void createNewHistory(Agent helper, float trustScore) {
 
@@ -154,8 +102,20 @@ public class AgentTrust {
         histories[historyIndex].addHistory(trustScore);
     }
 
-
-    //============================//============================//============================
+    public int[] getObservationInTargetAndPitfallCount() {
+        int[] tarPit = {0, 0};
+        if (observations == null || observations.isEmpty()) {
+            return tarPit;
+        }
+        for (TrustObservation obs : observations) {
+            if (obs.isIsFinalTarget()) {
+                tarPit[0]++;
+            } else if (obs.isIsFinalPitfall()) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
 
     //============================//============================//============================
 
@@ -241,5 +201,13 @@ public class AgentTrust {
 
     public int getRecommendationItemCap() {
         return recommendationItemCap;
+    }
+
+    public int getObservationCap() {
+        return observationCap;
+    }
+
+    public List<TrustObservation> getObservations() {
+        return observations;
     }
 }

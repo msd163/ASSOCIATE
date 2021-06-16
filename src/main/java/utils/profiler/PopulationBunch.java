@@ -1,6 +1,5 @@
 package utils.profiler;
 
-import _type.TtTrustBehavioralStrategy;
 import _type.TtTrustReplaceHistoryMethod;
 
 public class PopulationBunch {
@@ -9,6 +8,7 @@ public class PopulationBunch {
     private String trustHistoryCap;
     private String trustRecommendationItemCap;
     private String trustRecommendationCap;
+    private String observationCap;
     private String watchListCapacity;
     private String watchDepth;
     private String travelHistory;
@@ -23,6 +23,7 @@ public class PopulationBunch {
     private DefParameter watchListCapacityD;
     private DefParameter trustRecommendationCapD;
     private DefParameter trustRecommendationItemCapD;
+    private DefParameter observationCapD;
     private DefParameter watchDepthD;
     private DefParameter travelHistoryCapD;
     private DefParameter targetCountD;
@@ -42,6 +43,7 @@ public class PopulationBunch {
         travelHistoryCapD = new DefParameter(travelHistory);
         targetCountD = new DefParameter(targetCount);
         trustReplaceHistoryMethodD = new DefParameter(trustReplaceHistoryMethod);
+        observationCapD = new DefParameter(observationCap);
     }
 
     //============================//============================
@@ -95,6 +97,10 @@ public class PopulationBunch {
 
     public DefParameter getTrustRecommendationItemCapD() {
         return trustRecommendationItemCapD;
+    }
+
+    public DefParameter getObservationCapD() {
+        return observationCapD;
     }
 
     //============================//============================

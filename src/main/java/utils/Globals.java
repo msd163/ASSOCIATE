@@ -19,6 +19,7 @@ public class Globals {
         public static int maxWatchListCapacity = 0;
         public static int maxWatchDepth = 0;
         public static int maxTravelHistoryCap = 0;
+        public static int maxObservationCap = 0;
     }
 
     public static class Color$ {
@@ -33,6 +34,8 @@ public class Globals {
         public static Color lightGray = new Color(206, 206, 206);
         public static Color lightMagenta = new Color(224, 186, 223);
         public static Color lightYellow = new Color(232, 223, 168);
+
+        public static Color darkGreen= new Color(0, 158, 0);
 
         public static Color getLight(TtBehaviorState state) {
             switch (state) {
@@ -63,6 +66,7 @@ public class Globals {
                     return yellow;
             }
         }
+
     }
 
     public static Random RANDOM = new Random(new Date().getTime());

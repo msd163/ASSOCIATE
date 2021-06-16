@@ -6,7 +6,7 @@ public enum TtTrustMethodology {
     NoTrust_RandomPath,
     NoTrust_ShortPath,
     //--
-    BasicTrust_OnlyByItsHistory
+    TrustMode
     ;
 
     public static TtTrustMethodology getByOrdinal(int ordinal) {

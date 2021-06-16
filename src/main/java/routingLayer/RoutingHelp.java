@@ -1,5 +1,6 @@
 package routingLayer;
 
+import _type.TtIsValidatedInObservations;
 import stateLayer.StateX;
 import systemLayer.Agent;
 
@@ -10,6 +11,11 @@ public class RoutingHelp {
     private int stepFromAgentToHelper;
     private StateX nextState;
     private float trustLevel;
+    private TtIsValidatedInObservations validation;
+
+    public RoutingHelp() {
+        validation = TtIsValidatedInObservations.Unknown;
+    }
 
     //============================//============================
 
@@ -55,5 +61,13 @@ public class RoutingHelp {
 
     public void setTrustLevel(float trustLevel) {
         this.trustLevel = trustLevel;
+    }
+
+    public void setValidation(TtIsValidatedInObservations validation) {
+        this.validation = validation;
+    }
+
+    public TtIsValidatedInObservations getValidation() {
+        return validation;
     }
 }

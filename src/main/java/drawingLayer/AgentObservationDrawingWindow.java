@@ -7,14 +7,14 @@ import utils.Globals;
 import java.awt.*;
 import java.util.List;
 
-public class AgentRecommendationDataDrawingWindow extends DrawingWindow {
+public class AgentObservationDrawingWindow extends DrawingWindow {
 
     private World world;
 
 
     //============================//============================  panning params
 
-    public AgentRecommendationDataDrawingWindow(World world) {
+    public AgentObservationDrawingWindow(World world) {
         super();
         this.world = world;
     }
@@ -45,7 +45,7 @@ public class AgentRecommendationDataDrawingWindow extends DrawingWindow {
 
         g.drawString("World Time                : " + worldTimer, 100, 50);
         g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
-        g.drawString("Recommendation History Capacity and Current Size", 100, 150);
+        g.drawString("Observation Capacity and Current Size", 100, 150);
 
         //============================//============================//============================
         //============================ Draw mouse plus
@@ -65,8 +65,8 @@ public class AgentRecommendationDataDrawingWindow extends DrawingWindow {
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
         List<Agent> agents = world.getSortedAgentsByCapPower();
-        for (int i = 0, agentsLength = agents.size(); i < agentsLength; i++) {
-            Agent agent = agents.get(i);
+        for (int i = 0, jj = agents.size() - 1; jj > -1; jj--, i++) {
+            Agent agent = agents.get(jj);
 
             g.setColor(Globals.Color$.getNormal(agent.getBehavior().getBehaviorState()));
 
@@ -74,11 +74,20 @@ public class AgentRecommendationDataDrawingWindow extends DrawingWindow {
             g.setColor(Color.BLACK);
             g.drawString(agent.getId() + "", -30, i * 21 + 12);
             g.setColor(Color.GRAY);
-            g.fillRect(5, i * 21, agent.getCapacity().getTrustRecommendationCap(), 20);
+            g.fillRect(5, i * 21, agent.getCapacity().getObservationCap(), 20);
 
-            g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
+            //g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
 
-            g.fillRect(5, i * 21, agent.getTrust().getRecommendations().size(), 20);
+            int obsSize = agent.getTrust().getObservations().size();
+           // g.fillRect(5, i * 21, obsSize, 20);
+
+            if (obsSize > 0) {
+                int[] obsTarPit = agent.getTrust().getObservationInTargetAndPitfallCount();
+                g.setColor(Globals.Color$.lightGreen);
+                g.fillRect(5, i * 21 + 2, obsTarPit[0], 16);
+                g.setColor(Globals.Color$.lightRed);
+                g.fillRect(5 + obsTarPit[0], i * 21 + 2, obsTarPit[1], 16);
+            }
 
         }
 

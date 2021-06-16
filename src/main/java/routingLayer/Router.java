@@ -1,5 +1,6 @@
 package routingLayer;
 
+import _type.TtIsValidatedInObservations;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
@@ -246,9 +247,15 @@ public class Router {
         List<RoutingHelp> sortedRoutingHelps = routingHelps;
         switch (Config.TRUST_METHODOLOGY) {
 
-            case BasicTrust_OnlyByItsHistory:
+            case TrustMode:
                 sortedRoutingHelps = basicTrustMechanism(agent, goalState, routingHelps);
                 if (sortedRoutingHelps == null) return;
+
+                if (Config.TRUST_OBSERVATION) {
+                    sortedRoutingHelps = refineByObservation(agent,sortedRoutingHelps);
+                }
+
+
                 break;
 
             case NoTrust_ShortPath:
@@ -257,6 +264,12 @@ public class Router {
             default:
                 break;
 
+        }
+
+        // If there is no routerHelper...
+        if (sortedRoutingHelps.isEmpty()) {
+            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.FAILED, "There is no REFINED routerHelp that know where is the goal state", agent, agent.getState(), goalState);
+            return;
         }
 
         agent.clearNextSteps();
@@ -292,6 +305,33 @@ public class Router {
             statistics___.add_Itt_TrustToMischief();
         }
 //        }
+    }
+
+    private List<RoutingHelp> refineByObservation(Agent requester, List<RoutingHelp> srh) {
+
+        List<RoutingHelp> refinedList = new ArrayList<>();
+
+        for (RoutingHelp routingHelp : srh) {
+            Globals.trustManager.ValidateHelperInObservations(requester, routingHelp);
+            if (routingHelp.getValidation() != TtIsValidatedInObservations.Invalid) {
+                refinedList.add(routingHelp);
+            }
+        }
+
+        refinedList.sort((RoutingHelp r1, RoutingHelp r2) -> {
+            if (r1.getValidation() == TtIsValidatedInObservations.Valid && r2.getValidation() != TtIsValidatedInObservations.Valid) {
+                return -1;
+            }
+
+            if (r1.getValidation() != TtIsValidatedInObservations.Valid && r2.getValidation() == TtIsValidatedInObservations.Valid) {
+                return 1;
+            }
+
+            return 0;
+        });
+
+        return refinedList;
+
     }
 
     private void sortRoutingByShortestPath(List<RoutingHelp> sortedRoutingHelps) {

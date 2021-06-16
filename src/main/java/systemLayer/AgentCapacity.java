@@ -24,6 +24,8 @@ public class AgentCapacity {
 
         trustHistoryCap = profiler.getCurrentBunch().getTrustHistoryCapD().nextValue();
         trustHistoryItemCap = profiler.getCurrentBunch().getTrustHistoryItemCapD().nextValue();
+observationCap = profiler.getCurrentBunch().getObservationCapD().nextValue();
+
 
         // capPower is between 0 and 100
         capPower =
@@ -31,6 +33,7 @@ public class AgentCapacity {
                         (int) (10 * ((float) trustHistoryItemCap / Globals.ProfileBunchMax.maxTrustHistoryCap)) +
                         (int) (10 * ((float) trustRecommendationCap / Globals.ProfileBunchMax.maxTrustRecommendationCap)) +
                         (int) (10 * ((float) trustRecommendationItemCap / Globals.ProfileBunchMax.maxTrustRecommendationItemCap)) +
+                        (int) (10 * ((float) observationCap / Globals.ProfileBunchMax.maxObservationCap)) +
                         (int) (20 * ((float) travelHistoryCap / Globals.ProfileBunchMax.maxTravelHistoryCap)) +
                         (int) (20 * ((float) watchListCapacity / Globals.ProfileBunchMax.maxWatchListCapacity)) +
                         (int) (15 * ((float) watchDepth / Globals.ProfileBunchMax.maxWatchDepth))
@@ -56,7 +59,9 @@ public class AgentCapacity {
     @Expose
     private int travelHistoryCap;                        // size of travel history
     @Expose
-    private int capPower;                            // it will be calculated by other params
+    private int observationCap;
+    @Expose
+    private int capPower; // it will be calculated by other params
 
     public int getWatchListCapacity() {
         return watchListCapacity;
@@ -128,5 +133,13 @@ public class AgentCapacity {
 
     public void setTrustRecommendationCap(int trustRecommendationCap) {
         this.trustRecommendationCap = trustRecommendationCap;
+    }
+
+    public int getObservationCap() {
+        return observationCap;
+    }
+
+    public void setObservationCap(int observationCap) {
+        this.observationCap = observationCap;
     }
 }

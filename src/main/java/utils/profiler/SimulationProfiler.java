@@ -111,6 +111,9 @@ public class SimulationProfiler {
             if (Globals.ProfileBunchMax.maxWatchListCapacity < bunch.getWatchListCapacityD().getMaxValue()) {
                 Globals.ProfileBunchMax.maxWatchListCapacity = bunch.getWatchListCapacityD().getMaxValue();
             }
+            if (Globals.ProfileBunchMax.maxObservationCap < bunch.getObservationCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxObservationCap = bunch.getObservationCapD().getMaxValue();
+            }
         }
     }
     //============================//============================

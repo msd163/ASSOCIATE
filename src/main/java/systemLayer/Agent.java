@@ -104,7 +104,7 @@ public class Agent {
     }
 
     public void initVars() {
-        trust.setTrustParams(capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap(), capacity.getTrustRecommendationCap(), capacity.getTrustRecommendationItemCap());
+        trust.setTrustParams(capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap(), capacity.getTrustRecommendationCap(), capacity.getTrustRecommendationItemCap(), capacity.getObservationCap());
         trust.init(this);
 
         watchedAgents = new ArrayList<>();
@@ -132,6 +132,13 @@ public class Agent {
 
     public void resetParams() {
         currentDoingServiceSize = 0;
+    }
+
+    public TravelHistory getLastTravelHistory() {
+        if (travelHistories == null || travelHistories.isEmpty()) {
+            return null;
+        }
+        return travelHistories.get(travelHistories.size() - 1);
     }
 
     //============================//============================ Travel
@@ -438,5 +445,9 @@ public class Agent {
 
     public int[] getTargetStateIds() {
         return targetStateIds;
+    }
+
+    public boolean hasObservation() {
+        return trust.getObservations().size()>0;
     }
 }

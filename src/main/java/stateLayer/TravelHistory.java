@@ -100,4 +100,8 @@ public class TravelHistory {
     public boolean isTrustCalculated() {
         return isTrustCalculated;
     }
+
+    public boolean isIsPitfall() {
+        return isPitfall;
+    }
 }

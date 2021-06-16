@@ -1,11 +1,15 @@
 package trustLayer;
 
+import _type.TtIsValidatedInObservations;
+import routingLayer.RoutingHelp;
 import stateLayer.TravelHistory;
 import systemLayer.Agent;
+import systemLayer.WatchedAgent;
 import utils.Config;
 import utils.Globals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TrustManager {
 
@@ -222,5 +226,87 @@ public class TrustManager {
         );
 
         receiver.getTrust().getRecommendations().add(tr);
+    }
+
+    //============================//============================//============================ Observation
+
+    public void observe(Agent agent) {
+        for (WatchedAgent wa : agent.getWatchedAgents()) {
+            Agent obsAgent = wa.getAgent();
+            TravelHistory lastTravelHistory = obsAgent.getLastTravelHistory();
+            if (lastTravelHistory == null) {
+                continue;
+            }
+            if (lastTravelHistory.getHelper() != null) {
+                if (lastTravelHistory.isIsPitfall()) {
+                    addToObserve(agent, obsAgent, lastTravelHistory.getHelper(), false);
+                } else if (lastTravelHistory.isIsTarget()) {
+                    addToObserve(agent, obsAgent, lastTravelHistory.getHelper(), true);
+                }
+            }
+        }
+    }
+
+    private void addToObserve(Agent observer, Agent observed, Agent helper, boolean isInTarget) {
+        if (observer.getTrust().getObservations().size() >= observer.getTrust().getObservationCap()) {
+            observer.getTrust().getObservations().remove(0);
+        }
+
+        TrustObservation observation = new TrustObservation(observed, helper, !isInTarget, isInTarget, isInTarget ? 1 : -1);
+
+        observer.getTrust().getObservations().add(observation);
+    }
+
+
+    public boolean canObserve(Agent observer, Agent agent) {
+        for (TrustObservation obs : observer.getTrust().getObservations()) {
+            if (obs.getResponder().getId() == agent.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public TtIsValidatedInObservations inValidInObservation(Agent observer, Agent agent) {
+        for (TrustObservation obs : observer.getTrust().getObservations()) {
+            if (obs.getResponder().getId() == agent.getId()) {
+                return obs.isIsFinalTarget() ? TtIsValidatedInObservations.Valid : TtIsValidatedInObservations.Invalid;
+            }
+        }
+        return TtIsValidatedInObservations.Unknown;
+    }
+
+    public void ValidateHelperInObservations(Agent requester, RoutingHelp routingHelp) {
+        List<Agent> observers = new ArrayList<>();
+        List<Float> trusts = new ArrayList<>();
+        for (WatchedAgent watchedAgent : requester.getWatchedAgents()) {
+            if (watchedAgent.getAgent().hasObservation()) {
+                float trustLevel = getTrustLevel(requester, watchedAgent.getAgent());
+                if (trustLevel > 0 && canObserve(watchedAgent.getAgent(), routingHelp.getHelperAgent())) {
+                    observers.add(watchedAgent.getAgent());
+                    trusts.add(trustLevel);
+                }
+            }
+        }
+
+        if (observers.isEmpty()) {
+            return;
+        }
+
+        float maxTrust = 0;
+        int maxIndex = 0;
+
+        for (int i = 0, trustsSize = trusts.size(); i < trustsSize; i++) {
+            Float trust = trusts.get(i);
+            if (trust > maxTrust) {
+                maxIndex = i;
+                maxTrust = trust;
+            }
+        }
+
+        TtIsValidatedInObservations validation = inValidInObservation(observers.get(maxIndex), routingHelp.getHelperAgent());
+        routingHelp.setValidation(validation);
+
+        return;
     }
 }

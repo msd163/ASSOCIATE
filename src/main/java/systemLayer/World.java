@@ -6,7 +6,10 @@ import stateLayer.Environment;
 import stateLayer.StateX;
 import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
-import utils.*;
+import utils.Config;
+import utils.Globals;
+import utils.ImageBuilder;
+import utils.ProjectPath;
 import utils.statistics.WorldStatistics;
 
 import javax.swing.*;
@@ -255,7 +258,7 @@ public class World {
         }
 
         //============================ Initializing Recommendation Drawing Windows
-        AgentRecommendationDataDrawingWindow agentRecommendationDW = new AgentRecommendationDataDrawingWindow(this);
+        AgentRecommendationDrawingWindow agentRecommendationDW = new AgentRecommendationDrawingWindow(this);
         agentRecommendationDW.setDoubleBuffered(true);
         agentRecommendationDW.setName("a_rec");
         if (Config.DRAWING_SHOW_AGENT_RECOMMENDATION_DATA) {
@@ -265,6 +268,19 @@ public class World {
             agTravelInfoPrJFrame.setVisible(true);
             agTravelInfoPrJFrame.setLocation(widthHalf, heightHalf);
             agTravelInfoPrJFrame.setTitle("Agent Recommendation Data");
+        }
+
+        //============================ Initializing Recommendation Drawing Windows
+        AgentObservationDrawingWindow agentObservationDW = new AgentObservationDrawingWindow(this);
+        agentObservationDW.setDoubleBuffered(true);
+        agentObservationDW.setName("a_obs");
+        if (Config.DRAWING_SHOW_AGENT_OBSERVATION_DATA) {
+            JFrame agTravelInfoPrJFrame = new JFrame();
+            agTravelInfoPrJFrame.getContentPane().add(agentObservationDW);
+            agTravelInfoPrJFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            agTravelInfoPrJFrame.setVisible(true);
+            agTravelInfoPrJFrame.setLocation(widthHalf, heightHalf);
+            agTravelInfoPrJFrame.setTitle("Agent Observation Data");
         }
 
 
@@ -277,7 +293,7 @@ public class World {
 
             WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
             statistic.setWorldTime(Globals.WORLD_TIMER);
-            statistic.init(Globals.EPISODE,agents);
+            statistic.init(Globals.EPISODE, agents);
             router.setStatistics(statistic);
 
             if (Globals.WORLD_TIMER == 0 && Config.STATISTICS_IS_GENERATE) {
@@ -299,9 +315,17 @@ public class World {
             }
 
             //============================//============================ Traveling
-
             for (Agent agent : agents) {
                 router.takeAStepTowardTheTarget(agent);
+            }
+
+            //============================//============================ Observation
+            if (Config.TRUST_OBSERVATION) {
+                for (Agent agent : agents) {
+                    if (agent.getCapacity().getObservationCap() > 0) {
+                        Globals.trustManager.observe(agent);
+                    }
+                }
             }
 
             //============================//============================  updating full state statistics
@@ -322,7 +346,7 @@ public class World {
             }
             //============================//============================ Repainting
             updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
-                    analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW);
+                    analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW, agentObservationDW);
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
@@ -363,7 +387,7 @@ public class World {
 
             while (Globals.PAUSE) {
                 updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
-                        analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW);
+                        analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW, agentObservationDW);
             }
 
         }
@@ -391,7 +415,7 @@ public class World {
 
         while (true) {
             updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
-                    analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW);
+                    analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW, agentObservationDW);
         }
     }  //  End of running
 
@@ -404,7 +428,8 @@ public class World {
                                AnalysisOfTrustParamsDrawingWindow paramsDrawingWindow,
                                AgentTravelInfoDrawingWindow agentTravelInfoDW,
                                AgentTrustDataDrawingWindow agentTrustDW,
-                               AgentRecommendationDataDrawingWindow agentRecommendationDataDW
+                               AgentRecommendationDrawingWindow agentRecommendationDataDW,
+                               AgentObservationDrawingWindow agentObservationDW
     ) {
         try {
             Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
@@ -437,6 +462,9 @@ public class World {
         }
         if (Config.DRAWING_SHOW_AGENT_RECOMMENDATION_DATA) {
             agentRecommendationDataDW.repaint();
+        }
+        if (Config.DRAWING_SHOW_AGENT_OBSERVATION_DATA) {
+            agentObservationDW.repaint();
         }
     }
 
