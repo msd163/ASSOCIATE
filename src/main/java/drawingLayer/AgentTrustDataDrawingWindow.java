@@ -37,15 +37,17 @@ public class AgentTrustDataDrawingWindow extends DrawingWindow {
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
 
-        g.setColor(Color.YELLOW);
 
         //============================//============================ Translate for panning and scaling
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+        g.setColor(Color.GREEN);
+        g.drawString("Simulation Timer            : " + Globals.SIMULATION_TIMER, 100, 50);
+        g.drawString("Trust Data Capacity and Current Size", 500, 50);
 
-        g.drawString("World Time                : " + worldTimer, 100, 50);
-        g.drawString("Episode                    : " + Globals.EPISODE, 100, 90);
-        g.drawString("Trust Data Capacity and Current Size", 100, 150);
+        g.setColor(Color.YELLOW);
+        g.drawString("World Time                : " + worldTimer, 100, 100);
+        g.drawString("Episode                    : " + Globals.EPISODE, 100, 140);
 
         //============================//============================//============================
         //============================ Draw mouse plus
