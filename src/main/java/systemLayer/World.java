@@ -120,7 +120,7 @@ public class World {
     }
 
     private void initTrustMatrix() {
-        matrixGenerator.init(agents);
+        matrixGenerator.init(sortedAgentsByCapPower);
 
     }
 

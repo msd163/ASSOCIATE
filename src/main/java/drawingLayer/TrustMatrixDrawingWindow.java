@@ -5,12 +5,13 @@ import trustLayer.TrustMatrix;
 import utils.Globals;
 
 import java.awt.*;
+import java.util.List;
 
 public class TrustMatrixDrawingWindow extends DrawingWindow {
 
     private TrustMatrix matrix;
     Float[][] trustMatrix;
-    private Agent[] agents;
+    private List<Agent> sAgents;
 
     private int matCount;
 
@@ -20,7 +21,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         this.matrix = matrixGenerator;
         matCount = this.matrix.getAgentCount();
         trustMatrix = this.matrix.getTrustMatrix();
-        agents = matrixGenerator.getAgents();
+        sAgents = matrixGenerator.getsAgents();
         axisY = axisX = matCount * 5;
         trusteeData = new int[matCount][3];     // 0: totalTrust  |  1: FP | 2: FN
     }
@@ -67,7 +68,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         //============================//============================
 
         for (int row = 0; row < matCount; row++) {
-            agentInRow = agents[row];
+            agentInRow = sAgents.get(row);
 
             g.setColor(Globals.Color$.getNormal(agentInRow.getBehavior().getBehaviorState()));
 
@@ -82,7 +83,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             g.fillRect(pnX - agentInRow.getCapacity().getCapPower() - 10, row * 5 + 1, agentInRow.getCapacity().getCapPower(), 3);
 
             for (int col = 0; col < matCount; col++) {
-                agentInCol = agents[col];
+                agentInCol = sAgents.get(col);
                 float trVal = this.trustMatrix[row][col];
                 if (trVal > 0) {
                     trusteeData[col][0]++;
@@ -129,7 +130,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
         for (int i = 0, trusteeDataLength = trusteeData.length; i < trusteeDataLength; i++) {
             int[] td = trusteeData[i];
-            g.setColor(Globals.Color$.getLight(agents[i].getBehavior().getCurrentBehaviorState()));
+            g.setColor(Globals.Color$.getLight(sAgents.get(i).getBehavior().getCurrentBehaviorState()));
             g.fillRect(i * 5, pnY - td[0] - 10, 5, td[0]);
             g.setColor(Color.CYAN);
             g.fillRect(i * 5, pnY - td[1] - 10, 2, td[1]);

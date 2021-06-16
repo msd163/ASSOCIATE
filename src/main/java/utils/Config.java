@@ -8,7 +8,7 @@ public class Config {
     public static final boolean TRUST_USE_FORGOTTEN_COEFF = true;
     public static final boolean TRUST_SHARE_Recommendation = true;
     public static final float TRUST_FORGOTTEN_COEFF = 1.0f;
-    public static final float TRUST_RECOMMENDATION_COEFF = 0.5f;
+    public static final float TRUST_RECOMMENDATION_COEFF = 1.0f;
 
 
     //============================//============================

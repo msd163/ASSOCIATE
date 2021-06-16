@@ -1,6 +1,7 @@
 package systemLayer;
 
 import com.google.gson.annotations.Expose;
+import utils.Globals;
 import utils.profiler.SimulationProfiler;
 
 public class AgentCapacity {
@@ -26,22 +27,15 @@ public class AgentCapacity {
 
         // capPower is between 0 and 100
         capPower =
-                (int) (15 * ((float) trustHistoryCap / profiler.getCurrentBunch().getTrustHistoryCapD().getMaxValue())) +
-                        (int) (10 * ((float) trustHistoryItemCap / profiler.getCurrentBunch().getTrustHistoryItemCapD().getMaxValue())) +
-                        (int) (10 * ((float) trustRecommendationCap / profiler.getCurrentBunch().getTrustRecommendationCapD().getMaxValue())) +
-                        (int) (10 * ((float) trustRecommendationItemCap / profiler.getCurrentBunch().getTrustRecommendationItemCapD().getMaxValue())) +
-                        (int) (20 * ((float) travelHistoryCap / profiler.getCurrentBunch().getTravelHistoryCapD().getMaxValue())) +
-                        (int) (20 * ((float) watchListCapacity / profiler.getCurrentBunch().getWatchListCapacityD().getMaxValue())) +
-                        (int) (15 * ((float) watchDepth / profiler.getCurrentBunch().getWatchRadiusD().getMaxValue()))
+                (int) (15 * ((float) trustHistoryCap / Globals.ProfileBunchMax.maxTrustHistoryCap)) +
+                        (int) (10 * ((float) trustHistoryItemCap / Globals.ProfileBunchMax.maxTrustHistoryCap)) +
+                        (int) (10 * ((float) trustRecommendationCap / Globals.ProfileBunchMax.maxTrustRecommendationCap)) +
+                        (int) (10 * ((float) trustRecommendationItemCap / Globals.ProfileBunchMax.maxTrustRecommendationItemCap)) +
+                        (int) (20 * ((float) travelHistoryCap / Globals.ProfileBunchMax.maxTravelHistoryCap)) +
+                        (int) (20 * ((float) watchListCapacity / Globals.ProfileBunchMax.maxWatchListCapacity)) +
+                        (int) (15 * ((float) watchDepth / Globals.ProfileBunchMax.maxWatchDepth))
         ;
 
-        /*System.out.println(
-                " | watchDepth: " + watchDepth
-                        + " | watchListCap: " + watchListCapacity
-                        + " | travelHistory: " + travelHistory
-                        + " | trustHistoryCap: " + trustHistoryCap
-                        + " | historySerRecCap: " + trustHistoryItemCap
-        );*/
 
     }
 

@@ -9,10 +9,20 @@ import java.util.Random;
 
 public class Globals {
 
+    public static class ProfileBunchMax {
+        public static int maxTrustHistoryItemCap = 0;
+        public static int maxTrustHistoryCap = 0;
+        public static int maxTrustRecommendationItemCap = 0;
+        public static int maxTrustRecommendationCap = 0;
+        public static int maxWatchListCapacity = 0;
+        public static int maxWatchDepth = 0;
+        public static int maxTravelHistoryCap = 0;
+    }
+
     public static class Color$ {
         public static Color green = new Color(113, 253, 14);
         public static Color red = new Color(238, 38, 21);
-        public static Color gray = new Color(158, 158, 158);
+        public static Color gray = new Color(250, 250, 250);
         public static Color magenta = new Color(252, 72, 248);
         public static Color yellow = new Color(247, 255, 68);
 

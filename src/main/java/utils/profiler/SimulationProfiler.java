@@ -1,5 +1,7 @@
 package utils.profiler;
 
+import utils.Globals;
+
 import java.util.ArrayList;
 
 public class SimulationProfiler {
@@ -67,8 +69,9 @@ public class SimulationProfiler {
 
     public void NextBunch() {
         currentBunchIndex++;
-        if (currentBunchIndex >= bunches.size())
+        if (currentBunchIndex >= bunches.size()) {
             currentBunchIndex = 0;
+        }
     }
 
     public void PrevBunch() {
@@ -83,6 +86,32 @@ public class SimulationProfiler {
 
     public PopulationBunch getCurrentBunch() {
         return bunches.get(currentBunchIndex);
+    }
+
+    public void calcMaxOfBunchParams() {
+        for (PopulationBunch bunch : bunches) {
+            if (Globals.ProfileBunchMax.maxTravelHistoryCap < bunch.getTravelHistoryCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxTravelHistoryCap = bunch.getTravelHistoryCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxTrustHistoryCap < bunch.getTrustHistoryCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxTrustHistoryCap = bunch.getTrustHistoryCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxTrustHistoryItemCap < bunch.getTrustRecommendationItemCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxTrustHistoryItemCap = bunch.getTrustRecommendationItemCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxWatchDepth < bunch.getWatchRadiusD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxWatchDepth = bunch.getWatchRadiusD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxTrustRecommendationCap < bunch.getTrustRecommendationCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxTrustRecommendationCap = bunch.getTrustRecommendationCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxTrustRecommendationItemCap < bunch.getTrustRecommendationItemCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxTrustRecommendationItemCap = bunch.getTrustRecommendationItemCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxWatchListCapacity < bunch.getWatchListCapacityD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxWatchListCapacity = bunch.getWatchListCapacityD().getMaxValue();
+            }
+        }
     }
     //============================//============================
 

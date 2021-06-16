@@ -7,19 +7,20 @@ import utils.WorldStatistics;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 public class TrustMatrix {
 
     Float[][] trustMatrix;
     int agentCount = 0;
-    Agent[] agents;
+    List<Agent> sAgents;
 
     File file;
     FileWriter writer;
 
-    public void init(Agent[] agents) {
-        this.agentCount = agents.length;
-        this.agents = agents;
+    public void init(List<Agent> agents) {
+        this.agentCount = agents.size();
+        this.sAgents = agents;
         trustMatrix = new Float[agentCount][agentCount];
 
         for (int i = 0; i < agentCount; i++) {
@@ -30,30 +31,30 @@ public class TrustMatrix {
     }
 
     public void update(WorldStatistics statistics) {
-        for (int i = 0, agentsSize = agents.length; i < agentsSize; i++) {
-            Agent agent = agents[i];
+        for (int i = 0, agentsSize = sAgents.size(); i < agentsSize; i++) {
+            Agent agent = sAgents.get(i);
             TrustHistory[] histories = agent.getTrust().getHistories();
             for (TrustHistory history : histories) {
                 if (history != null && history.getLastEpisode() == Globals.EPISODE) {
-                    for (int j = 0, size = agents.length; j < size; j++) {
-                        Agent trustee = agents[j];
+                    for (int j = 0, size = sAgents.size(); j < size; j++) {
+                        Agent trustee = sAgents.get(j);
                         if (trustee.getId() == history.getAgent().getId()) {
                             trustMatrix[i][j] = history.getFinalTrustLevel();
                             if (history.getFinalTrustLevel() > 0 && !trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_FalseNegativeTrust();
-                               // statistics.getAgentStatistics()[j].addAsTrustee_FN();
+                                // statistics.getAgentStatistics()[j].addAsTrustee_FN();
                             }
                             if (history.getFinalTrustLevel() < 0 && trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_FalsePositiveTrust();
-                              //  statistics.getAgentStatistics()[j].addAsTrustee_FP();
+                                //  statistics.getAgentStatistics()[j].addAsTrustee_FP();
                             }
                             if (history.getFinalTrustLevel() > 0 && trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_TrueNegativeTrust();
-                              //  statistics.getAgentStatistics()[j].addAsTrustee_TN();
+                                //  statistics.getAgentStatistics()[j].addAsTrustee_TN();
                             }
                             if (history.getFinalTrustLevel() < 0 && !trustee.getBehavior().getHasHonestState()) {
                                 statistics.add_Itt_TruePositiveTrust();
-                              //  statistics.getAgentStatistics()[j].addAsTrustee_TP();
+                                //  statistics.getAgentStatistics()[j].addAsTrustee_TP();
                             }
                             break;
                         }
@@ -107,7 +108,7 @@ public class TrustMatrix {
     }
 
 
-    public Agent[] getAgents() {
-        return agents;
+    public List<Agent> getsAgents() {
+        return sAgents;
     }
 }
