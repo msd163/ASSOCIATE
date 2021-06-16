@@ -133,11 +133,12 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             g.setColor(Globals.Color$.getLight(sAgents.get(i).getBehavior().getCurrentBehaviorState()));
             g.fillRect(i * 5, pnY - td[0] - 10, 5, td[0]);
             g.setColor(Color.CYAN);
-            g.fillRect(i * 5, pnY - td[1] - 10, 2, td[1]);
+            g.fillRect(i * 5, pnY - td[1] - 10, 5, td[1]);
             g.setColor(Color.RED);
-            g.fillRect(i * 5, pnY - td[2] - 10, 2, td[2]);
+            g.fillRect(i * 5 , pnY - td[1]- td[2] - 10, 5, td[2]);
         }
 
+        //============================//============================ Drawing fixed texts of coordination
         g.setColor(Color.YELLOW);
 
         g.scale(1, -1);

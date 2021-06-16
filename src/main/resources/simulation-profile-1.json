@@ -2,15 +2,15 @@
   "simulationRound": "1",
   "sleepInTarget": "2",
   "------------------1": "",
-  "stateCount": 100,
-  "stateCapacity": "100",
+  "stateCount": 20,
+  "stateCapacity": "30",
   "stateTargetCount": "#2..8",
   "pitfallCount": "2",
   "------------------2": "",
-  "agentsCount": "1000",
+  "agentsCount": "200",
   "bunches": [
     {
-      "bunchCount": "%10@1000",
+      "bunchCount": "%10@200",
       "targetCount": "200",
       "watchDepth": "2",
       "watchListCapacity": "#800..1000",
@@ -19,7 +19,7 @@
       "trustHistoryItemCap": "#800..1000",
       "trustRecommendationCap": "#800..1000",
       "trustRecommendationItemCap": "#80..100",
-      "observationCap": "#80..8000",
+      "observationCap": "#800..8000",
       "trustReplaceHistoryMethod": 1,
       "behavior": {
         "honestPercent": 97,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "bunchCount": "%40@1000",
+      "bunchCount": "%40@200",
       "targetCount": "200",
       "watchDepth": "#0..1",
       "watchListCapacity": "#100..800",
@@ -57,7 +57,7 @@
       }
     },
     {
-      "bunchCount": "%50@100",
+      "bunchCount": "%50@200",
       "targetCount": "200",
       "watchDepth": "0",
       "watchListCapacity": "#1..100",
