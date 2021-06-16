@@ -17,6 +17,8 @@ public class AgentTravelInfoDrawingWindow extends DrawingWindow {
     public AgentTravelInfoDrawingWindow(World world) {
         super();
         this.world = world;
+        axisX = world.getEnvironment().getProMax().getMaxTravelHistoryCap();
+        axisY = world.getAgentsCount() * 21;
     }
 
     private int worldTimer;
@@ -34,8 +36,6 @@ public class AgentTravelInfoDrawingWindow extends DrawingWindow {
         g.setBackground(Color.BLACK);
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
-
-        axisX = 0;
 
         g.setColor(Color.YELLOW);
 

@@ -423,7 +423,7 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
-        ImageBuilder.generateStatisticsImages(stateMachineDW, statsOfEnvDW, trustMatrixDW,
+        new ImageBuilder().generateStatisticsImages(stateMachineDW, statsOfEnvDW, trustMatrixDW,
                 statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentObservationDW, agentRecommendationDW,
                 agentTravelInfoDW, agentTrustDW
         );

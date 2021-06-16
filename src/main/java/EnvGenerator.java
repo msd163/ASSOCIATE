@@ -202,6 +202,8 @@ public class EnvGenerator {
 
         int stateCount = environment.getStateCount();
 
+        environment.updateProMaxParams();
+
         //============================//============================  Creating states
         for (int i = 0; i < stateCount; i++) {
             StateX stateX = new StateX();

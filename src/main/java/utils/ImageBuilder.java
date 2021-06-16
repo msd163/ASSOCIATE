@@ -9,19 +9,20 @@ import java.io.File;
 
 public class ImageBuilder {
 
-    public static void generateStatisticsImages(StateMachineDrawingWindow stateMachineWindow,
-                                                StatsOfEnvDrawingWindow statsOfEnvWindow,
-                                                TrustMatrixDrawingWindow trustMatrixWindow,
-                                                StatsOfTrustDrawingWindow trustStatsWindow,
-                                                StatsOfFalsePoNeDrawingWindow poNeStatsWindow,
-                                                AnalysisOfTrustParamsDrawingWindow trustParamsDrawingWindow,
-                                                AgentObservationDrawingWindow agentObservationDrawingWindow,
-                                                AgentRecommendationDrawingWindow agentRecommendationDrawingWindow,
-                                                AgentTravelInfoDrawingWindow agentTravelInfoDrawingWindow,
-                                                AgentTrustDataDrawingWindow agentTrustDataDrawingWindow
+
+    public void generateStatisticsImages(StateMachineDrawingWindow stateMachineWindow,
+                                         StatsOfEnvDrawingWindow statsOfEnvWindow,
+                                         TrustMatrixDrawingWindow trustMatrixWindow,
+                                         StatsOfTrustDrawingWindow trustStatsWindow,
+                                         StatsOfFalsePoNeDrawingWindow poNeStatsWindow,
+                                         AnalysisOfTrustParamsDrawingWindow trustParamsDrawingWindow,
+                                         AgentObservationDrawingWindow agentObservationDrawingWindow,
+                                         AgentRecommendationDrawingWindow agentRecommendationDrawingWindow,
+                                         AgentTravelInfoDrawingWindow agentTravelInfoDrawingWindow,
+                                         AgentTrustDataDrawingWindow agentTrustDataDrawingWindow
     ) {
         if (Config.DRAWING_SHOW_STATE_MACHINE) {
-            generateStatisticsImage(stateMachineWindow);
+            //generateStatisticsImage(stateMachineWindow);
         }
         if (Config.DRAWING_SHOW_STAT_OF_ENV) {
             generateStatisticsImage(statsOfEnvWindow);
@@ -56,13 +57,28 @@ public class ImageBuilder {
         try {
             drawingWindow.resetParams();
 
-            BufferedImage image = new BufferedImage(drawingWindow.getRealWith(), 2 * drawingWindow.getRealHeight(), BufferedImage.TYPE_INT_RGB);
+            int w = drawingWindow.getRealWith();
+            if (w > 25000) {
+                w = 25000;
+            }
+
+            int h = 2 * drawingWindow.getRealHeight();
+            if (h > 14000) {
+                h = 14000;
+            }
+            BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = image.createGraphics();
             graphics2D.translate(100, drawingWindow.getRealHeight());
             drawingWindow.paint(graphics2D);
 
             String simDir = "/sim-" + (Globals.SIMULATION_TIMER < 10 ? "0" + Globals.SIMULATION_TIMER : Globals.SIMULATION_TIMER);
-            ImageIO.write(ImageTrimmer.trim(image), "jpeg", new File(ProjectPath.instance().statisticsDir() + "/" + Globals.STATS_FILE_NAME + "/" + simDir + "/" + Globals.STATS_FILE_NAME + ".xmg." + drawingWindow.getName() + ".jpg"));
+            image = ImageTrimmer.trim(image);
+            ImageIO.write(image, "jpeg", new File(ProjectPath.instance().statisticsDir() + "/" + Globals.STATS_FILE_NAME + "/" + simDir + "/" + Globals.STATS_FILE_NAME + ".xmg." + drawingWindow.getName() + ".jpg"));
+
+            graphics2D.dispose();
+
+            System.out.println("|> ImageBuilder::  " + drawingWindow.getName() + " generated. size: " + image.getWidth() + " X " + image.getHeight());
+
         } catch (Exception exception) {
             exception.printStackTrace();
         }

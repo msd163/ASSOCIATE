@@ -17,6 +17,8 @@ public class AgentObservationDrawingWindow extends DrawingWindow {
     public AgentObservationDrawingWindow(World world) {
         super();
         this.world = world;
+        axisX = world.getEnvironment().getProMax().getMaxObservationCap();
+        axisY = world.getAgentsCount() * 21;
     }
 
     private int worldTimer;
@@ -34,8 +36,6 @@ public class AgentObservationDrawingWindow extends DrawingWindow {
         g.setBackground(Color.BLACK);
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
-
-        axisX = 0;
 
         g.setColor(Color.YELLOW);
 
@@ -79,7 +79,7 @@ public class AgentObservationDrawingWindow extends DrawingWindow {
             //g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
 
             int obsSize = agent.getTrust().getObservations().size();
-           // g.fillRect(5, i * 21, obsSize, 20);
+            // g.fillRect(5, i * 21, obsSize, 20);
 
             if (obsSize > 0) {
                 int[] obsTarPit = agent.getTrust().getObservationInTargetAndPitfallCount();

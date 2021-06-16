@@ -22,7 +22,12 @@ public class Environment {
 
 
         code = month + day + "-" + hours + minutes;
+
+        proMax = new EnvironmentProfilerMaxParams();
     }
+
+    @Expose
+    private EnvironmentProfilerMaxParams proMax;
 
     @Expose
     private String code = "";                               // unique code for identifying and tracing reports
@@ -247,6 +252,17 @@ public class Environment {
         }
     }
 
+    public void updateProMaxParams() {
+        proMax.setMaxTrustHistoryItemCap(Globals.ProfileBunchMax.maxTrustHistoryItemCap);
+        proMax.setMaxTrustHistoryCap(Globals.ProfileBunchMax.maxTrustHistoryCap);
+        proMax.setMaxTrustRecommendationItemCap(Globals.ProfileBunchMax.maxTrustRecommendationItemCap);
+        proMax.setMaxTrustRecommendationCap(Globals.ProfileBunchMax.maxTrustRecommendationCap);
+        proMax.setMaxWatchListCapacity(Globals.ProfileBunchMax.maxWatchListCapacity);
+        proMax.setMaxWatchDepth(Globals.ProfileBunchMax.maxWatchDepth);
+        proMax.setMaxTravelHistoryCap(Globals.ProfileBunchMax.maxTravelHistoryCap);
+        proMax.setMaxObservationCap(Globals.ProfileBunchMax.maxObservationCap);
+    }
+
     //============================//============================
 
     public int getPitfallCount() {
@@ -404,5 +420,9 @@ public class Environment {
 
     public String getCode() {
         return code;
+    }
+
+    public EnvironmentProfilerMaxParams getProMax() {
+        return proMax;
     }
 }
