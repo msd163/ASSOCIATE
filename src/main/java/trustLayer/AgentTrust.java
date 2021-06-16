@@ -108,10 +108,12 @@ public class AgentTrust {
             return tarPit;
         }
         for (TrustObservation obs : observations) {
-            if (obs.isIsFinalTarget()) {
-                tarPit[0]++;
-            } else if (obs.isIsFinalPitfall()) {
-                tarPit[1]++;
+            if (obs != null) {
+                if (obs.isIsFinalTarget()) {
+                    tarPit[0]++;
+                } else if (obs.isIsFinalPitfall()) {
+                    tarPit[1]++;
+                }
             }
         }
         return tarPit;

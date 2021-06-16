@@ -11,9 +11,10 @@ import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
 import systemLayer.World;
-import utils.Config;
+import trustLayer.TrustManager;
 import utils.Globals;
 import utils.OutLog____;
+import utils.profiler.SimulationConfig;
 import utils.statistics.WorldStatistics;
 
 import java.util.ArrayList;
@@ -23,9 +24,11 @@ public class Router {
 
     private WorldStatistics statistics___;
     private World world;
+    private TrustManager trustManager;
 
     public Router(World world) {
         this.world = world;
+        this.trustManager = world.getTrustManager();
     }
 
     public void setStatistics(WorldStatistics statistics) {
@@ -157,13 +160,13 @@ public class Router {
             if (finalState.isIsPitfall()) {
                 statistics___.add_Itt_AgentsInPitfall();
                 statistics___.add_All_AgentsInPitfall();
-                Globals.trustManager.reduceTrustForPitfall(agent);
+                trustManager.reduceTrustForPitfall(agent);
             }
             //
             else if (finalState.getId() == agent.getCurrentTarget().getId()) {
                 statistics___.add_Itt_AgentsInTarget();
                 statistics___.add_All_AgentsInTarget();
-                Globals.trustManager.increaseTrustForSuccessTarget(agent);
+                trustManager.increaseTrustForSuccessTarget(agent);
             }
         }
         //-- Failed to travel to neighbor.
@@ -188,7 +191,9 @@ public class Router {
             return;
         }
 
-        if (Config.TRUST_METHODOLOGY == TtTrustMethodology.FullyRandomly) {
+        SimulationConfig simulationConfig = world.getSimulationConfig();
+
+        if (simulationConfig.getTtMethod() == TtTrustMethodology.FullyRandomly) {
             return;
         }
 
@@ -229,7 +234,7 @@ public class Router {
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
                 //============================//============================ _Trust
-                routingHelp.setTrustLevel(Globals.trustManager.getTrustLevel(agent, wa.getAgent()));
+                routingHelp.setTrustLevel(trustManager.getTrustLevel(agent, wa.getAgent()));
                 //============================//============================
                 routingHelps.add(routingHelp);
             }
@@ -245,14 +250,14 @@ public class Router {
         //todo: Implementing trust mechanism
 
         List<RoutingHelp> sortedRoutingHelps = routingHelps;
-        switch (Config.TRUST_METHODOLOGY) {
+        switch (simulationConfig.getTtMethod()) {
 
-            case TrustMode:
+            case TrustMode_ShortPath:
                 sortedRoutingHelps = basicTrustMechanism(agent, goalState, routingHelps);
                 if (sortedRoutingHelps == null) return;
 
-                if (Config.TRUST_OBSERVATION) {
-                    sortedRoutingHelps = refineByObservation(agent,sortedRoutingHelps);
+                if (simulationConfig.isIsUseTrustObservation()) {
+                    sortedRoutingHelps = refineByObservation(agent, sortedRoutingHelps);
                 }
 
 
@@ -290,9 +295,9 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
-        if (Config.TRUST_SHARE_Recommendation) {
-            Globals.trustManager.shareRecommendation(agent, help.getHelperAgent());
-            Globals.trustManager.shareRecommendation(help.getHelperAgent(), agent);
+        if (simulationConfig.isUseTrustRecommendation()) {
+            trustManager.shareRecommendation(agent, help.getHelperAgent());
+            trustManager.shareRecommendation(help.getHelperAgent(), agent);
         }
 
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {
@@ -312,7 +317,7 @@ public class Router {
         List<RoutingHelp> refinedList = new ArrayList<>();
 
         for (RoutingHelp routingHelp : srh) {
-            Globals.trustManager.ValidateHelperInObservations(requester, routingHelp);
+            trustManager.ValidateHelperInObservations(requester, routingHelp);
             if (routingHelp.getValidation() != TtIsValidatedInObservations.Invalid) {
                 refinedList.add(routingHelp);
             }

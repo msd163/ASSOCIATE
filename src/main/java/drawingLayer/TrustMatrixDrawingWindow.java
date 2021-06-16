@@ -38,9 +38,9 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
 
-        g.setColor(Color.YELLOW);
+       /* g.setColor(Color.YELLOW);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
-        g.drawString(mousePosition.toString(), 100, 100);
+        g.drawString(mousePosition.toString(), 100, 100);*/
 
         //============================//============================//============================
         //============================ Draw mouse plus

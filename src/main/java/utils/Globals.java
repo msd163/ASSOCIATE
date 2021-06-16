@@ -93,7 +93,7 @@ public class Globals {
 
     public static StatsEnvGenerator statsEnvGenerator = new StatsEnvGenerator();
     public static StatsTrustGenerator statsTrustGenerator = new StatsTrustGenerator();
-    public static TrustManager trustManager;
+    //public static TrustManager trustManager;
 
 
     public static void reset() {

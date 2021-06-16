@@ -3,6 +3,7 @@ package trustLayer;
 import systemLayer.Agent;
 import utils.Config;
 import utils.Globals;
+import utils.profiler.SimulationConfig;
 
 import java.util.ArrayList;
 
@@ -56,7 +57,8 @@ public class TrustRecommendation {
     }
 
     public float getFinalRecommendedTrustLevel() {
-        if (Config.TRUST_USE_FORGOTTEN_COEFF) {
+        SimulationConfig simulationConfig = master.getWorld().getSimulationConfig();
+        if (simulationConfig.isUseTrustForgottenCoeff()) {
             //-- For preventing stack over flow problem and unlimited loop
             if (finalTrustLevelUpdateTime == Globals.WORLD_TIMER) {
                 return finalTrustLevel;
@@ -64,10 +66,11 @@ public class TrustRecommendation {
             finalTrustLevelUpdateTime = Globals.WORLD_TIMER;
             finalTrustLevel = 0;
             for (TrustRecommendationItem item : items) {
-                float recommenderTrustLevel = Globals.trustManager.getTrustLevel(master, item.getRecommender());
+                float recommenderTrustLevel = master.getWorld().getTrustManager().getTrustLevel(master, item.getRecommender());
                 //-- If recommender identified as an honest agent...
                 if (recommenderTrustLevel > 0) {
-                    finalTrustLevel += item.getRecommendedTrustLevel() * Math.pow(Config.TRUST_FORGOTTEN_COEFF, Globals.WORLD_TIMER - item.getRecommendTime());
+                    //todo: has a bug! item.getRecommendedTrustLevel() has to be a proportion of a whole
+                    finalTrustLevel += item.getRecommendedTrustLevel() * Math.pow(simulationConfig.getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getRecommendTime());
                 }
             }
             return finalTrustLevel;

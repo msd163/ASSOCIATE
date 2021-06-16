@@ -7,6 +7,7 @@ import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import utils.Config;
 import utils.Globals;
+import utils.profiler.SimulationConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +15,10 @@ import java.util.List;
 public class TrustManager {
 
 
-    public TrustManager() {
-    }
+    private SimulationConfig simulationConfig;
 
-    public static int calculateTrust(Agent agent) {
-
-
-        return 0;
+    public TrustManager(SimulationConfig simConfig) {
+        this.simulationConfig = simConfig;
     }
 
     public void reduceTrustForPitfall(Agent agent) {
@@ -156,12 +154,13 @@ public class TrustManager {
                 }
             }
         }
-        if (Config.TRUST_SHARE_Recommendation) {
+        if (simulationConfig.isUseTrustRecommendation()) {
             for (TrustRecommendation recommendation : master.getTrust().getRecommendations()) {
                 if (recommendation.getTrustee().getId() == trustee.getId()) {
+                    //todo: need to be overviewed and revised.
                     calculatedTrust =
-                            (1 - Config.TRUST_RECOMMENDATION_COEFF) * calculatedTrust
-                                    + Config.TRUST_RECOMMENDATION_COEFF * recommendation.getFinalRecommendedTrustLevel();
+                            (1 - simulationConfig.getTrustRecommendationCoeff()) * calculatedTrust
+                                    + simulationConfig.getTrustRecommendationCoeff() * recommendation.getFinalRecommendedTrustLevel();
                     break;
                 }
             }

@@ -44,6 +44,11 @@ public class ProjectPath {
         return resourcesDir() + "/simulation-profile-" + i + ".json";
     }
 
+
+    public String simulationConfigFile() {
+        return resourcesDir() + "/simulation-config.json";
+    }
+
     //============================//============================
 
     public String statisticsDir() {

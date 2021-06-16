@@ -4,17 +4,20 @@ import _type.TtTrustMethodology;
 
 public class Config {
 
-    public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.TrustMode;
-    public static final boolean TRUST_USE_FORGOTTEN_COEFF = true;
-    public static final boolean TRUST_SHARE_Recommendation = true;
+   /* public static final TtTrustMethodology TRUST_METHODOLOGY = TtTrustMethodology.TrustMode_ShortPath;
+    //public static final boolean TRUST_USE_FORGOTTEN_COEFF = true;
+    //public static final boolean TRUST_SHARE_Recommendation = true;
     public static final boolean TRUST_OBSERVATION = true;
     public static final float TRUST_FORGOTTEN_COEFF = 1.0f;
-    public static final float TRUST_RECOMMENDATION_COEFF = 0.5f;
+    public static final float TRUST_RECOMMENDATION_COEFF = 0.5f;*/
 
 
     //============================//============================
     public static final String SimulatingFilePath = ProjectPath.instance().simulationProfileData(1);
     public static final String SimulatingFileName = SimulatingFilePath.substring(SimulatingFilePath.lastIndexOf("/"));
+
+    public static final String SimulationConfigFilePath = ProjectPath.instance().simulationConfigFile();
+    public static final String SimulationConfigFileName = SimulationConfigFilePath.substring(SimulationConfigFilePath.lastIndexOf("/"));
 
     public static final String EnvironmentDataFilePath = ProjectPath.instance().environmentData();
     public static final String EnvironmentDataFileName = EnvironmentDataFilePath.substring(EnvironmentDataFilePath.lastIndexOf("/"));

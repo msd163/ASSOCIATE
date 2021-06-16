@@ -6,12 +6,6 @@ import java.util.ArrayList;
 
 public class SimulationProfiler {
 
-
-    private String simulationRound;
-    private DefParameter simulationRoundD;
-    private String sleepInTarget;
-    private DefParameter sleepInTargetD;
-
     //============================
     private String stateCount;
     private DefParameter stateCountD;
@@ -39,23 +33,20 @@ public class SimulationProfiler {
                 = stateTargetCount
                 = stateCapacity
                 = stateCount
-                = sleepInTarget
                 = agentsCount
-                = simulationRound
                 = "";
         currentBunchIndex = 0;
         bunches = null;
+
     }
 
     public void init() {
 
         agentsCountD = new DefParameter(agentsCount);
-        simulationRoundD = new DefParameter(simulationRound);
         pitfallCountD = new DefParameter(pitfallCount);
         stateTargetCountD = new DefParameter(stateTargetCount);
         stateCapacityD = new DefParameter(stateCapacity);
         stateCountD = new DefParameter(stateCount);
-        sleepInTargetD = new DefParameter(sleepInTarget);
 
         if (bunches == null || bunches.isEmpty()) {
             System.out.println(">> ERROR: Profiler bunch is empty.");
@@ -118,16 +109,8 @@ public class SimulationProfiler {
     }
     //============================//============================
 
-    public int getSimulationRoundValue() {
-        return simulationRoundD.nextValue();
-    }
-
     public int getAgentsCountValue() {
         return agentsCountD.nextValue();
-    }
-
-    public int getSleepInTargetValue() {
-        return sleepInTargetD.nextValue();
     }
 
     public int getStateCountValue() {
@@ -170,9 +153,7 @@ public class SimulationProfiler {
 
         return tx + "CapacityProfiler{" +
                 ti + "  agentsCount='" + agentsCount + '\'' +
-                ti + ", simulationRound='" + simulationRound + '\'' +
                 ti + ", agentsCountD=" + agentsCountD.toString(tabIndex) +
-                ti + ", simulationRoundD=" + simulationRoundD.toString(tabIndex) +
                 ti + ", currentBunch=" + currentBunchIndex +
                 ti + ", bunches=" + bs +
                 tx + '}';
@@ -182,4 +163,5 @@ public class SimulationProfiler {
     public String toString() {
         return toString(0);
     }
+
 }

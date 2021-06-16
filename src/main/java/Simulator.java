@@ -4,6 +4,7 @@ import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.ProjectPath;
+import utils.profiler.SimulationConfigBunch;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,13 +16,14 @@ public class Simulator {
 
     private World[] worlds;
     private Environment loadedEnvironmentFromJson;
-    FileReader envReader;
-    Gson gson = new Gson();
+    private SimulationConfigBunch simulationConfigBunch;
+
+    private FileReader envReader;
+    private Gson gson = new Gson();
 
     private void init() throws Exception {
 
-        //============================//============================
-        //-- Loading Environment from file
+        //============================//============================ Loading Environment from file
         envReader = new FileReader(Config.EnvironmentDataFilePath);
         loadedEnvironmentFromJson = gson.fromJson(envReader, Environment.class);
 
@@ -33,12 +35,24 @@ public class Simulator {
 
         System.out.println("> Environment loaded from file.");
 
+        //============================//============================ Loading Simulation Config file from file
+        envReader = new FileReader(Config.SimulationConfigFilePath);
+        simulationConfigBunch = gson.fromJson(envReader, SimulationConfigBunch.class);
+
+        if (simulationConfigBunch == null) {
+            System.out.println(">> Simulator.init");
+            System.out.println("> Error: simulation config file not found.");
+            return;
+        }
+
+        System.out.println("> Simulation Config file loaded from file.");
+
         //============================ Initializing worlds
-        Globals.SIMULATION_ROUND = loadedEnvironmentFromJson.getSimulationRound();
+        Globals.SIMULATION_ROUND = simulationConfigBunch.getSimulationRound();
         worlds = new World[Globals.SIMULATION_ROUND];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
-            worlds[i] = new World();
+            worlds[i] = new World(simulationConfigBunch.getNextConfig());
         }
 
 

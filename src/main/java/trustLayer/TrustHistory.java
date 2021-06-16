@@ -55,7 +55,7 @@ public class TrustHistory {
     }
 
     public float getFinalTrustLevel() {
-        if (Config.TRUST_USE_FORGOTTEN_COEFF) {
+        if (agent.getWorld().getSimulationConfig().isUseTrustForgottenCoeff()) {
             //-- For preventing stack over flow problem and unlimited loop
             if (finalTrustLevelUpdateTime == Globals.WORLD_TIMER) {
                 return finalTrustLevel;
@@ -63,7 +63,7 @@ public class TrustHistory {
             finalTrustLevelUpdateTime = Globals.WORLD_TIMER;
             finalTrustLevel = 0;
             for (TrustHistoryItem item : items) {
-                finalTrustLevel += item.getTrustScore() * Math.pow(Config.TRUST_FORGOTTEN_COEFF, Globals.WORLD_TIMER - item.getVisitTime());
+                finalTrustLevel += item.getTrustScore() * Math.pow(agent.getWorld().getSimulationConfig().getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getVisitTime());
             }
             return finalTrustLevel;
         }

@@ -10,6 +10,7 @@ import utils.Config;
 import utils.Globals;
 import utils.ImageBuilder;
 import utils.ProjectPath;
+import utils.profiler.SimulationConfig;
 import utils.statistics.WorldStatistics;
 
 import javax.swing.*;
@@ -19,8 +20,8 @@ import java.util.List;
 
 public class World {
 
-    public World() {
-
+    public World(SimulationConfig simulationConfig) {
+        this.simulationConfig = simulationConfig;
     }
 
     private Agent[] agents;
@@ -38,6 +39,10 @@ public class World {
 
     TrustMatrix matrixGenerator = new TrustMatrix();
 
+    private SimulationConfig simulationConfig;
+
+    private TrustManager trustManager;
+
     //============================//============================//============================
     public void init(Environment _environment) throws Exception {
 
@@ -46,6 +51,10 @@ public class World {
         //-- Identifying the agents that we want to trace in Main diagram.
         //-- Indicating the agent and it's communications in environments with different colors
         traceAgentIds = new int[]{};
+
+
+        //============================//============================
+        trustManager = new TrustManager(simulationConfig);
 
         router = new Router(this);
         //============================ Setting agents count
@@ -104,8 +113,6 @@ public class World {
 
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
-
-        Globals.trustManager = new TrustManager();
 
         statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
         for (i = 0; i < statistics.length; i++) {
@@ -335,10 +342,10 @@ public class World {
             }
 
             //============================//============================ Observation
-            if (Config.TRUST_OBSERVATION) {
+            if (simulationConfig.isIsUseTrustObservation()) {
                 for (Agent agent : agents) {
                     if (agent.getCapacity().getObservationCap() > 0) {
-                        Globals.trustManager.observe(agent);
+                        trustManager.observe(agent);
                     }
                 }
             }
@@ -542,4 +549,11 @@ public class World {
         return sortedAgentsByCapPower;
     }
 
+    public SimulationConfig getSimulationConfig() {
+        return simulationConfig;
+    }
+
+    public TrustManager getTrustManager() {
+        return trustManager;
+    }
 }

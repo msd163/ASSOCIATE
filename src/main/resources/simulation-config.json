@@ -1,0 +1,30 @@
+{
+  "simulationRound": 4,
+  "configs": [
+    {
+      "method": 0,
+      "isUseTrustObservation": true,
+      "trustForgottenCoeff": 1.0,
+      "trustRecommendationCoeff": 1.0
+    },
+    {
+      "method": 4,
+      "isUseTrustObservation": false,
+      "trustForgottenCoeff": 1.0,
+      "trustRecommendationCoeff": 1.0
+    },
+    {
+      "method": 4,
+      "isUseTrustObservation": true,
+      "trustForgottenCoeff": 1.0,
+      "trustRecommendationCoeff": 1.0
+    }
+  ,
+    {
+      "method": 4,
+      "isUseTrustObservation": true,
+      "trustForgottenCoeff": 1.0,
+      "trustRecommendationCoeff": 0.0
+    }
+  ]
+}
