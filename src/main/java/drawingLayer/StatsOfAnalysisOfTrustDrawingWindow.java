@@ -50,29 +50,32 @@ public class StatsOfAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
             if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                 axisX += 8;
-                prevPoints[0].y = (int) (stat.getTrustAccuracy() * 200);
-                prevPoints[1].y = (int) (stat.getTrustSensitivity() * 200);
-                prevPoints[2].y = (int) (stat.getTrustSpecificity() * 200);
+                prevPoints[0].y = stat.getTrustAccuracyI200();
+                prevPoints[1].y = stat.getTrustSensitivityI200();
+                prevPoints[2].y = stat.getTrustSpecificityI200();
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
 
             } else {
 
-                prevPoints[0].y = (int) (statistics[i - 1].getTrustAccuracy() * 200);
-                prevPoints[1].y = (int) (statistics[i - 1].getTrustSensitivity() * 200);
-                prevPoints[2].y = (int) (statistics[i - 1].getTrustSpecificity() * 200);
+                prevPoints[0].y = statistics[i - 1].getTrustAccuracyI200();
+                prevPoints[1].y = statistics[i - 1].getTrustSensitivityI200();
+                prevPoints[2].y = statistics[i - 1].getTrustSpecificityI200();
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
                 axisX += 8;
             }
 
-            drawCurve(axisX, (int) (stat.getTrustAccuracy() * 200), Color.GREEN, 1, i);
-            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, (int) (stat.getTrustAccuracy() * 200));
-
-            drawCurve(axisX, (int) (stat.getTrustSensitivity() * 200), Color.YELLOW, 2, i);
-            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, (int) (stat.getTrustSensitivity() * 200));
-
-            drawCurve(axisX, (int) (stat.getTrustSpecificity() * 200), Color.PINK, 3, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, (int) (stat.getTrustSpecificity() * 200));
-
+            drawCurve(axisX, stat.getTrustAccuracyI200(), Color.GREEN, 1, i);
+            if (prevPoints[0].y >= 0) {
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI200());
+            }
+            drawCurve(axisX, stat.getTrustSensitivityI200(), Color.YELLOW, 2, i);
+            if (prevPoints[1].y >= 0) {
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI200());
+            }
+            drawCurve(axisX, stat.getTrustSpecificityI200(), Color.PINK, 3, i);
+            if (prevPoints[2].y >= 0) {
+                g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI200());
+            }
         }
 
         //============================//============================ Draw X-axis line

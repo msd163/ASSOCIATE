@@ -54,10 +54,10 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
             g.setColor(Color.YELLOW);
             g.drawString("Sim " + j + " |", 80, y);
             //============================
-            drawCurve(200, y, Color.GREEN, j, 10, 0);
+            drawCurve(200, y, Color.GREEN, j, 20, -1);
             g.drawString("AgentsInTarget", 220, y);
             //============================
-            drawCurve(500, y, Color.RED, j, 10, 0);
+            drawCurve(500, y, Color.RED, j, 20, -1);
             g.drawString("AgentsInPitfall", 520, y);
             //============================
             g.setColor(Globals.Color$.lightGray);
@@ -68,9 +68,7 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
         //============================//============================//============================ Diagram drawing
 
         //============================ Translate
-        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
-        g.scale(scale, -scale);
-        g.translate(100, -getHeight() / scale + 100);
+        reverseNormalizeCoordination();
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 

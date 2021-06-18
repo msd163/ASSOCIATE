@@ -115,9 +115,21 @@ public class EpisodeStatistics {
             WorldStatistics wd = wds[i];
             midAgentsInTarget += wd.getAllAgentsInTarget();
             midAgentsInPitfall += wd.getAllAgentsInPitfall();
+
+            midFalsePositiveTrust += wd.getIttFalsePositiveTrust();
+            midTruePositiveTrust += wd.getIttTruePositiveTrust();
+            midFalseNegativeTrust += wd.getIttFalseNegativeTrust();
+            midTrueNegativeTrust += wd.getIttTrueNegativeTrust();
         }
         midAgentsInTarget /= diff;
         midAgentsInPitfall /= diff;
+
+        midFalsePositiveTrust /= diff;
+        midTruePositiveTrust /= diff;
+        midFalseNegativeTrust /= diff;
+        midTrueNegativeTrust /= diff;
+
+        calcTrustParams();
     }
 
     //============================//============================
@@ -175,6 +187,19 @@ public class EpisodeStatistics {
         return trustSpecificity;
     }
 
+    public int getTrustAccuracyI200() {
+        return (int) (trustAccuracy * 200);
+    }
+
+    public int getTrustSensitivityI200() {
+        return (int) (trustSensitivity * 200);
+    }
+
+    public int getTrustSpecificityI200() {
+        return (int) (trustSpecificity * 200);
+    }
+
+
     public int getEpisode() {
         return episode;
     }
@@ -182,4 +207,6 @@ public class EpisodeStatistics {
     public int getToTime() {
         return toTime;
     }
+
+
 }

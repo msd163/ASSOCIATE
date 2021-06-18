@@ -139,13 +139,13 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     //============================//============================
-    public void normalizeCoordination(){
+    public void normalizeCoordination() {
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, scale);
         g.translate(200, 300);
     }
 
-    public void reverseNormalizeCoordination(){
+    public void reverseNormalizeCoordination() {
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
         g.translate(100, -getHeight() / scale + 100);
@@ -154,11 +154,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     //============================//============================
 
     public void drawCurve(int x, int y, Color color, int index, int xIndex) {
-        drawCurve(x, y, color, index, 12, xIndex);
+        drawCurve(x, y, color, index, 10, xIndex);
     }
 
     public void drawCurve(int x, int y, Color color, int index, int size, int xIndex) {
-        if ((index + xIndex) % 8 != 0) {
+        if (xIndex != -1 && (index + xIndex) % 10 != 0) {
             size = 4;
         }
         int sizeHf = size / 2;

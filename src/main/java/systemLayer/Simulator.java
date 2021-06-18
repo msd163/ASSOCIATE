@@ -1,6 +1,8 @@
 package systemLayer;
 
 import com.google.gson.Gson;
+import drawingLayer.DrawingWindow;
+import drawingLayer.integrated.IntAnalysisOfTrustDrawingWindow;
 import drawingLayer.integrated.IntStatsOfEnvDrawingWindow;
 import stateLayer.Environment;
 import utils.Config;
@@ -34,6 +36,7 @@ public class Simulator {
     //============================//============================
 
     private IntStatsOfEnvDrawingWindow intStatsOfEnvDW;
+    private IntAnalysisOfTrustDrawingWindow intAnalysisOfTrustDW;
 
     //============================//============================//============================
     private void init() throws Exception {
@@ -111,6 +114,9 @@ public class Simulator {
         if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
             intStatsOfEnvDW.repaint();
         }
+        if (Config.INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
+            intAnalysisOfTrustDW.repaint();
+        }
     }
 
     public void simulate() throws Exception {
@@ -132,14 +138,12 @@ public class Simulator {
         //============================ Initializing Diagram Drawing Windows
         if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
             intStatsOfEnvDW = new IntStatsOfEnvDrawingWindow(worlds, simulationConfigBunch);
-            intStatsOfEnvDW.setDoubleBuffered(true);
-            intStatsOfEnvDW.setName("int_s_env");
-            JFrame statsFrame = new JFrame();
-            statsFrame.getContentPane().add(intStatsOfEnvDW);
-            statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
-            statsFrame.setVisible(true);
-            statsFrame.setLocation(0, heightHalf);
-            statsFrame.setTitle("Integrated Environment Statistics");
+            initDrawingWindow(intStatsOfEnvDW, widthHalf, heightHalf, "int_s_env", "Integrated Environment Statistics");
+        }
+
+        if (Config.INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
+            intAnalysisOfTrustDW = new IntAnalysisOfTrustDrawingWindow(worlds, simulationConfigBunch);
+            initDrawingWindow(intAnalysisOfTrustDW, widthHalf, heightHalf, "int_anl", "Integrated Analysis of Trust (Acc|Sens|Spec)");
         }
 
 
@@ -161,5 +165,16 @@ public class Simulator {
             Globals.statsEnvGenerator.close();
             Globals.statsTrustGenerator.close();
         }
+    }
+
+    private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf, String name, String title) {
+        drawingWindow.setDoubleBuffered(true);
+        drawingWindow.setName(name);
+        JFrame statsFrame = new JFrame();
+        statsFrame.getContentPane().add(drawingWindow);
+        statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+        statsFrame.setVisible(true);
+        statsFrame.setLocation(0, heightHalf);
+        statsFrame.setTitle(title);
     }
 }

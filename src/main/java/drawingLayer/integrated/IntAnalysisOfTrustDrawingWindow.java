@@ -4,7 +4,9 @@ import drawingLayer.DrawingWindow;
 import systemLayer.World;
 import utils.Config;
 import utils.Globals;
+import utils.Point;
 import utils.profiler.SimulationConfigBunch;
+import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
 
 import java.awt.*;
@@ -20,45 +22,25 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
         super();
         this.worlds = worlds;
         this.configBunch = configBunch;
+        this.prevPoints = new Point[3];
+        for (int i = 0; i < this.prevPoints.length; i++) {
+            prevPoints[i] = new Point(0, 0);
+        }
     }
-
-    private int worldTimer;
-    private int simulationTimer;
 
     @Override
     public void paint(Graphics gr) {
 
-        worldTimer = Globals.WORLD_TIMER - 1;
-        simulationTimer = Globals.SIMULATION_TIMER;
-
-        if (worldTimer < 0) {
+        if (!mainPaint(gr, "Integrated Trust Analysis Params")) {
             return;
         }
 
-        g = (Graphics2D) gr;
-        g.setBackground(Color.BLACK);
-        g.clearRect(0, 0, getWidth(), getHeight());
-        pauseNotice(g);
+        printStatsInfo(1, "Accuracy (#of correct/#of all))", worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustAccuracy(), Color.GREEN);
 
-        g.setColor(Color.YELLOW);
+        printStatsInfo(2, "Sensitivity (#of TP/#of all P)", worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustSensitivity(), Color.YELLOW);
 
-        //============================//============================ Translate for panning and scaling
+        printStatsInfo(3, "Specificity (#of TN/#of all N)", worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustSpecificity(), Color.PINK);
 
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-
-        g.drawString("Simulation Time                  : " + simulationTimer, 100, 50);
-        g.drawString("World Time                         : " + worldTimer, 100, 90);
-        g.drawString("Episode                               : " + Globals.EPISODE, 100, 130);
-
-        g.setColor(Color.GREEN);
-        g.drawString("Accuracy (#of correct/#of all))               :   " + worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustAccuracy(), 800, 50);
-        g.setColor(Color.YELLOW);
-        g.drawString("Sensitivity (#of TP/#of all P)                  :   " + worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustSensitivity(), 800, 90);
-        g.setColor(Color.PINK);
-        g.drawString("Specificity (#of TN/#of all N)                  :   " + worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustSpecificity(), 800, 130);
-
-        g.setColor(Color.WHITE);
-        g.drawString("[ X200 Scale ]", 800, 180);
 
         //============================//============================ INFO
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
@@ -70,37 +52,27 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
             //============================
             int y = 40 * j + 220;
-            g.setColor(Color.YELLOW);
+            g.setColor(Color.white);
             g.drawString("Sim " + j + " |", 80, y);
             //============================
-            drawCurve( 200, y, Color.GREEN, j, 10);
-            g.drawString("AgentsInTarget", 220, y);
+            drawCurve(200, y, Color.GREEN, j, 20, -1);
+            g.drawString("Accuracy", 220, y);
             //============================
-            drawCurve( 500, y, Color.RED, j, 10);
-            g.drawString("AgentsInPitfall", 520, y);
+            drawCurve(500, y, Color.YELLOW, j, 20, -1);
+            g.drawString("Sensitivity", 520, y);
+            //============================
+            drawCurve(800, y, Color.PINK, j, 20, -1);
+            g.drawString("Specificity", 820, y);
             //============================
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + configBunch.getByIndex(j).getInfo(), 800, y);
+            g.drawString("|>  " + configBunch.getByIndex(j).getInfo(), 1100, y);
             //============================
-
         }
 
         //============================//============================//============================ Diagram drawing
 
-        //============================ Draw mouse plus
-        Point mousePoint = getMousePosition();
-        if (mousePoint != null) {
-            g.setColor(Color.WHITE);
-            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
-            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
-            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
-            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
-        }
-
         //============================ Translate
-        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
-        g.scale(scale, -scale);
-        g.translate(100, -getHeight() / scale + 100);
+        reverseNormalizeCoordination();
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
@@ -111,7 +83,7 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
                 break;
             }
 
-            axisX = j * 4;
+            axisX = j;
             axisY = 0;
 
             worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
@@ -119,19 +91,95 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
             WorldStatistics[] statistics = world.getWdStatistics();
             for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
                 WorldStatistics stat = statistics[i];
-                axisX += 20;
 
-                drawCurve( axisX, stat.getAllAgentsInTarget(), Color.GREEN, j, i);
+                if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    axisX += 8;
+                    prevPoints[0].y = stat.getTrustAccuracyI200();
+                    prevPoints[1].y = stat.getTrustSensitivityI200();
+                    prevPoints[2].y = stat.getTrustSpecificityI200();
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
 
-                drawCurve( axisX, stat.getAllAgentsInPitfall(), Color.RED, j, i);
+                } else {
 
+                    prevPoints[0].y = statistics[i - 1].getTrustAccuracyI200();
+                    prevPoints[1].y = statistics[i - 1].getTrustSensitivityI200();
+                    prevPoints[2].y = statistics[i - 1].getTrustSpecificityI200();
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
+                    axisX += 8;
+                }
+
+                drawCurve(axisX, stat.getTrustAccuracyI200(), Color.GREEN, j, i);
+                if (prevPoints[0].y >= 0) {
+                    g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI200());
+                }
+                drawCurve(axisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, i);
+                if (prevPoints[1].y >= 0) {
+                    g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI200());
+                }
+                drawCurve(axisX, stat.getTrustSpecificityI200(), Color.PINK, j, i);
+                if (prevPoints[2].y >= 0) {
+                    g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI200());
+                }
             }
         }
         //============================//============================ Draw X-axis line
         g.setColor(Color.YELLOW);
         g.drawLine(0, 0, getRealWith(), 0);
 
-        //============================//============================
+
+        //============================//============================//============================ Episode Drawing
+
+        g.translate(0, -1000);
+        g.setColor(Color.pink);
+        g.drawLine(0, 0, getRealWith(), 0);
+
+
+        for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+            World world = worlds[j];
+
+            if (j > Globals.SIMULATION_TIMER || world == null) {
+                break;
+            }
+
+            axisX = j;
+            axisY = 0;
+
+            worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
+
+            EpisodeStatistics[] statistics = world.getEpStatistics();
+            for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                EpisodeStatistics stat = statistics[i];
+
+                if (stat.getToTime() == 0) {
+                    break;
+                }
+
+                if (i > 0) {
+                    prevPoints[0].x = prevPoints[1].x= prevPoints[2].x = axisX;
+                    prevPoints[0].y = statistics[i - 1].getTrustAccuracyI200();
+                    prevPoints[1].y = statistics[i - 1].getTrustSensitivityI200();
+                    prevPoints[2].y = statistics[i - 1].getTrustSpecificityI200();
+                    axisX += 100;
+
+                } else {
+                    axisX += 100;
+                    prevPoints[0].x = prevPoints[1].x= prevPoints[2].x = axisX;
+                    prevPoints[0].y = stat.getTrustAccuracyI200();
+                    prevPoints[1].y = stat.getTrustSensitivityI200();
+                    prevPoints[2].y = stat.getTrustSpecificityI200();
+                }
+
+                drawCurve(axisX, stat.getTrustAccuracyI200(), Color.GREEN, j, 20, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI200());
+
+                drawCurve(axisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, 20, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI200());
+
+                drawCurve(axisX, stat.getTrustSpecificityI200(), Color.PINK, j, 20, i);
+                g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI200());
+
+            }
+        }
 
 
     }

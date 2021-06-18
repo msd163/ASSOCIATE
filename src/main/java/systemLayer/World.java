@@ -304,7 +304,7 @@ public class World {
             agTravelInfoPrJFrame.setTitle("Agent Recommendation Data");
         }
 
-        //============================ Initializing Recommendation Drawing Windows
+        //============================ Initializing Observation Drawing Windows
         AgentObservationDrawingWindow agentObservationDW = new AgentObservationDrawingWindow(this);
         agentObservationDW.setDoubleBuffered(true);
         agentObservationDW.setName("a_obs");
@@ -330,7 +330,6 @@ public class World {
             WorldStatistics wdStats = wdStatistics[Globals.WORLD_TIMER];
             wdStats.setWorldTime(Globals.WORLD_TIMER);
             wdStats.init(Globals.EPISODE, agents);
-
 
             router.setStatistics(wdStats);
 
@@ -401,33 +400,36 @@ public class World {
                 Globals.EPISODE++;
 
                 //-- Exiting agents that are in pitfall and taking in new state randomly.
-                ArrayList<StateX> states = environment.getStates();
-                for (int j = 0, statesSize = states.size(); j < statesSize; j++) {
-                    StateX state = states.get(j);
-                    if (state.isIsPitfall()) {
+                // ArrayList<StateX> states = environment.getStates();
+                //for (int j = 0, statesSize = states.size(); j < statesSize; j++) {
+                // StateX state = states.get(j);
+                //if (state.isIsPitfall()) {
 
-                        for (int i = 0, aSize = state.getAgents().size(); i < aSize; i++) {
-                            Agent agent = state.getAgents().get(i);
-
-                            StateX randomState;
-                            int tryCount = 0;
-                            boolean isAddedToState;
-                            do {
-                                randomState = environment.getRandomState();
-                                if (randomState.isIsPitfall()) {
-                                    isAddedToState = false;
-                                } else {
-                                    // checking state capability and adding the agent to it.
-                                    isAddedToState = randomState.addAgent(agent);
-                                }
-                                if (isAddedToState) {
-                                    state.getAgents().get(i).setState(randomState);
-                                }
-                            } while (!isAddedToState && tryCount++ < agentsCount * 2);
-                        }
-                        state.getAgents().clear();
-                    }
+                for (StateX state : environment.getStates()) {
+                    state.getAgents().clear();
                 }
+
+                for (int i = 0; i < agentsCount; i++) {
+                    Agent agent = agents[i];
+
+                    StateX randomState;
+                    int tryCount = 0;
+                    boolean isAddedToState;
+                    do {
+                        randomState = environment.getRandomState();
+                        if (randomState.isIsPitfall()) {
+                            isAddedToState = false;
+                        } else {
+                            // checking state capability and adding the agent to it.
+                            isAddedToState = randomState.addAgent(agent);
+                        }
+                        if (isAddedToState) {
+                            agent.setState(randomState);
+                        }
+                    } while (!isAddedToState && tryCount++ < agentsCount * 2);
+                }
+                //  }
+                // }
             }
 
             while (Globals.PAUSE) {
