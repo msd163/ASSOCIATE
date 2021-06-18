@@ -2,6 +2,7 @@ package drawingLayer;
 
 import systemLayer.World;
 import utils.Globals;
+import utils.Point;
 import utils.statistics.WorldStatistics;
 
 import java.awt.*;
@@ -15,6 +16,10 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
     public StatsOfTrustDrawingWindow(World world) {
         super();
         this.world = world;
+        this.prevPoints = new utils.Point[4];
+        for (int i = 0; i < this.prevPoints.length; i++) {
+            prevPoints[i] = new Point(0, 0);
+        }
     }
 
     @Override
@@ -26,15 +31,10 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
         axisX = 0;
         axisY = 0;
 
-        g.setColor(Color.GREEN);
-        g.drawString("All Trust To HONEST                  :   " + world.getWdStatistics()[worldTimer].getAllTrustToHonest(), 100, 150);
-        g.setColor(Color.RED);
-        g.drawString("All Trust To Adversary             :   " + world.getWdStatistics()[worldTimer].getAllTrustToAdversary(), 100, 190);
-        g.setColor(Color.MAGENTA);
-        g.drawString("All Trust To Int.Adversary       :   " + world.getWdStatistics()[worldTimer].getAllTrustToIntelligentAdversary(), 100, 230);
-        g.setColor(Color.WHITE);
-        g.drawString("Trust To Mischief                     :   " + world.getWdStatistics()[worldTimer].getAllTrustToMischief(), 100, 270);
-
+        printStatsInfo(1, "All Trust To HONEST", world.getWdStatistics()[worldTimer].getAllTrustToHonest(), Color.GREEN);
+        printStatsInfo(2, "All Trust To Adversary", world.getWdStatistics()[worldTimer].getAllTrustToAdversary(), Color.RED);
+        printStatsInfo(3, "All Trust To Int.Adversary", world.getWdStatistics()[worldTimer].getAllTrustToIntelligentAdversary(), Color.MAGENTA);
+        printStatsInfo(4, "All Trust To Mischief", world.getWdStatistics()[worldTimer].getAllTrustToMischief(), Color.WHITE);
 
         reverseNormalizeCoordination();
 
@@ -44,21 +44,37 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
 
         for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {
             WorldStatistics stat = statistics[i];
-            axisX += 5;
 
-            //============================ Bound Rectangle
-            //g.drawRect(0, 0, world.getWidth(), world.getHeight());
-            g.setColor(Color.WHITE);
-            g.fillOval(axisX, stat.getAllTrustToMischief(), 5, 5);
-            ///
-            g.setColor(Color.GREEN);
-            g.fillOval(axisX, stat.getAllTrustToHonest(), 5, 5);
-            //============================
-            g.setColor(Color.MAGENTA);
-            g.fillOval(axisX, stat.getAllTrustToIntelligentAdversary(), 5, 5);
-            ///
-            g.setColor(Color.RED);
-            g.fillOval(axisX, stat.getAllTrustToAdversary(), 5, 5);
+            if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                axisX += 8;
+                prevPoints[0].y = stat.getAllTrustToMischief();
+                prevPoints[1].y = stat.getAllTrustToHonest();
+                prevPoints[2].y = stat.getAllTrustToIntelligentAdversary();
+                prevPoints[3].y = stat.getAllTrustToAdversary();
+                prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
+
+            } else {
+
+                prevPoints[0].y = statistics[i - 1].getAllTrustToMischief();
+                prevPoints[1].y = statistics[i - 1].getAllTrustToHonest();
+                prevPoints[2].y = statistics[i - 1].getAllTrustToIntelligentAdversary();
+                prevPoints[3].y = statistics[i - 1].getAllTrustToAdversary();
+                prevPoints[0].x = prevPoints[1].x = prevPoints[2].x  = prevPoints[3].x = axisX;
+                axisX += 8;
+            }
+
+            drawCurve(axisX, stat.getAllTrustToMischief(), Color.WHITE, 1, i);
+            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getAllTrustToMischief());
+
+            drawCurve(axisX, stat.getAllTrustToHonest(), Color.GREEN, 2, i);
+            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getAllTrustToHonest());
+
+            drawCurve(axisX, stat.getAllTrustToIntelligentAdversary(), Color.MAGENTA, 3, i);
+            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getAllTrustToIntelligentAdversary());
+
+            drawCurve(axisX, stat.getAllTrustToAdversary(), Color.RED, 4, i);
+            g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getAllTrustToAdversary());
+
         }
 
         //============================//============================ Draw X-axis line

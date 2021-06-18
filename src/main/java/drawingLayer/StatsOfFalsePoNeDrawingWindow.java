@@ -26,14 +26,10 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
         axisX = 0;
         axisY = 0;
 
-        g.setColor(Color.PINK);
-        g.drawString("False Positive            :   " + world.getWdStatistics()[worldTimer].getIttFalsePositiveTrust(), 100, 150);
-        g.setColor(Color.RED);
-        g.drawString("False Negative            :   " + world.getWdStatistics()[worldTimer].getIttFalseNegativeTrust(), 100, 190);
-        g.setColor(Color.YELLOW);
-        g.drawString("True Positive              :   " + world.getWdStatistics()[worldTimer].getIttTruePositiveTrust(), 100, 230);
-        g.setColor(Color.GREEN);
-        g.drawString("True Negative              :   " + world.getWdStatistics()[worldTimer].getIttTrueNegativeTrust(), 100, 270);
+        printStatsInfo(1, "False Positive", world.getWdStatistics()[worldTimer].getIttFalsePositiveTrust(), Color.PINK);
+        printStatsInfo(2, "False Negative", world.getWdStatistics()[worldTimer].getIttFalseNegativeTrust(), Color.RED);
+        printStatsInfo(3, "True Positive", world.getWdStatistics()[worldTimer].getIttTruePositiveTrust(), Color.YELLOW);
+        printStatsInfo(4, "True Negative", world.getWdStatistics()[worldTimer].getIttTrueNegativeTrust(), Color.GREEN);
 
         reverseNormalizeCoordination();
         //============================//============================//============================

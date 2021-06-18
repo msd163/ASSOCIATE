@@ -90,6 +90,7 @@ public class WorldStatistics {
 
         if (prevStats != null && prevStats.episode == episode) {
             allTrustToHonest = prevStats.getAllTrustToHonest();
+            allTrustToAdversary = prevStats.getAllTrustToAdversary();
             allTrustToIntelligentAdversary = prevStats.getAllTrustToIntelligentAdversary();
             allTrustToMischief = prevStats.getAllTrustToMischief();
 
