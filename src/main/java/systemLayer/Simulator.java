@@ -1,11 +1,15 @@
+package systemLayer;
+
 import com.google.gson.Gson;
+import drawingLayer.integrated.IntStatsOfEnvDrawingWindow;
 import stateLayer.Environment;
-import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.ProjectPath;
 import utils.profiler.SimulationConfigBunch;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Files;
@@ -18,9 +22,16 @@ public class Simulator {
     private Environment loadedEnvironmentFromJson;
     private SimulationConfigBunch simulationConfigBunch;
 
+    //============================//============================
+
     private FileReader envReader;
     private Gson gson = new Gson();
 
+    //============================//============================
+
+    private IntStatsOfEnvDrawingWindow intStatsOfEnvDW;
+
+    //============================//============================//============================
     private void init() throws Exception {
 
         //============================//============================ Loading Environment from file
@@ -52,7 +63,7 @@ public class Simulator {
         worlds = new World[Globals.SIMULATION_ROUND];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
-            worlds[i] = new World(simulationConfigBunch.getNextConfig());
+            worlds[i] = new World(this, simulationConfigBunch.getNextConfig());
         }
 
 
@@ -92,6 +103,12 @@ public class Simulator {
         System.out.println("> Environment reloaded from file. simulationTimer");
     }
 
+    public void updateWindows() {
+        if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
+            intStatsOfEnvDW.repaint();
+        }
+    }
+
     public void simulate() throws Exception {
 
         try {
@@ -100,6 +117,27 @@ public class Simulator {
             e.printStackTrace();
             return;
         }
+
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        int widthHalf = (int) width / 2;
+        int heightHalf = (int) height / 2;
+
+        //============================ Initializing Diagram Drawing Windows
+        if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
+            intStatsOfEnvDW = new IntStatsOfEnvDrawingWindow(worlds, simulationConfigBunch);
+            intStatsOfEnvDW.setDoubleBuffered(true);
+            intStatsOfEnvDW.setName("int_s_env");
+            JFrame statsFrame = new JFrame();
+            statsFrame.getContentPane().add(intStatsOfEnvDW);
+            statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            statsFrame.setVisible(true);
+            statsFrame.setLocation(0, heightHalf);
+            statsFrame.setTitle("Integrated Environment Statistics");
+        }
+
 
         for (World world : worlds) {
             if (Globals.SIMULATION_TIMER > 0) {

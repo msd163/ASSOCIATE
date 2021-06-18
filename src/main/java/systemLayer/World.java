@@ -20,9 +20,12 @@ import java.util.List;
 
 public class World {
 
-    public World(SimulationConfig simulationConfig) {
+    public World(Simulator simulator, SimulationConfig simulationConfig) {
+        this.simulator = simulator;
         this.simulationConfig = simulationConfig;
     }
+
+    private Simulator simulator;
 
     private Agent[] agents;
     private List<Agent> sortedAgentsByCapPower;
@@ -493,6 +496,8 @@ public class World {
         if (Config.DRAWING_SHOW_AGENT_OBSERVATION_DATA) {
             agentObservationDW.repaint();
         }
+
+        simulator.updateWindows();
     }
 
     //============================//============================//============================

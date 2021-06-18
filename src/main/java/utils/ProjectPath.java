@@ -40,8 +40,8 @@ public class ProjectPath {
         return environmentDir() + "/environment-" + i + ".json";
     }
 
-    public String simulationProfileData(int i) {
-        return resourcesDir() + "/simulation-profile-" + i + ".json";
+    public String simulationProfileFile() {
+        return resourcesDir() + "/simulation-profile.json";
     }
 
 

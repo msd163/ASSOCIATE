@@ -19,4 +19,8 @@ public class SimulationConfigBunch {
         }
         return configs[currentIndex++];
     }
+
+    public SimulationConfig getByIndex(int index){
+        return configs[index];
+    }
 }
