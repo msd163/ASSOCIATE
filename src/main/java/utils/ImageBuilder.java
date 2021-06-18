@@ -1,6 +1,8 @@
 package utils;
 
 import drawingLayer.*;
+import drawingLayer.integrated.IntAnalysisOfTrustDrawingWindow;
+import drawingLayer.integrated.IntStatsOfEnvDrawingWindow;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -53,27 +55,39 @@ public class ImageBuilder {
         }
     }
 
+
+    public void generateSimulationImages(IntStatsOfEnvDrawingWindow intStatsOfEnvDrawingWindow,
+                                         IntAnalysisOfTrustDrawingWindow intAnalysisOfTrustDrawingWindow) {
+        if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
+            generateStatisticsImage(intStatsOfEnvDrawingWindow);
+        }
+        if (Config.INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
+            generateStatisticsImage(intAnalysisOfTrustDrawingWindow);
+        }
+
+    }
+
     private static void generateStatisticsImage(DrawingWindow drawingWindow) {
         try {
             drawingWindow.resetParams();
 
             int w = drawingWindow.getRealWith();
-            if (w > 25000) {
-                w = 25000;
+            if (w > 22000) {
+                w = 22000;
             }
 
             int h = 2 * drawingWindow.getRealHeight();
-            if (h > 14000) {
-                h = 14000;
+            if (h > 12000) {
+                h = 12000;
             }
             BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = image.createGraphics();
             graphics2D.translate(100, drawingWindow.getRealHeight());
             drawingWindow.paint(graphics2D);
 
-            String simDir = "/sim-" + (Globals.SIMULATION_TIMER < 10 ? "0" + Globals.SIMULATION_TIMER : Globals.SIMULATION_TIMER);
+            //String simDir = "/sim-" + (Globals.SIMULATION_TIMER < 10 ? "0" + Globals.SIMULATION_TIMER : Globals.SIMULATION_TIMER);
             image = ImageTrimmer.trim(image);
-            ImageIO.write(image, "jpeg", new File(ProjectPath.instance().statisticsDir() + "/" + Globals.STATS_FILE_NAME + "/" + simDir + "/" + Globals.STATS_FILE_NAME + ".xmg." + drawingWindow.getName() + ".jpg"));
+            ImageIO.write(image, "jpeg", new File(ProjectPath.instance().statisticsDir() + "/" + Globals.STATS_FILE_NAME + "/" + Globals.STATS_FILE_NAME + ".xmg." + drawingWindow.getName() + ".jpg"));
 
             graphics2D.dispose();
 

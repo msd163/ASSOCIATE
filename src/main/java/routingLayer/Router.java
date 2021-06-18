@@ -54,12 +54,12 @@ public class Router {
             statistics___.addAgentsWithNoTargetState();
             return null;
         }
-        if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
+   /*     if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
             int ct = agent.getCurrentTarget().getId();
             agent.assignNextTargetState();
             OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
                     "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
-        }
+        }*/
 
         // If the agent is in target agent
         if (agent.isInTargetState()) {
@@ -404,7 +404,7 @@ public class Router {
      * @param nextState The state to be go
      * @return final state
      */
-    private StateX gotoNeighborState(Agent agent, StateX nextState) {
+    public StateX gotoNeighborState(Agent agent, StateX nextState) {
 
         //============================
         StateX state = agent.getState();

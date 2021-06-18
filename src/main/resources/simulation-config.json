@@ -2,7 +2,7 @@
   "simulationRound": 2,
   "configs": [
     {
-      "method": 4,
+      "method": 0,
       "isUseTrustObservation": true,
       "trustForgottenCoeff": 0.9,
       "trustRecommendationCoeff": 0.5
@@ -15,27 +15,27 @@
     },
     {
       "method": 4,
+      "isUseTrustObservation": false,
+      "trustForgottenCoeff": 1.0,
+      "trustRecommendationCoeff": 0.0
+    },
+    {
+      "method": 4,
       "isUseTrustObservation": true,
       "trustForgottenCoeff": 1.0,
       "trustRecommendationCoeff": 0.0
     },
     {
       "method": 4,
-      "isUseTrustObservation": false,
-      "trustForgottenCoeff": 1.0,
-      "trustRecommendationCoeff": 0.0
-    },
-    {
-      "method": 4,
-      "isUseTrustObservation": false,
+      "isUseTrustObservation": true,
       "trustForgottenCoeff": 1.0,
       "trustRecommendationCoeff": 0.5
     },
     {
       "method": 4,
       "isUseTrustObservation": true,
-      "trustForgottenCoeff": 1.0,
-      "trustRecommendationCoeff": 1.0
+      "trustForgottenCoeff": 0.99,
+      "trustRecommendationCoeff": 0.5
     },
     {
       "method": 4,

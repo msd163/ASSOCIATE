@@ -7,6 +7,7 @@ import drawingLayer.integrated.IntStatsOfEnvDrawingWindow;
 import stateLayer.Environment;
 import utils.Config;
 import utils.Globals;
+import utils.ImageBuilder;
 import utils.ProjectPath;
 import utils.profiler.SimulationConfigBunch;
 
@@ -160,11 +161,14 @@ public class Simulator {
             }
         }
 
+        Globals.SIMULATION_TIMER--;
+        new ImageBuilder().generateSimulationImages(intStatsOfEnvDW, intAnalysisOfTrustDW);
         //============================//============================ Closing statistics file
         if (Config.STATISTICS_IS_GENERATE) {
             Globals.statsEnvGenerator.close();
             Globals.statsTrustGenerator.close();
         }
+
     }
 
     private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf, String name, String title) {

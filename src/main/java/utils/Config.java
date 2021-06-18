@@ -25,10 +25,10 @@ public class Config {
 
     public static final boolean DRAWING_SHOW_STATE_MACHINE /*               */ = false;
     public static final boolean DRAWING_SHOW_STAT_OF_ENV /*                 */ = false;
-    public static final boolean DRAWING_SHOW_STATS_OF_TRUST/*               */ = true;
+    public static final boolean DRAWING_SHOW_STATS_OF_TRUST/*               */ = false;
     public static final boolean DRAWING_SHOW_TRUST_MATRIX /*                */ = false;
-    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE /*              */ = true;
-    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM/*      */ = true;
+    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE /*              */ = false;
+    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM/*      */ = false;
     public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO /*           */ = false;
     public static final boolean DRAWING_SHOW_AGENT_TRUST_DATA /*            */ = false;
     public static final boolean DRAWING_SHOW_AGENT_RECOMMENDATION_DATA /*   */ = false;

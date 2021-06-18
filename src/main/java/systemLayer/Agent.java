@@ -212,6 +212,13 @@ public class Agent {
         return targetStates[currentTargetStateIndex];
     }
 
+    public StateX getNextTarget() {
+        if (currentTargetStateIndex < getTargetCounts() - 1) {
+            return targetStates[currentTargetStateIndex + 1];
+        }
+        return targetStates[0];
+    }
+
     public int getCurrentTargetStateIndex() {
         return currentTargetStateIndex;
     }
@@ -448,6 +455,6 @@ public class Agent {
     }
 
     public boolean hasObservation() {
-        return trust.getObservations().size()>0;
+        return trust.getObservations().size() > 0;
     }
 }

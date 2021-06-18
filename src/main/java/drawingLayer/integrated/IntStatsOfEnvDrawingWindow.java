@@ -28,6 +28,8 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
         }
     }
 
+    int loAxisX = 0;
+
     @Override
     public void paint(Graphics gr) {
 
@@ -79,7 +81,7 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
                 break;
             }
 
-            axisX = j;
+            loAxisX = j;
             axisY = 0;
 
             worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
@@ -89,26 +91,30 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
                 WorldStatistics stat = statistics[i];
 
                 if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
-                    axisX += 8;
+                    loAxisX += 8;
                     prevPoints[0].y = stat.getAllAgentsInTarget();
                     prevPoints[1].y = statistics[i].getAllAgentsInPitfall();
-                    prevPoints[0].x = prevPoints[1].x = axisX;
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
 
                 } else {
 
                     prevPoints[0].y = statistics[i - 1].getAllAgentsInTarget();
                     prevPoints[1].y = statistics[i - 1].getAllAgentsInPitfall();
-                    prevPoints[0].x = prevPoints[1].x = axisX;
-                    axisX += 8;
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
+                    loAxisX += 8;
                 }
 
-                drawCurve(axisX, stat.getAllAgentsInTarget(), Color.GREEN, j, i);
-                g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getAllAgentsInTarget());
+                drawCurve(loAxisX, stat.getAllAgentsInTarget(), Color.GREEN, j, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAllAgentsInTarget());
 
-                drawCurve(axisX, stat.getAllAgentsInPitfall(), Color.RED, j, i);
-                g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getAllAgentsInPitfall());
+                drawCurve(loAxisX, stat.getAllAgentsInPitfall(), Color.RED, j, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAllAgentsInPitfall());
 
+                if (axisX < loAxisX) {
+                    axisX = loAxisX;
+                }
             }
+
         }
         //============================//============================ Draw X-axis line
         g.setColor(Color.YELLOW);
@@ -129,7 +135,7 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
                 break;
             }
 
-            axisX = j;
+            loAxisX = j;
             axisY = 0;
 
             worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
@@ -143,23 +149,23 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
                 }
 
                 if (i > 0) {
-                    prevPoints[0].x = prevPoints[1].x = axisX;
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
                     prevPoints[0].y = statistics[i - 1].getMidAgentsInTarget();
                     prevPoints[1].y = statistics[i - 1].getMidAgentsInPitfall();
-                    axisX += 100;
+                    loAxisX += 100;
 
                 } else {
-                    axisX += 100;
-                    prevPoints[0].x = prevPoints[1].x = axisX;
+                    loAxisX += 100;
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
                     prevPoints[0].y = stat.getMidAgentsInTarget();
                     prevPoints[1].y = stat.getMidAgentsInPitfall();
                 }
 
-                drawCurve(axisX, stat.getMidAgentsInTarget(), Color.GREEN, j, 20, i);
-                g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getMidAgentsInTarget());
+                drawCurve(loAxisX, stat.getMidAgentsInTarget(), Color.GREEN, j, 20, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getMidAgentsInTarget());
 
-                drawCurve(axisX, stat.getMidAgentsInPitfall(), Color.RED, j, 20, i);
-                g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getMidAgentsInPitfall());
+                drawCurve(loAxisX, stat.getMidAgentsInPitfall(), Color.RED, j, 20, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getMidAgentsInPitfall());
 
             }
         }

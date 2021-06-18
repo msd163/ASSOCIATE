@@ -28,6 +28,8 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
         }
     }
 
+    int loAxisX;
+
     @Override
     public void paint(Graphics gr) {
 
@@ -83,7 +85,7 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
                 break;
             }
 
-            axisX = j;
+            loAxisX = j;
             axisY = 0;
 
             worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
@@ -93,32 +95,36 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
                 WorldStatistics stat = statistics[i];
 
                 if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
-                    axisX += 8;
+                    loAxisX += 8;
                     prevPoints[0].y = stat.getTrustAccuracyI200();
                     prevPoints[1].y = stat.getTrustSensitivityI200();
                     prevPoints[2].y = stat.getTrustSpecificityI200();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
 
                 } else {
 
                     prevPoints[0].y = statistics[i - 1].getTrustAccuracyI200();
                     prevPoints[1].y = statistics[i - 1].getTrustSensitivityI200();
                     prevPoints[2].y = statistics[i - 1].getTrustSpecificityI200();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
-                    axisX += 8;
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+                    loAxisX += 8;
                 }
 
-                drawCurve(axisX, stat.getTrustAccuracyI200(), Color.GREEN, j, i);
+                drawCurve(loAxisX, stat.getTrustAccuracyI200(), Color.GREEN, j, i);
                 if (prevPoints[0].y >= 0) {
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI200());
+                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI200());
                 }
-                drawCurve(axisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, i);
+                drawCurve(loAxisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, i);
                 if (prevPoints[1].y >= 0) {
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI200());
+                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI200());
                 }
-                drawCurve(axisX, stat.getTrustSpecificityI200(), Color.PINK, j, i);
+                drawCurve(loAxisX, stat.getTrustSpecificityI200(), Color.PINK, j, i);
                 if (prevPoints[2].y >= 0) {
-                    g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI200());
+                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI200());
+                }
+
+                if (axisX < loAxisX) {
+                    axisX = loAxisX;
                 }
             }
         }
@@ -141,7 +147,7 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
                 break;
             }
 
-            axisX = j;
+            loAxisX = j;
             axisY = 0;
 
             worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
@@ -155,28 +161,28 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
                 }
 
                 if (i > 0) {
-                    prevPoints[0].x = prevPoints[1].x= prevPoints[2].x = axisX;
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                     prevPoints[0].y = statistics[i - 1].getTrustAccuracyI200();
                     prevPoints[1].y = statistics[i - 1].getTrustSensitivityI200();
                     prevPoints[2].y = statistics[i - 1].getTrustSpecificityI200();
-                    axisX += 100;
+                    loAxisX += 100;
 
                 } else {
-                    axisX += 100;
-                    prevPoints[0].x = prevPoints[1].x= prevPoints[2].x = axisX;
+                    loAxisX += 100;
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                     prevPoints[0].y = stat.getTrustAccuracyI200();
                     prevPoints[1].y = stat.getTrustSensitivityI200();
                     prevPoints[2].y = stat.getTrustSpecificityI200();
                 }
 
-                drawCurve(axisX, stat.getTrustAccuracyI200(), Color.GREEN, j, 20, i);
-                g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI200());
+                drawCurve(loAxisX, stat.getTrustAccuracyI200(), Color.GREEN, j, 20, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI200());
 
-                drawCurve(axisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, 20, i);
-                g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI200());
+                drawCurve(loAxisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, 20, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI200());
 
-                drawCurve(axisX, stat.getTrustSpecificityI200(), Color.PINK, j, 20, i);
-                g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI200());
+                drawCurve(loAxisX, stat.getTrustSpecificityI200(), Color.PINK, j, 20, i);
+                g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI200());
 
             }
         }

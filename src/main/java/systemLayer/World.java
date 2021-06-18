@@ -1,15 +1,14 @@
 package systemLayer;
 
+import _type.TtOutLogMethodSection;
+import _type.TtOutLogStatus;
 import drawingLayer.*;
 import routingLayer.Router;
 import stateLayer.Environment;
 import stateLayer.StateX;
 import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
-import utils.Config;
-import utils.Globals;
-import utils.ImageBuilder;
-import utils.ProjectPath;
+import utils.*;
 import utils.profiler.SimulationConfig;
 import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
@@ -396,40 +395,25 @@ public class World {
                     epStatistics[Globals.EPISODE].setFromTime(Globals.WORLD_TIMER);
                 }
 
-                //-- Increasing Episode
-                Globals.EPISODE++;
-
-                //-- Exiting agents that are in pitfall and taking in new state randomly.
-                // ArrayList<StateX> states = environment.getStates();
-                //for (int j = 0, statesSize = states.size(); j < statesSize; j++) {
-                // StateX state = states.get(j);
-                //if (state.isIsPitfall()) {
-
                 for (StateX state : environment.getStates()) {
                     state.getAgents().clear();
                 }
 
-                for (int i = 0; i < agentsCount; i++) {
-                    Agent agent = agents[i];
+                //-- Increasing Episode
+                Globals.EPISODE++;
 
-                    StateX randomState;
-                    int tryCount = 0;
-                    boolean isAddedToState;
-                    do {
-                        randomState = environment.getRandomState();
-                        if (randomState.isIsPitfall()) {
-                            isAddedToState = false;
-                        } else {
-                            // checking state capability and adding the agent to it.
-                            isAddedToState = randomState.addAgent(agent);
-                        }
-                        if (isAddedToState) {
-                            agent.setState(randomState);
-                        }
-                    } while (!isAddedToState && tryCount++ < agentsCount * 2);
+                for (Agent agent : agents) {
+
+                    if (agent.getState().isIsPitfall()) {
+                        agent.setState(agent.getCurrentTarget());
+                    }
+                    int ct = agent.getCurrentTarget().getId();
+                    agent.assignNextTargetState();
+                    OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
+                            "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
+
                 }
-                //  }
-                // }
+
             }
 
             while (Globals.PAUSE) {
@@ -465,10 +449,10 @@ public class World {
 
         //============================//============================ Running program after finishing lifeTime of the world.
 
-        while (Globals.SIMULATION_TIMER == Globals.SIMULATION_ROUND - 1) {
+       /* while (Globals.SIMULATION_TIMER == Globals.SIMULATION_ROUND - 1) {
             updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
                     analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW, agentObservationDW);
-        }
+        }*/
     }  //  End of running
 
 
