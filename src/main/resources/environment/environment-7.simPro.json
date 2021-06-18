@@ -5,10 +5,10 @@
   "stateTargetCount": "#2..6",
   "pitfallCount": "1",
   "--------------------------------------------------3": "AGENT",
-  "agentsCount": "500",
+  "agentsCount": "1000",
   "bunches": [
     {
-      "bunchCount": "%10@500",
+      "bunchCount": "%10@1000",
       "targetCount": "200",
       "watchDepth": "2",
       "watchListCapacity": "#800..1000",
@@ -31,7 +31,7 @@
       }
     },
     {
-      "bunchCount": "%40@500",
+      "bunchCount": "%40@1000",
       "targetCount": "200",
       "watchDepth": "#0..1",
       "watchListCapacity": "#100..800",

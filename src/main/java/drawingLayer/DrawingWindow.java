@@ -21,6 +21,13 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected float scale = 1f;
 
+
+    protected int worldTimer;
+    protected int simulationTimer;
+
+    protected utils.Point prevPoints[];      //-- Previously visited point
+
+
     public DrawingWindow() {
         //============================//============================
         addMouseListener(
@@ -51,37 +58,147 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected Graphics2D g;
 
-    @Override
-    public void paint(Graphics gr) {
+
+    public void printDrawingTitle(String title) {
+        g.setColor(Color.cyan);
+        g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+        g.drawString(title, 100, 50);
+        g.drawLine(50, 70, 2000, 70);
+
+        g.translate(0, 80);
+    }
+
+    public void printStatsInfo(int index, String title, Color color) {
+        g.setColor(color);
+        g.drawString(title, 100, index * 50);
+    }
+
+    public void printStatsInfo(int index, String title, int value, Color color) {
+        g.setColor(color);
+        g.drawString(title, 100, index * 50);
+        g.drawString(": " + value, 600, index * 50);
+    }
+
+    public void printStatsInfo(int index, String title, float value, Color color) {
+        g.setColor(color);
+        g.drawString(title, 100, index * 50);
+        g.drawString(": " + value, 600, index * 50);
+    }
+
+    public void printStatsInfo(int index, String title, int value1, String value2, Color color) {
+        g.setColor(color);
+        g.drawString(title, 100, index * 50);
+        g.drawString(": " + value1, 600, index * 50);
+        g.drawString(": " + value2, 800, index * 50);
+    }
+
+    public boolean mainPaint(Graphics gr) {
+        return mainPaint(gr, getName());
+    }
+
+    public boolean mainPaint(Graphics gr, String title) {
+
+        worldTimer = Globals.WORLD_TIMER - 1;
+        simulationTimer = Globals.SIMULATION_TIMER;
+
+        if (worldTimer < 0) {
+            return false;
+        }
 
         g = (Graphics2D) gr;
-
-
-       /* g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
-
         g.clearRect(0, 0, getWidth(), getHeight());
+        pauseNotice(g);
 
-        setBackground(Color.BLACK);
+        printDrawingTitle(title);
+
+
         g.setColor(Color.YELLOW);
 
         //============================//============================ Translate for panning and scaling
 
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        g.drawString("Drawing Window ",100,100);
+        g.drawString("Simulation Time", 1100, 50);
+        g.drawString(": " + simulationTimer, 1300, 50);
+        g.drawString("World Time", 1100, 90);
+        g.drawString(": " + worldTimer, 1300, 90);
+        g.drawString("Episode", 1100, 130);
+        g.drawString(": " + Globals.EPISODE, 1300, 130);
 
 
+        java.awt.Point mousePoint = getMousePosition();
+        if (mousePoint != null) {
+            g.setColor(Color.WHITE);
+            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
+            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
+            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
+            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
+        }
+        return true;
+    }
+
+    //============================//============================
+    public void normalizeCoordination(){
+        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
+        g.scale(scale, scale);
+        g.translate(200, 300);
+    }
+
+    public void reverseNormalizeCoordination(){
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
-        g.translate(0, -getHeight() + 100);
-        //============================ Translate
-      *//*  // g2.translate(SHIFT_X, SHIFT_Y);
-        g.scale(1.0, -1.0);
-        g.translate(0, -getHeight()+100);*//*
-
-        g.drawRect(0, 0, 100, 100);*/
+        g.translate(100, -getHeight() / scale + 100);
     }
+
+    //============================//============================
+
+    public void drawCurve(int x, int y, Color color, int index, int xIndex) {
+        drawCurve(x, y, color, index, 12, xIndex);
+    }
+
+    public void drawCurve(int x, int y, Color color, int index, int size, int xIndex) {
+        if ((index + xIndex) % 8 != 0) {
+            size = 4;
+        }
+        int sizeHf = size / 2;
+        switch (index) {
+            case 0:
+                g.setColor(color);
+                g.fillOval(x - sizeHf, y - sizeHf, size, size);
+                break;
+            case 1:
+                g.setColor(color);
+                g.drawLine(x - sizeHf, y, x + sizeHf, y);
+                g.drawLine(x, y - sizeHf, x, y + sizeHf);
+                break;
+            case 2:
+                g.setColor(color);
+                g.fillRect(x - sizeHf, y - sizeHf, size, size);
+                break;
+            case 3:
+                g.setColor(color);
+                g.drawLine(x - sizeHf, y - sizeHf, x + sizeHf, y + sizeHf);
+                g.drawLine(x - sizeHf, y + sizeHf, x + sizeHf, y - sizeHf);
+                break;
+            case 4:
+                g.setColor(color);
+                g.drawRect(x - sizeHf, y - sizeHf, size, size);
+                break;
+            case 5:
+                g.setColor(color);
+                g.drawOval(x - sizeHf, y - sizeHf, size, size);
+                break;
+            case 6:
+                g.setColor(color);
+                g.drawLine(x - sizeHf, y, x + sizeHf, y);
+                break;
+            default:
+                g.setColor(color);
+                g.drawLine(x, y, x, y + size * 3);
+        }
+    }
+
 
     //============================//============================
     public void resetParams() {

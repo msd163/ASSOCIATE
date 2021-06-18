@@ -13,9 +13,9 @@ public class SimulationConfig {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "Method: " + methodology +
-                    ", IsUseObservation: " + isUseTrustObservation +
-                    ", TrustForgottenCoeff: " + trustForgottenCoeff +
-                    ", TrustRecommendationCoeff: " + trustRecommendationCoeff;
+                    " | IsUseObservation: " + isUseTrustObservation +
+                    " | TrustForgottenCoeff: " + trustForgottenCoeff +
+                    " | TrustRecommendationCoeff: " + trustRecommendationCoeff;
         }
         return "Method: " + methodology;
 

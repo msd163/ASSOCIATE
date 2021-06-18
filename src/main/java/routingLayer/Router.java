@@ -54,20 +54,19 @@ public class Router {
             statistics___.addAgentsWithNoTargetState();
             return null;
         }
+        if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
+            int ct = agent.getCurrentTarget().getId();
+            agent.assignNextTargetState();
+            OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
+                    "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
+        }
 
         // If the agent is in target agent
         if (agent.isInTargetState()) {
             statistics___.add_All_AgentsInTarget();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
-            //if (!agent.isInFinalTarget()) {
-            if (agent.getCurrentTargetStateIndex() < Globals.EPISODE) {
-                int ct = agent.getCurrentTarget().getId();
-                agent.assignNextTargetState();
-                OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
-                        "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
-            }
-            //}
+
             return state;
         }
 
@@ -102,17 +101,6 @@ public class Router {
             return state;
         }
 
-     /*   // If there is not any states in the agent history, the nextSteps of agent have to be updated.
-        if (agent.getNextSteps().isEmpty()) {
-            //============================//============================//============================
-            //============================//============================
-            //============================
-            updateNextSteps(agent, targetState);
-            //============================
-            //============================//============================
-            //============================//============================//============================
-            statistics___.add_Itt_UpdatedNextStep();
-        }*/
 
         // If the nextSteps is empty after updating the nextSteps, the agent will go to one neighbor randomly.
         if (agent.getNextSteps().isEmpty()) {

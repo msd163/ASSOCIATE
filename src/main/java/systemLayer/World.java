@@ -11,6 +11,7 @@ import utils.Globals;
 import utils.ImageBuilder;
 import utils.ProjectPath;
 import utils.profiler.SimulationConfig;
+import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
 
 import javax.swing.*;
@@ -36,7 +37,9 @@ public class World {
 
     private Environment environment;
 
-    private WorldStatistics[] statistics;
+    private WorldStatistics[] wdStatistics;
+
+    private EpisodeStatistics[] epStatistics;
 
     private Router router;
 
@@ -117,13 +120,19 @@ public class World {
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
 
-        statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
-        for (i = 0; i < statistics.length; i++) {
+        wdStatistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
+        for (i = 0; i < wdStatistics.length; i++) {
             if (i == 0) {
-                statistics[i] = new WorldStatistics(null, agentsCount);
+                wdStatistics[i] = new WorldStatistics(null, agentsCount);
             } else {
-                statistics[i] = new WorldStatistics(statistics[i - 1], agentsCount);
+                wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount);
             }
+        }
+
+        int maxEpisodeCount = Math.max(environment.getProMax().getMaxAgentTargetCount(), Config.WORLD_LIFE_TIME / Config.EPISODE_TIMOUT);
+        epStatistics = new EpisodeStatistics[maxEpisodeCount];
+        for (i = 0; i < maxEpisodeCount; i++) {
+            epStatistics[i] = new EpisodeStatistics();
         }
 
         //============================//============================ Init trust matrix
@@ -244,7 +253,7 @@ public class World {
         }
 
         //============================ Initializing Diagram Drawing Windows
-        AnalysisOfTrustParamsDrawingWindow analysisOfTrustParamsDW = new AnalysisOfTrustParamsDrawingWindow(this);
+        StatsOfAnalysisOfTrustDrawingWindow analysisOfTrustParamsDW = new StatsOfAnalysisOfTrustDrawingWindow(this);
         analysisOfTrustParamsDW.setDoubleBuffered(true);
         analysisOfTrustParamsDW.setName("t_anl");
         if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
@@ -313,13 +322,17 @@ public class World {
          *            MAIN LOOP      *
          * ****************************/
 
+        epStatistics[0].setFromTime(Globals.WORLD_TIMER);
+
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
-            WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
-            statistic.setWorldTime(Globals.WORLD_TIMER);
-            statistic.init(Globals.EPISODE, agents);
-            router.setStatistics(statistic);
+            WorldStatistics wdStats = wdStatistics[Globals.WORLD_TIMER];
+            wdStats.setWorldTime(Globals.WORLD_TIMER);
+            wdStats.init(Globals.EPISODE, agents);
+
+
+            router.setStatistics(wdStats);
 
             if (Globals.WORLD_TIMER == 0 && Config.STATISTICS_IS_GENERATE) {
                 Globals.statsEnvGenerator.addComment(environment);
@@ -356,18 +369,18 @@ public class World {
             //============================//============================  updating full state statistics
             for (StateX state : environment.getStates()) {
                 if (state.isFullCapability()) {
-                    statistic.addFullStateCount();
+                    wdStats.addFullStateCount();
                 }
                 if (state.getTargets().size() == 0) {
-                    statistic.addStatesWithNoTarget();
+                    wdStats.addStatesWithNoTarget();
                 }
             }
 
-            matrixGenerator.update(statistic);
+            matrixGenerator.update(wdStats);
 
             if (Config.STATISTICS_IS_GENERATE) {
-                Globals.statsEnvGenerator.addStat(statistic);
-                Globals.statsTrustGenerator.addStat(statistic);
+                Globals.statsEnvGenerator.addStat(wdStats);
+                Globals.statsTrustGenerator.addStat(wdStats);
             }
             //============================//============================ Repainting
             updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
@@ -375,7 +388,14 @@ public class World {
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
-            if (Globals.WORLD_TIMER % Config.EPISODE_TIMOUT == 0 || statistic.getAllAgentsInTarget() + statistic.getAllAgentsInPitfall() == agentsCount) {
+            if ((Globals.WORLD_TIMER + 1) % Config.EPISODE_TIMOUT == 0 || wdStats.getAllAgentsInTarget() + wdStats.getAllAgentsInPitfall() == agentsCount) {
+
+
+                if (Globals.WORLD_TIMER > 0) {
+                    //-- updating episode statistics
+                    epStatistics[Globals.EPISODE].update(wdStatistics);
+                    epStatistics[Globals.EPISODE].setFromTime(Globals.WORLD_TIMER);
+                }
 
                 //-- Increasing Episode
                 Globals.EPISODE++;
@@ -455,7 +475,7 @@ public class World {
                                TrustMatrixDrawingWindow trustMatWindow,
                                StatsOfTrustDrawingWindow trustStatsWindow,
                                StatsOfFalsePoNeDrawingWindow poNeStatsWindow,
-                               AnalysisOfTrustParamsDrawingWindow paramsDrawingWindow,
+                               StatsOfAnalysisOfTrustDrawingWindow paramsDrawingWindow,
                                AgentTravelInfoDrawingWindow agentTravelInfoDW,
                                AgentTrustDataDrawingWindow agentTrustDW,
                                AgentRecommendationDrawingWindow agentRecommendationDataDW,
@@ -510,6 +530,11 @@ public class World {
                 ti + " | agentsCount=" + agentsCount;
     }
 
+    public String getDrawingTitle() {
+        return "E-Code: " + environment.getCode() + " | #Ags: " + agentsCount + " | #Sts: " + environment.getStateCount() +
+                " | " + simulator.getSimulationConfigBunch().getByIndex(Globals.SIMULATION_TIMER).getInfo();
+    }
+
     public String toString(int tabIndex) {
         tabIndex++;
         StringBuilder tx = new StringBuilder("\n");
@@ -546,8 +571,12 @@ public class World {
         this.environment = environment;
     }
 
-    public WorldStatistics[] getStatistics() {
-        return statistics;
+    public WorldStatistics[] getWdStatistics() {
+        return wdStatistics;
+    }
+
+    public EpisodeStatistics[] getEpStatistics() {
+        return epStatistics;
     }
 
     public List<Agent> getSortedAgentsByCapPower() {

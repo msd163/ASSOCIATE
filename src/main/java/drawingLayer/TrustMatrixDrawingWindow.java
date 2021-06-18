@@ -33,25 +33,10 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        g = (Graphics2D) gr;
-        g.setBackground(Color.BLACK);
-        g.clearRect(0, 0, getWidth(), getHeight());
-        pauseNotice(g);
-
-       /* g.setColor(Color.YELLOW);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
-        g.drawString(mousePosition.toString(), 100, 100);*/
-
-        //============================//============================//============================
-        //============================ Draw mouse plus
-        Point mousePoint = getMousePosition();
-        if (mousePoint != null) {
-            g.setColor(Color.WHITE);
-            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
-            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
-            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
-            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
+        if (!mainPaint(gr, "Trust Matrix")) {
+            return;
         }
+
 
         int pnScl_x = pnOffset.x + scaleOffset.x;
         int pnScl_y = pnOffset.y + scaleOffset.y;
@@ -135,7 +120,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             g.setColor(Color.CYAN);
             g.fillRect(i * 5, pnY - td[1] - 10, 5, td[1]);
             g.setColor(Color.RED);
-            g.fillRect(i * 5 , pnY - td[1]- td[2] - 10, 5, td[2]);
+            g.fillRect(i * 5, pnY - td[1] - td[2] - 10, 5, td[2]);
         }
 
         //============================//============================ Drawing fixed texts of coordination

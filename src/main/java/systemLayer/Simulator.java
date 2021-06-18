@@ -22,6 +22,10 @@ public class Simulator {
     private Environment loadedEnvironmentFromJson;
     private SimulationConfigBunch simulationConfigBunch;
 
+    public SimulationConfigBunch getSimulationConfigBunch() {
+        return simulationConfigBunch;
+    }
+
     //============================//============================
 
     private FileReader envReader;

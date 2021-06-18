@@ -24,6 +24,8 @@ public class EnvironmentProfilerMaxParams {
     private int maxTravelHistoryCap = 0;
     @Expose
     private int maxObservationCap = 0;
+    @Expose
+    private int maxAgentTargetCount = 0;
 
     //============================//============================//============================
 
@@ -89,5 +91,13 @@ public class EnvironmentProfilerMaxParams {
 
     public void setMaxObservationCap(int maxObservationCap) {
         this.maxObservationCap = maxObservationCap;
+    }
+
+    public int getMaxAgentTargetCount() {
+        return maxAgentTargetCount;
+    }
+
+    public void setMaxAgentTargetCount(int maxAgentTargetCount) {
+        this.maxAgentTargetCount = maxAgentTargetCount;
     }
 }

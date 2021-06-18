@@ -1,11 +1,11 @@
 {
-  "simulationRound": 7,
+  "simulationRound": 1,
   "configs": [
     {
-      "method": 0,
+      "method": 4,
       "isUseTrustObservation": true,
-      "trustForgottenCoeff": 1.0,
-      "trustRecommendationCoeff": 1.0
+      "trustForgottenCoeff": 0.9,
+      "trustRecommendationCoeff": 0.5
     },
     {
       "method": 2,

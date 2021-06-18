@@ -15,7 +15,7 @@ public class ImageBuilder {
                                          TrustMatrixDrawingWindow trustMatrixWindow,
                                          StatsOfTrustDrawingWindow trustStatsWindow,
                                          StatsOfFalsePoNeDrawingWindow poNeStatsWindow,
-                                         AnalysisOfTrustParamsDrawingWindow trustParamsDrawingWindow,
+                                         StatsOfAnalysisOfTrustDrawingWindow trustParamsDrawingWindow,
                                          AgentObservationDrawingWindow agentObservationDrawingWindow,
                                          AgentRecommendationDrawingWindow agentRecommendationDrawingWindow,
                                          AgentTravelInfoDrawingWindow agentTravelInfoDrawingWindow,

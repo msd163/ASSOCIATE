@@ -20,6 +20,7 @@ public class Globals {
         public static int maxWatchDepth = 0;
         public static int maxTravelHistoryCap = 0;
         public static int maxObservationCap = 0;
+        public static int maxAgentTargetCount = 0;
     }
 
     public static class Color$ {

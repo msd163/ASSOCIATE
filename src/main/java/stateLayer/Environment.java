@@ -258,6 +258,7 @@ public class Environment {
         proMax.setMaxWatchDepth(Globals.ProfileBunchMax.maxWatchDepth);
         proMax.setMaxTravelHistoryCap(Globals.ProfileBunchMax.maxTravelHistoryCap);
         proMax.setMaxObservationCap(Globals.ProfileBunchMax.maxObservationCap);
+        proMax.setMaxAgentTargetCount(Globals.ProfileBunchMax.maxAgentTargetCount);
     }
 
     //============================//============================

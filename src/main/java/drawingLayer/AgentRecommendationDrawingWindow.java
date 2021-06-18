@@ -21,51 +21,16 @@ public class AgentRecommendationDrawingWindow extends DrawingWindow {
         axisY = world.getAgentsCount() * 21;
     }
 
-    private int worldTimer;
-
     @Override
     public void paint(Graphics gr) {
 
-        worldTimer = Globals.WORLD_TIMER - 1;
-
-        if (worldTimer < 0) {
+        if (!mainPaint(gr,world.getDrawingTitle())) {
             return;
         }
-
-        g = (Graphics2D) gr;
-        g.setBackground(Color.BLACK);
-        g.clearRect(0, 0, getWidth(), getHeight());
-        pauseNotice(g);
-
-
-        //============================//============================ Translate for panning and scaling
-
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-
-        g.setColor(Color.GREEN);
-        g.drawString("Simulation Timer            : " + Globals.SIMULATION_TIMER, 100, 50);
-        g.drawString("Recommendation History Capacity and Current Size", 500, 50);
-
-
-        g.setColor(Color.YELLOW);
-        g.drawString("World Time                : " + worldTimer, 100, 100);
-        g.drawString("Episode                    : " + Globals.EPISODE, 100, 140);
+        printStatsInfo(1, "Recommendation History Capacity and Current Size", Color.cyan);
+        normalizeCoordination();
 
         //============================//============================//============================
-        //============================ Draw mouse plus
-        Point mousePoint = getMousePosition();
-        if (mousePoint != null) {
-            g.setColor(Color.WHITE);
-            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
-            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
-            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
-            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
-        }
-
-        //============================ Translate
-        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
-        g.scale(scale, scale);
-        g.translate(200, 300);
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
         List<Agent> agents = world.getSortedAgentsByCapPower();
