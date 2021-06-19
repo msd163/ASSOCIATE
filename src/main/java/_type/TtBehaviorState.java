@@ -4,7 +4,7 @@ public enum TtBehaviorState {
     Honest,
     Adversary,
     Mischief,
-    IntelligentAdversary,
+    Hypocrite,
     ;
 
     public static TtBehaviorState getByOrdinal(int ordinal) {

@@ -65,7 +65,7 @@ public class Environment {
     @Expose
     private int honestCount;                                // Only for generating environment-x.json file
     @Expose
-    private int intelligentAdversaryCount;                   // Only for generating environment-x.json file
+    private int hypocriteCount;                   // Only for generating environment-x.json file
     @Expose
     private int mischiefCount;                                // Only for generating environment-x.json file
 
@@ -205,15 +205,15 @@ public class Environment {
                 = mischiefCount
                 = honestCount
                 = adversaryCount
-                = intelligentAdversaryCount = 0;
+                = hypocriteCount = 0;
 
         for (StateX state : states) {
             if (state.getAgents() != null) {
                 agentsCount += state.getAgents().size();
                 for (Agent agent : state.getAgents()) {
                     agent.updateProfile();
-                    if (agent.getBehavior().getHasIntelligentAdversaryState()) {
-                        intelligentAdversaryCount++;
+                    if (agent.getBehavior().getHasHypocriteState()) {
+                        hypocriteCount++;
                     } else if (agent.getBehavior().getHasHonestState()) {
                         honestCount++;
                     } else if (agent.getBehavior().getHasAdversaryState()) {
@@ -283,8 +283,8 @@ public class Environment {
         return adversaryCount;
     }
 
-    public int getIntelligentAdversaryCount() {
-        return intelligentAdversaryCount;
+    public int getHypocriteCount() {
+        return hypocriteCount;
     }
 
     public int getMischiefCount() {

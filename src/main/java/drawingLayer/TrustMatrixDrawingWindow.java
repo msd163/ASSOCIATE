@@ -80,7 +80,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
                         trusteeData[col][2]++;
                         g.setColor(Color.WHITE);
                         g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
-                    } else if (agentInCol.getBehavior().getHasIntelligentAdversaryState()) {
+                    } else if (agentInCol.getBehavior().getHasHypocriteState()) {
                         trusteeData[col][2]++;
                         g.setColor(Color.MAGENTA);
                         g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);

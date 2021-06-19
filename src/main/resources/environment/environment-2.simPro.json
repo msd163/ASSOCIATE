@@ -25,7 +25,7 @@
         "honestPercent": 97,
         "adversaryPercent": 1,
         "mischiefPercent": 0,
-        "intelligentAdversary": {
+        "hypocrite": {
           "honestPercent": 50,
           "adversaryPercent": 40,
           "mischiefPercent": 10
@@ -48,7 +48,7 @@
         "honestPercent": 94,
         "adversaryPercent": 3,
         "mischiefPercent": 2,
-        "intelligentAdversary": {
+        "hypocrite": {
           "honestPercent": 40,
           "adversaryPercent": 30,
           "mischiefPercent": 30
@@ -71,7 +71,7 @@
         "honestPercent": 90,
         "adversaryPercent": 2,
         "mischiefPercent": 8,
-        "intelligentAdversary": {
+        "hypocrite": {
           "honestPercent": 50,
           "adversaryPercent": 30,
           "mischiefPercent": 20

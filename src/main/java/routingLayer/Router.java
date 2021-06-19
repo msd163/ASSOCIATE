@@ -292,8 +292,8 @@ public class Router {
             statistics___.add_Itt_TrustToHonest();
         } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
             statistics___.add_Itt_TrustToAdversary();
-        } else if (help.getHelperAgent().getBehavior().getHasIntelligentAdversaryState()) {
-            statistics___.add_Itt_TrustToIntelligentAdversary();
+        } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
+            statistics___.add_Itt_TrustToHypocrite();
         } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
             statistics___.add_Itt_TrustToMischief();
         }

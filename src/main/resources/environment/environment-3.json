@@ -21,7 +21,7 @@
   "agentsCount": 200,
   "adversaryCount": 6,
   "honestCount": 186,
-  "intelligentAdversaryCount": 0,
+  "hypocriteCount": 0,
   "mischiefCount": 8,
   "_C3": "______________________________",
   "states": [

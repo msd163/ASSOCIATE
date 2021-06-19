@@ -5,8 +5,7 @@ public class PopulationBunchBehaviorParam {
     private int honestPercent;                                   // Only honest agents percentage. these agents navigate others to correct targets.
     private int adversaryPercent;                                // only dishonest and adversary percentage. these agents navigate others to pitfalls.
     private int mischiefPercent;                                 // only mischief percentage. these agents navigate others to a random target, not correct targets.
-    private IntelligentAdversaryBehavior intelligentAdversary;      // an intelligent adversary agent that
-
+    private PopulationBunchHypocriteBehavior hypocriteBehavior;      // an hypocrite agent that
     //============================//============================
 
     public int getHonestPercent() {
@@ -33,11 +32,11 @@ public class PopulationBunchBehaviorParam {
         this.mischiefPercent = mischiefPercent;
     }
 
-    public IntelligentAdversaryBehavior getIntelligentAdversary() {
-        return intelligentAdversary;
+    public PopulationBunchHypocriteBehavior getHypocriteBehavior() {
+        return hypocriteBehavior;
     }
 
-    public void setIntelligentAdversary(IntelligentAdversaryBehavior intelligentAdversary) {
-        this.intelligentAdversary = intelligentAdversary;
+    public void setHypocriteBehavior(PopulationBunchHypocriteBehavior hypocriteBehavior) {
+        this.hypocriteBehavior = hypocriteBehavior;
     }
 }

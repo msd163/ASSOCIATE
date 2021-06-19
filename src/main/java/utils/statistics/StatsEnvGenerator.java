@@ -52,7 +52,7 @@ public class StatsEnvGenerator {
                     + ", Agents: " + environment.getAgentsCount()
                     + ", Honest: " + environment.getHonestCount()
                     + ", Adversary: " + environment.getAdversaryCount()
-                    + ", Int.Adversary: " + environment.getIntelligentAdversaryCount()
+                    + ", Int.Adversary: " + environment.getHypocriteCount()
                     + ", Mischief: " + environment.getMischiefCount()
                     + "\n");
             writer.flush();

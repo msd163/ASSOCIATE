@@ -2,7 +2,7 @@ package utils.profiler;
 
 import com.google.gson.annotations.Expose;
 
-public class IntelligentAdversaryBehavior {
+public class PopulationBunchHypocriteBehavior {
 
     @Expose
     private int honestPercent;          // Only honest agents percentage. these agents navigate others to correct targets.

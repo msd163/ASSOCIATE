@@ -22,7 +22,7 @@
   "agentsCount": 200,
   "adversaryCount": 4,
   "honestCount": 185,
-  "intelligentAdversaryCount": 3,
+  "hypocriteCount": 3,
   "mischiefCount": 8,
   "_C3": "______________________________",
   "states": [
@@ -10979,7 +10979,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -24391,7 +24391,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -37780,7 +37780,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,

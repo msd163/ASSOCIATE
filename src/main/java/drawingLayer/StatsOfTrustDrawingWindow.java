@@ -33,7 +33,7 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
 
         printStatsInfo(1, "All Trust To HONEST", world.getWdStatistics()[worldTimer].getAllTrustToHonest(), Color.GREEN);
         printStatsInfo(2, "All Trust To Adversary", world.getWdStatistics()[worldTimer].getAllTrustToAdversary(), Color.RED);
-        printStatsInfo(3, "All Trust To Int.Adversary", world.getWdStatistics()[worldTimer].getAllTrustToIntelligentAdversary(), Color.MAGENTA);
+        printStatsInfo(3, "All Trust To Int.Adversary", world.getWdStatistics()[worldTimer].getAllTrustToHypocrite(), Color.MAGENTA);
         printStatsInfo(4, "All Trust To Mischief", world.getWdStatistics()[worldTimer].getAllTrustToMischief(), Color.WHITE);
 
         reverseNormalizeCoordination();
@@ -49,7 +49,7 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
                 axisX += 8;
                 prevPoints[0].y = stat.getAllTrustToMischief();
                 prevPoints[1].y = stat.getAllTrustToHonest();
-                prevPoints[2].y = stat.getAllTrustToIntelligentAdversary();
+                prevPoints[2].y = stat.getAllTrustToHypocrite();
                 prevPoints[3].y = stat.getAllTrustToAdversary();
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
 
@@ -57,7 +57,7 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
 
                 prevPoints[0].y = statistics[i - 1].getAllTrustToMischief();
                 prevPoints[1].y = statistics[i - 1].getAllTrustToHonest();
-                prevPoints[2].y = statistics[i - 1].getAllTrustToIntelligentAdversary();
+                prevPoints[2].y = statistics[i - 1].getAllTrustToHypocrite();
                 prevPoints[3].y = statistics[i - 1].getAllTrustToAdversary();
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x  = prevPoints[3].x = axisX;
                 axisX += 8;
@@ -69,8 +69,8 @@ public class StatsOfTrustDrawingWindow extends DrawingWindow {
             drawCurve(axisX, stat.getAllTrustToHonest(), Color.GREEN, 2, i);
             g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getAllTrustToHonest());
 
-            drawCurve(axisX, stat.getAllTrustToIntelligentAdversary(), Color.MAGENTA, 3, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getAllTrustToIntelligentAdversary());
+            drawCurve(axisX, stat.getAllTrustToHypocrite(), Color.MAGENTA, 3, i);
+            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getAllTrustToHypocrite());
 
             drawCurve(axisX, stat.getAllTrustToAdversary(), Color.RED, 4, i);
             g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getAllTrustToAdversary());

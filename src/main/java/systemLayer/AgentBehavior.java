@@ -3,7 +3,7 @@ package systemLayer;
 import _type.TtBehaviorState;
 import com.google.gson.annotations.Expose;
 import utils.Globals;
-import utils.profiler.IntelligentAdversaryBehavior;
+import utils.profiler.PopulationBunchHypocriteBehavior;
 import utils.profiler.PopulationBunchBehaviorParam;
 
 public class AgentBehavior {
@@ -19,8 +19,8 @@ public class AgentBehavior {
         } else if (rand < behavior.getMischiefPercent() + behavior.getAdversaryPercent() + behavior.getHonestPercent()) {
             behaviorState = TtBehaviorState.Honest;
         } else {
-            behaviorState = TtBehaviorState.IntelligentAdversary;
-            adversaryBehavior = behavior.getIntelligentAdversary();
+            behaviorState = TtBehaviorState.Hypocrite;
+            adversaryBehavior = behavior.getHypocriteBehavior();
         }
         updateBehaviorState();
     }
@@ -33,7 +33,7 @@ public class AgentBehavior {
     private TtBehaviorState currentBehaviorState;
 
     @Expose
-    private IntelligentAdversaryBehavior adversaryBehavior;
+    private PopulationBunchHypocriteBehavior adversaryBehavior;
 
     public TtBehaviorState getBehaviorState() {
         return behaviorState;
@@ -47,8 +47,8 @@ public class AgentBehavior {
         return behaviorState == TtBehaviorState.Adversary;
     }
 
-    public boolean getHasIntelligentAdversaryState() {
-        return behaviorState == TtBehaviorState.IntelligentAdversary;
+    public boolean getHasHypocriteState() {
+        return behaviorState == TtBehaviorState.Hypocrite;
     }
 
     public boolean getHasMischief() {
@@ -61,7 +61,7 @@ public class AgentBehavior {
 
     //============================//============================//============================
     public TtBehaviorState updateBehaviorState() {
-        if (behaviorState == TtBehaviorState.IntelligentAdversary) {
+        if (behaviorState == TtBehaviorState.Hypocrite) {
             int rand = Globals.RANDOM.nextInt(100);
 
             if (rand < adversaryBehavior.getAdversaryPercent()) {

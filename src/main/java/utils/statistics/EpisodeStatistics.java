@@ -15,7 +15,7 @@ public class EpisodeStatistics {
     //============================
     private int midTrustToHonest;                   // mid agents that trust to a 'honest' agent
     private int midTrustToAdversary;                // mid agents that trust to a 'adversary' agent
-    private int midTrustToIntelligentAdversary;     // mid agents that trust to a 'int.adversary' agent
+    private int midTrustToHypocrite;     // mid agents that trust to a 'int.adversary' agent
     private int midTrustToMischief;                 // mid agents that trust to a 'mischief' agent
 
     // ============================
@@ -58,7 +58,7 @@ public class EpisodeStatistics {
 
                 = midTrustToAdversary
                 = midTrustToHonest
-                = midTrustToIntelligentAdversary
+                = midTrustToHypocrite
                 = midTrustToMischief
                 = 0;
     }
@@ -151,8 +151,8 @@ public class EpisodeStatistics {
         return midTrustToAdversary;
     }
 
-    public int getMidTrustToIntelligentAdversary() {
-        return midTrustToIntelligentAdversary;
+    public int getMidTrustToHypocrite() {
+        return midTrustToHypocrite;
     }
 
     public int getMidTrustToMischief() {

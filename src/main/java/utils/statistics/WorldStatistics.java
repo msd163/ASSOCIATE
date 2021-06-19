@@ -26,12 +26,12 @@ public class WorldStatistics {
     //============================
     private int allTrustToHonest;                   // all agents that trust to a 'honest' agent
     private int allTrustToAdversary;                // all agents that trust to a 'adversary' agent
-    private int allTrustToIntelligentAdversary;     // all agents that trust to a 'int.adversary' agent
+    private int allTrustToHypocrite;     // all agents that trust to a 'int.adversary' agent
     private int allTrustToMischief;                 // all agents that trust to a 'mischief' agent
 
     private int ittTrustToHonest;                   // agents that trust to a 'honest' agent in this time
     private int ittTrustToAdversary;                // agents that trust to a 'dishonest' agent in this time
-    private int ittTrustToIntelligentAdversary;     // agents that trust to a 'int.adversary' agent
+    private int ittTrustToHypocrite;     // agents that trust to a 'int.adversary' agent
     private int ittTrustToMischief;                 // agents that trust to a 'mischief' agent
 
     // ============================
@@ -91,14 +91,14 @@ public class WorldStatistics {
         if (prevStats != null && prevStats.episode == episode) {
             allTrustToHonest = prevStats.getAllTrustToHonest();
             allTrustToAdversary = prevStats.getAllTrustToAdversary();
-            allTrustToIntelligentAdversary = prevStats.getAllTrustToIntelligentAdversary();
+            allTrustToHypocrite = prevStats.getAllTrustToHypocrite();
             allTrustToMischief = prevStats.getAllTrustToMischief();
 
         } else {
 
             allTrustToAdversary
                     = allTrustToHonest
-                    = allTrustToIntelligentAdversary
+                    = allTrustToHypocrite
                     = allTrustToMischief
                     = 0;
 
@@ -163,9 +163,9 @@ public class WorldStatistics {
         allTrustToAdversary++;
     }
 
-    public void add_Itt_TrustToIntelligentAdversary() {
-        ittTrustToIntelligentAdversary++;
-        allTrustToIntelligentAdversary++;
+    public void add_Itt_TrustToHypocrite() {
+        ittTrustToHypocrite++;
+        allTrustToHypocrite++;
     }
 
     public void add_Itt_TrustToMischief() {
@@ -352,12 +352,12 @@ public class WorldStatistics {
         return allTrustToMischief;
     }
 
-    public int getAllTrustToIntelligentAdversary() {
-        return allTrustToIntelligentAdversary;
+    public int getAllTrustToHypocrite() {
+        return allTrustToHypocrite;
     }
 
-    public int getIttTrustToIntelligentAdversary() {
-        return ittTrustToIntelligentAdversary;
+    public int getIttTrustToHypocrite() {
+        return ittTrustToHypocrite;
     }
 
     public int getIttTrustToMischief() {

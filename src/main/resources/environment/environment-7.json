@@ -22,7 +22,7 @@
   "agentsCount": 1000,
   "adversaryCount": 26,
   "honestCount": 927,
-  "intelligentAdversaryCount": 15,
+  "hypocriteCount": 15,
   "mischiefCount": 32,
   "_C3": "______________________________",
   "states": [
@@ -29428,7 +29428,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -33222,7 +33222,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -36572,7 +36572,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -58850,7 +58850,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -117614,7 +117614,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -122749,7 +122749,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -125874,7 +125874,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -132329,7 +132329,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -142126,7 +142126,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -197543,7 +197543,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -197992,7 +197992,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -202681,7 +202681,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,
@@ -204462,7 +204462,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -205366,7 +205366,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 50,
               "adversaryPercent": 40,
@@ -207369,7 +207369,7 @@
             "trustReplaceHistoryMethod": "RemoveLastUpdated"
           },
           "behavior": {
-            "behaviorState": "IntelligentAdversary",
+            "behaviorState": "Hypocrite",
             "adversaryBehavior": {
               "honestPercent": 40,
               "adversaryPercent": 30,

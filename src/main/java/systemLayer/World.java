@@ -4,6 +4,7 @@ import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import drawingLayer.*;
 import routingLayer.Router;
+import simulateLayer.Simulator;
 import stateLayer.Environment;
 import stateLayer.StateX;
 import trustLayer.TrustManager;

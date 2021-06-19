@@ -46,7 +46,7 @@ public class Globals {
                     return lightRed;
                 case Mischief:
                     return lightGray;
-                case IntelligentAdversary:
+                case Hypocrite:
                     return lightMagenta;
                 default:
                     return lightYellow;
@@ -61,7 +61,7 @@ public class Globals {
                     return red;
                 case Mischief:
                     return gray;
-                case IntelligentAdversary:
+                case Hypocrite:
                     return magenta;
                 default:
                     return yellow;

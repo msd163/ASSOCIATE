@@ -1,10 +1,11 @@
-package systemLayer;
+package simulateLayer;
 
 import com.google.gson.Gson;
 import drawingLayer.DrawingWindow;
 import drawingLayer.integrated.IntAnalysisOfTrustDrawingWindow;
 import drawingLayer.integrated.IntStatsOfEnvDrawingWindow;
 import stateLayer.Environment;
+import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.ImageBuilder;
