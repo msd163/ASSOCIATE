@@ -5,7 +5,7 @@ import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
-import utils.profiler.SimulationConfigBunch;
+import utils.profiler.SimulationConfig;
 import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
 
@@ -14,11 +14,11 @@ import java.awt.*;
 public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
     private World worlds[];
-    private SimulationConfigBunch configBunch;
+    private SimulationConfig configBunch;
 
     //============================//============================  panning params
 
-    public IntAnalysisOfTrustDrawingWindow(World worlds[], SimulationConfigBunch configBunch) {
+    public IntAnalysisOfTrustDrawingWindow(World worlds[], SimulationConfig configBunch) {
         super();
         this.worlds = worlds;
         this.configBunch = configBunch;

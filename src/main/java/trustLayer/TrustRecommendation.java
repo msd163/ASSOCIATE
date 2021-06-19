@@ -1,9 +1,8 @@
 package trustLayer;
 
 import systemLayer.Agent;
-import utils.Config;
 import utils.Globals;
-import utils.profiler.SimulationConfig;
+import utils.profiler.SimulationConfigItem;
 
 import java.util.ArrayList;
 
@@ -57,8 +56,8 @@ public class TrustRecommendation {
     }
 
     public float getFinalRecommendedTrustLevel() {
-        SimulationConfig simulationConfig = master.getWorld().getSimulationConfig();
-        if (simulationConfig.isUseTrustForgottenCoeff()) {
+        SimulationConfigItem simulationConfigItem = master.getWorld().getSimulationConfig();
+        if (simulationConfigItem.isUseTrustForgottenCoeff()) {
             //-- For preventing stack over flow problem and unlimited loop
             if (finalTrustLevelUpdateTime == Globals.WORLD_TIMER) {
                 return finalTrustLevel;
@@ -70,7 +69,7 @@ public class TrustRecommendation {
                 //-- If recommender identified as an honest agent...
                 if (recommenderTrustLevel > 0) {
                     //todo: has a bug! item.getRecommendedTrustLevel() has to be a proportion of a whole
-                    finalTrustLevel += item.getRecommendedTrustLevel() * Math.pow(simulationConfig.getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getRecommendTime());
+                    finalTrustLevel += item.getRecommendedTrustLevel() * Math.pow(simulationConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getRecommendTime());
                 }
             }
             return finalTrustLevel;

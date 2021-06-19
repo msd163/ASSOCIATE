@@ -9,7 +9,7 @@ import stateLayer.StateX;
 import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
 import utils.*;
-import utils.profiler.SimulationConfig;
+import utils.profiler.SimulationConfigItem;
 import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
 
@@ -20,9 +20,9 @@ import java.util.List;
 
 public class World {
 
-    public World(Simulator simulator, SimulationConfig simulationConfig) {
+    public World(Simulator simulator, SimulationConfigItem simulationConfigItem) {
         this.simulator = simulator;
-        this.simulationConfig = simulationConfig;
+        this.simulationConfigItem = simulationConfigItem;
     }
 
     private Simulator simulator;
@@ -44,7 +44,7 @@ public class World {
 
     TrustMatrix matrixGenerator = new TrustMatrix();
 
-    private SimulationConfig simulationConfig;
+    private SimulationConfigItem simulationConfigItem;
 
     private TrustManager trustManager;
 
@@ -59,7 +59,7 @@ public class World {
 
 
         //============================//============================
-        trustManager = new TrustManager(simulationConfig);
+        trustManager = new TrustManager(simulationConfigItem);
 
         router = new Router(this);
         //============================ Setting agents count
@@ -356,7 +356,7 @@ public class World {
             }
 
             //============================//============================ Observation
-            if (simulationConfig.isIsUseTrustObservation()) {
+            if (simulationConfigItem.isIsUseTrustObservation()) {
                 for (Agent agent : agents) {
                     if (agent.getCapacity().getObservationCap() > 0) {
                         trustManager.observe(agent);
@@ -569,8 +569,8 @@ public class World {
         return sortedAgentsByCapPower;
     }
 
-    public SimulationConfig getSimulationConfig() {
-        return simulationConfig;
+    public SimulationConfigItem getSimulationConfig() {
+        return simulationConfigItem;
     }
 
     public TrustManager getTrustManager() {

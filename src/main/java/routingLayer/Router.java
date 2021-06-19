@@ -14,7 +14,7 @@ import systemLayer.World;
 import trustLayer.TrustManager;
 import utils.Globals;
 import utils.OutLog____;
-import utils.profiler.SimulationConfig;
+import utils.profiler.SimulationConfigItem;
 import utils.statistics.WorldStatistics;
 
 import java.util.ArrayList;
@@ -179,9 +179,9 @@ public class Router {
             return;
         }
 
-        SimulationConfig simulationConfig = world.getSimulationConfig();
+        SimulationConfigItem simulationConfigItem = world.getSimulationConfig();
 
-        if (simulationConfig.getTtMethod() == TtTrustMethodology.FullyRandomly) {
+        if (simulationConfigItem.getTtMethod() == TtTrustMethodology.FullyRandomly) {
             return;
         }
 
@@ -238,13 +238,13 @@ public class Router {
         //todo: Implementing trust mechanism
 
         List<RoutingHelp> sortedRoutingHelps = routingHelps;
-        switch (simulationConfig.getTtMethod()) {
+        switch (simulationConfigItem.getTtMethod()) {
 
             case TrustMode_ShortPath:
                 sortedRoutingHelps = basicTrustMechanism(agent, goalState, routingHelps);
                 if (sortedRoutingHelps == null) return;
 
-                if (simulationConfig.isIsUseTrustObservation()) {
+                if (simulationConfigItem.isIsUseTrustObservation()) {
                     sortedRoutingHelps = refineByObservation(agent, sortedRoutingHelps);
                 }
 
@@ -283,7 +283,7 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
-        if (simulationConfig.isUseTrustRecommendation()) {
+        if (simulationConfigItem.isUseTrustRecommendation()) {
             trustManager.shareRecommendation(agent, help.getHelperAgent());
             trustManager.shareRecommendation(help.getHelperAgent(), agent);
         }

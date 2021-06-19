@@ -9,7 +9,7 @@ import utils.Config;
 import utils.Globals;
 import utils.ImageBuilder;
 import utils.ProjectPath;
-import utils.profiler.SimulationConfigBunch;
+import utils.profiler.SimulationConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,10 +23,10 @@ public class Simulator {
 
     private World[] worlds;
     private Environment loadedEnvironmentFromJson;
-    private SimulationConfigBunch simulationConfigBunch;
+    private SimulationConfig simulationConfig;
 
-    public SimulationConfigBunch getSimulationConfigBunch() {
-        return simulationConfigBunch;
+    public SimulationConfig getSimulationConfigBunch() {
+        return simulationConfig;
     }
 
     //============================//============================
@@ -34,7 +34,7 @@ public class Simulator {
     private FileReader envReader;
     private Gson gson = new Gson();
 
-    //============================//============================
+    //============================//============================ Drawing Windows
 
     private IntStatsOfEnvDrawingWindow intStatsOfEnvDW;
     private IntAnalysisOfTrustDrawingWindow intAnalysisOfTrustDW;
@@ -56,9 +56,9 @@ public class Simulator {
 
         //============================//============================ Loading Simulation Config file from file
         envReader = new FileReader(Config.SimulationConfigFilePath);
-        simulationConfigBunch = gson.fromJson(envReader, SimulationConfigBunch.class);
+        simulationConfig = gson.fromJson(envReader, SimulationConfig.class);
 
-        if (simulationConfigBunch == null) {
+        if (simulationConfig == null) {
             System.out.println(">> Simulator.init");
             System.out.println("> Error: simulation config file not found.");
             return;
@@ -66,14 +66,13 @@ public class Simulator {
 
         System.out.println("> Simulation Config file loaded from file.");
 
-        //============================ Initializing worlds
-        Globals.SIMULATION_ROUND = simulationConfigBunch.getSimulationRound();
+        //============================//============================ Initializing worlds
+        Globals.SIMULATION_ROUND = simulationConfig.getSimulationRound();
         worlds = new World[Globals.SIMULATION_ROUND];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
-            worlds[i] = new World(this, simulationConfigBunch.getNextConfig());
+            worlds[i] = new World(this, simulationConfig.getNextConfig());
         }
-
 
         //============================//============================ Initializing statistics report file
         if (Config.STATISTICS_IS_GENERATE) {
@@ -97,7 +96,7 @@ public class Simulator {
         }
     }
 
-    private void reInit() throws FileNotFoundException {
+    private void reloadEnvironmentFromFile() throws FileNotFoundException {
 
         envReader = new FileReader(Config.EnvironmentDataFilePath);
         loadedEnvironmentFromJson = gson.fromJson(envReader, Environment.class);
@@ -129,28 +128,25 @@ public class Simulator {
             return;
         }
 
-
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        double height = screenSize.getHeight();
-        int widthHalf = (int) width / 2;
-        int heightHalf = (int) height / 2;
+        int widthHalf = (int) screenSize.getWidth() / 2;
+        int heightHalf = (int) screenSize.getHeight() / 2;
 
         //============================ Initializing Diagram Drawing Windows
         if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
-            intStatsOfEnvDW = new IntStatsOfEnvDrawingWindow(worlds, simulationConfigBunch);
+            intStatsOfEnvDW = new IntStatsOfEnvDrawingWindow(worlds, simulationConfig);
             initDrawingWindow(intStatsOfEnvDW, widthHalf, heightHalf, "int_s_env", "Integrated Environment Statistics");
         }
 
         if (Config.INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
-            intAnalysisOfTrustDW = new IntAnalysisOfTrustDrawingWindow(worlds, simulationConfigBunch);
-            initDrawingWindow(intAnalysisOfTrustDW, widthHalf, heightHalf, "int_anl", "Integrated Analysis of Trust (Acc|Sens|Spec)");
+            intAnalysisOfTrustDW = new IntAnalysisOfTrustDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intAnalysisOfTrustDW, widthHalf, heightHalf, "int_t_anl", "Integrated Analysis of Trust (Acc|Sens|Spec)");
         }
 
 
         for (World world : worlds) {
             if (Globals.SIMULATION_TIMER > 0) {
-                reInit();
+                reloadEnvironmentFromFile();
             }
             Globals.reset();
             world.init(loadedEnvironmentFromJson);
@@ -163,12 +159,12 @@ public class Simulator {
 
         Globals.SIMULATION_TIMER--;
         new ImageBuilder().generateSimulationImages(intStatsOfEnvDW, intAnalysisOfTrustDW);
+
         //============================//============================ Closing statistics file
         if (Config.STATISTICS_IS_GENERATE) {
             Globals.statsEnvGenerator.close();
             Globals.statsTrustGenerator.close();
         }
-
     }
 
     private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf, String name, String title) {

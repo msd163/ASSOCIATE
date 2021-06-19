@@ -5,7 +5,7 @@ import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
-import utils.profiler.SimulationConfigBunch;
+import utils.profiler.SimulationConfig;
 import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
 
@@ -14,11 +14,11 @@ import java.awt.*;
 public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
 
     private World worlds[];
-    private SimulationConfigBunch configBunch;
+    private SimulationConfig configBunch;
 
     //============================//============================  panning params
 
-    public IntStatsOfEnvDrawingWindow(World worlds[], SimulationConfigBunch configBunch) {
+    public IntStatsOfEnvDrawingWindow(World worlds[], SimulationConfig configBunch) {
         super();
         this.worlds = worlds;
         this.configBunch = configBunch;
