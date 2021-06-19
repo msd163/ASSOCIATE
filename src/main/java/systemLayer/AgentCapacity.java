@@ -2,7 +2,7 @@ package systemLayer;
 
 import com.google.gson.annotations.Expose;
 import utils.Globals;
-import utils.profiler.SimulationProfiler;
+import simulateLayer.profiler.SimulationProfiler;
 
 public class AgentCapacity {
 

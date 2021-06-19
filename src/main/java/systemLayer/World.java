@@ -10,7 +10,7 @@ import stateLayer.StateX;
 import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
 import utils.*;
-import utils.profiler.SimulationConfigItem;
+import simulateLayer.SimulationConfigItem;
 import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
 
@@ -29,6 +29,7 @@ public class World {
     private Simulator simulator;
 
     private Agent[] agents;
+
     private List<Agent> sortedAgentsByCapPower;
 
     private int agentsCount;

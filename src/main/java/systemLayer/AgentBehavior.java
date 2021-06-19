@@ -3,8 +3,8 @@ package systemLayer;
 import _type.TtBehaviorState;
 import com.google.gson.annotations.Expose;
 import utils.Globals;
-import utils.profiler.PopulationBunchHypocriteBehavior;
-import utils.profiler.PopulationBunchBehaviorParam;
+import simulateLayer.profiler.PopulationBunchHypocriteBehavior;
+import simulateLayer.profiler.PopulationBunchBehaviorParam;
 
 public class AgentBehavior {
 

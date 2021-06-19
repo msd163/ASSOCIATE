@@ -1,4 +1,4 @@
-package utils.profiler;
+package utils;
 
 import _type.TtParamType;
 import static utils.Globals.RANDOM;

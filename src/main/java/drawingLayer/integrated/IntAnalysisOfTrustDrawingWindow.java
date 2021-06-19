@@ -5,7 +5,7 @@ import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
-import utils.profiler.SimulationConfig;
+import simulateLayer.SimulationConfig;
 import utils.statistics.EpisodeStatistics;
 import utils.statistics.WorldStatistics;
 

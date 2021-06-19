@@ -14,7 +14,7 @@ import systemLayer.World;
 import trustLayer.TrustManager;
 import utils.Globals;
 import utils.OutLog____;
-import utils.profiler.SimulationConfigItem;
+import simulateLayer.SimulationConfigItem;
 import utils.statistics.WorldStatistics;
 
 import java.util.ArrayList;

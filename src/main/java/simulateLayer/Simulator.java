@@ -10,7 +10,6 @@ import utils.Config;
 import utils.Globals;
 import utils.ImageBuilder;
 import utils.ProjectPath;
-import utils.profiler.SimulationConfig;
 
 import javax.swing.*;
 import java.awt.*;

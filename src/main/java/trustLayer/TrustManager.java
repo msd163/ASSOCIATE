@@ -6,7 +6,7 @@ import stateLayer.TravelHistory;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import utils.Globals;
-import utils.profiler.SimulationConfigItem;
+import simulateLayer.SimulationConfigItem;
 
 import java.util.ArrayList;
 import java.util.List;

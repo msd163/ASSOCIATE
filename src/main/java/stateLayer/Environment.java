@@ -75,9 +75,13 @@ public class Environment {
     @Expose
     private ArrayList<StateX> states;
 
+    //============================//============================//============================
+
     private World world;
+
     private TransitionX[] transitions;
 
+    //============================//============================//============================
     /**
      * Assigning point to states in environment
      *

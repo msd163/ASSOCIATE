@@ -8,7 +8,7 @@ import stateLayer.TravelHistory;
 import trustLayer.AgentTrust;
 import utils.Globals;
 import utils.OutLog____;
-import utils.profiler.SimulationProfiler;
+import simulateLayer.profiler.SimulationProfiler;
 
 import java.util.ArrayList;
 import java.util.List;

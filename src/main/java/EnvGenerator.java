@@ -9,7 +9,7 @@ import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 import utils.ProjectPath;
-import utils.profiler.SimulationProfiler;
+import simulateLayer.profiler.SimulationProfiler;
 
 import java.io.File;
 import java.io.FileReader;
