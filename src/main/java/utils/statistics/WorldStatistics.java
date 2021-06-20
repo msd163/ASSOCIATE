@@ -1,6 +1,7 @@
 package utils.statistics;
 
-import systemLayer.Agent;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WorldStatistics {
 
@@ -40,7 +41,7 @@ public class WorldStatistics {
     private int ittTruePositiveTrust;
     private int ittTrueNegativeTrust;
     //============================
-    private AgentStatistics agentStatistics[];
+    private Map<Integer, AgentStatistics> agentStatistics;
 
 
     //--  (Number of correct assessments)/Number of all assessments)
@@ -81,11 +82,11 @@ public class WorldStatistics {
                 = ittTrueNegativeTrust
                 = 0;
 
-        agentStatistics = new AgentStatistics[agentCount];
+        agentStatistics = new HashMap<>(agentCount);
 
     }
 
-    public void init(int episode, Agent[] agents) {
+    public void init(int episode) {
         this.episode = episode;
 
         if (prevStats != null && prevStats.episode == episode) {
@@ -111,6 +112,8 @@ public class WorldStatistics {
 
     public void add_Itt_AgentsInTarget() {
         ittAgentsInTarget++;
+        allAgentsInTarget++;
+
     }
 
     public void addFullStateCount() {
@@ -151,6 +154,8 @@ public class WorldStatistics {
 
     public void add_Itt_AgentsInPitfall() {
         ittAgentsInPitfall++;
+        allAgentsInPitfall++;
+
     }
 
     public void add_Itt_TrustToHonest() {
@@ -364,7 +369,7 @@ public class WorldStatistics {
         return ittTrustToMischief;
     }
 
-    public AgentStatistics[] getAgentStatistics() {
+    public Map<Integer, AgentStatistics> getAgentStatistics() {
         return agentStatistics;
     }
 }

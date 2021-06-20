@@ -31,11 +31,11 @@ public class TrustMatrix {
     }
 
     public void update(WorldStatistics statistics) {
-        for (int i = 0, agentsSize = sAgents.size(); i < agentsSize; i++) {
+        for (int i = 0 ; i < agentCount; i++) {
             Agent agent = sAgents.get(i);
             TrustHistory[] histories = agent.getTrust().getHistories();
             for (TrustHistory history : histories) {
-                if (history != null && history.getLastEpisode() == Globals.EPISODE) {
+                if (history != null && history.getLastVisitTime() == Globals.WORLD_TIMER) {
                     for (int j = 0, size = sAgents.size(); j < size; j++) {
                         Agent trustee = sAgents.get(j);
                         if (trustee.getId() == history.getAgent().getId()) {

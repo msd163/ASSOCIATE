@@ -16,12 +16,13 @@ public class TrustObservation {
 
     //============================//============================
 
-    public TrustObservation(Agent requester, Agent responder, boolean isFinalPitfall, boolean isFinalTarget, float trustScore) {
+    public TrustObservation(Agent requester, Agent responder, boolean isFinalTarget) {
         this.requester = requester;
         this.responder = responder;
-        this.isFinalPitfall = isFinalPitfall;
+        this.isFinalPitfall = !isFinalTarget;
         this.isFinalTarget = isFinalTarget;
-        this.trustScore = trustScore;
+        //todo: can be done intelligently with dynamic and adaptive value instead of 1:-1
+        this.trustScore = isFinalTarget ? 1 : -1;
     }
 
 

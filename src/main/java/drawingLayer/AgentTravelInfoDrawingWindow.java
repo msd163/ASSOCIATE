@@ -34,7 +34,7 @@ public class AgentTravelInfoDrawingWindow extends DrawingWindow {
         //============================//============================//============================
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-        List<Agent> agents = world.getSortedAgentsByCapPower();
+        List<Agent> agents = world.getAgents();
         for (int i = 0, jj = agents.size() - 1, agentsLength = agents.size(); i < agentsLength; jj--, i++) {
             Agent agent = agents.get(jj);
 

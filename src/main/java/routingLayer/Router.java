@@ -4,6 +4,7 @@ import _type.TtIsValidatedInObservations;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
+import simulateLayer.SimulationConfigItem;
 import stateLayer.StateX;
 import stateLayer.TransitionX;
 import stateLayer.TravelHistory;
@@ -14,7 +15,6 @@ import systemLayer.World;
 import trustLayer.TrustManager;
 import utils.Globals;
 import utils.OutLog____;
-import simulateLayer.SimulationConfigItem;
 import utils.statistics.WorldStatistics;
 
 import java.util.ArrayList;
@@ -25,10 +25,13 @@ public class Router {
     private WorldStatistics statistics___;
     private World world;
     private TrustManager trustManager;
+    private SimulationConfigItem simulationConfigItem;
 
     public Router(World world) {
         this.world = world;
         this.trustManager = world.getTrustManager();
+        simulationConfigItem = world.getSimulationConfig();
+
     }
 
     public void setStatistics(WorldStatistics statistics) {
@@ -66,7 +69,13 @@ public class Router {
             statistics___.add_All_AgentsInTarget();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
+            if (agent.getSpentTimeAtTheTarget() > 1) {
+                int ct = agent.getCurrentTarget().getId();
+                agent.assignNextTargetState();
+                OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
+                        "targetIndex: " + agent.getCurrentTargetStateIndex() + ". Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
 
+            }
             return state;
         }
 
@@ -79,18 +88,27 @@ public class Router {
                     "In PITFALL",
                     agent, state, agent.getCurrentTarget());
 
+            agent.clearNextSteps();
+            agent.addSpentTimeAtTheTarget();
+            if (agent.getSpentTimeAtTheTarget() > 1) {
+                boolean isAdded = agent.getCurrentTarget().addAgent(agent);
+                if (isAdded) {
+                    agent.getState().getAgents().remove(agent);
+                    agent.setState(agent.getCurrentTarget());
+
+                    int ct = agent.getCurrentTarget().getId();
+                    agent.assignNextTargetState();
+                    OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
+                            "Free From Pitfall: targetIndex: " + agent.getCurrentTargetStateIndex() + ". Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
+                }
+            }
+
             return state;
         }
 
         // the state has no output state. The agent is in an state that is pit
         if (state.getTargets().size() == 0) {
             agent.clearNextSteps();
-            // Printing map
-      /*      String sIds = "";
-            for (TravelHistory s : agent.getTravelHistories()) {
-                sIds += " | " + s.getStateX().getId() *//*+ "-" + s.getVisitTime()*//*;
-            }*/
-            //System.out.println(">>ERR>> no target for agent:::gotoSate::agentId: " + agent.getId() + " [ c: " + state.getId() + " >  t: " + targetState.getId() + " ] #  maps: " + sIds);
             OutLog____.pl(
                     TtOutLogMethodSection.TakeAStepTowardTheTarget,
                     TtOutLogStatus.ERROR,
@@ -109,10 +127,8 @@ public class Router {
             statistics___.addRandomTravelToNeighbors();
             if (stateX.getId() == agent.getCurrentTarget().getId()) {
                 statistics___.add_Itt_AgentsInTarget();
-                statistics___.add_All_AgentsInTarget();
             } else if (stateX.isIsPitfall()) {
                 statistics___.add_Itt_AgentsInPitfall();
-                statistics___.add_All_AgentsInPitfall();
             }
             return stateX;
         }
@@ -147,13 +163,11 @@ public class Router {
             //
             if (finalState.isIsPitfall()) {
                 statistics___.add_Itt_AgentsInPitfall();
-                statistics___.add_All_AgentsInPitfall();
                 trustManager.reduceTrustForPitfall(agent);
             }
             //
             else if (finalState.getId() == agent.getCurrentTarget().getId()) {
                 statistics___.add_Itt_AgentsInTarget();
-                statistics___.add_All_AgentsInTarget();
                 trustManager.increaseTrustForSuccessTarget(agent);
             }
         }
@@ -178,8 +192,6 @@ public class Router {
         if (!agent.getNextSteps().isEmpty()) {
             return;
         }
-
-        SimulationConfigItem simulationConfigItem = world.getSimulationConfig();
 
         if (simulationConfigItem.getTtMethod() == TtTrustMethodology.FullyRandomly) {
             return;
@@ -222,7 +234,7 @@ public class Router {
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
                 //============================//============================ _Trust
-                routingHelp.setTrustLevel(trustManager.getTrustLevel(agent, wa.getAgent()));
+                routingHelp.setTrustLevel(trustManager.getTrustLevel(agent, wa.getAgent(),true));
                 //============================//============================
                 routingHelps.add(routingHelp);
             }
@@ -244,15 +256,15 @@ public class Router {
                 sortedRoutingHelps = basicTrustMechanism(agent, goalState, routingHelps);
                 if (sortedRoutingHelps == null) return;
 
-                if (simulationConfigItem.isIsUseTrustObservation()) {
+                //-- Validating routingHelps according to observations
+                if (simulationConfigItem.isIsValidateByTrustObservation()) {
                     sortedRoutingHelps = refineByObservation(agent, sortedRoutingHelps);
                 }
-
-
                 break;
 
             case NoTrust_ShortPath:
                 sortRoutingByShortestPath(sortedRoutingHelps);
+                break;
             case NoTrust_RandomPath:
             default:
                 break;
@@ -357,7 +369,9 @@ public class Router {
         });
 
         int srIndex = 0;
-        for (int routingHelpsSize = routingHelps.size(); srIndex < routingHelpsSize && srIndex < 6; srIndex++) {
+        for (int routingHelpsSize = routingHelps.size();
+             srIndex < routingHelpsSize && srIndex < simulationConfigItem.getMaximumConsideredRoutingHelpInTrustMechanism();
+             srIndex++) {
             RoutingHelp help = routingHelps.get(srIndex);
             if (help.getTrustLevel() < 0) {
                 break;

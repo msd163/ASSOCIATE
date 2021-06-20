@@ -146,7 +146,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
     BasicStroke stroke3 = new BasicStroke(3);
     BasicStroke stroke2 = new BasicStroke(2);
     BasicStroke stroke1 = new BasicStroke(1);
-    Font font = new Font("Tahoma", Font.PLAIN, 9);
+
     Color honestBackColor;
     Color honestForeColor;
     Color honestBorderColor;
@@ -217,7 +217,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
 
         // Drawing id of the node
         g.setColor(honestForeColor);
-        g.setFont(font);
+        g.setFont(new Font("Tahoma", Font.PLAIN, 9));
         g.drawString(agent.getId() + "", loc_x - 5, loc_y + 5 /*+ capacity.getCapPower() + 10*/);
 
     }

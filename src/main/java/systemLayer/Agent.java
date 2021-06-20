@@ -3,12 +3,12 @@ package systemLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
+import simulateLayer.profiler.SimulationProfiler;
 import stateLayer.StateX;
 import stateLayer.TravelHistory;
 import trustLayer.AgentTrust;
 import utils.Globals;
 import utils.OutLog____;
-import simulateLayer.profiler.SimulationProfiler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,6 @@ public class Agent {
                 currentTargetStateIndex = 0;
         this.world = parentWorld;
         this.id = id;
-        currentDoingServiceSize = 0;
         simConfigTraceable =
                 simConfigShowWatchRadius =
                         simConfigShowRequestedService =
@@ -44,7 +43,6 @@ public class Agent {
     private int id;
 
     //============================ processing variables
-    private int currentDoingServiceSize;
 
     //============================
     private World world;
@@ -130,9 +128,6 @@ public class Agent {
         behavior.updateBehaviorState();
     }
 
-    public void resetParams() {
-        currentDoingServiceSize = 0;
-    }
 
     public TravelHistory getLastTravelHistory() {
         if (travelHistories == null || travelHistories.isEmpty()) {
@@ -147,14 +142,13 @@ public class Agent {
     }
 
     public boolean assignNextTargetState() {
+        spentTimeAtTheTarget = 0;
         if (currentTargetStateIndex < getTargetCounts() - 1) {
             currentTargetStateIndex++;
-            spentTimeAtTheTarget = 0;
-            return true;
         } else {
-            //currentTargetStateIndex = 0;
-            return true;
+            currentTargetStateIndex = 0;
         }
+        return true;
     }
 
     /**
@@ -301,23 +295,6 @@ public class Agent {
         }
     }
 
-    //============================ Doing
-
-    public void shareExperienceWith(Agent agent) {
-/*        for (AgentHistory history : trust.getHistories()) {
-            if (history != null) {
-                for (ServiceMetaInfo info : history.getServiceMetaInfos()) {
-                    if (info != null) {
-                        // Only direct observation
-                        if (info.getPublisher().getId() == this.id) {
-                            agent.getTrust().recordExperience(info);
-                        }
-                    }
-                }
-            }
-        }*/
-    }
-
     //============================//============================//============================
 
     @Override
@@ -329,7 +306,6 @@ public class Agent {
                 ",\n\t simConfigTraceable=" + simConfigTraceable +
                 ",\n\t simConfigShowRequestedService=" + simConfigShowRequestedService +
                 ",\n\t id=" + id +
-                ",\n\t currentDoingServiceSize=" + currentDoingServiceSize +
                 ",\n\t world=" + world +
                 ",\n\t capacity=" + capacity +
                 ",\n\t trust=" + trust +

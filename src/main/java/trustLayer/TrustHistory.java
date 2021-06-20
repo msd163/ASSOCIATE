@@ -1,7 +1,6 @@
 package trustLayer;
 
 import systemLayer.Agent;
-import utils.Config;
 import utils.Globals;
 
 import java.util.ArrayList;
@@ -28,11 +27,20 @@ public class TrustHistory {
     public void addHistory(float trustScore) {
         lastVisitTime = Globals.WORLD_TIMER;
         lastEpisode = Globals.EPISODE;
-        finalTrustLevel += trustScore;
+        changeFinalTrustLeve(trustScore);
         items.add(new TrustHistoryItem(
                 Globals.WORLD_TIMER,
                 trustScore
         ));
+    }
+
+    public void changeFinalTrustLeve(double trustScore) {
+        finalTrustLevel += trustScore;
+        if (finalTrustLevel > 1) {
+            finalTrustLevel = 1;
+        } else if (finalTrustLevel < -1) {
+            finalTrustLevel = -1;
+        }
     }
 
     //============================//============================//============================
@@ -50,10 +58,6 @@ public class TrustHistory {
         return lastVisitTime;
     }
 
-    public void setLastVisitTime(int lastVisitTime) {
-        this.lastVisitTime = lastVisitTime;
-    }
-
     public float getFinalTrustLevel() {
         if (agent.getWorld().getSimulationConfig().isUseTrustForgottenCoeff()) {
             //-- For preventing stack over flow problem and unlimited loop
@@ -63,23 +67,19 @@ public class TrustHistory {
             finalTrustLevelUpdateTime = Globals.WORLD_TIMER;
             finalTrustLevel = 0;
             for (TrustHistoryItem item : items) {
-                finalTrustLevel += item.getTrustScore() * Math.pow(agent.getWorld().getSimulationConfig().getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getVisitTime());
+                changeFinalTrustLeve(item.getTrustScore() * Math.pow(agent.getWorld().getSimulationConfig().getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getVisitTime()));
+            }
+            //-- tuning final trust level
+            if (finalTrustLevel < agent.getWorld().getSimulationConfig().getIgnoringThresholdOfTrustLevelValue() && finalTrustLevel > -agent.getWorld().getSimulationConfig().getIgnoringThresholdOfTrustLevelValue()) {
+                finalTrustLevel = 0;
             }
             return finalTrustLevel;
         }
         return finalTrustLevel;
     }
 
-    public void setFinalTrustLevel(float finalTrustLevel) {
-        this.finalTrustLevel = finalTrustLevel;
-    }
-
     public ArrayList<TrustHistoryItem> getItems() {
         return items;
-    }
-
-    public void setItems(ArrayList<TrustHistoryItem> items) {
-        this.items = items;
     }
 
     public int getLastEpisode() {

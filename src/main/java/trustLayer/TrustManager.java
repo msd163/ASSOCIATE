@@ -2,14 +2,16 @@ package trustLayer;
 
 import _type.TtIsValidatedInObservations;
 import routingLayer.RoutingHelp;
+import simulateLayer.SimulationConfigItem;
 import stateLayer.TravelHistory;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import utils.Globals;
-import simulateLayer.SimulationConfigItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TrustManager {
 
@@ -74,8 +76,10 @@ public class TrustManager {
                 TrustHistory _tuh = __trustHistory[k];
                 if (_tuh != null && _tuh.getAgent().getId() == tvh.getHelper().getId()) {
                     __trust.setHistoryIndex(k);
-
-                    __trust.addHistory(effect * getScoreByOrder(consideredHistoryCount++));
+                    float v = effect * getScoreByOrder(consideredHistoryCount++);
+                    if (v != 0) {
+                        __trust.addHistory(v);
+                    }
                     travelHistory.get(tvhIndex).setIsTrustCalculated(true);
                     return;
                 }
@@ -137,12 +141,22 @@ public class TrustManager {
         if (index < 0) {
             System.out.println(">> Error::getScoreByOrder: index is less than ZERO: " + index);
         }
-        return 1 / (float) ((index + 1) * (index + 1));
+        if (index > simulationConfigItem.getHistoryDepthInTrustScoring()) {
+            return 0;
+        }
+        return 1 / (float) (((index + 1) * (index + 1)) * 2);
 
     }
 
-    public float getTrustLevel(Agent master, Agent trustee) {
+    Map<String, Float[]> lastUpdateTrustLevel = new HashMap<>();
+
+    public float getTrustLevel(Agent master, Agent trustee, boolean isUseObservation) {
         TrustHistory[] histories = master.getTrust().getHistories();
+
+        Float[] lastTimeAndTrustLevel = lastUpdateTrustLevel.get(master.getId() + "-" + trustee.getId());
+        if (lastTimeAndTrustLevel != null && lastTimeAndTrustLevel[0] == Globals.WORLD_TIMER) {
+            return lastTimeAndTrustLevel[1];
+        }
 
         float calculatedTrust = 0;
         if (histories != null) {
@@ -157,14 +171,24 @@ public class TrustManager {
             for (TrustRecommendation recommendation : master.getTrust().getRecommendations()) {
                 if (recommendation.getTrustee().getId() == trustee.getId()) {
                     //todo: need to be overviewed and revised.
-                    calculatedTrust =
-                            (1 - simulationConfigItem.getTrustRecommendationCoeff()) * calculatedTrust
-                                    + simulationConfigItem.getTrustRecommendationCoeff() * recommendation.getFinalRecommendedTrustLevel();
+                    calculatedTrust += simulationConfigItem.getTrustRecommendationCoeff() * recommendation.getFinalRecommendedTrustLevel();
                     break;
                 }
             }
         }
 
+        if (isUseObservation && simulationConfigItem.isUseTrustObservation()) {
+            calculatedTrust += simulationConfigItem.getTrustObservationCoeff() * calcFinalTrustLevelAccordingObservation(master, trustee);
+        }
+
+        if (calculatedTrust > 1) {
+            calculatedTrust = 1;
+        } else if (calculatedTrust < -1) {
+            calculatedTrust = -1;
+        }
+        //-- For preventing stack over flow bug
+        lastUpdateTrustLevel.put(master.getId() + "-" + trustee.getId(), new Float[]{(float) Globals.WORLD_TIMER, calculatedTrust});
+        //System.out.println(master.getId() + "-" + trustee.getId() + "  wt:" + (float) Globals.WORLD_TIMER + " -----ctrt:" + calculatedTrust);
         return calculatedTrust;
     }
 
@@ -177,7 +201,7 @@ public class TrustManager {
         }
 
         //-- If receiver of recommendation hos no trust to recommender
-        float trustLevelOfRecommender = getTrustLevel(to, from);
+        float trustLevelOfRecommender = getTrustLevel(to, from, true);
         if (trustLevelOfRecommender <= 0) {
             return;
         }
@@ -250,7 +274,7 @@ public class TrustManager {
             observer.getTrust().getObservations().remove(0);
         }
 
-        TrustObservation observation = new TrustObservation(observed, helper, !isInTarget, isInTarget, isInTarget ? 1 : -1);
+        TrustObservation observation = new TrustObservation(observed, helper, isInTarget);
 
         observer.getTrust().getObservations().add(observation);
     }
@@ -265,7 +289,7 @@ public class TrustManager {
         return false;
     }
 
-    public TtIsValidatedInObservations inValidInObservation(Agent observer, Agent agent) {
+    public TtIsValidatedInObservations isValidInObservation(Agent observer, Agent agent) {
         for (TrustObservation obs : observer.getTrust().getObservations()) {
             if (obs.getResponder().getId() == agent.getId()) {
                 return obs.isIsFinalTarget() ? TtIsValidatedInObservations.Valid : TtIsValidatedInObservations.Invalid;
@@ -274,12 +298,21 @@ public class TrustManager {
         return TtIsValidatedInObservations.Unknown;
     }
 
+    public float findTrustScoreInObservation(Agent observer, Agent agent) {
+        for (TrustObservation obs : observer.getTrust().getObservations()) {
+            if (obs.getResponder().getId() == agent.getId()) {
+                return obs.getTrustScore();
+            }
+        }
+        return 0.0f;
+    }
+
     public void ValidateHelperInObservations(Agent requester, RoutingHelp routingHelp) {
         List<Agent> observers = new ArrayList<>();
         List<Float> trusts = new ArrayList<>();
         for (WatchedAgent watchedAgent : requester.getWatchedAgents()) {
             if (watchedAgent.getAgent().hasObservation()) {
-                float trustLevel = getTrustLevel(requester, watchedAgent.getAgent());
+                float trustLevel = getTrustLevel(requester, watchedAgent.getAgent(), false);
                 if (trustLevel > 0 && canObserve(watchedAgent.getAgent(), routingHelp.getHelperAgent())) {
                     observers.add(watchedAgent.getAgent());
                     trusts.add(trustLevel);
@@ -302,9 +335,42 @@ public class TrustManager {
             }
         }
 
-        TtIsValidatedInObservations validation = inValidInObservation(observers.get(maxIndex), routingHelp.getHelperAgent());
+        TtIsValidatedInObservations validation = isValidInObservation(observers.get(maxIndex), routingHelp.getHelperAgent());
         routingHelp.setValidation(validation);
 
-        return;
+    }
+
+    Map<String, Float[]> lastUpdateObservationTime = new HashMap<>();
+
+    public float calcFinalTrustLevelAccordingObservation(Agent requester, Agent helper) {
+
+
+        float finalTrustLevel = 0.0f;
+        int watchedCount = 0;
+        for (WatchedAgent watchedAgent : requester.getWatchedAgents()) {
+            if ((watchedAgent.getAgent().getId() == helper.getId())) {
+                continue;
+            }
+            if (watchedAgent.getAgent().hasObservation()) {
+                float trustLevel;
+                Float[] lastTimeAndTrustLevel = lastUpdateObservationTime.get(requester.getId() + "-" + watchedAgent.getAgent().getId());
+                if (lastTimeAndTrustLevel != null && lastTimeAndTrustLevel[0] == Globals.WORLD_TIMER) {
+                    trustLevel = lastTimeAndTrustLevel[1];
+                } else {
+                    trustLevel = getTrustLevel(requester, watchedAgent.getAgent(), false);
+                    //-- For preventing stack over flow bug
+                    lastUpdateObservationTime.put(requester.getId() + "-" + watchedAgent.getAgent().getId(), new Float[]{(float) Globals.WORLD_TIMER, trustLevel});
+                    //System.out.println(requester.getId() + "-" + watchedAgent.getAgent().getId() + " wt: " + Globals.WORLD_TIMER + " trt: " + trustLevel);
+                }
+
+                if (trustLevel > 0 && canObserve(watchedAgent.getAgent(), helper)) {
+                    watchedCount++;
+                    finalTrustLevel += trustLevel * findTrustScoreInObservation(watchedAgent.getAgent(), helper);
+                }
+            }
+        }
+
+        //System.out.println("finalTrustLevel/watchedCount: " + (watchedCount == 0 ? 0.0f : finalTrustLevel / watchedCount));
+        return watchedCount == 0 ? 0.0f : finalTrustLevel / watchedCount;
     }
 }

@@ -34,7 +34,7 @@ public class AgentObservationDrawingWindow extends DrawingWindow {
         //============================//============================//============================
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-        List<Agent> agents = world.getSortedAgentsByCapPower();
+        List<Agent> agents = world.getAgents();
         for (int i = 0, jj = agents.size() - 1; jj > -1; jj--, i++) {
             Agent agent = agents.get(jj);
 

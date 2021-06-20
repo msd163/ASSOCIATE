@@ -93,10 +93,7 @@ public class AgentTrust {
         ArrayList<TrustHistoryItem> items = histories[historyIndex].getItems();
         if (items.size() >= historyItemCap) {
             // Removing trust score of removed item from finalTrustLevel
-            histories[historyIndex].setFinalTrustLevel(
-                    histories[historyIndex].getFinalTrustLevel() -
-                            items.get(0).getTrustScore()
-            );
+            histories[historyIndex].changeFinalTrustLeve(-items.get(0).getTrustScore());
             histories[historyIndex].getItems().remove(0);
         }
         histories[historyIndex].addHistory(trustScore);

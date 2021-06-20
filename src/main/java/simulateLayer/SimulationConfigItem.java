@@ -4,18 +4,27 @@ import _type.TtTrustMethodology;
 
 public class SimulationConfigItem {
     private int method;
-    private boolean isUseTrustObservation;
+    private boolean isValidateByTrustObservation;
     private float trustForgottenCoeff;
     private float trustRecommendationCoeff;
+    private float trustObservationCoeff;
+    private int historyDepthInTrustScoring;
+    private float ignoringThresholdOfTrustLevelValue;
+    private float maximumConsideredRoutingHelpInTrustMechanism;
 
     //============================//============================//============================
     public String getInfo() {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "Method: " + methodology +
-                    " | IsUseObservation: " + isUseTrustObservation +
+                    " | IsUseObservation: " + isValidateByTrustObservation +
                     " | TrustForgottenCoeff: " + trustForgottenCoeff +
-                    " | TrustRecommendationCoeff: " + trustRecommendationCoeff;
+                    " | TrustRecommendationCoeff: " + trustRecommendationCoeff +
+                    " | TrustObservationCoeff: " + trustObservationCoeff +
+                    " | HistoryDepthInTrustScoring: " + historyDepthInTrustScoring +
+                    " | IgnoringThresholdOfTrt: " + ignoringThresholdOfTrustLevelValue +
+                    " | MaxConsRoutingHelpInTrt: " + maximumConsideredRoutingHelpInTrustMechanism
+                    ;
         }
         return "Method: " + methodology;
 
@@ -23,6 +32,10 @@ public class SimulationConfigItem {
 
     public boolean isUseTrustRecommendation() {
         return trustRecommendationCoeff > 0;
+    }
+
+    public boolean isUseTrustObservation() {
+        return trustObservationCoeff > 0;
     }
 
     public boolean isUseTrustForgottenCoeff() {
@@ -42,29 +55,34 @@ public class SimulationConfigItem {
         this.method = method;
     }
 
-    public boolean isIsUseTrustObservation() {
-        return isUseTrustObservation;
+    public boolean isIsValidateByTrustObservation() {
+        return isValidateByTrustObservation;
     }
 
-    public void setIsUseTrustObservation(boolean useTrustObservation) {
-        isUseTrustObservation = useTrustObservation;
-    }
 
     public float getTrustForgottenCoeff() {
         return trustForgottenCoeff;
     }
 
-    public void setTrustForgottenCoeff(float trustForgottenCoeff) {
-        this.trustForgottenCoeff = trustForgottenCoeff;
-    }
 
     public float getTrustRecommendationCoeff() {
         return trustRecommendationCoeff;
     }
 
-    public void setTrustRecommendationCoeff(float trustRecommendationCoeff) {
-        this.trustRecommendationCoeff = trustRecommendationCoeff;
+
+    public float getTrustObservationCoeff() {
+        return trustObservationCoeff;
     }
 
+    public int getHistoryDepthInTrustScoring() {
+        return historyDepthInTrustScoring;
+    }
 
+    public float getIgnoringThresholdOfTrustLevelValue() {
+        return ignoringThresholdOfTrustLevelValue;
+    }
+
+    public float getMaximumConsideredRoutingHelpInTrustMechanism() {
+        return maximumConsideredRoutingHelpInTrustMechanism;
+    }
 }

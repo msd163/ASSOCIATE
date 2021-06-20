@@ -21,7 +21,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected float scale = 1f;
 
-
     protected int worldTimer;
     protected int simulationTimer;
 

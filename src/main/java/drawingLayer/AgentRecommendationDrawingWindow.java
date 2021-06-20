@@ -33,7 +33,7 @@ public class AgentRecommendationDrawingWindow extends DrawingWindow {
         //============================//============================//============================
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-        List<Agent> agents = world.getSortedAgentsByCapPower();
+        List<Agent> agents = world.getAgents();
         for (int jj = agents.size() - 1, i = 0; jj > -1; i++, jj--) {
             Agent agent = agents.get(jj);
 

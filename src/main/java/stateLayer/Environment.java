@@ -77,6 +77,7 @@ public class Environment {
 
     //============================//============================//============================
 
+    @Expose(deserialize = false,serialize = false)
     private World world;
 
     private TransitionX[] transitions;
