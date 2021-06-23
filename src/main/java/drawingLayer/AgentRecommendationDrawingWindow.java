@@ -21,10 +21,9 @@ public class AgentRecommendationDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr,world.getDrawingTitle())) {
+        if (!mainPaint(gr,"Recommendation Data :: "+world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
-        printStatsInfo(1, "Recommendation History Capacity and Current Size", Color.cyan);
         normalizeCoordination();
 
         //============================//============================//============================

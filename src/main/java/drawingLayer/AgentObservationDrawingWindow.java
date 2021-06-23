@@ -23,11 +23,10 @@ public class AgentObservationDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, world.getDrawingTitle())) {
+        if (!mainPaint(gr,"Observation Data :: "+ world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 
-        printStatsInfo(1, "Observation Capacity and Current Size", Color.cyan);
         normalizeCoordination();
 
         //============================//============================//============================

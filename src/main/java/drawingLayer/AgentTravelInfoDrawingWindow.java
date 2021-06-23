@@ -22,10 +22,10 @@ public class AgentTravelInfoDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr,world.getDrawingTitle())) {
+        if (!mainPaint(gr,"Travel History Data :: "+world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
-        printStatsInfo(1, "Travel History Capacity and Current Size", Color.cyan);
+
         normalizeCoordination();
 
         //============================//============================//============================

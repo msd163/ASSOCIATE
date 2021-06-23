@@ -485,8 +485,11 @@ public class World {
     }
 
     public String getDrawingTitle() {
-        return "E-Code: " + environment.getCode() + " | #Ags: " + agentsCount + " | #Sts: " + environment.getStateCount() +
-                " | " + simulator.getSimulationConfigBunch().getByIndex(Globals.SIMULATION_TIMER).getInfo();
+        return "E-Code: " + environment.getCode() + " | #Ags: " + agentsCount + " | #Sts: " + environment.getStateCount();
+    }
+
+    public String getSimulationConfigInfo() {
+        return  simulator.getSimulationConfigBunch().getByIndex(Globals.SIMULATION_TIMER).getInfo();
     }
 
     public String toString(int tabIndex) {

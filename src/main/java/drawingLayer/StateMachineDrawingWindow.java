@@ -58,7 +58,6 @@ public class StateMachineDrawingWindow extends DrawingWindow {
 
         //============================ Title
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-        //g.drawString(world.toString(), 10, 10);
 
         //============================//============================ Translate for panning and scaling
 

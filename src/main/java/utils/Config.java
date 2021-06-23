@@ -18,7 +18,7 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 100;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 1000;          // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
@@ -35,15 +35,15 @@ public class Config {
     //============================ Drawing Windows
 
     public static final boolean DRAWING_SHOW_STATE_MACHINE /*               */ = false;
-    public static final boolean DRAWING_SHOW_STAT_OF_ENV /*                 */ = true;
+    public static final boolean DRAWING_SHOW_STAT_OF_ENV /*                 */ = false;
     public static final boolean DRAWING_SHOW_STATS_OF_TRUST/*               */ = false;
     public static final boolean DRAWING_SHOW_TRUST_MATRIX /*                */ = true;
     public static final boolean DRAWING_SHOW_STATS_OF_PO_NE /*              */ = false;
     public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM/*      */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO /*           */ = true;
+    public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO /*           */ = false;
     public static final boolean DRAWING_SHOW_AGENT_TRUST_DATA /*            */ = true;
     public static final boolean DRAWING_SHOW_AGENT_RECOMMENDATION_DATA /*   */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_OBSERVATION_DATA /*      */ = true;
+    public static final boolean DRAWING_SHOW_AGENT_OBSERVATION_DATA /*      */ = false;
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 

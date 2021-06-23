@@ -19,19 +19,19 @@ public class SimulationConfigItem {
     public String getInfo() {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
-            return "method: " + methodology +
-                    " | trustForgottenCoeff: " + trustForgottenCoeff +
-                    " | trustRecommendationCoeff: " + trustRecommendationCoeff +
-                    " | isUseExperience: " + isUseExperience +
-                    " | isUseIndirectExperience: " + isUseIndirectExperience +
-                    " | isUseObservation: " + isUseObservation +
-                    " | isUseIndirectObservation: " + isUseIndirectObservation +
-                    " | experienceDepthInRewarding: " + experienceDepthInRewarding +
-                    " | ignoringThresholdOfTrustValue: " + ignoringThresholdOfTrustValue +
-                    " | maximumConsideredRoutingHelpInTrustMechanism: " + maximumConsideredRoutingHelpInTrustMechanism;
+            return "Method: " + methodology +
+                    " | ForgottenCoeff: " + trustForgottenCoeff +
+                    " | RecommCoeff: " + trustRecommendationCoeff +
+                    " | UseExp: " + isUseExperience +
+                    " | UseIndrExp: " + isUseIndirectExperience +
+                    " | UseObs: " + isUseObservation +
+                    " | UseIndrObs: " + isUseIndirectObservation +
+                    " | ExpDepthInRewarding: " + experienceDepthInRewarding +
+                    " | IgnoringThrldOfTV: " + ignoringThresholdOfTrustValue +
+                    " | MaxConsideredRHInTM: " + maximumConsideredRoutingHelpInTrustMechanism;
 
         }
-        return "method: " + methodology;
+        return "Method: " + methodology;
 
     }
 

@@ -35,7 +35,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Trust Matrix")) {
+        if (!mainPaint(gr, "Matrix :: "+ world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 
@@ -44,7 +44,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         int pnScl_y = pnOffset.y + scaleOffset.y;
         g.translate(pnScl_x, pnScl_y);
         g.scale(scale, -scale);
-        g.translate(110, -getHeight() / scale + 110);
+        g.translate(110, (-getHeight() +translateInTitle_Y+ translateInNormCoord_Y)/ scale );
 
         int pnY = (pnScl_y > 0 ? (int) (pnScl_y / scale) + 10 : 0) - 5;
         int pnX = (pnScl_x < 0 ? -(int) (pnScl_x / scale) + 10 : 0) - 5;

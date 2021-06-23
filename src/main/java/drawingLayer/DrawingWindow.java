@@ -28,6 +28,12 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected utils.Point prevPoints[];      //-- Previously visited point
 
+    protected int translateInTitle_Y = 0;
+    private int translateInNormCoord_X = 200;
+    protected int translateInNormCoord_Y = 300;
+    private int translateInRevCoord_X = 100;
+    private float translateInRevCoord_Y = -getHeight() / scale + 100;
+
     public int getWorldId() {
         return world == null ? -1 : world.getId();
     }
@@ -63,13 +69,33 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected Graphics2D g;
 
 
-    public void printDrawingTitle(String title) {
+    public void printDrawingTitle(String title, String subTitle) {
+
+        java.awt.Point mousePoint = getMousePosition();
+        if (mousePoint != null) {
+            g.setColor(Color.WHITE);
+            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
+            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
+            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
+            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
+        }
+
         g.setColor(Color.cyan);
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
         g.drawString(title, 100, 50);
-        g.drawLine(50, 70, 2000, 70);
-
-        g.translate(0, 80);
+        if (subTitle != null) {
+            g.setColor(Color.ORANGE);
+            g.setFont(new Font("TimesRoman", Font.BOLD, 25));
+            g.drawString(subTitle, 100, 90);
+            g.drawLine(50, 110, 2000, 110);
+            // g.translate(0, 120);
+            translateInTitle_Y = 120;
+            g.translate(0, translateInTitle_Y);
+        } else {
+            g.drawLine(50, 70, 2000, 70);
+            translateInTitle_Y = 80;
+            g.translate(0, translateInTitle_Y);
+        }
     }
 
     public void printStatsInfo(int index, String title, Color color) {
@@ -97,10 +123,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public boolean mainPaint(Graphics gr) {
-        return mainPaint(gr, getName());
+        return mainPaint(gr, getName(), null);
     }
 
-    public boolean mainPaint(Graphics gr, String title) {
+    public boolean mainPaint(Graphics gr, String title, String subTitle) {
 
         worldTimer = Globals.WORLD_TIMER - 1;
         simulationTimer = Globals.SIMULATION_TIMER;
@@ -114,8 +140,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
 
-        printDrawingTitle(title);
-
+        printDrawingTitle(title, subTitle);
 
         g.setColor(Color.YELLOW);
 
@@ -136,14 +161,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.drawString(": " + Globals.EPISODE, 1300, 130);
 
 
-        java.awt.Point mousePoint = getMousePosition();
-        if (mousePoint != null) {
-            g.setColor(Color.WHITE);
-            //-- (TOP-DOWN) Drawing vertical line for mouse pointer
-            g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
-            //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
-            g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
-        }
         return true;
     }
 
@@ -151,13 +168,17 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     public void normalizeCoordination() {
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, scale);
-        g.translate(200, 300);
+        g.translate(translateInNormCoord_X, translateInNormCoord_Y);
+//        g.translate(200, 300);
     }
 
     public void reverseNormalizeCoordination() {
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
         g.scale(scale, -scale);
-        g.translate(100, -getHeight() / scale + 100);
+
+        translateInRevCoord_Y = -getHeight() / scale + 100;
+        g.translate(translateInRevCoord_X, translateInRevCoord_Y);
+        //g.translate(100, -getHeight() / scale + 100);
     }
 
     //============================//============================

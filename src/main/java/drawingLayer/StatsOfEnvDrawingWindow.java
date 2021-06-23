@@ -18,7 +18,7 @@ public class StatsOfEnvDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, world.getDrawingTitle())) {
+        if (!mainPaint(gr,"Environment Data :: "+ world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         axisX = 0;

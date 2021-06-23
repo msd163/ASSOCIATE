@@ -34,7 +34,7 @@ public class IntStatsOfEnvDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Integrated Statistics of Environment")) {
+        if (!mainPaint(gr, "Integrated Statistics of Environment", null)) {
             return;
         }
 

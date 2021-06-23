@@ -18,7 +18,7 @@ public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, world.getDrawingTitle())) {
+        if (!mainPaint(gr, "Trust FP/FN/TP/TN Data :: "+world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         axisX = 0;

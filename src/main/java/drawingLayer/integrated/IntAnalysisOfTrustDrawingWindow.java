@@ -34,7 +34,7 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Integrated Trust Analysis Params")) {
+        if (!mainPaint(gr, "Integrated Trust Analysis Params",null)) {
             return;
         }
 

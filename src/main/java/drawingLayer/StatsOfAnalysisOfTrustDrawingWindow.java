@@ -23,7 +23,7 @@ public class StatsOfAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
     @Override
     public void paint(Graphics gr) {
-        if (!mainPaint(gr, world.getDrawingTitle())) {
+        if (!mainPaint(gr, "Trust Analysis :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         axisX = 0;
