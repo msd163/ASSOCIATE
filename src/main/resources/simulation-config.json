@@ -1,6 +1,16 @@
 {
-  "simulationRound": 2,
+  "simulationRound": 3,
   "configs": [
+    {
+      "method": 0,
+      "isValidateByTrustObservation": true,
+      "trustForgottenCoeff": 0.01,
+      "trustRecommendationCoeff": 1.0,
+      "trustObservationCoeff": 1.0,
+      "experienceDepthInRewarding": 1,
+      "ignoringThresholdOfTrustLevelValue": 0.00001,
+      "maximumConsideredRoutingHelpInTrustMechanism": 6
+    },
     {
       "method": 2,
       "isValidateByTrustObservation": true,
@@ -8,7 +18,7 @@
       "trustRecommendationCoeff": 1.0,
       "trustObservationCoeff": 1.0,
       "experienceDepthInRewarding": 1,
-      "ignoringThresholdOfTrustLevelValue": 0.0001,
+      "ignoringThresholdOfTrustLevelValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6
     },
     {
@@ -18,7 +28,7 @@
       "trustRecommendationCoeff": 0.0,
       "trustObservationCoeff": 0.0,
       "experienceDepthInRewarding": 1,
-      "ignoringThresholdOfTrustLevelValue": 0.0001,
+      "ignoringThresholdOfTrustLevelValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 8
     }
   ]

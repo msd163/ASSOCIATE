@@ -9,8 +9,6 @@ import java.util.List;
 
 public class AgentTrustDataDrawingWindow extends DrawingWindow {
 
-    private World world;
-
     //============================//============================  panning params
 
     public AgentTrustDataDrawingWindow(World world) {

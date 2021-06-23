@@ -23,10 +23,13 @@ import java.util.List;
 
 public class World {
 
-    public World(Simulator simulator, SimulationConfigItem simulationConfigItem) {
+    public World(int id,Simulator simulator, SimulationConfigItem simulationConfigItem) {
+        this.id = id;
         this.simulator = simulator;
         this.simulationConfigItem = simulationConfigItem;
     }
+
+    private int id;
 
     private Simulator simulator;
 
@@ -347,7 +350,7 @@ public class World {
         }
 
         //============================ Initializing Diagram Drawing Windows
-        trustMatrixDW = new TrustMatrixDrawingWindow(matrixGenerator);
+        trustMatrixDW = new TrustMatrixDrawingWindow(matrixGenerator, this);
         if (Config.DRAWING_SHOW_TRUST_MATRIX) {
             initDrawingWindow(widthHalf, heightHalf, trustMatrixDW, "t_mtx", "Trust Matrix", TtDrawingWindowLocation.TopLeft);
         }
@@ -534,5 +537,13 @@ public class World {
 
     public TrustManager getTrustManager() {
         return trustManager;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

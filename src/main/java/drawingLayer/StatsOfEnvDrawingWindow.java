@@ -8,8 +8,6 @@ import java.awt.*;
 
 public class StatsOfEnvDrawingWindow extends DrawingWindow {
 
-    private World world;
-
     //============================//============================  panning params
 
     public StatsOfEnvDrawingWindow(World world) {

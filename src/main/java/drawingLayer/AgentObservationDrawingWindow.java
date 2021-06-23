@@ -9,7 +9,6 @@ import java.util.List;
 
 public class AgentObservationDrawingWindow extends DrawingWindow {
 
-    private World world;
 
     //============================//============================  panning params
 

@@ -85,9 +85,16 @@ public class ImageBuilder {
             graphics2D.translate(100, drawingWindow.getRealHeight());
             drawingWindow.paint(graphics2D);
 
-            //String simDir = "/sim-" + (Globals.SIMULATION_TIMER < 10 ? "0" + Globals.SIMULATION_TIMER : Globals.SIMULATION_TIMER);
+            int worldId = drawingWindow.getWorldId();
+
+            String simDir = "";
+
+            if (worldId >= 0) {
+                simDir = "/sim-" + (worldId < 10 ? "0" + worldId : worldId);
+            }
+
             image = ImageTrimmer.trim(image);
-            ImageIO.write(image, "jpeg", new File(ProjectPath.instance().statisticsDir() + "/" + Globals.STATS_FILE_NAME + "/" + Globals.STATS_FILE_NAME + ".xmg." + drawingWindow.getName() + ".jpg"));
+            ImageIO.write(image, "jpeg", new File(ProjectPath.instance().statisticsDir() + "/" + Globals.STATS_FILE_NAME + simDir + "/" + Globals.STATS_FILE_NAME + ".xmg." + drawingWindow.getName() + ".jpg"));
 
             graphics2D.dispose();
 

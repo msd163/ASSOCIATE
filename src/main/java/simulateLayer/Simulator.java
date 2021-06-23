@@ -71,7 +71,7 @@ public class Simulator {
         worlds = new World[Globals.SIMULATION_ROUND];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
-            worlds[i] = new World(this, simulationConfig.getNextConfig());
+            worlds[i] = new World(i,this, simulationConfig.getNextConfig());
         }
 
         //============================//============================ Initializing statistics report file

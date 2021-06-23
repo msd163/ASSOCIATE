@@ -1,6 +1,7 @@
 package drawingLayer;
 
 import systemLayer.Agent;
+import systemLayer.World;
 import trustLayer.TrustMatrix;
 import utils.Globals;
 
@@ -16,8 +17,9 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
     private int matCount;
 
 
-    public TrustMatrixDrawingWindow(TrustMatrix matrixGenerator) {
+    public TrustMatrixDrawingWindow(TrustMatrix matrixGenerator, World world) {
         super();
+        this.world = world;
         this.matrix = matrixGenerator;
         matCount = this.matrix.getAgentCount();
         trustMatrix = this.matrix.getTrustMatrix();

@@ -8,8 +8,6 @@ import java.awt.*;
 
 public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
 
-    private World world;
-
     //============================//============================  panning params
 
     public StatsOfFalsePoNeDrawingWindow(World world) {

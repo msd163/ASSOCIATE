@@ -1,5 +1,6 @@
 package drawingLayer;
 
+import systemLayer.World;
 import utils.Globals;
 import utils.Point;
 
@@ -21,11 +22,15 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected float scale = 1f;
 
+    protected World world;
     protected int worldTimer;
     protected int simulationTimer;
 
     protected utils.Point prevPoints[];      //-- Previously visited point
 
+    public int getWorldId() {
+        return world == null ? -1 : world.getId();
+    }
 
     public DrawingWindow() {
         //============================//============================
@@ -118,8 +123,13 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        g.drawString("Simulation Time", 1100, 50);
-        g.drawString(": " + simulationTimer, 1300, 50);
+        if (world != null) {
+            g.drawString("World Id", 1100, 50);
+            g.drawString(": " + world.getId(), 1300, 50);
+        } else {
+            g.drawString("Simulation Time", 1100, 50);
+            g.drawString(": " + simulationTimer, 1300, 50);
+        }
         g.drawString("World Time", 1100, 90);
         g.drawString(": " + worldTimer, 1300, 90);
         g.drawString("Episode", 1100, 130);

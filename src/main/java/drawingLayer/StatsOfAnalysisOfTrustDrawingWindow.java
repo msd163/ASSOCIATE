@@ -9,8 +9,6 @@ import java.awt.*;
 
 public class StatsOfAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
-    private World world;
-
     //============================//============================  panning params
 
     public StatsOfAnalysisOfTrustDrawingWindow(World world) {

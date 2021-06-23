@@ -17,7 +17,6 @@ public class StateMachineDrawingWindow extends DrawingWindow {
 
     private static final Random random = new Random();
 
-    private World world;
     private Environment environment;
     private Color[] colors;
 

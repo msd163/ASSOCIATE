@@ -9,9 +9,6 @@ import java.util.List;
 
 public class AgentRecommendationDrawingWindow extends DrawingWindow {
 
-    private World world;
-
-
     //============================//============================  panning params
 
     public AgentRecommendationDrawingWindow(World world) {
