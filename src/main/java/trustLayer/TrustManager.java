@@ -42,7 +42,7 @@ public class TrustManager {
         float trustValue = calcTrustValue(requester, responder);
 
         trust.getLastUpdateTrustValues()[responder.getIndex()] = Globals.WORLD_TIMER;
-        trust.getTrustValues()[requester.getIndex()] = trustValue;
+        trust.getTrustValues()[responder.getIndex()] = trustValue;
 
         //-- trust of recommendation
 /*        if (simulationConfigItem.isUseTrustRecommendation()) {
@@ -254,6 +254,7 @@ public class TrustManager {
             //-- Creating experience
             TrustExperience experience = new TrustExperience(tvh.getResponder());
             experience.addExperience(requester, source, destination, reward);
+            experiences.add(experience);
 
             responderId = tvh.getResponder().getId();
             rewardCount++;
@@ -338,6 +339,7 @@ public class TrustManager {
         //-- Creating experience
         TrustIndirectExperience experience = new TrustIndirectExperience(responder);
         experience.addExperience(indirectExperienceItem);
+        experiences.add(experience);
 
         return true;
 
@@ -435,6 +437,7 @@ public class TrustManager {
         TrustObservation observation = new TrustObservation(responder);
         float reward = (isInTarget ? 1 : -1) * getRewardByOrder(0);
         observation.addObservation(observer, observed, null, null, reward);
+        observations.add(observation);
 
         return true;
     }
@@ -610,6 +613,7 @@ public class TrustManager {
         //-- Creating observation
         TrustIndirectObservation observation = new TrustIndirectObservation(responder);
         observation.addObservation(indirectObservationItem);
+        observations.add(observation);
 
         return true;
     }

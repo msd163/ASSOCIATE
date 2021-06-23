@@ -3,7 +3,7 @@
   "stateCount": 50,
   "stateCapacity": "100",
   "stateTargetCount": "#2..6",
-  "pitfallCount": "2",
+  "pitfallCount": "20",
   "--------------------------------------------------3": "AGENT",
   "agentsCount": "500",
   "bunches": [

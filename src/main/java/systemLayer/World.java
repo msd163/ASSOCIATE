@@ -59,7 +59,6 @@ public class World {
         //-- Indicating the agent and it's communications in environments with different colors
         traceAgentIds = new int[]{};
 
-
         //============================//============================
         trustManager = new TrustManager(simulationConfigItem);
 

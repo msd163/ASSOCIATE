@@ -67,6 +67,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             g.setColor(Globals.Color$.getLight(agentInRow.getBehavior().getCurrentBehaviorState()));
             g.fillRect(pnX - agentInRow.getCapacity().getCapPower() - 10, row * 5 + 1, agentInRow.getCapacity().getCapPower(), 3);
 
+            //-- updating trust data array that are shown in below of axis X
             for (int col = 0; col < matCount; col++) {
                 agentInCol = sAgents.get(col);
                 float trVal = this.trustMatrix[row][col];
@@ -99,13 +100,14 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
                     g.setColor(Color.DARK_GRAY);
                 }
 
+                //-- Calculation bigness of trust value
                 trVal = Math.abs(trVal);
 
                 int bigness =
-                        trVal <= 0.5f ? 1
-                                : trVal <= 1 ? 2
-                                : trVal <= 1.5 ? 3
-                                : trVal <= 2 ? 4
+                        trVal <= 0.01f ? 1
+                                : trVal <= 0.1 ? 2
+                                : trVal <= 0.3 ? 3
+                                : trVal <= 0.6 ? 4
                                 : 5;
 
                 g.fillRect(col * 5 + ((5 - bigness) / 2), row * 5 + ((5 - bigness) / 2), bigness, bigness);

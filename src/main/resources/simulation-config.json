@@ -4,7 +4,7 @@
     {
       "method": 2,
       "isValidateByTrustObservation": true,
-      "trustForgottenCoeff": 0.99,
+      "trustForgottenCoeff": 0.01,
       "trustRecommendationCoeff": 1.0,
       "trustObservationCoeff": 1.0,
       "experienceDepthInRewarding": 1,
@@ -14,12 +14,12 @@
     {
       "method": 4,
       "isValidateByTrustObservation": true,
-      "trustForgottenCoeff": 0.99,
-      "trustRecommendationCoeff": 1.0,
-      "trustObservationCoeff": 1.0,
+      "trustForgottenCoeff": 0.01,
+      "trustRecommendationCoeff": 0.0,
+      "trustObservationCoeff": 0.0,
       "experienceDepthInRewarding": 1,
       "ignoringThresholdOfTrustLevelValue": 0.0001,
-      "maximumConsideredRoutingHelpInTrustMechanism": 6
+      "maximumConsideredRoutingHelpInTrustMechanism": 8
     }
   ]
 }

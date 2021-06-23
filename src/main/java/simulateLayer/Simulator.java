@@ -165,6 +165,12 @@ public class Simulator {
             Globals.statsEnvGenerator.close();
             Globals.statsTrustGenerator.close();
         }
+
+        while (true) {
+            for (World world : worlds) {
+                world.updateWindows();
+            }
+        }
     }
 
     private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf, String name, String title) {

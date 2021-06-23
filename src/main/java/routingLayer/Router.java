@@ -1,6 +1,5 @@
 package routingLayer;
 
-import _type.TtIsValidatedInObservations;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
@@ -234,7 +233,10 @@ public class Router {
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
                 //============================//============================ _Trust
-                routingHelp.setTrustLevel(trustManager.getTrustValue(agent, wa.getAgent()));
+                /*if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
+                        simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath) {*/
+                    routingHelp.setTrustLevel(trustManager.getTrustValue(agent, wa.getAgent()));
+                /*}*/
                 //============================//============================
                 routingHelps.add(routingHelp);
             }
@@ -312,33 +314,33 @@ public class Router {
 //        }
     }
 
-  /*  private List<RoutingHelp> refineByObservation(Agent requester, List<RoutingHelp> srh) {
+    /*  private List<RoutingHelp> refineByObservation(Agent requester, List<RoutingHelp> srh) {
 
-        List<RoutingHelp> refinedList = new ArrayList<>();
+          List<RoutingHelp> refinedList = new ArrayList<>();
 
-        for (RoutingHelp routingHelp : srh) {
-            trustManager.ValidateHelperInObservations(requester, routingHelp);
-            if (routingHelp.getValidation() != TtIsValidatedInObservations.Invalid) {
-                refinedList.add(routingHelp);
-            }
-        }
+          for (RoutingHelp routingHelp : srh) {
+              trustManager.ValidateHelperInObservations(requester, routingHelp);
+              if (routingHelp.getValidation() != TtIsValidatedInObservations.Invalid) {
+                  refinedList.add(routingHelp);
+              }
+          }
 
-        refinedList.sort((RoutingHelp r1, RoutingHelp r2) -> {
-            if (r1.getValidation() == TtIsValidatedInObservations.Valid && r2.getValidation() != TtIsValidatedInObservations.Valid) {
-                return -1;
-            }
+          refinedList.sort((RoutingHelp r1, RoutingHelp r2) -> {
+              if (r1.getValidation() == TtIsValidatedInObservations.Valid && r2.getValidation() != TtIsValidatedInObservations.Valid) {
+                  return -1;
+              }
 
-            if (r1.getValidation() != TtIsValidatedInObservations.Valid && r2.getValidation() == TtIsValidatedInObservations.Valid) {
-                return 1;
-            }
+              if (r1.getValidation() != TtIsValidatedInObservations.Valid && r2.getValidation() == TtIsValidatedInObservations.Valid) {
+                  return 1;
+              }
 
-            return 0;
-        });
+              return 0;
+          });
 
-        return refinedList;
+          return refinedList;
 
-    }
-*/
+      }
+  */
     private void sortRoutingByShortestPath(List<RoutingHelp> sortedRoutingHelps) {
         // Sorting routerHelpers based on shortest path.
         sortedRoutingHelps.sort((c1, c2) -> {
