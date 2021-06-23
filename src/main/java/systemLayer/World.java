@@ -1,6 +1,7 @@
 package systemLayer;
 
 import _type.TtDrawingWindowLocation;
+import _type.TtSimulationMode;
 import drawingLayer.*;
 import routingLayer.Router;
 import simulateLayer.SimulationConfigItem;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class World {
 
-    public World(int id,Simulator simulator, SimulationConfigItem simulationConfigItem) {
+    public World(int id, Simulator simulator, SimulationConfigItem simulationConfigItem) {
         this.id = id;
         this.simulator = simulator;
         this.simulationConfigItem = simulationConfigItem;
@@ -137,10 +138,12 @@ public class World {
             }
         }
 
-        int maxEpisodeCount = Math.max(environment.getProMax().getMaxAgentTargetCount(), Config.WORLD_LIFE_TIME / Config.EPISODE_TIMOUT);
-        epStatistics = new EpisodeStatistics[maxEpisodeCount];
-        for (i = 0; i < maxEpisodeCount; i++) {
-            epStatistics[i] = new EpisodeStatistics();
+        if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
+            int maxEpisodeCount = Math.max(environment.getProMax().getMaxAgentTargetCount(), Config.WORLD_LIFE_TIME / Config.EPISODE_TIMOUT);
+            epStatistics = new EpisodeStatistics[maxEpisodeCount];
+            for (i = 0; i < maxEpisodeCount; i++) {
+                epStatistics[i] = new EpisodeStatistics();
+            }
         }
 
         //============================//============================ Init trust matrix
@@ -202,8 +205,9 @@ public class World {
          *            MAIN LOOP      *
          * ****************************/
 
-        epStatistics[0].setFromTime(Globals.WORLD_TIMER);
-
+        if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
+            epStatistics[0].setFromTime(Globals.WORLD_TIMER);
+        }
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
@@ -235,7 +239,7 @@ public class World {
             }
 
             //============================//============================ Observation
-            if (simulationConfigItem.isIsUseObservation() || simulationConfigItem.isIsUseIndirectObservation() ) {
+            if (simulationConfigItem.isIsUseObservation() || simulationConfigItem.isIsUseIndirectObservation()) {
                 for (Agent agent : agents) {
                     if (agent.getCapacity().getObservationCap() > 0) {
                         trustManager.observe(agent);
@@ -325,7 +329,6 @@ public class World {
 
 
         //============================//============================ Running program after finishing lifeTime of the world.
-
 
 
         /*while (Globals.SIMULATION_TIMER == Globals.SIMULATION_ROUND - 1) {

@@ -1,6 +1,18 @@
 {
-  "simulationRound": 5,
+  "simulationRound": 1,
   "configs": [
+    {
+      "method": 4,
+      "trustForgottenCoeff": 0.1,
+      "isUseExperience": true,
+      "isUseIndirectExperience": true,
+      "isUseObservation": true,
+      "isUseIndirectObservation": true,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "trustRecommendationCoeff": 0.0,
+      "experienceDepthInRewarding": 1,
+      "maximumConsideredRoutingHelpInTrustMechanism": 6
+    },
     {
       "method": 0,
       "trustForgottenCoeff": 0.01,
@@ -16,18 +28,6 @@
     {
       "method": 2,
       "trustForgottenCoeff": 0.00,
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isUseObservation": true,
-      "isUseIndirectObservation": true,
-      "ignoringThresholdOfTrustValue": 0.00001,
-      "trustRecommendationCoeff": 0.0,
-      "experienceDepthInRewarding": 1,
-      "maximumConsideredRoutingHelpInTrustMechanism": 6
-    },
-    {
-      "method": 4,
-      "trustForgottenCoeff": 0.1,
       "isUseExperience": true,
       "isUseIndirectExperience": true,
       "isUseObservation": true,
