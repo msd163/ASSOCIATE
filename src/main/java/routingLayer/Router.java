@@ -297,10 +297,10 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
-     /*   if (simulationConfigItem.isUseTrustRecommendation()) {
-            trustManager.shareRecommendation(agent, help.getHelperAgent());
-            trustManager.shareRecommendation(help.getHelperAgent(), agent);
-        }*/
+        if (simulationConfigItem.isIsUseIndirectExperience()) {
+            trustManager.shareExperiences(agent, help.getHelperAgent());
+            trustManager.shareObservations(agent, help.getHelperAgent());
+        }
 
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {
             statistics___.add_Itt_TrustToHonest();

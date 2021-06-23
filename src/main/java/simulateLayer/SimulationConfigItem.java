@@ -4,38 +4,35 @@ import _type.TtTrustMethodology;
 
 public class SimulationConfigItem {
     private int method;
-    private boolean isValidateByTrustObservation;
-    private float   trustForgottenCoeff;
-    private float   trustRecommendationCoeff;
-    private float   trustObservationCoeff;
-    private int     experienceDepthInRewarding;
-    private float   ignoringThresholdOfTrustLevelValue;
-    private float   maximumConsideredRoutingHelpInTrustMechanism;
+    // private boolean isValidateByTrustObservation;
+    private float trustForgottenCoeff;
+    private float trustRecommendationCoeff;
+    private boolean isUseExperience;
+    private boolean isUseIndirectExperience;
+    private boolean isUseObservation;
+    private boolean isUseIndirectObservation;
+    private int   experienceDepthInRewarding;
+    private float ignoringThresholdOfTrustValue;
+    private float maximumConsideredRoutingHelpInTrustMechanism;
 
     //============================//============================//============================
     public String getInfo() {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
-            return "Method: " + methodology +
-                    " | IsUseObservation: " + isValidateByTrustObservation +
-                    " | TrustForgottenCoeff: " + trustForgottenCoeff +
-                    " | TrustRecommendationCoeff: " + trustRecommendationCoeff +
-                    " | TrustObservationCoeff: " + trustObservationCoeff +
-                    " | ExperienceDepthInRewarding: " + experienceDepthInRewarding +
-                    " | IgnoringThresholdOfTrt: " + ignoringThresholdOfTrustLevelValue +
-                    " | MaxConsRoutingHelpInTrt: " + maximumConsideredRoutingHelpInTrustMechanism
-                    ;
+            return "method: " + methodology +
+                    " | trustForgottenCoeff: " + trustForgottenCoeff +
+                    " | trustRecommendationCoeff: " + trustRecommendationCoeff +
+                    " | isUseExperience: " + isUseExperience +
+                    " | isUseIndirectExperience: " + isUseIndirectExperience +
+                    " | isUseObservation: " + isUseObservation +
+                    " | isUseIndirectObservation: " + isUseIndirectObservation +
+                    " | experienceDepthInRewarding: " + experienceDepthInRewarding +
+                    " | ignoringThresholdOfTrustValue: " + ignoringThresholdOfTrustValue +
+                    " | maximumConsideredRoutingHelpInTrustMechanism: " + maximumConsideredRoutingHelpInTrustMechanism;
+
         }
-        return "Method: " + methodology;
+        return "method: " + methodology;
 
-    }
-
-    public boolean isUseTrustRecommendation() {
-        return trustRecommendationCoeff > 0;
-    }
-
-    public boolean isUseTrustObservation() {
-        return trustObservationCoeff > 0;
     }
 
     public boolean isUseTrustForgottenCoeff() {
@@ -55,31 +52,37 @@ public class SimulationConfigItem {
         this.method = method;
     }
 
-    public boolean isIsValidateByTrustObservation() {
-        return isValidateByTrustObservation;
-    }
-
 
     public float getTrustForgottenCoeff() {
         return trustForgottenCoeff;
     }
 
-
     public float getTrustRecommendationCoeff() {
         return trustRecommendationCoeff;
     }
 
+    public boolean isIsUseExperience() {
+        return isUseExperience;
+    }
 
-    public float getTrustObservationCoeff() {
-        return trustObservationCoeff;
+    public boolean isIsUseIndirectExperience() {
+        return isUseIndirectExperience;
+    }
+
+    public boolean isIsUseObservation() {
+        return isUseObservation;
+    }
+
+    public boolean isIsUseIndirectObservation() {
+        return isUseIndirectObservation;
     }
 
     public int getExperienceDepthInRewarding() {
         return experienceDepthInRewarding;
     }
 
-    public float getIgnoringThresholdOfTrustLevelValue() {
-        return ignoringThresholdOfTrustLevelValue;
+    public float getIgnoringThresholdOfTrustValue() {
+        return ignoringThresholdOfTrustValue;
     }
 
     public float getMaximumConsideredRoutingHelpInTrustMechanism() {

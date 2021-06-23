@@ -9,6 +9,7 @@ public enum TtOutLogMethodSection {
     UpdateTargets("UpTrgs"),
     UpdateWatchList("UpWtch"),
     DoYouKnowWhereIs("DoYouKn"),
+    TrustData_AddItem("Td-AddItem"),
     //
     ;
 

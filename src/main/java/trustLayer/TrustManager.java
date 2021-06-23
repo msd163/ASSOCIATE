@@ -133,7 +133,8 @@ public class TrustManager {
         List<Float> norList = new ArrayList<>();
 
         for (TrustDataItem item : items) {
-            float trustValue = getTrustValue(requester, item.getIssuer());
+            //-- For preventing stack over flow in calculating trust, we use trust value that is calculated previously
+            float trustValue = requester.getTrust().getTrustValues()[item.getIssuer().getIndex()]; //getTrustValue(requester, item.getIssuer());
             norList.add(trustValue * item.getReward() * getForgottenValue(item.getTime()));
         }
         return norList;
@@ -279,7 +280,20 @@ public class TrustManager {
 
     //============================//============================//============================ Indirect Experience
 
-    private boolean addIndirectExperience(TrustDataItem indirectExperienceItem, Agent responder, Agent issuer, Agent receiver) {
+    public boolean shareExperiences(Agent issuer/*experimenter*/, Agent receiver) {
+        if (issuer.getTrust().getExperiences().size() == 0) {
+            return false;
+        }
+
+        for (TrustExperience experience : issuer.getTrust().getExperiences()) {
+            for (TrustDataItem item : experience.getItems()) {
+                addIndirectExperience(item, experience.getResponder(), issuer, receiver);
+            }
+        }
+        return true;
+    }
+
+    public boolean addIndirectExperience(TrustDataItem indirectExperienceItem, Agent responder, Agent issuer, Agent receiver) {
 
         //============================
         int experienceCap = receiver.getTrust().getIndirectExperienceCap();
@@ -553,7 +567,21 @@ public class TrustManager {
 
 
     //============================//============================//============================ Indirect Observation
-    private boolean addIndirectObservation(TrustDataItem indirectObservationItem, Agent responder, Agent issuer/*observer*/, Agent receiver) {
+
+    public boolean shareObservations(Agent issuer/*observer*/, Agent receiver) {
+        if (issuer.getTrust().getObservations().size() == 0) {
+            return false;
+        }
+
+        for (TrustObservation observation : issuer.getTrust().getObservations()) {
+            for (TrustDataItem item : observation.getItems()) {
+                addIndirectObservation(item, observation.getResponder(), issuer, receiver);
+            }
+        }
+        return true;
+    }
+
+    public boolean addIndirectObservation(TrustDataItem indirectObservationItem, Agent responder, Agent issuer/*observer*/, Agent receiver) {
 
         //============================
         int observationCap = receiver.getTrust().getIndirectObservationCap();

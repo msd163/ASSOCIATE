@@ -35,7 +35,7 @@ public class StatsOfAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
         printStatsInfo(3, "Specificity (#of TN/#of all N)", world.getWdStatistics()[worldTimer].getTrustSpecificity(), Color.PINK);
 
-        printStatsInfo(4, "[ X200 Scale ])", Color.WHITE);
+        printStatsInfo(4, "[ X200 Scale ]", Color.WHITE);
 
         //============================//============================//============================
 

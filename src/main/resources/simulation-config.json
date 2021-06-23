@@ -1,35 +1,65 @@
 {
-  "simulationRound": 3,
+  "simulationRound": 5,
   "configs": [
     {
       "method": 0,
-      "isValidateByTrustObservation": true,
       "trustForgottenCoeff": 0.01,
-      "trustRecommendationCoeff": 1.0,
-      "trustObservationCoeff": 1.0,
+      "isUseExperience": true,
+      "isUseIndirectExperience": true,
+      "isUseObservation": true,
+      "isUseIndirectObservation": true,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "trustRecommendationCoeff": 0.0,
       "experienceDepthInRewarding": 1,
-      "ignoringThresholdOfTrustLevelValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6
     },
     {
       "method": 2,
-      "isValidateByTrustObservation": true,
-      "trustForgottenCoeff": 0.01,
-      "trustRecommendationCoeff": 1.0,
-      "trustObservationCoeff": 1.0,
+      "trustForgottenCoeff": 0.00,
+      "isUseExperience": true,
+      "isUseIndirectExperience": true,
+      "isUseObservation": true,
+      "isUseIndirectObservation": true,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "trustRecommendationCoeff": 0.0,
       "experienceDepthInRewarding": 1,
-      "ignoringThresholdOfTrustLevelValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6
     },
     {
       "method": 4,
-      "isValidateByTrustObservation": true,
-      "trustForgottenCoeff": 0.01,
+      "trustForgottenCoeff": 0.1,
+      "isUseExperience": true,
+      "isUseIndirectExperience": true,
+      "isUseObservation": true,
+      "isUseIndirectObservation": true,
+      "ignoringThresholdOfTrustValue": 0.00001,
       "trustRecommendationCoeff": 0.0,
-      "trustObservationCoeff": 0.0,
       "experienceDepthInRewarding": 1,
-      "ignoringThresholdOfTrustLevelValue": 0.00001,
-      "maximumConsideredRoutingHelpInTrustMechanism": 8
+      "maximumConsideredRoutingHelpInTrustMechanism": 6
+    },
+    {
+      "method": 4,
+      "trustForgottenCoeff": 0.0,
+      "isUseExperience": true,
+      "isUseIndirectExperience": false,
+      "isUseObservation": true,
+      "isUseIndirectObservation": false,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "trustRecommendationCoeff": 0.0,
+      "experienceDepthInRewarding": 1,
+      "maximumConsideredRoutingHelpInTrustMechanism": 6
+    },
+    {
+      "method": 4,
+      "trustForgottenCoeff": 0.0,
+      "isUseExperience": true,
+      "isUseIndirectExperience": false,
+      "isUseObservation": false,
+      "isUseIndirectObservation": false,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "trustRecommendationCoeff": 0.0,
+      "experienceDepthInRewarding": 1,
+      "maximumConsideredRoutingHelpInTrustMechanism": 6
     }
   ]
 }

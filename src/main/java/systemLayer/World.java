@@ -235,7 +235,7 @@ public class World {
             }
 
             //============================//============================ Observation
-            if (simulationConfigItem.isIsValidateByTrustObservation()) {
+            if (simulationConfigItem.isIsUseObservation() || simulationConfigItem.isIsUseIndirectObservation() ) {
                 for (Agent agent : agents) {
                     if (agent.getCapacity().getObservationCap() > 0) {
                         trustManager.observe(agent);
@@ -394,7 +394,7 @@ public class World {
         //============================ Initializing Observation Drawing Windows
         agentObservationDW = new AgentObservationDrawingWindow(this);
         if (Config.DRAWING_SHOW_AGENT_OBSERVATION_DATA) {
-            initDrawingWindow(widthHalf, heightHalf, agentObservationDW, "a_obs", "gent Observation Data", TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, agentObservationDW, "a_obs", "Agent Observation Data", TtDrawingWindowLocation.BottomRight);
         }
     }
 
