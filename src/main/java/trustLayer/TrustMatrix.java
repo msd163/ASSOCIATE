@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class TrustMatrix {
 
@@ -31,34 +32,35 @@ public class TrustMatrix {
     }
 
     public void update(WorldStatistics statistics) {
-        for (int i = 0 ; i < agentCount; i++) {
+        Agent responder;
+        for (int i = 0; i < agentCount; i++) {
             Agent agent = sAgents.get(i);
-            TrustHistory[] histories = agent.getTrust().getHistories();
-            for (TrustHistory history : histories) {
-                if (history != null && history.getLastVisitTime() == Globals.WORLD_TIMER) {
-                    for (int j = 0, size = sAgents.size(); j < size; j++) {
-                        Agent trustee = sAgents.get(j);
-                        if (trustee.getId() == history.getAgent().getId()) {
-                            trustMatrix[i][j] = history.getFinalTrustLevel();
-                            if (history.getFinalTrustLevel() > 0 && !trustee.getBehavior().getHasHonestState()) {
-                                statistics.add_Itt_FalseNegativeTrust();
-                                // statistics.getAgentStatistics()[j].addAsTrustee_FN();
-                            }
-                            if (history.getFinalTrustLevel() < 0 && trustee.getBehavior().getHasHonestState()) {
-                                statistics.add_Itt_FalsePositiveTrust();
-                                //  statistics.getAgentStatistics()[j].addAsTrustee_FP();
-                            }
-                            if (history.getFinalTrustLevel() > 0 && trustee.getBehavior().getHasHonestState()) {
-                                statistics.add_Itt_TrueNegativeTrust();
-                                //  statistics.getAgentStatistics()[j].addAsTrustee_TN();
-                            }
-                            if (history.getFinalTrustLevel() < 0 && !trustee.getBehavior().getHasHonestState()) {
-                                statistics.add_Itt_TruePositiveTrust();
-                                //  statistics.getAgentStatistics()[j].addAsTrustee_TP();
-                            }
-                            break;
-                        }
+            float[] trustValues = agent.getTrust().getTrustValues();
+            int[] lastUpdateTimes = agent.getTrust().getLastUpdateTrustValues();
+            for (int k = 0, trustValuesLength = trustValues.length; k < trustValuesLength; k++) {
+                responder = sAgents.get(k);
+                float tValue = trustValues[k];
+                int updateTime = lastUpdateTimes[k];
+                if (/*tValue != 0 && */updateTime == Globals.WORLD_TIMER) {
+                    trustMatrix[i][k] = tValue;
+                    if (tValue > 0 && !responder.getBehavior().getHasHonestState()) {
+                        statistics.add_Itt_FalseNegativeTrust();
+                        // statistics.getAgentStatistics()[j].addAsTrustee_FN();
                     }
+                    if (tValue < 0 && responder.getBehavior().getHasHonestState()) {
+                        statistics.add_Itt_FalsePositiveTrust();
+                        //  statistics.getAgentStatistics()[j].addAsTrustee_FP();
+                    }
+                    if (tValue > 0 && responder.getBehavior().getHasHonestState()) {
+                        statistics.add_Itt_TrueNegativeTrust();
+                        //  statistics.getAgentStatistics()[j].addAsTrustee_TN();
+                    }
+                    if (tValue < 0 && !responder.getBehavior().getHasHonestState()) {
+                        statistics.add_Itt_TruePositiveTrust();
+                        //  statistics.getAgentStatistics()[j].addAsTrustee_TP();
+                    }
+                    break;
+
                 }
             }
         }

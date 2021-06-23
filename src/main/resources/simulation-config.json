@@ -7,7 +7,7 @@
       "trustForgottenCoeff": 0.99,
       "trustRecommendationCoeff": 1.0,
       "trustObservationCoeff": 1.0,
-      "historyDepthInTrustScoring": 1,
+      "experienceDepthInRewarding": 1,
       "ignoringThresholdOfTrustLevelValue": 0.0001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6
     },
@@ -17,7 +17,7 @@
       "trustForgottenCoeff": 0.99,
       "trustRecommendationCoeff": 1.0,
       "trustObservationCoeff": 1.0,
-      "historyDepthInTrustScoring": 1,
+      "experienceDepthInRewarding": 1,
       "ignoringThresholdOfTrustLevelValue": 0.0001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6
     }

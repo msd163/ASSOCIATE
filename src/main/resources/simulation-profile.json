@@ -3,27 +3,37 @@
   "stateCount": 50,
   "stateCapacity": "100",
   "stateTargetCount": "#2..6",
-  "pitfallCount": "1",
+  "pitfallCount": "2",
   "--------------------------------------------------3": "AGENT",
   "agentsCount": "500",
   "bunches": [
     {
-      "bunchCount": "%10@500",
+      "bunchCount": "%30@500",
       "targetCount": "200",
       "watchDepth": "2",
-      "watchListCapacity": "#800..1000",
-      "travelHistory": "#1000..2000",
-      "trustHistoryCap": "#800..1000",
-      "trustHistoryItemCap": "#800..1000",
+      "watchListCap": "#800..1000",
+      "travelHistoryCap": "#1000..2000",
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#800..1000",
+      "experienceItemCap": "#800..1000",
+      "indirectExperienceCap": "#800..1000",
+      "indirectExperienceItemCap": "#800..1000",
+      "_3": "-----------------------------------",
+      "observationCap": "#800..2000",
+      "observationItemCap": "#800..2000",
+      "indirectObservationCap": "#800..2000",
+      "indirectObservationItemCap": "#800..2000",
+      "_4": "-----------------------------------",
       "trustRecommendationCap": "#800..1000",
       "trustRecommendationItemCap": "#80..100",
-      "observationCap": "#800..2000",
-      "trustReplaceHistoryMethod": 1,
+      "_5": "-----------------------------------",
       "behavior": {
         "honestPercent": 97,
         "adversaryPercent": 1,
         "mischiefPercent": 0,
-        "hypocrite": {
+        "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
           "mischiefPercent": 10
@@ -31,48 +41,35 @@
       }
     },
     {
-      "bunchCount": "%40@500",
+      "bunchCount": "%70@500",
       "targetCount": "200",
       "watchDepth": "#0..1",
-      "watchListCapacity": "#100..800",
-      "travelHistory": "#500..1000",
-      "trustHistoryCap": "#100..800",
-      "trustHistoryItemCap": "#100..800",
-      "trustRecommendationCap": "#10..50",
-      "trustRecommendationItemCap": "#10..50",
-      "observationCap": "0",
+      "watchListCap": "#8..800",
+      "travelHistoryCap": "#100..800",
+      "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#10..800",
+      "experienceItemCap": "#10..800",
+      "indirectExperienceCap": "#10..800",
+      "indirectExperienceItemCap": "#10..800",
+      "_3": "-----------------------------------",
+      "observationCap": "#100..800",
+      "observationItemCap": "#100..800",
+      "indirectObservationCap": "#100..800",
+      "indirectObservationItemCap": "#100..800",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#100..1000",
+      "trustRecommendationItemCap": "#80..100",
+      "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 94,
+        "honestPercent": 92,
         "adversaryPercent": 3,
-        "mischiefPercent": 2,
-        "hypocrite": {
-          "honestPercent": 40,
-          "adversaryPercent": 30,
-          "mischiefPercent": 30
-        }
-      }
-    },
-    {
-      "bunchCount": "%50@500",
-      "targetCount": "200",
-      "watchDepth": "0",
-      "watchListCapacity": "#10..100",
-      "travelHistory": "#1..5",
-      "trustHistoryCap": "#1..5",
-      "trustHistoryItemCap": "#1..10",
-      "trustRecommendationCap": "#100..300",
-      "trustRecommendationItemCap": "#100..300",
-      "observationCap": "0",
-      "trustReplaceHistoryMethod": 1,
-      "behavior": {
-        "honestPercent": 90,
-        "adversaryPercent": 2,
-        "mischiefPercent": 8,
-        "hypocrite": {
+        "mischiefPercent": 5,
+        "hypocriteBehavior": {
           "honestPercent": 50,
-          "adversaryPercent": 30,
-          "mischiefPercent": 20
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
         }
       }
     }

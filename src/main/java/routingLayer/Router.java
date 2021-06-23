@@ -163,12 +163,12 @@ public class Router {
             //
             if (finalState.isIsPitfall()) {
                 statistics___.add_Itt_AgentsInPitfall();
-                trustManager.reduceTrustForPitfall(agent);
+                trustManager.createFailedExperience(agent, world.getEnvironment().getState(currentAgentStateId), finalState);
             }
             //
             else if (finalState.getId() == agent.getCurrentTarget().getId()) {
                 statistics___.add_Itt_AgentsInTarget();
-                trustManager.increaseTrustForSuccessTarget(agent);
+                trustManager.creatSuccessExperience(agent, world.getEnvironment().getState(currentAgentStateId), finalState);
             }
         }
         //-- Failed to travel to neighbor.
@@ -234,7 +234,7 @@ public class Router {
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
                 //============================//============================ _Trust
-                routingHelp.setTrustLevel(trustManager.getTrustLevel(agent, wa.getAgent(),true));
+                routingHelp.setTrustLevel(trustManager.getTrustValue(agent, wa.getAgent()));
                 //============================//============================
                 routingHelps.add(routingHelp);
             }
@@ -257,9 +257,9 @@ public class Router {
                 if (sortedRoutingHelps == null) return;
 
                 //-- Validating routingHelps according to observations
-                if (simulationConfigItem.isIsValidateByTrustObservation()) {
+               /* if (simulationConfigItem.isIsValidateByTrustObservation()) {
                     sortedRoutingHelps = refineByObservation(agent, sortedRoutingHelps);
-                }
+                }*/
                 break;
 
             case NoTrust_ShortPath:
@@ -295,10 +295,10 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
-        if (simulationConfigItem.isUseTrustRecommendation()) {
+     /*   if (simulationConfigItem.isUseTrustRecommendation()) {
             trustManager.shareRecommendation(agent, help.getHelperAgent());
             trustManager.shareRecommendation(help.getHelperAgent(), agent);
-        }
+        }*/
 
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {
             statistics___.add_Itt_TrustToHonest();
@@ -312,7 +312,7 @@ public class Router {
 //        }
     }
 
-    private List<RoutingHelp> refineByObservation(Agent requester, List<RoutingHelp> srh) {
+  /*  private List<RoutingHelp> refineByObservation(Agent requester, List<RoutingHelp> srh) {
 
         List<RoutingHelp> refinedList = new ArrayList<>();
 
@@ -338,7 +338,7 @@ public class Router {
         return refinedList;
 
     }
-
+*/
     private void sortRoutingByShortestPath(List<RoutingHelp> sortedRoutingHelps) {
         // Sorting routerHelpers based on shortest path.
         sortedRoutingHelps.sort((c1, c2) -> {

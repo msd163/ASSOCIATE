@@ -1,8 +1,8 @@
 package systemLayer;
 
 import com.google.gson.annotations.Expose;
-import utils.Globals;
 import simulateLayer.profiler.SimulationProfiler;
+import utils.Globals;
 
 public class AgentCapacity {
 
@@ -17,25 +17,39 @@ public class AgentCapacity {
 
         travelHistoryCap = profiler.getCurrentBunch().getTravelHistoryCapD().nextValue();
 
-        watchListCapacity = profiler.getCurrentBunch().getWatchListCapacityD().nextValue();
+        watchListCap = profiler.getCurrentBunch().getWatchListCapD().nextValue();
 
         trustRecommendationCap = profiler.getCurrentBunch().getTrustRecommendationCapD().nextValue();
         trustRecommendationItemCap = profiler.getCurrentBunch().getTrustRecommendationItemCapD().nextValue();
 
-        trustHistoryCap = profiler.getCurrentBunch().getTrustHistoryCapD().nextValue();
-        trustHistoryItemCap = profiler.getCurrentBunch().getTrustHistoryItemCapD().nextValue();
-observationCap = profiler.getCurrentBunch().getObservationCapD().nextValue();
+        experienceCap = profiler.getCurrentBunch().getExperienceCapD().nextValue();
+        experienceItemCap = profiler.getCurrentBunch().getExperienceItemCapD().nextValue();
 
+        indirectExperienceCap = profiler.getCurrentBunch().getIndirectExperienceCapD().nextValue();
+        indirectExperienceItemCap = profiler.getCurrentBunch().getIndirectExperienceItemCapD().nextValue();
+
+        observationCap = profiler.getCurrentBunch().getObservationCapD().nextValue();
+        observationItemCap = profiler.getCurrentBunch().getObservationItemCapD().nextValue();
+
+        indirectObservationCap = profiler.getCurrentBunch().getIndirectObservationCapD().nextValue();
+        indirectObservationItemCap = profiler.getCurrentBunch().getIndirectObservationItemCapD().nextValue();
 
         // capPower is between 0 and 100
         capPower =
-                (int) (15 * ((float) trustHistoryCap / Globals.ProfileBunchMax.maxTrustHistoryCap)) +
-                        (int) (10 * ((float) trustHistoryItemCap / Globals.ProfileBunchMax.maxTrustHistoryCap)) +
-                        (int) (10 * ((float) trustRecommendationCap / Globals.ProfileBunchMax.maxTrustRecommendationCap)) +
-                        (int) (10 * ((float) trustRecommendationItemCap / Globals.ProfileBunchMax.maxTrustRecommendationItemCap)) +
+                (int) (10 * ((float) experienceCap / Globals.ProfileBunchMax.maxExperienceCap)) +
+                        (int) (5 * ((float) experienceItemCap / Globals.ProfileBunchMax.maxExperienceItemCap)) +
+                        (int) (3 * ((float) indirectExperienceCap / Globals.ProfileBunchMax.maxIndirectExperienceCap)) +
+                        (int) (2 * ((float) indirectExperienceItemCap / Globals.ProfileBunchMax.maxIndirectExperienceItemCap)) +
+
                         (int) (10 * ((float) observationCap / Globals.ProfileBunchMax.maxObservationCap)) +
-                        (int) (20 * ((float) travelHistoryCap / Globals.ProfileBunchMax.maxTravelHistoryCap)) +
-                        (int) (20 * ((float) watchListCapacity / Globals.ProfileBunchMax.maxWatchListCapacity)) +
+                        (int) (5 * ((float) observationItemCap / Globals.ProfileBunchMax.maxObservationItemCap)) +
+                        (int) (3 * ((float) indirectObservationCap / Globals.ProfileBunchMax.maxIndirectObservationCap)) +
+                        (int) (2 * ((float) indirectObservationItemCap / Globals.ProfileBunchMax.maxIndirectObservationItemCap)) +
+
+                        (int) (10 * ((float) trustRecommendationCap / Globals.ProfileBunchMax.maxTrustRecommendationCap)) +
+                        (int) (5 * ((float) trustRecommendationItemCap / Globals.ProfileBunchMax.maxTrustRecommendationItemCap)) +
+                        (int) (15 * ((float) travelHistoryCap / Globals.ProfileBunchMax.maxTravelHistoryCap)) +
+                        (int) (15 * ((float) watchListCap / Globals.ProfileBunchMax.maxWatchListCap)) +
                         (int) (15 * ((float) watchDepth / Globals.ProfileBunchMax.maxWatchDepth))
         ;
 
@@ -45,15 +59,20 @@ observationCap = profiler.getCurrentBunch().getObservationCapD().nextValue();
     private Agent agent;
 
     @Expose
-    private int trustHistoryItemCap;        //size of trust items in each trust history. trust items is score of trust for one agent (helper)
+    private int experienceCap;
     @Expose
-    private int trustHistoryCap;
+    private int experienceItemCap;        //size of experience items in each trust Experience history. experience items is tuple of trust for one agent (responder)
     @Expose
-    private int trustRecommendationItemCap;        //size of recommendation items in each trust history. trust items is score of trust for one agent (helper)
+    private int indirectExperienceCap;
+    @Expose
+    private int indirectExperienceItemCap;        //size of experience items in each trust Experience history. experience items is tuple of trust for one agent (responder)
+
+    @Expose
+    private int trustRecommendationItemCap;        //size of recommendation items in each trust history. trust items is score of trust for one agent (responder)
     @Expose
     private int trustRecommendationCap;
     @Expose
-    private int watchListCapacity;
+    private int watchListCap;
     @Expose
     private int watchDepth;                              // depth of watch in neighbor states
     @Expose
@@ -61,10 +80,16 @@ observationCap = profiler.getCurrentBunch().getObservationCapD().nextValue();
     @Expose
     private int observationCap;
     @Expose
+    private int observationItemCap;
+    @Expose
+    private int indirectObservationCap;
+    @Expose
+    private int indirectObservationItemCap;
+    @Expose
     private int capPower; // it will be calculated by other params
 
-    public int getWatchListCapacity() {
-        return watchListCapacity;
+    public int getWatchListCap() {
+        return watchListCap;
     }
 
     public int getWatchDepth() {
@@ -82,33 +107,53 @@ observationCap = profiler.getCurrentBunch().getObservationCapD().nextValue();
     @Override
     public String toString() {
         return "\n\tAgentCapacity{" +
-                "\n\t\ttrustHistoryItemCap=" + trustHistoryItemCap +
-                ",\n\t\ttrustHistoryCap=" + trustHistoryCap +
-                ",\n\t\twatchListCapacity=" + watchListCapacity +
+                "\n\t\texperienceItemCap=" + experienceItemCap +
+                ",\n\t\texperienceCap=" + experienceCap +
+                ",\n\t\twatchListCap=" + watchListCap +
                 ",\n\t\twatchDepth=" + watchDepth +
                 ",\n\t\ttravelHistoryCap=" + travelHistoryCap +
                 ",\n\t\tcapPower=" + capPower +
                 '}';
     }
 
-    public int getTrustHistoryItemCap() {
-        return trustHistoryItemCap;
+    public int getIndirectExperienceCap() {
+        return indirectExperienceCap;
     }
 
-    public void setTrustHistoryItemCap(int trustHistoryItemCap) {
-        this.trustHistoryItemCap = trustHistoryItemCap;
+    public int getIndirectExperienceItemCap() {
+        return indirectExperienceItemCap;
     }
 
-    public int getTrustHistoryCap() {
-        return trustHistoryCap;
+    public int getObservationItemCap() {
+        return observationItemCap;
     }
 
-    public void setTrustHistoryCap(int trustHistoryCap) {
-        this.trustHistoryCap = trustHistoryCap;
+    public int getIndirectObservationCap() {
+        return indirectObservationCap;
     }
 
-    public void setWatchListCapacity(int watchListCapacity) {
-        this.watchListCapacity = watchListCapacity;
+    public int getIndirectObservationItemCap() {
+        return indirectObservationItemCap;
+    }
+
+    public int getExperienceItemCap() {
+        return experienceItemCap;
+    }
+
+    public void setExperienceItemCap(int experienceItemCap) {
+        this.experienceItemCap = experienceItemCap;
+    }
+
+    public int getExperienceCap() {
+        return experienceCap;
+    }
+
+    public void setExperienceCap(int experienceCap) {
+        this.experienceCap = experienceCap;
+    }
+
+    public void setWatchListCap(int watchListCap) {
+        this.watchListCap = watchListCap;
     }
 
     public void setWatchDepth(int watchDepth) {

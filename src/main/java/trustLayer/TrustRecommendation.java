@@ -5,6 +5,7 @@ import systemLayer.Agent;
 import utils.Globals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TrustRecommendation {
 
@@ -64,16 +65,52 @@ public class TrustRecommendation {
         }
         finalTrustLevelUpdateTime = Globals.WORLD_TIMER;
         finalTrustLevel = 0;
+
+        List<Float> itemsWithForgottenFactorEffect = new ArrayList<>();
+
+        //-- Adding forgotten factor effect to trust items
         for (TrustRecommendationItem item : items) {
+            float recommenderTrustLevel = master.getWorld().getTrustManager().getTrustValue(master, item.getRecommender());
+            //-- If recommender identified as an honest agent...
+            if (recommenderTrustLevel > 0) {
+                itemsWithForgottenFactorEffect.add(
+                        recommenderTrustLevel
+                                * item.getRecommendedTrustLevel()
+                                * (float) Math.pow(1 - simulationConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getRecommendTime()));
+                //changeFinalTrustLeve(item.getTrustScore() * Math.pow(agent.getWorld().getSimulationConfig().getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getVisitTime()));
+            }
+        }
+
+        //-- Sorting items according to abstraction |value| of trusts
+        itemsWithForgottenFactorEffect.sort((Float f1, Float f2) -> {
+                    if (Math.abs(f1) > Math.abs(f2)) {
+                        return -1;
+                    }
+                    if (Math.abs(f1) < Math.abs(f2)) {
+                        return 1;
+                    }
+                    return 0;
+                }
+        );
+
+        //-- Calculating trust level value according to Basel Series
+        int index = 0;
+        for (int i = 0, tsSize = itemsWithForgottenFactorEffect.size(); i < tsSize; i++) {
+            Float t = itemsWithForgottenFactorEffect.get(i);
+            finalTrustLevel += (t / ((index + 2) * (index + 2)));
+            index++;
+        }
+
+/*        for (TrustRecommendationItem item : items) {
             float recommenderTrustLevel = master.getWorld().getTrustManager().getTrustLevel(master, item.getRecommender(),true);
             //-- If recommender identified as an honest agent...
             if (recommenderTrustLevel > 0) {
                 //todo: has a bug! item.getRecommendedTrustLevel() has to be a proportion of a whole
                 finalTrustLevel += recommenderTrustLevel *
                         item.getRecommendedTrustLevel()
-                        * Math.pow(simulationConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getRecommendTime());
+                        * Math.pow(1-simulationConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - item.getRecommendTime());
             }
-        }
+        }*/
         return finalTrustLevel;
         //}
         //return finalTrustLevel;

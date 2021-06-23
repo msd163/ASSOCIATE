@@ -85,11 +85,17 @@ public class SimulationProfiler {
             if (Globals.ProfileBunchMax.maxTravelHistoryCap < bunch.getTravelHistoryCapD().getMaxValue()) {
                 Globals.ProfileBunchMax.maxTravelHistoryCap = bunch.getTravelHistoryCapD().getMaxValue();
             }
-            if (Globals.ProfileBunchMax.maxTrustHistoryCap < bunch.getTrustHistoryCapD().getMaxValue()) {
-                Globals.ProfileBunchMax.maxTrustHistoryCap = bunch.getTrustHistoryCapD().getMaxValue();
+            if (Globals.ProfileBunchMax.maxExperienceCap < bunch.getExperienceCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxExperienceCap = bunch.getExperienceCapD().getMaxValue();
             }
-            if (Globals.ProfileBunchMax.maxTrustHistoryItemCap < bunch.getTrustRecommendationItemCapD().getMaxValue()) {
-                Globals.ProfileBunchMax.maxTrustHistoryItemCap = bunch.getTrustRecommendationItemCapD().getMaxValue();
+            if (Globals.ProfileBunchMax.maxExperienceItemCap < bunch.getExperienceItemCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxExperienceItemCap = bunch.getExperienceItemCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxIndirectExperienceCap < bunch.getIndirectExperienceCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxIndirectExperienceCap = bunch.getIndirectExperienceCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxIndirectExperienceItemCap < bunch.getIndirectExperienceItemCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxIndirectExperienceItemCap = bunch.getIndirectExperienceItemCapD().getMaxValue();
             }
             if (Globals.ProfileBunchMax.maxWatchDepth < bunch.getWatchRadiusD().getMaxValue()) {
                 Globals.ProfileBunchMax.maxWatchDepth = bunch.getWatchRadiusD().getMaxValue();
@@ -100,11 +106,20 @@ public class SimulationProfiler {
             if (Globals.ProfileBunchMax.maxTrustRecommendationItemCap < bunch.getTrustRecommendationItemCapD().getMaxValue()) {
                 Globals.ProfileBunchMax.maxTrustRecommendationItemCap = bunch.getTrustRecommendationItemCapD().getMaxValue();
             }
-            if (Globals.ProfileBunchMax.maxWatchListCapacity < bunch.getWatchListCapacityD().getMaxValue()) {
-                Globals.ProfileBunchMax.maxWatchListCapacity = bunch.getWatchListCapacityD().getMaxValue();
+            if (Globals.ProfileBunchMax.maxWatchListCap < bunch.getWatchListCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxWatchListCap = bunch.getWatchListCapD().getMaxValue();
             }
             if (Globals.ProfileBunchMax.maxObservationCap < bunch.getObservationCapD().getMaxValue()) {
                 Globals.ProfileBunchMax.maxObservationCap = bunch.getObservationCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxObservationItemCap < bunch.getObservationItemCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxObservationItemCap = bunch.getObservationItemCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxIndirectObservationCap < bunch.getIndirectObservationCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxIndirectObservationCap = bunch.getIndirectObservationCapD().getMaxValue();
+            }
+            if (Globals.ProfileBunchMax.maxIndirectObservationItemCap < bunch.getIndirectObservationItemCapD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxIndirectObservationItemCap = bunch.getIndirectObservationItemCapD().getMaxValue();
             }
             if (Globals.ProfileBunchMax.maxAgentTargetCount < bunch.getTargetCountD().getMaxValue()) {
                 Globals.ProfileBunchMax.maxAgentTargetCount = bunch.getTargetCountD().getMaxValue();

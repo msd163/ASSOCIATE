@@ -130,7 +130,7 @@ public class EnvGenerator {
 
             //============================ Creating new state
             agents[i] = new Agent(null, id++);
-            agents[i].initForGenerator(profiler);
+            agents[i].initForGenerator(profiler,agentsCount);
 
             //============================  Adding agent to an state
             StateX randomState;

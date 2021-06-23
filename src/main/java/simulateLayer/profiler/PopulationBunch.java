@@ -1,30 +1,52 @@
 package simulateLayer.profiler;
 
-import _type.TtTrustReplaceHistoryMethod;
+import _type.TtTrustReplaceMethod;
 import utils.DefParameter;
 
 public class PopulationBunch {
     private String bunchCount;
-    private String trustHistoryItemCap;
-    private String trustHistoryCap;
-    private String trustRecommendationItemCap;
+
+    private String experienceCap;
+    private String experienceItemCap;
+
+    private String indirectExperienceCap;
+    private String indirectExperienceItemCap;
+
     private String trustRecommendationCap;
+    private String trustRecommendationItemCap;
+    
     private String observationCap;
-    private String watchListCapacity;
+    private String observationItemCap;
+    
+    private String indirectObservationCap;
+    private String indirectObservationItemCap;
+    
+    private String watchListCap;
     private String watchDepth;
-    private String travelHistory;
+    private String travelHistoryCap;
     private String targetCount;
     private String trustReplaceHistoryMethod;
     private PopulationBunchBehaviorParam behavior;
 
     //============================
     private DefParameter bunchCountD;
-    private DefParameter trustHistoryItemCapD;
-    private DefParameter trustHistoryCapD;
-    private DefParameter watchListCapacityD;
+    
+    private DefParameter experienceCapD;
+    private DefParameter experienceItemCapD;
+
+    private DefParameter indirectExperienceCapD;
+    private DefParameter indirectExperienceItemCapD;
+
+
+    private DefParameter observationCapD;
+    private DefParameter observationItemCapD;
+
+    private DefParameter indirectObservationCapD;
+    private DefParameter indirectObservationItemCapD;
+    
+    private DefParameter watchListCapD;
     private DefParameter trustRecommendationCapD;
     private DefParameter trustRecommendationItemCapD;
-    private DefParameter observationCapD;
     private DefParameter watchDepthD;
     private DefParameter travelHistoryCapD;
     private DefParameter targetCountD;
@@ -35,16 +57,27 @@ public class PopulationBunch {
 
     public void initDefParams() {
         bunchCountD = new DefParameter(bunchCount);
-        trustHistoryItemCapD = new DefParameter(trustHistoryItemCap);
-        trustHistoryCapD = new DefParameter(trustHistoryCap);
-        trustRecommendationItemCapD = new DefParameter(trustRecommendationItemCap);
+        
+        experienceCapD = new DefParameter(experienceCap);
+        experienceItemCapD = new DefParameter(experienceItemCap);
+        
+        indirectExperienceCapD = new DefParameter(indirectExperienceCap);
+        indirectExperienceItemCapD = new DefParameter(indirectExperienceItemCap);
+
         trustRecommendationCapD = new DefParameter(trustRecommendationCap);
-        watchListCapacityD = new DefParameter(watchListCapacity);
+        trustRecommendationItemCapD = new DefParameter(trustRecommendationItemCap);
+        watchListCapD = new DefParameter(watchListCap);
         watchDepthD = new DefParameter(watchDepth);
-        travelHistoryCapD = new DefParameter(travelHistory);
+        travelHistoryCapD = new DefParameter(travelHistoryCap);
         targetCountD = new DefParameter(targetCount);
         trustReplaceHistoryMethodD = new DefParameter(trustReplaceHistoryMethod);
+        
         observationCapD = new DefParameter(observationCap);
+        observationItemCapD = new DefParameter(observationItemCap);
+        
+        indirectObservationCapD = new DefParameter(indirectObservationCap);
+        indirectObservationItemCapD = new DefParameter(indirectObservationItemCap);
+        
     }
 
     //============================//============================
@@ -54,21 +87,40 @@ public class PopulationBunch {
         return bunchCountD.nextValue();
     }
 
+    public DefParameter getIndirectExperienceCapD() {
+        return indirectExperienceCapD;
+    }
+
+    public DefParameter getIndirectExperienceItemCapD() {
+        return indirectExperienceItemCapD;
+    }
+
+    public DefParameter getObservationItemCapD() {
+        return observationItemCapD;
+    }
+
+    public DefParameter getIndirectObservationCapD() {
+        return indirectObservationCapD;
+    }
+
+    public DefParameter getIndirectObservationItemCapD() {
+        return indirectObservationItemCapD;
+    }
 
     public DefParameter getBunchCountD() {
         return bunchCountD;
     }
 
-    public DefParameter getTrustHistoryItemCapD() {
-        return trustHistoryItemCapD;
+    public DefParameter getExperienceItemCapD() {
+        return experienceItemCapD;
     }
 
-    public DefParameter getTrustHistoryCapD() {
-        return trustHistoryCapD;
+    public DefParameter getExperienceCapD() {
+        return experienceCapD;
     }
 
-    public DefParameter getWatchListCapacityD() {
-        return watchListCapacityD;
+    public DefParameter getWatchListCapD() {
+        return watchListCapD;
     }
 
     public DefParameter getWatchRadiusD() {
@@ -83,9 +135,9 @@ public class PopulationBunch {
         return targetCountD;
     }
 
-    public TtTrustReplaceHistoryMethod getTrustReplaceHistoryMethod() {
+    public TtTrustReplaceMethod getTrustReplaceHistoryMethod() {
         int i = trustReplaceHistoryMethodD.nextValue();
-        return TtTrustReplaceHistoryMethod.getByOrdinal(i);
+        return TtTrustReplaceMethod.getByOrdinal(i);
     }
 
     public PopulationBunchBehaviorParam getBehavior() {
@@ -118,15 +170,15 @@ public class PopulationBunch {
         tabIndex++;
         return tx + "PopulationBunch{" +
                 ti + "  bunchCount='" + bunchCount + '\'' +
-                ti + ", trustHistoryItemCap='" + trustHistoryItemCap + '\'' +
-                ti + ", trustHistoryCap='" + trustHistoryCap + '\'' +
-                ti + ", watchListCapacity='" + watchListCapacity + '\'' +
+                ti + ", experienceItemCap='" + experienceItemCap + '\'' +
+                ti + ", experienceCap='" + experienceCap + '\'' +
+                ti + ", watchListCap='" + watchListCap + '\'' +
                 ti + ", watchDepth='" + watchDepth + '\'' +
-                ti + ", travelHistory='" + travelHistory + '\'' +
+                ti + ", travelHistoryCap='" + travelHistoryCap + '\'' +
                 ti + ", bunchCountD=" + bunchCountD.toString(tabIndex) +
-                ti + ", trustHistoryItemCapD=" + trustHistoryItemCapD.toString(tabIndex) +
-                ti + ", trustHistoryCapD=" + trustHistoryCapD.toString(tabIndex) +
-                ti + ", watchListCapacityD=" + watchListCapacityD.toString(tabIndex) +
+                ti + ", experienceItemCapD=" + experienceItemCapD.toString(tabIndex) +
+                ti + ", experienceCapD=" + experienceCapD.toString(tabIndex) +
+                ti + ", watchListCapD=" + watchListCapD.toString(tabIndex) +
                 ti + ", watchDepthD=" + watchDepthD.toString(tabIndex) +
                 ti + ", travelHistoryD=" + travelHistoryCapD.toString(tabIndex) +
                 ti + ", targetCountD=" + targetCountD.toString(tabIndex) +

@@ -255,14 +255,22 @@ public class Environment {
     }
 
     public void updateProMaxParams() {
-        proMax.setMaxTrustHistoryItemCap(Globals.ProfileBunchMax.maxTrustHistoryItemCap);
-        proMax.setMaxTrustHistoryCap(Globals.ProfileBunchMax.maxTrustHistoryCap);
+        proMax.setMaxExperienceCap(Globals.ProfileBunchMax.maxExperienceCap);
+        proMax.setMaxExperienceItemCap(Globals.ProfileBunchMax.maxExperienceItemCap);
+        proMax.setMaxIndirectExperienceCap(Globals.ProfileBunchMax.maxIndirectExperienceCap);
+        proMax.setMaxIndirectExperienceItemCap(Globals.ProfileBunchMax.maxIndirectExperienceItemCap);
+
+        proMax.setMaxObservationCap(Globals.ProfileBunchMax.maxObservationCap);
+        proMax.setMaxObservationItemCap(Globals.ProfileBunchMax.maxObservationItemCap);
+        proMax.setMaxIndirectObservationCap(Globals.ProfileBunchMax.maxIndirectObservationCap);
+        proMax.setMaxIndirectObservationItemCap(Globals.ProfileBunchMax.maxIndirectObservationItemCap);
+
         proMax.setMaxTrustRecommendationItemCap(Globals.ProfileBunchMax.maxTrustRecommendationItemCap);
         proMax.setMaxTrustRecommendationCap(Globals.ProfileBunchMax.maxTrustRecommendationCap);
-        proMax.setMaxWatchListCapacity(Globals.ProfileBunchMax.maxWatchListCapacity);
+        proMax.setMaxWatchListCap(Globals.ProfileBunchMax.maxWatchListCap);
         proMax.setMaxWatchDepth(Globals.ProfileBunchMax.maxWatchDepth);
         proMax.setMaxTravelHistoryCap(Globals.ProfileBunchMax.maxTravelHistoryCap);
-        proMax.setMaxObservationCap(Globals.ProfileBunchMax.maxObservationCap);
+
         proMax.setMaxAgentTargetCount(Globals.ProfileBunchMax.maxAgentTargetCount);
     }
 

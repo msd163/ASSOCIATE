@@ -10,7 +10,7 @@ public class TravelHistory {
     private StateX stateX;
     private int visitTime;
     private ArrayList<StateX> targets;
-    private Agent helper;
+    private Agent responder;
     private boolean isTarget;
     private int targetIndex;    // in target array
     private boolean isPitfall;
@@ -18,11 +18,11 @@ public class TravelHistory {
     //============================//============================//============================
 
 
-    public TravelHistory(StateX stateX, int visitTime, ArrayList<StateX> targets, Agent helper, boolean isTarget, boolean isPitfall, int targetIndex) {
+    public TravelHistory(StateX stateX, int visitTime, ArrayList<StateX> targets, Agent responder, boolean isTarget, boolean isPitfall, int targetIndex) {
         this.stateX = stateX;
         this.visitTime = visitTime;
         this.targets = targets;
-        this.helper = helper;
+        this.responder = responder;
         this.isTarget = isTarget;
         this.isPitfall = isPitfall;
         this.targetIndex = targetIndex;
@@ -85,12 +85,12 @@ public class TravelHistory {
         isTarget = target;
     }
 
-    public Agent getHelper() {
-        return helper;
+    public Agent getResponder() {
+        return responder;
     }
 
-    public void setHelper(Agent helper) {
-        this.helper = helper;
+    public void setResponder(Agent responder) {
+        this.responder = responder;
     }
 
     public void setIsTrustCalculated(boolean trustCalculated) {

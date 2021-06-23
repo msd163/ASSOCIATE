@@ -79,12 +79,12 @@ public class World {
 
         ArrayList<StateX> states = environment.getStates();
         agents = new ArrayList<>();
-        int i = 0;
+        int i;
         for (StateX state : states) {
             for (Agent agent : state.getAgents()) {
                 agent.setState(state);
                 agent.setWorld(this);
-                agent.initVars();
+                agent.initVars(agentsCount);
 
                 //============================ filling state array according to stateId array
                 agent.updateTargets();
@@ -114,6 +114,12 @@ public class World {
             }
             return 0;
         });
+
+        //-- Setting index of agent in sorted list
+        int indexInSortedList = 0;
+        for (Agent agent : agents) {
+            agent.setIndex(indexInSortedList++);
+        }
 
         environment.reassigningStateLocationAndTransPath();
 

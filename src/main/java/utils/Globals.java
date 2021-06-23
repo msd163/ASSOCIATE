@@ -12,14 +12,19 @@ import java.util.Random;
 public class Globals {
 
     public static class ProfileBunchMax {
-        public static int maxTrustHistoryItemCap = 0;
-        public static int maxTrustHistoryCap = 0;
+        public static int maxExperienceCap = 0;
+        public static int maxExperienceItemCap = 0;
+        public static int maxIndirectExperienceCap = 0;
+        public static int maxIndirectExperienceItemCap = 0;
         public static int maxTrustRecommendationItemCap = 0;
         public static int maxTrustRecommendationCap = 0;
-        public static int maxWatchListCapacity = 0;
+        public static int maxWatchListCap = 0;
         public static int maxWatchDepth = 0;
         public static int maxTravelHistoryCap = 0;
         public static int maxObservationCap = 0;
+        public static int maxObservationItemCap = 0;
+        public static int maxIndirectObservationCap = 0;
+        public static int maxIndirectObservationItemCap = 0;
         public static int maxAgentTargetCount = 0;
     }
 

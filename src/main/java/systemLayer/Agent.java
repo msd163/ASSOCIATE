@@ -41,6 +41,8 @@ public class Agent {
     //============================
     @Expose
     private int id;
+    @Expose
+    private int index; // index of agent in sorted list
 
     //============================ processing variables
 
@@ -81,12 +83,18 @@ public class Agent {
 
     //============================//============================//============================
 
-    public void initForGenerator(SimulationProfiler profiler) {
+    public void initForGenerator(SimulationProfiler profiler,int agentsCount) {
         capacity = new AgentCapacity(this, profiler);
         trust = new AgentTrust(
-                capacity.getTrustHistoryCap(),
-                capacity.getTrustHistoryItemCap(),
                 profiler.getCurrentBunch().getTrustReplaceHistoryMethod(),
+                capacity.getExperienceCap(),
+                capacity.getExperienceItemCap(),
+                capacity.getIndirectExperienceCap(),
+                capacity.getIndirectExperienceItemCap(),
+                capacity.getObservationCap(),
+                capacity.getObservationItemCap(),
+                capacity.getIndirectObservationCap(),
+                capacity.getIndirectObservationItemCap(),
                 capacity.getTrustRecommendationCap(),
                 capacity.getTrustRecommendationItemCap()
         );
@@ -97,13 +105,25 @@ public class Agent {
         targetStateIds = new int[targetCount];
         targetStates = new StateX[targetCount];
 
-        initVars();
+        initVars(agentsCount);
 
     }
 
-    public void initVars() {
-        trust.setTrustParams(capacity.getTrustHistoryCap(), capacity.getTrustHistoryItemCap(), capacity.getTrustRecommendationCap(), capacity.getTrustRecommendationItemCap(), capacity.getObservationCap());
-        trust.init(this);
+    public void initVars(int agentsCount) {
+        trust.setTrustParams(
+                capacity.getExperienceCap(),
+                capacity.getExperienceItemCap(),
+                capacity.getIndirectExperienceCap(),
+                capacity.getIndirectExperienceItemCap(),
+                capacity.getObservationCap(),
+                capacity.getObservationItemCap(),
+                capacity.getIndirectObservationCap(),
+                capacity.getIndirectObservationItemCap(),
+                capacity.getTrustRecommendationCap(),
+                capacity.getTrustRecommendationItemCap()
+        );
+
+        trust.init(this,agentsCount);
 
         watchedAgents = new ArrayList<>();
         watchedStates = new ArrayList<>();
@@ -269,7 +289,7 @@ public class Agent {
         //============================
         int remainedAgents = state.fillAgentsOfState(
                 watchedAgents,
-                capacity.getWatchListCapacity(),
+                capacity.getWatchListCap(),
                 this,
                 parentPath);
 
@@ -432,5 +452,13 @@ public class Agent {
 
     public boolean hasObservation() {
         return trust.getObservations().size() > 0;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

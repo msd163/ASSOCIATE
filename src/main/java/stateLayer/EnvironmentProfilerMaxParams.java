@@ -9,40 +9,50 @@ public class EnvironmentProfilerMaxParams {
 
     //============================//============================//============================
     @Expose
-    private int maxTrustHistoryItemCap = 0;
+    private int maxExperienceCap = 0;
     @Expose
-    private int maxTrustHistoryCap = 0;
+    private int maxExperienceItemCap = 0;
+    @Expose
+    private int maxIndirectExperienceCap = 0;
+    @Expose
+    private int maxIndirectExperienceItemCap = 0;
+    @Expose
+    private int maxObservationCap = 0;
+    @Expose
+    private int maxObservationItemCap = 0;
+    @Expose
+    private int maxIndirectObservationCap = 0;
+    @Expose
+    private int maxIndirectObservationItemCap = 0;
     @Expose
     private int maxTrustRecommendationItemCap = 0;
     @Expose
     private int maxTrustRecommendationCap = 0;
     @Expose
-    private int maxWatchListCapacity = 0;
+    private int maxWatchListCap = 0;
     @Expose
     private int maxWatchDepth = 0;
     @Expose
     private int maxTravelHistoryCap = 0;
     @Expose
-    private int maxObservationCap = 0;
-    @Expose
     private int maxAgentTargetCount = 0;
 
     //============================//============================//============================
 
-    public int getMaxTrustHistoryItemCap() {
-        return maxTrustHistoryItemCap;
+    public int getMaxExperienceItemCap() {
+        return maxExperienceItemCap;
     }
 
-    public void setMaxTrustHistoryItemCap(int maxTrustHistoryItemCap) {
-        this.maxTrustHistoryItemCap = maxTrustHistoryItemCap;
+    public void setMaxExperienceItemCap(int maxExperienceItemCap) {
+        this.maxExperienceItemCap = maxExperienceItemCap;
     }
 
-    public int getMaxTrustHistoryCap() {
-        return maxTrustHistoryCap;
+    public int getMaxExperienceCap() {
+        return maxExperienceCap;
     }
 
-    public void setMaxTrustHistoryCap(int maxTrustHistoryCap) {
-        this.maxTrustHistoryCap = maxTrustHistoryCap;
+    public void setMaxExperienceCap(int maxExperienceCap) {
+        this.maxExperienceCap = maxExperienceCap;
     }
 
     public int getMaxTrustRecommendationItemCap() {
@@ -61,12 +71,12 @@ public class EnvironmentProfilerMaxParams {
         this.maxTrustRecommendationCap = maxTrustRecommendationCap;
     }
 
-    public int getMaxWatchListCapacity() {
-        return maxWatchListCapacity;
+    public int getMaxWatchListCap() {
+        return maxWatchListCap;
     }
 
-    public void setMaxWatchListCapacity(int maxWatchListCapacity) {
-        this.maxWatchListCapacity = maxWatchListCapacity;
+    public void setMaxWatchListCap(int maxWatchListCap) {
+        this.maxWatchListCap = maxWatchListCap;
     }
 
     public int getMaxWatchDepth() {
@@ -99,5 +109,45 @@ public class EnvironmentProfilerMaxParams {
 
     public void setMaxAgentTargetCount(int maxAgentTargetCount) {
         this.maxAgentTargetCount = maxAgentTargetCount;
+    }
+
+    public int getMaxIndirectExperienceCap() {
+        return maxIndirectExperienceCap;
+    }
+
+    public void setMaxIndirectExperienceCap(int maxIndirectExperienceCap) {
+        this.maxIndirectExperienceCap = maxIndirectExperienceCap;
+    }
+
+    public int getMaxIndirectExperienceItemCap() {
+        return maxIndirectExperienceItemCap;
+    }
+
+    public void setMaxIndirectExperienceItemCap(int maxIndirectExperienceItemCap) {
+        this.maxIndirectExperienceItemCap = maxIndirectExperienceItemCap;
+    }
+
+    public int getMaxObservationItemCap() {
+        return maxObservationItemCap;
+    }
+
+    public void setMaxObservationItemCap(int maxObservationItemCap) {
+        this.maxObservationItemCap = maxObservationItemCap;
+    }
+
+    public int getMaxIndirectObservationCap() {
+        return maxIndirectObservationCap;
+    }
+
+    public void setMaxIndirectObservationCap(int maxIndirectObservationCap) {
+        this.maxIndirectObservationCap = maxIndirectObservationCap;
+    }
+
+    public int getMaxIndirectObservationItemCap() {
+        return maxIndirectObservationItemCap;
+    }
+
+    public void setMaxIndirectObservationItemCap(int maxIndirectObservationItemCap) {
+        this.maxIndirectObservationItemCap = maxIndirectObservationItemCap;
     }
 }

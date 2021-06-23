@@ -1,12 +1,12 @@
 package _type;
 
-public enum TtTrustReplaceHistoryMethod {
+public enum TtTrustReplaceMethod {
     Sequential_Circular,
     RemoveLastUpdated,
     ;
 
-    public static TtTrustReplaceHistoryMethod getByOrdinal(int ordinal) {
-        for (TtTrustReplaceHistoryMethod value : values()) {
+    public static TtTrustReplaceMethod getByOrdinal(int ordinal) {
+        for (TtTrustReplaceMethod value : values()) {
             if (value.ordinal() == ordinal) {
                 return value;
             }

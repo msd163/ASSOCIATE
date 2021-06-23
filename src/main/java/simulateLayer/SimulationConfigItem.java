@@ -5,12 +5,12 @@ import _type.TtTrustMethodology;
 public class SimulationConfigItem {
     private int method;
     private boolean isValidateByTrustObservation;
-    private float trustForgottenCoeff;
-    private float trustRecommendationCoeff;
-    private float trustObservationCoeff;
-    private int historyDepthInTrustScoring;
-    private float ignoringThresholdOfTrustLevelValue;
-    private float maximumConsideredRoutingHelpInTrustMechanism;
+    private float   trustForgottenCoeff;
+    private float   trustRecommendationCoeff;
+    private float   trustObservationCoeff;
+    private int     experienceDepthInRewarding;
+    private float   ignoringThresholdOfTrustLevelValue;
+    private float   maximumConsideredRoutingHelpInTrustMechanism;
 
     //============================//============================//============================
     public String getInfo() {
@@ -21,7 +21,7 @@ public class SimulationConfigItem {
                     " | TrustForgottenCoeff: " + trustForgottenCoeff +
                     " | TrustRecommendationCoeff: " + trustRecommendationCoeff +
                     " | TrustObservationCoeff: " + trustObservationCoeff +
-                    " | HistoryDepthInTrustScoring: " + historyDepthInTrustScoring +
+                    " | ExperienceDepthInRewarding: " + experienceDepthInRewarding +
                     " | IgnoringThresholdOfTrt: " + ignoringThresholdOfTrustLevelValue +
                     " | MaxConsRoutingHelpInTrt: " + maximumConsideredRoutingHelpInTrustMechanism
                     ;
@@ -39,7 +39,7 @@ public class SimulationConfigItem {
     }
 
     public boolean isUseTrustForgottenCoeff() {
-        return trustForgottenCoeff < 1;
+        return trustForgottenCoeff > 0;
     }
     //============================//============================//============================
 
@@ -74,8 +74,8 @@ public class SimulationConfigItem {
         return trustObservationCoeff;
     }
 
-    public int getHistoryDepthInTrustScoring() {
-        return historyDepthInTrustScoring;
+    public int getExperienceDepthInRewarding() {
+        return experienceDepthInRewarding;
     }
 
     public float getIgnoringThresholdOfTrustLevelValue() {

@@ -16,7 +16,7 @@ public class AgentTrustDataDrawingWindow extends DrawingWindow {
     public AgentTrustDataDrawingWindow(World world) {
         super();
         this.world = world;
-        axisX = world.getEnvironment().getProMax().getMaxTrustHistoryCap();
+        axisX = world.getEnvironment().getProMax().getMaxExperienceCap();
         axisY = world.getAgentsCount() * 21;
     }
 
@@ -42,11 +42,11 @@ public class AgentTrustDataDrawingWindow extends DrawingWindow {
             g.setColor(Color.BLACK);
             g.drawString(agent.getId() + "", -30, i * 21 + 12);
             g.setColor(Color.GRAY);
-            g.fillRect(5, i * 21, agent.getCapacity().getTrustHistoryCap(), 20);
+            g.fillRect(5, i * 21, agent.getCapacity().getExperienceCap(), 20);
 
             g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
 
-            g.fillRect(5, i * 21, agent.getTrust().getHistorySize(), 20);
+            g.fillRect(5, i * 21, agent.getTrust().getExperiences().size(), 20);
 
         }
 
