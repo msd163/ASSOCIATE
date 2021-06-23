@@ -1,5 +1,6 @@
-package drawingLayer;
+package drawingLayer.trust;
 
+import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
 import utils.Globals;
@@ -7,12 +8,12 @@ import utils.Globals;
 import java.awt.*;
 import java.util.List;
 
-public class AgentObservationDrawingWindow extends DrawingWindow {
+public class IndirectObservationBarDrawingWindow extends DrawingWindow {
 
 
     //============================//============================  panning params
 
-    public AgentObservationDrawingWindow(World world) {
+    public IndirectObservationBarDrawingWindow(World world) {
         super();
         this.world = world;
         axisX = world.getEnvironment().getProMax().getMaxObservationCap();
@@ -23,7 +24,7 @@ public class AgentObservationDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr,"Observation Data :: "+ world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, "Indirect Observation Data :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 
@@ -42,21 +43,17 @@ public class AgentObservationDrawingWindow extends DrawingWindow {
             g.setColor(Color.BLACK);
             g.drawString(agent.getId() + "", -30, i * 21 + 12);
             g.setColor(Color.GRAY);
-            g.fillRect(5, i * 21, agent.getCapacity().getObservationCap(), 20);
+            g.fillRect(5, i * 21, agent.getCapacity().getIndirectObservationCap(), 20);
 
-            //g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
-
-            int obsSize = agent.getTrust().getObservations().size();
-            // g.fillRect(5, i * 21, obsSize, 20);
+            int obsSize = agent.getTrust().getIndirectObservations().size();
 
             if (obsSize > 0) {
-                int[] obsTarPit = agent.getTrust().getObservationInTargetAndPitfallCount();
+                int[] obsTarPit = agent.getTrust().getIndirectObservationRewardsCount();
                 g.setColor(Globals.Color$.lightGreen);
                 g.fillRect(5, i * 21 + 2, obsTarPit[0], 16);
                 g.setColor(Globals.Color$.lightRed);
                 g.fillRect(5 + obsTarPit[0], i * 21 + 2, obsTarPit[1], 16);
             }
-
         }
 
     }

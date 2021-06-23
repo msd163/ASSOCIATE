@@ -2,8 +2,8 @@ package simulateLayer;
 
 import com.google.gson.Gson;
 import drawingLayer.DrawingWindow;
-import drawingLayer.integrated.IntAnalysisOfTrustDrawingWindow;
-import drawingLayer.integrated.IntStatsOfEnvDrawingWindow;
+import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
+import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
 import stateLayer.Environment;
 import systemLayer.World;
 import utils.Config;
@@ -36,8 +36,8 @@ public class Simulator {
 
     //============================//============================ Drawing Windows
 
-    private IntStatsOfEnvDrawingWindow intStatsOfEnvDW;
-    private IntAnalysisOfTrustDrawingWindow intAnalysisOfTrustDW;
+    private IntTravelStatsLinearDrawingWindow intStatsOfEnvDW;
+    private IntTrustAnalysisLinearDrawingWindow intAnalysisOfTrustDW;
 
     //============================//============================//============================
     private void init() throws Exception {
@@ -111,10 +111,10 @@ public class Simulator {
     }
 
     public void updateWindows() {
-        if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
+        if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
             intStatsOfEnvDW.repaint();
         }
-        if (Config.INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
+        if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
             intAnalysisOfTrustDW.repaint();
         }
     }
@@ -133,13 +133,13 @@ public class Simulator {
         int heightHalf = (int) screenSize.getHeight() / 2;
 
         //============================ Initializing Diagram Drawing Windows
-        if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
-            intStatsOfEnvDW = new IntStatsOfEnvDrawingWindow(worlds, simulationConfig);
+        if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
+            intStatsOfEnvDW = new IntTravelStatsLinearDrawingWindow(worlds, simulationConfig);
             initDrawingWindow(intStatsOfEnvDW, widthHalf, heightHalf, "int_s_env", "Integrated Environment Statistics");
         }
 
-        if (Config.INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
-            intAnalysisOfTrustDW = new IntAnalysisOfTrustDrawingWindow(worlds, simulationConfig);
+        if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
+            intAnalysisOfTrustDW = new IntTrustAnalysisLinearDrawingWindow(worlds, simulationConfig);
             initDrawingWindow(intAnalysisOfTrustDW, widthHalf, heightHalf, "int_t_anl", "Integrated Analysis of Trust (Acc|Sens|Spec)");
         }
 

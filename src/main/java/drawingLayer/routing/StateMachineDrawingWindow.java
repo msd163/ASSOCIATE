@@ -1,5 +1,6 @@
-package drawingLayer;
+package drawingLayer.routing;
 
+import drawingLayer.DrawingWindow;
 import stateLayer.Environment;
 import stateLayer.StateX;
 import stateLayer.TransitionX;

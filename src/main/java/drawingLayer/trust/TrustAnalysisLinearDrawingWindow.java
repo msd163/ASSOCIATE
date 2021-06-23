@@ -1,5 +1,6 @@
-package drawingLayer;
+package drawingLayer.trust;
 
+import drawingLayer.DrawingWindow;
 import systemLayer.World;
 import utils.Globals;
 import utils.Point;
@@ -7,11 +8,11 @@ import utils.statistics.WorldStatistics;
 
 import java.awt.*;
 
-public class StatsOfAnalysisOfTrustDrawingWindow extends DrawingWindow {
+public class TrustAnalysisLinearDrawingWindow extends DrawingWindow {
 
     //============================//============================  panning params
 
-    public StatsOfAnalysisOfTrustDrawingWindow(World world) {
+    public TrustAnalysisLinearDrawingWindow(World world) {
         super();
         this.world = world;
         this.prevPoints = new Point[3];

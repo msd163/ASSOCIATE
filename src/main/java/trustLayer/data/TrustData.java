@@ -17,11 +17,10 @@ public class TrustData {
     protected ArrayList<TrustDataItem> items;
     // protected float finalReward;
     // protected int finalRewardUpdateTime;
+
+    protected int positiveRewards;
+    protected int negativeRewards;
     //============================//============================//============================
-
-
-    public TrustData() {
-    }
 
     public TrustData(Agent responder) {
         this.responder = responder;
@@ -29,12 +28,18 @@ public class TrustData {
         lastEpisode = Globals.EPISODE;
         //  finalReward = 0;
         items = new ArrayList<>();
+        positiveRewards = negativeRewards = 0;
         //  finalRewardUpdateTime = Globals.WORLD_TIMER;
     }
 
     protected void addItem(Agent issuer, Agent requester, StateX source, StateX destination, float reward) {
         lastTime = Globals.WORLD_TIMER;
         lastEpisode = Globals.EPISODE;
+        if (reward >= 0) {
+            positiveRewards++;
+        } else {
+            negativeRewards++;
+        }
         items.add(new TrustDataItem(
                 issuer,
                 requester,
@@ -82,6 +87,11 @@ public class TrustData {
 
         lastTime = Globals.WORLD_TIMER;
         lastEpisode = Globals.EPISODE;
+        if (item.getReward() >= 0) {
+            positiveRewards++;
+        } else {
+            negativeRewards++;
+        }
         items.add(new TrustDataItem(
                 item.getIssuer(),
                 item.getRequester(),
@@ -115,5 +125,13 @@ public class TrustData {
 
     public ArrayList<TrustDataItem> getItems() {
         return items;
+    }
+
+    public int getPositiveRewards() {
+        return positiveRewards;
+    }
+
+    public int getNegativeRewards() {
+        return negativeRewards;
     }
 }

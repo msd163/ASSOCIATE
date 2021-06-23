@@ -34,21 +34,25 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final boolean DRAWING_SHOW_STATE_MACHINE /*               */ = false;
-    public static final boolean DRAWING_SHOW_STAT_OF_ENV /*                 */ = false;
-    public static final boolean DRAWING_SHOW_STATS_OF_TRUST/*               */ = false;
-    public static final boolean DRAWING_SHOW_TRUST_MATRIX /*                */ = true;
-    public static final boolean DRAWING_SHOW_STATS_OF_PO_NE /*              */ = false;
-    public static final boolean DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM/*      */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_TRAVEL_INFO /*           */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_TRUST_DATA /*            */ = true;
-    public static final boolean DRAWING_SHOW_AGENT_RECOMMENDATION_DATA /*   */ = false;
-    public static final boolean DRAWING_SHOW_AGENT_OBSERVATION_DATA /*      */ = false;
+    public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
+    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
+    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
+
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
+    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
+    public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
+    public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
+
+    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = true;
+    public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = true;
+    public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = true;
+    public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = true;
+    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = false;
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 
-    public static final boolean INT_DRAWING_SHOW_STAT_OF_ENV /*                     */ = true;
-    public static final boolean INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM /*         */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*                     */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;

@@ -1,16 +1,17 @@
-package drawingLayer;
+package drawingLayer.trust;
 
+import drawingLayer.DrawingWindow;
 import systemLayer.World;
 import utils.Globals;
 import utils.statistics.WorldStatistics;
 
 import java.awt.*;
 
-public class StatsOfFalsePoNeDrawingWindow extends DrawingWindow {
+public class TrustRecogniseLinearDrawingWindow extends DrawingWindow {
 
     //============================//============================  panning params
 
-    public StatsOfFalsePoNeDrawingWindow(World world) {
+    public TrustRecogniseLinearDrawingWindow(World world) {
         super();
         this.world = world;
     }

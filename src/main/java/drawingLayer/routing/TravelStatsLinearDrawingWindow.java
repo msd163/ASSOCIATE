@@ -1,16 +1,17 @@
-package drawingLayer;
+package drawingLayer.routing;
 
+import drawingLayer.DrawingWindow;
 import systemLayer.World;
 import utils.Globals;
 import utils.statistics.WorldStatistics;
 
 import java.awt.*;
 
-public class StatsOfEnvDrawingWindow extends DrawingWindow {
+public class TravelStatsLinearDrawingWindow extends DrawingWindow {
 
     //============================//============================  panning params
 
-    public StatsOfEnvDrawingWindow(World world) {
+    public TravelStatsLinearDrawingWindow(World world) {
         super();
         this.world = world;
     }

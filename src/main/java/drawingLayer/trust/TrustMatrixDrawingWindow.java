@@ -1,5 +1,6 @@
-package drawingLayer;
+package drawingLayer.trust;
 
+import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
 import trustLayer.TrustMatrix;

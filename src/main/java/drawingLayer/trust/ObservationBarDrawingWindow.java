@@ -1,5 +1,7 @@
-package drawingLayer;
+package drawingLayer.trust;
 
+import _type.TtBehaviorState;
+import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
 import utils.Globals;
@@ -7,30 +9,32 @@ import utils.Globals;
 import java.awt.*;
 import java.util.List;
 
-public class AgentRecommendationDrawingWindow extends DrawingWindow {
+public class ObservationBarDrawingWindow extends DrawingWindow {
+
 
     //============================//============================  panning params
 
-    public AgentRecommendationDrawingWindow(World world) {
+    public ObservationBarDrawingWindow(World world) {
         super();
         this.world = world;
-        axisX = world.getEnvironment().getProMax().getMaxTrustRecommendationCap();
+        axisX = world.getEnvironment().getProMax().getMaxObservationCap();
         axisY = world.getAgentsCount() * 21;
     }
 
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr,"Recommendation Data :: "+world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr,"Observation Data :: "+ world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
+
         normalizeCoordination();
 
         //============================//============================//============================
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
         List<Agent> agents = world.getAgents();
-        for (int jj = agents.size() - 1, i = 0; jj > -1; i++, jj--) {
+        for (int i = 0, jj = agents.size() - 1; jj > -1; jj--, i++) {
             Agent agent = agents.get(jj);
 
             g.setColor(Globals.Color$.getNormal(agent.getBehavior().getBehaviorState()));
@@ -39,12 +43,17 @@ public class AgentRecommendationDrawingWindow extends DrawingWindow {
             g.setColor(Color.BLACK);
             g.drawString(agent.getId() + "", -30, i * 21 + 12);
             g.setColor(Color.GRAY);
-            g.fillRect(5, i * 21, agent.getCapacity().getTrustRecommendationCap(), 20);
+            g.fillRect(5, i * 21, agent.getCapacity().getObservationCap(), 20);
 
-            g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
+            int obsSize = agent.getTrust().getObservations().size();
 
-            g.fillRect(5, i * 21, agent.getTrust().getRecommendations().size(), 20);
-
+            if (obsSize > 0) {
+                int[] obsTarPit = agent.getTrust().getObservationRewardsCount();
+                g.setColor(Globals.Color$.lightGreen);
+                g.fillRect(5, i * 21 + 2, obsTarPit[0], 16);
+                g.setColor(Globals.Color$.lightRed);
+                g.fillRect(5 + obsTarPit[0], i * 21 + 2, obsTarPit[1], 16);
+            }
         }
 
     }

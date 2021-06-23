@@ -1,8 +1,12 @@
 package utils;
 
 import drawingLayer.*;
-import drawingLayer.integrated.IntAnalysisOfTrustDrawingWindow;
-import drawingLayer.integrated.IntStatsOfEnvDrawingWindow;
+import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
+import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
+import drawingLayer.routing.TravelHistoryBarDrawingWindow;
+import drawingLayer.routing.StateMachineDrawingWindow;
+import drawingLayer.routing.TravelStatsLinearDrawingWindow;
+import drawingLayer.trust.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,56 +17,65 @@ public class ImageBuilder {
 
 
     public void generateStatisticsImages(StateMachineDrawingWindow stateMachineWindow,
-                                         StatsOfEnvDrawingWindow statsOfEnvWindow,
-                                         TrustMatrixDrawingWindow trustMatrixWindow,
-                                         StatsOfTrustDrawingWindow trustStatsWindow,
-                                         StatsOfFalsePoNeDrawingWindow poNeStatsWindow,
-                                         StatsOfAnalysisOfTrustDrawingWindow trustParamsDrawingWindow,
-                                         AgentObservationDrawingWindow agentObservationDrawingWindow,
-                                         AgentRecommendationDrawingWindow agentRecommendationDrawingWindow,
-                                         AgentTravelInfoDrawingWindow agentTravelInfoDrawingWindow,
-                                         AgentTrustDataDrawingWindow agentTrustDataDrawingWindow
+                                         TravelStatsLinearDrawingWindow travelStatsLinearDrawingWindow,
+                                         TrustMatrixDrawingWindow trustMatrixDrawingWindow,
+                                         TrustStatsLinearDrawingWindow trustStatsLinearDrawingWindow,
+                                         TrustRecogniseLinearDrawingWindow trustRecogniseLinearDrawingWindow,
+                                         TrustAnalysisLinearDrawingWindow trustAnalysisLinearDrawingWindow,
+                                         ObservationBarDrawingWindow observationBarDrawingWindow,
+                                         RecommendationBarDrawingWindow recommendationBarDrawingWindow,
+                                         TravelHistoryBarDrawingWindow travelHistoryBarDrawingWindow,
+                                         ExperienceBarDrawingWindow experienceBarDrawingWindow,
+                                         IndirectExperienceBarDrawingWindow indirectExperienceBarDrawingWindow,
+                                         IndirectObservationBarDrawingWindow indirectObservationBarDrawingWindow
     ) {
-        if (Config.DRAWING_SHOW_STATE_MACHINE) {
+        if (Config.DRAWING_SHOW_stateMachineWindow) {
             //generateStatisticsImage(stateMachineWindow);
         }
-        if (Config.DRAWING_SHOW_STAT_OF_ENV) {
-            generateStatisticsImage(statsOfEnvWindow);
+        if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
+            generateStatisticsImage(travelStatsLinearDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_TRUST_MATRIX) {
-            generateStatisticsImage(trustMatrixWindow);
+        if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
+            generateStatisticsImage(trustMatrixDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_STATS_OF_TRUST) {
-            generateStatisticsImage(trustStatsWindow);
+        if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
+            generateStatisticsImage(trustStatsLinearDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
-            generateStatisticsImage(poNeStatsWindow);
+        if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
+            generateStatisticsImage(trustRecogniseLinearDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
-            generateStatisticsImage(trustParamsDrawingWindow);
+        if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
+            generateStatisticsImage(trustAnalysisLinearDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_AGENT_TRAVEL_INFO) {
-            generateStatisticsImage(agentTravelInfoDrawingWindow);
+        if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
+            generateStatisticsImage(travelHistoryBarDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_AGENT_TRUST_DATA) {
-            generateStatisticsImage(agentTrustDataDrawingWindow);
+        if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
+            generateStatisticsImage(experienceBarDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_AGENT_RECOMMENDATION_DATA) {
-            generateStatisticsImage(agentRecommendationDrawingWindow);
+        if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
+            generateStatisticsImage(indirectExperienceBarDrawingWindow);
         }
-        if (Config.DRAWING_SHOW_AGENT_OBSERVATION_DATA) {
-            generateStatisticsImage(agentObservationDrawingWindow);
+        if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
+            generateStatisticsImage(recommendationBarDrawingWindow);
         }
+        if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
+            generateStatisticsImage(observationBarDrawingWindow);
+        }
+        if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
+            generateStatisticsImage(indirectObservationBarDrawingWindow);
+        }
+
     }
 
 
-    public void generateSimulationImages(IntStatsOfEnvDrawingWindow intStatsOfEnvDrawingWindow,
-                                         IntAnalysisOfTrustDrawingWindow intAnalysisOfTrustDrawingWindow) {
-        if (Config.INT_DRAWING_SHOW_STAT_OF_ENV) {
-            generateStatisticsImage(intStatsOfEnvDrawingWindow);
+    public void generateSimulationImages(IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow,
+                                         IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow) {
+        if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
+            generateStatisticsImage(intTravelStatsLinearDrawingWindow);
         }
-        if (Config.INT_DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
-            generateStatisticsImage(intAnalysisOfTrustDrawingWindow);
+        if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
+            generateStatisticsImage(intTrustAnalysisLinearDrawingWindow);
         }
 
     }

@@ -2,7 +2,11 @@ package systemLayer;
 
 import _type.TtDrawingWindowLocation;
 import _type.TtSimulationMode;
-import drawingLayer.*;
+import drawingLayer.DrawingWindow;
+import drawingLayer.routing.StateMachineDrawingWindow;
+import drawingLayer.routing.TravelHistoryBarDrawingWindow;
+import drawingLayer.routing.TravelStatsLinearDrawingWindow;
+import drawingLayer.trust.*;
 import routingLayer.Router;
 import simulateLayer.SimulationConfigItem;
 import simulateLayer.Simulator;
@@ -151,16 +155,23 @@ public class World {
     }
 
 
-    private StateMachineDrawingWindow stateMachineDW;
-    private StatsOfEnvDrawingWindow statsOfEnvDW;
-    private TrustMatrixDrawingWindow trustMatrixDW;
-    private StatsOfTrustDrawingWindow statsOfTrustDW;
-    private AgentTrustDataDrawingWindow agentTrustDW;
-    private AgentTravelInfoDrawingWindow agentTravelInfoDW;
-    private StatsOfAnalysisOfTrustDrawingWindow analysisOfTrustParamsDW;
-    private StatsOfFalsePoNeDrawingWindow statsOfFalsePoNeDW;
-    private AgentObservationDrawingWindow agentObservationDW;
-    private AgentRecommendationDrawingWindow agentRecommendationDW;
+    private StateMachineDrawingWindow stateMachineDrawingWindow;
+    private TravelStatsLinearDrawingWindow travelStatsLinearDrawingWindow;
+    private TravelHistoryBarDrawingWindow travelHistoryBarDrawingWindow;
+
+    private TrustMatrixDrawingWindow trustMatrixDrawingWindow;
+
+    private TrustStatsLinearDrawingWindow trustStatsLinearDrawingWindow;
+    private TrustRecogniseLinearDrawingWindow trustRecogniseLinearDrawingWindow;
+    private TrustAnalysisLinearDrawingWindow trustAnalysisLinearDrawingWindow;
+
+    private ExperienceBarDrawingWindow experienceBarDrawingWindow;
+    private IndirectExperienceBarDrawingWindow indirectExperienceBarDrawingWindow;
+
+    private ObservationBarDrawingWindow observationBarDrawingWindow;
+    private IndirectObservationBarDrawingWindow indirectObservationBarDrawingWindow;
+
+    private RecommendationBarDrawingWindow recommendationBarDrawingWindow;
 
 
     private void initStatistics() {
@@ -320,9 +331,19 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
-        new ImageBuilder().generateStatisticsImages(stateMachineDW, statsOfEnvDW, trustMatrixDW,
-                statsOfTrustDW, statsOfFalsePoNeDW, analysisOfTrustParamsDW, agentObservationDW, agentRecommendationDW,
-                agentTravelInfoDW, agentTrustDW
+        new ImageBuilder().generateStatisticsImages(
+                stateMachineDrawingWindow,
+                travelStatsLinearDrawingWindow,
+                trustMatrixDrawingWindow,
+                trustStatsLinearDrawingWindow,
+                trustRecogniseLinearDrawingWindow,
+                trustAnalysisLinearDrawingWindow,
+                observationBarDrawingWindow,
+                recommendationBarDrawingWindow,
+                travelHistoryBarDrawingWindow,
+                experienceBarDrawingWindow,
+                indirectExperienceBarDrawingWindow,
+                indirectObservationBarDrawingWindow
         );
 
         System.out.println("Finished");
@@ -342,62 +363,73 @@ public class World {
         int widthHalf = (int) screenSize.getWidth() / 2;
         int heightHalf = (int) screenSize.getHeight() / 2;
         //============================ Initializing Main Drawing Windows
-        stateMachineDW = new StateMachineDrawingWindow(this);
-        if (Config.DRAWING_SHOW_STATE_MACHINE) {
-            initDrawingWindow(widthHalf, heightHalf, stateMachineDW, "st_mc", "State Machine Map", TtDrawingWindowLocation.TopLeft, true);
+        stateMachineDrawingWindow = new StateMachineDrawingWindow(this);
+        if (Config.DRAWING_SHOW_stateMachineWindow) {
+            initDrawingWindow(widthHalf, heightHalf, stateMachineDrawingWindow, "sta_mch", "State Machine Map", TtDrawingWindowLocation.TopLeft, true);
         }
         //============================ Initializing Diagram Drawing Windows
-        statsOfEnvDW = new StatsOfEnvDrawingWindow(this);
-        if (Config.DRAWING_SHOW_STAT_OF_ENV) {
-            initDrawingWindow(widthHalf, heightHalf, statsOfEnvDW, "s_env", "Environment Statistics", TtDrawingWindowLocation.TopRight);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        trustMatrixDW = new TrustMatrixDrawingWindow(matrixGenerator, this);
-        if (Config.DRAWING_SHOW_TRUST_MATRIX) {
-            initDrawingWindow(widthHalf, heightHalf, trustMatrixDW, "t_mtx", "Trust Matrix", TtDrawingWindowLocation.TopLeft);
+        travelStatsLinearDrawingWindow = new TravelStatsLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, travelStatsLinearDrawingWindow, "tvl_stt", "Travel Statistics Linear Chart", TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
-        statsOfTrustDW = new StatsOfTrustDrawingWindow(this);
-        if (Config.DRAWING_SHOW_STATS_OF_TRUST) {
-            initDrawingWindow(widthHalf, heightHalf, statsOfTrustDW, "t_stt", "Trust Statistics", TtDrawingWindowLocation.TopRight);
+        trustMatrixDrawingWindow = new TrustMatrixDrawingWindow(matrixGenerator, this);
+        if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustMatrixDrawingWindow, "tut_mtx", "Trust Matrix", TtDrawingWindowLocation.TopLeft);
         }
 
         //============================ Initializing Diagram Drawing Windows
-        statsOfFalsePoNeDW = new StatsOfFalsePoNeDrawingWindow(this);
-        if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
-            initDrawingWindow(widthHalf, heightHalf, statsOfFalsePoNeDW, "t_pon", "E(TP | TN | FP | FN) Statistics", TtDrawingWindowLocation.TopRight);
+        trustStatsLinearDrawingWindow = new TrustStatsLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustStatsLinearDrawingWindow, "tut_stt", "Trust Statistics Linear Chart", TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
-        analysisOfTrustParamsDW = new StatsOfAnalysisOfTrustDrawingWindow(this);
-        if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
-            initDrawingWindow(widthHalf, heightHalf, analysisOfTrustParamsDW, "t_anl", "Trust Analyzing (Accuracy | Sensitivity | Specificity)", TtDrawingWindowLocation.TopRight);
+        trustRecogniseLinearDrawingWindow = new TrustRecogniseLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustRecogniseLinearDrawingWindow, "tut_rcg", "Trust Recognition (TP | TN | FP | FN) Statistics Linear Chart", TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
-        agentTravelInfoDW = new AgentTravelInfoDrawingWindow(this);
-        if (Config.DRAWING_SHOW_AGENT_TRAVEL_INFO) {
-            initDrawingWindow(widthHalf, heightHalf, agentTravelInfoDW, "a_trv", "Agent Travel Info", TtDrawingWindowLocation.BottomRight);
+        trustAnalysisLinearDrawingWindow = new TrustAnalysisLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustAnalysisLinearDrawingWindow, "tut_anl", "Trust Analyzing (Accuracy | Sensitivity | Specificity) Linear Chart", TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
-        agentTrustDW = new AgentTrustDataDrawingWindow(this);
-        if (Config.DRAWING_SHOW_AGENT_TRUST_DATA) {
-            initDrawingWindow(widthHalf, heightHalf, agentTrustDW, "a_trt", "Agent Trust Data", TtDrawingWindowLocation.BottomRight);
+        travelHistoryBarDrawingWindow = new TravelHistoryBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, travelHistoryBarDrawingWindow, "tvl_his", "Travel History Bar Chart", TtDrawingWindowLocation.BottomRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        experienceBarDrawingWindow = new ExperienceBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, experienceBarDrawingWindow, "tut_exp", "Trust Experience Bar Chart", TtDrawingWindowLocation.BottomRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        indirectExperienceBarDrawingWindow = new IndirectExperienceBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, indirectExperienceBarDrawingWindow, "tut_ixp", "Indirect Trust Experience Bar Chart", TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Recommendation Drawing Windows
-        agentRecommendationDW = new AgentRecommendationDrawingWindow(this);
-        if (Config.DRAWING_SHOW_AGENT_RECOMMENDATION_DATA) {
-            initDrawingWindow(widthHalf, heightHalf, agentRecommendationDW, "a_rec", "Agent Recommendation Data", TtDrawingWindowLocation.BottomRight);
+        recommendationBarDrawingWindow = new RecommendationBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, recommendationBarDrawingWindow, "tut_rcm", "Trust Recommendation Bar Chart", TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Observation Drawing Windows
-        agentObservationDW = new AgentObservationDrawingWindow(this);
-        if (Config.DRAWING_SHOW_AGENT_OBSERVATION_DATA) {
-            initDrawingWindow(widthHalf, heightHalf, agentObservationDW, "a_obs", "Agent Observation Data", TtDrawingWindowLocation.BottomRight);
+        observationBarDrawingWindow = new ObservationBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, observationBarDrawingWindow, "tut_obs", "Trust Observation Bar Chart", TtDrawingWindowLocation.BottomRight);
+        }
+        //============================ Initializing Observation Drawing Windows
+        indirectObservationBarDrawingWindow = new IndirectObservationBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, indirectObservationBarDrawingWindow, "tut_ibs", "Indirect Trust Observation Bar Chart", TtDrawingWindowLocation.BottomRight);
         }
     }
 
@@ -440,35 +472,41 @@ public class World {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (Config.DRAWING_SHOW_STATE_MACHINE) {
-            stateMachineDW.repaint();
+        if (Config.DRAWING_SHOW_stateMachineWindow) {
+            stateMachineDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_STAT_OF_ENV) {
-            statsOfEnvDW.repaint();
+        if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
+            travelStatsLinearDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_TRUST_MATRIX) {
-            trustMatrixDW.repaint();
+        if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
+            trustMatrixDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_STATS_OF_TRUST) {
-            statsOfTrustDW.repaint();
+        if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
+            trustStatsLinearDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_STATS_OF_PO_NE) {
-            statsOfFalsePoNeDW.repaint();
+        if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
+            trustRecogniseLinearDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_ANALYSIS_OF_TRUST_PARAM) {
-            analysisOfTrustParamsDW.repaint();
+        if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
+            trustAnalysisLinearDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_AGENT_TRAVEL_INFO) {
-            agentTravelInfoDW.repaint();
+        if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
+            travelHistoryBarDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_AGENT_TRUST_DATA) {
-            agentTrustDW.repaint();
+        if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
+            experienceBarDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_AGENT_RECOMMENDATION_DATA) {
-            agentRecommendationDW.repaint();
+        if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
+            indirectExperienceBarDrawingWindow.repaint();
         }
-        if (Config.DRAWING_SHOW_AGENT_OBSERVATION_DATA) {
-            agentObservationDW.repaint();
+        if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
+            recommendationBarDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
+            observationBarDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
+            indirectObservationBarDrawingWindow.repaint();
         }
 
         simulator.updateWindows();
@@ -489,7 +527,7 @@ public class World {
     }
 
     public String getSimulationConfigInfo() {
-        return  simulator.getSimulationConfigBunch().getByIndex(Globals.SIMULATION_TIMER).getInfo();
+        return simulator.getSimulationConfigBunch().getByIndex(Globals.SIMULATION_TIMER).getInfo();
     }
 
     public String toString(int tabIndex) {

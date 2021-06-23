@@ -12,38 +12,37 @@ import utils.statistics.WorldStatistics;
 
 import java.awt.*;
 
-public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
+public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
     private World worlds[];
     private SimulationConfig configBunch;
 
     //============================//============================  panning params
 
-    public IntAnalysisOfTrustDrawingWindow(World worlds[], SimulationConfig configBunch) {
+    public IntTravelStatsLinearDrawingWindow(World worlds[], SimulationConfig configBunch) {
         super();
         this.worlds = worlds;
         this.configBunch = configBunch;
-        this.prevPoints = new Point[3];
+        this.prevPoints = new Point[2];
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
     }
 
-    int loAxisX;
+    int loAxisX = 0;
 
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Integrated Trust Analysis Params",null)) {
+        if (!mainPaint(gr, "Integrated Statistics of Environment", null)) {
             return;
         }
 
-        printStatsInfo(1, "Accuracy (#of correct/#of all))", worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustAccuracy(), Color.GREEN);
+        int allAgentsInTarget = worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInTarget();
+        printStatsInfo(1, "Agents In Targets", allAgentsInTarget, "%" + 100 * (float) allAgentsInTarget / worlds[simulationTimer].getAgentsCount(), Color.GREEN);
 
-        printStatsInfo(2, "Sensitivity (#of TP/#of all P)", worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustSensitivity(), Color.YELLOW);
-
-        printStatsInfo(3, "Specificity (#of TN/#of all N)", worlds[simulationTimer].getWdStatistics()[worldTimer].getTrustSpecificity(), Color.PINK);
-
+        int allAgentsInPitfall = worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInPitfall();
+        printStatsInfo(2, "Agents In Pitfall", allAgentsInPitfall, "%" + 100 * (float) allAgentsInPitfall / worlds[simulationTimer].getAgentsCount(), Color.RED);
 
         //============================//============================ INFO
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
@@ -55,20 +54,17 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
             //============================
             int y = 40 * j + 220;
-            g.setColor(Color.white);
+            g.setColor(Color.YELLOW);
             g.drawString("Sim " + j + " |", 80, y);
             //============================
             drawCurve(200, y, Color.GREEN, j, 20, -1);
-            g.drawString("Accuracy", 220, y);
+            g.drawString("AgentsInTarget", 220, y);
             //============================
-            drawCurve(500, y, Color.YELLOW, j, 20, -1);
-            g.drawString("Sensitivity", 520, y);
-            //============================
-            drawCurve(800, y, Color.PINK, j, 20, -1);
-            g.drawString("Specificity", 820, y);
+            drawCurve(500, y, Color.RED, j, 20, -1);
+            g.drawString("AgentsInPitfall", 520, y);
             //============================
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + configBunch.getByIndex(j).getInfo(), 1100, y);
+            g.drawString("|>  " + configBunch.getByIndex(j).getInfo(), 800, y);
             //============================
         }
 
@@ -97,37 +93,29 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
                 if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                     loAxisX += 8;
-                    prevPoints[0].y = stat.getTrustAccuracyI200();
-                    prevPoints[1].y = stat.getTrustSensitivityI200();
-                    prevPoints[2].y = stat.getTrustSpecificityI200();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+                    prevPoints[0].y = stat.getAllAgentsInTarget();
+                    prevPoints[1].y = statistics[i].getAllAgentsInPitfall();
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
 
                 } else {
 
-                    prevPoints[0].y = statistics[i - 1].getTrustAccuracyI200();
-                    prevPoints[1].y = statistics[i - 1].getTrustSensitivityI200();
-                    prevPoints[2].y = statistics[i - 1].getTrustSpecificityI200();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+                    prevPoints[0].y = statistics[i - 1].getAllAgentsInTarget();
+                    prevPoints[1].y = statistics[i - 1].getAllAgentsInPitfall();
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
                     loAxisX += 8;
                 }
 
-                drawCurve(loAxisX, stat.getTrustAccuracyI200(), Color.GREEN, j, i);
-                if (prevPoints[0].y >= 0) {
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI200());
-                }
-                drawCurve(loAxisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, i);
-                if (prevPoints[1].y >= 0) {
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI200());
-                }
-                drawCurve(loAxisX, stat.getTrustSpecificityI200(), Color.PINK, j, i);
-                if (prevPoints[2].y >= 0) {
-                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI200());
-                }
+                drawCurve(loAxisX, stat.getAllAgentsInTarget(), Color.GREEN, j, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAllAgentsInTarget());
+
+                drawCurve(loAxisX, stat.getAllAgentsInPitfall(), Color.RED, j, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAllAgentsInPitfall());
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;
                 }
             }
+
         }
         //============================//============================ Draw X-axis line
         g.setColor(Color.YELLOW);
@@ -136,8 +124,9 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================ Episode Drawing
         if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
-            g.translate(0, -1000);
-            g.setColor(Color.pink);
+
+            g.translate(0, -1200);
+            g.setColor(Color.ORANGE);
             g.drawLine(0, 0, getRealWith(), 0);
 
 
@@ -162,32 +151,26 @@ public class IntAnalysisOfTrustDrawingWindow extends DrawingWindow {
                     }
 
                     if (i > 0) {
-                        prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
-                        prevPoints[0].y = statistics[i - 1].getTrustAccuracyI200();
-                        prevPoints[1].y = statistics[i - 1].getTrustSensitivityI200();
-                        prevPoints[2].y = statistics[i - 1].getTrustSpecificityI200();
+                        prevPoints[0].x = prevPoints[1].x = loAxisX;
+                        prevPoints[0].y = statistics[i - 1].getMidAgentsInTarget();
+                        prevPoints[1].y = statistics[i - 1].getMidAgentsInPitfall();
                         loAxisX += 100;
 
                     } else {
                         loAxisX += 100;
-                        prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
-                        prevPoints[0].y = stat.getTrustAccuracyI200();
-                        prevPoints[1].y = stat.getTrustSensitivityI200();
-                        prevPoints[2].y = stat.getTrustSpecificityI200();
+                        prevPoints[0].x = prevPoints[1].x = loAxisX;
+                        prevPoints[0].y = stat.getMidAgentsInTarget();
+                        prevPoints[1].y = stat.getMidAgentsInPitfall();
                     }
 
-                    drawCurve(loAxisX, stat.getTrustAccuracyI200(), Color.GREEN, j, 20, i);
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI200());
+                    drawCurve(loAxisX, stat.getMidAgentsInTarget(), Color.GREEN, j, 20, i);
+                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getMidAgentsInTarget());
 
-                    drawCurve(loAxisX, stat.getTrustSensitivityI200(), Color.YELLOW, j, 20, i);
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI200());
-
-                    drawCurve(loAxisX, stat.getTrustSpecificityI200(), Color.PINK, j, 20, i);
-                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI200());
+                    drawCurve(loAxisX, stat.getMidAgentsInPitfall(), Color.RED, j, 20, i);
+                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getMidAgentsInPitfall());
 
                 }
             }
         }
-
     }
 }

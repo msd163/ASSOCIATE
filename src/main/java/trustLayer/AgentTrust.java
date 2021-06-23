@@ -54,7 +54,7 @@ public class AgentTrust {
         this.recommendationItemCap = recommendationItemCap;
     }
 
-    public void init(Agent parentAgent,int agentsCount) {
+    public void init(Agent parentAgent, int agentsCount) {
 
         this.agent = parentAgent;
 
@@ -115,20 +115,23 @@ public class AgentTrust {
     //============================//============================//============================
 
 
-    public int[] getObservationInTargetAndPitfallCount() {
+    public int[] getObservationRewardsCount() {
         int[] tarPit = {0, 0};
-       /* if (observations == null || observations.isEmpty()) {
-            return tarPit;
+
+        for (TrustObservation obs : observations) {
+            tarPit[0] += obs.getPositiveRewards();
+            tarPit[1] += obs.getNegativeRewards();
         }
-        for (TrustObservatioz obs : observations) {
-            if (obs != null) {
-                if (obs.isIsFinalTarget()) {
-                    tarPit[0]++;
-                } else if (obs.isIsFinalPitfall()) {
-                    tarPit[1]++;
-                }
-            }
-        }*/
+        return tarPit;
+    }
+
+    public int[] getIndirectObservationRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustIndirectObservation obs : indirectObservations) {
+            tarPit[0] += obs.getPositiveRewards();
+            tarPit[1] += obs.getNegativeRewards();
+        }
         return tarPit;
     }
 
