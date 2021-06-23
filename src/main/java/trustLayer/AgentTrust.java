@@ -111,16 +111,16 @@ public class AgentTrust {
 
     //============================//============================//============================
 
-
-    //============================//============================//============================
-
-
     public int[] getObservationRewardsCount() {
         int[] tarPit = {0, 0};
 
         for (TrustObservation obs : observations) {
-            tarPit[0] += obs.getPositiveRewards();
-            tarPit[1] += obs.getNegativeRewards();
+            int ar = obs.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
         }
         return tarPit;
     }
@@ -129,8 +129,41 @@ public class AgentTrust {
         int[] tarPit = {0, 0};
 
         for (TrustIndirectObservation obs : indirectObservations) {
-            tarPit[0] += obs.getPositiveRewards();
-            tarPit[1] += obs.getNegativeRewards();
+            int ar = obs.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
+
+
+    public int[] getExperienceRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustExperience exp : experiences) {
+            int ar = exp.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
+
+    public int[] getIndirectExperienceRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustIndirectExperience obs : indirectExperiences) {
+            int ar = obs.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
         }
         return tarPit;
     }

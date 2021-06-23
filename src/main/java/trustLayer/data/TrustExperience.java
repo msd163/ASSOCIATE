@@ -6,10 +6,9 @@ import systemLayer.Agent;
 public class TrustExperience extends TrustData {
 
 
-    public TrustExperience(Agent responder) {
-        super(responder);
+    public TrustExperience(Agent requester, Agent responder) {
+        super(requester, responder, requester.getTrust().getExperienceItemCap());
     }
-
 
     //============================//============================//============================
 

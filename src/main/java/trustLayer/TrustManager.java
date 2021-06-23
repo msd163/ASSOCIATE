@@ -253,7 +253,7 @@ public class TrustManager {
             float reward = effect * getRewardByOrder(++consideredExpCount);
 
             //-- Creating experience
-            TrustExperience experience = new TrustExperience(tvh.getResponder());
+            TrustExperience experience = new TrustExperience(requester, tvh.getResponder());
             experience.addExperience(requester, source, destination, reward);
             experiences.add(experience);
 
@@ -351,7 +351,7 @@ public class TrustManager {
         }
 
         //-- Creating experience
-        TrustIndirectExperience experience = new TrustIndirectExperience(responder);
+        TrustIndirectExperience experience = new TrustIndirectExperience(receiver, responder);
         experience.addExperience(indirectExperienceItem);
         experiences.add(experience);
 
@@ -448,7 +448,7 @@ public class TrustManager {
         }
 
         //-- Creating observation
-        TrustObservation observation = new TrustObservation(responder);
+        TrustObservation observation = new TrustObservation(observer,responder);
         float reward = (isInTarget ? 1 : -1) * getRewardByOrder(0);
         observation.addObservation(observer, observed, null, null, reward);
         observations.add(observation);
@@ -592,14 +592,14 @@ public class TrustManager {
         indirectObservationItem.setIssuer(issuer);
 
         //============================
-        AgentTrust __trust = receiver.getTrust();
-        List<TrustIndirectObservation> observations = __trust.getIndirectObservations();
+        AgentTrust rcvTrust = receiver.getTrust();
+        List<TrustIndirectObservation> rcvIndirObss = rcvTrust.getIndirectObservations();
 
 
         //============================//============================ // Check if the agent added to trustHistory previously and return it's ID.
         boolean isAdded = false;
-        for (int k = 0, obsLen = observations.size(); k < obsLen; k++) {
-            TrustIndirectObservation obs = observations.get(k);
+        for (int k = 0, obsLen = rcvIndirObss.size(); k < obsLen; k++) {
+            TrustIndirectObservation obs = rcvIndirObss.get(k);
             if (obs.getResponder().getId() == responder.getId()) {
                 //-- Adding observation
                 obs.addObservation(indirectObservationItem);
@@ -614,34 +614,34 @@ public class TrustManager {
 
         //============================//============================  // If the agent not added previously
 
-        if (__trust.getIndirectObservations().size() >= __trust.getIndirectObservationCap()) {
+        if (rcvTrust.getIndirectObservations().size() >= rcvTrust.getIndirectObservationCap()) {
             // Replacing new history item with an exist one according selected method.
-            switch (__trust.getTrustReplaceMethod()) {
+            switch (rcvTrust.getTrustReplaceMethod()) {
                 case Sequential_Circular:
-                    __trust.getIndirectObservations().remove(0);
+                    rcvTrust.getIndirectObservations().remove(0);
                     break;
 
                 case RemoveLastUpdated:
                     int historyIndex;
-                    TrustIndirectObservation oldHistory = __trust.getIndirectObservations().get(0);
+                    TrustIndirectObservation oldHistory = rcvTrust.getIndirectObservations().get(0);
                     historyIndex = 0;
-                    for (int k = 1, historiesLength = observations.size(); k < historiesLength; k++) {
-                        TrustIndirectObservation tExp = observations.get(k);
+                    for (int k = 1, historiesLength = rcvIndirObss.size(); k < historiesLength; k++) {
+                        TrustIndirectObservation tObs = rcvIndirObss.get(k);
 
-                        if (oldHistory.getLastTime() > tExp.getLastTime()) {
+                        if (oldHistory.getLastTime() > tObs.getLastTime()) {
                             historyIndex = k;
-                            oldHistory = tExp;
+                            oldHistory = tObs;
                         }
                     }
-                    __trust.getIndirectObservations().remove(historyIndex);
+                    rcvTrust.getIndirectObservations().remove(historyIndex);
                     break;
             }
         }
 
         //-- Creating observation
-        TrustIndirectObservation observation = new TrustIndirectObservation(responder);
+        TrustIndirectObservation observation = new TrustIndirectObservation(receiver,responder);
         observation.addObservation(indirectObservationItem);
-        observations.add(observation);
+        rcvIndirObss.add(observation);
 
         return true;
     }

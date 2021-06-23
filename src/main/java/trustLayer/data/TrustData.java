@@ -11,9 +11,11 @@ import java.util.ArrayList;
 
 public class TrustData {
 
+    protected Agent owner;
     protected Agent responder;
     protected int lastTime;
     protected int lastEpisode;
+    protected int itemCap;
     protected ArrayList<TrustDataItem> items;
     // protected float finalReward;
     // protected int finalRewardUpdateTime;
@@ -22,8 +24,10 @@ public class TrustData {
     protected int negativeRewards;
     //============================//============================//============================
 
-    public TrustData(Agent responder) {
+    public TrustData(Agent owner, Agent responder, int itemCap) {
+        this.owner = owner;
         this.responder = responder;
+        this.itemCap = itemCap;
         lastTime = Globals.WORLD_TIMER;
         lastEpisode = Globals.EPISODE;
         //  finalReward = 0;
@@ -33,13 +37,21 @@ public class TrustData {
     }
 
     protected void addItem(Agent issuer, Agent requester, StateX source, StateX destination, float reward) {
+        if (itemCap <= 0) {
+            return;
+        }
+
+        purgeItems();
+
         lastTime = Globals.WORLD_TIMER;
         lastEpisode = Globals.EPISODE;
+
         if (reward >= 0) {
             positiveRewards++;
         } else {
             negativeRewards++;
         }
+
         items.add(new TrustDataItem(
                 issuer,
                 requester,
@@ -48,6 +60,31 @@ public class TrustData {
                 Globals.WORLD_TIMER,
                 reward
         ));
+    }
+
+    private void purgeItems() {
+        if (items.size() >= itemCap) {
+            switch (owner.getTrust().getTrustReplaceMethod()) {
+                case Sequential_Circular:
+                    removeItem(0);
+                    break;
+
+                case RemoveLastUpdated:
+                    int historyIndex;
+                    TrustDataItem oldHistory = items.get(0);
+                    historyIndex = 0;
+                    for (int k = 1, historiesLength = items.size(); k < historiesLength; k++) {
+                        TrustDataItem tExp = items.get(k);
+
+                        if (oldHistory.getTime() > tExp.getTime()) {
+                            historyIndex = k;
+                            oldHistory = tExp;
+                        }
+                    }
+                    removeItem(historyIndex);
+                    break;
+            }
+        }
     }
 
     private boolean isAgentEquals(Agent a1, Agent a2) {
@@ -61,7 +98,9 @@ public class TrustData {
     }
 
     protected void addItem(TrustDataItem item) {
-
+        if (itemCap <= 0) {
+            return;
+        }
         if (items.size() > 0) {
             boolean isFound = false;
             for (TrustDataItem it : items) {
@@ -85,13 +124,17 @@ public class TrustData {
             }
         }
 
+        purgeItems();
+
         lastTime = Globals.WORLD_TIMER;
         lastEpisode = Globals.EPISODE;
+
         if (item.getReward() >= 0) {
             positiveRewards++;
         } else {
             negativeRewards++;
         }
+        
         items.add(new TrustDataItem(
                 item.getIssuer(),
                 item.getRequester(),
@@ -102,7 +145,18 @@ public class TrustData {
         ));
     }
 
+    public void removeItem(int index) {
+        TrustDataItem remove = items.remove(index);
+        if (remove.getReward() >= 0) {
+            positiveRewards--;
+        } else {
+            negativeRewards--;
+        }
+    }
 
+    public int getAbstractReward() {
+        return Integer.compare(positiveRewards, negativeRewards);
+    }
     //============================//============================//============================
 
 
@@ -133,5 +187,9 @@ public class TrustData {
 
     public int getNegativeRewards() {
         return negativeRewards;
+    }
+
+    public int getItemCap() {
+        return itemCap;
     }
 }

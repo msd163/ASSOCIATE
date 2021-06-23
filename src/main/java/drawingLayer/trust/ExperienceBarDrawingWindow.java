@@ -61,13 +61,33 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
             g.fillRect(5, i * 21, experienceCap, 20);
 
             //-- Drawing filled number rectangle
-            g.setColor(Globals.Color$.getLight(behaviorState));
+            g.setColor(Globals.Color$.lightGray);
             g.fillRect(5, i * 21, experiences.size(), 20);
 
             //-- Printing number/total
             g.setColor(Color.LIGHT_GRAY);
             g.drawString(experiences.size() + " / " + experienceCap,
                     experiences.size() + 20, i * 21 + 15);
+
+
+            int obsSize = agent.getTrust().getExperiences().size();
+
+            if (obsSize > 0) {
+                //-- Drawing positive and negative reward bars
+                int[] obsTarPit = agent.getTrust().getExperienceRewardsCount();
+                g.setColor(Globals.Color$.lightGreen);
+                g.fillRect(5, i * 21, obsTarPit[0], 20);
+                g.setColor(Globals.Color$.lightRed);
+                g.fillRect(5 + obsTarPit[0], i * 21, obsTarPit[1], 20);
+
+                //-- Drawing percentage of items size: itemSize/itemCap
+                List<TrustExperience> experiences = agent.getTrust().getExperiences();
+                for (int j = 0, experiencesSize = experiences.size(); j < experiencesSize; j++) {
+                    TrustExperience io = experiences.get(j);
+                    g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.green : Globals.Color$.red);
+                    g.drawLine(5 + j, i * 21, 5 + j, i * 21 + io.getItems().size() / io.getItemCap());
+                }
+            }
 
         }
     }

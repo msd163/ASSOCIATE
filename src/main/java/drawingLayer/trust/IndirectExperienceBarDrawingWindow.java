@@ -5,6 +5,7 @@ import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
 import trustLayer.data.TrustIndirectExperience;
+import trustLayer.data.TrustIndirectObservation;
 import utils.Globals;
 
 import java.awt.*;
@@ -59,13 +60,33 @@ public class IndirectExperienceBarDrawingWindow extends DrawingWindow {
             g.fillRect(5, i * 21, indirectExperienceCap, 20);
 
             //-- Drawing filled number rectangle
-            g.setColor(Globals.Color$.getLight(behaviorState));
+            g.setColor(Globals.Color$.lightGray);
             g.fillRect(5, i * 21, indirectExperiences.size(), 20);
 
             //-- Printing number/total
             g.setColor(Color.LIGHT_GRAY);
             g.drawString(indirectExperiences.size() + " / " + indirectExperienceCap,
                     indirectExperiences.size() + 20, i * 21 + 15);
+
+            int obsSize = agent.getTrust().getIndirectExperiences().size();
+
+            if (obsSize > 0) {
+                //-- Drawing positive and negative reward bars
+                int[] obsTarPit = agent.getTrust().getIndirectExperienceRewardsCount();
+                g.setColor(Globals.Color$.lightGreen);
+                g.fillRect(5, i * 21, obsTarPit[0], 20);
+                g.setColor(Globals.Color$.lightRed);
+                g.fillRect(5 + obsTarPit[0], i * 21, obsTarPit[1], 20);
+
+                //-- Drawing percentage of items size: itemSize/itemCap
+                List<TrustIndirectExperience> indirectExperiences = agent.getTrust().getIndirectExperiences();
+                for (int j = 0, indirectExperiencesSize = indirectExperiences.size(); j < indirectExperiencesSize; j++) {
+                    TrustIndirectExperience io = indirectExperiences.get(j);
+                    g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.green : Globals.Color$.red);
+                    g.drawLine(5 + j, i * 21, 5 + j, i * 21 + io.getItems().size() / io.getItemCap());
+                }
+            }
+
 
         }
     }
