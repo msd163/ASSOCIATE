@@ -6,12 +6,15 @@ public class SimulationConfigItem {
     private int method;
     // private boolean isValidateByTrustObservation;
     private float trustForgottenCoeff;
-    private float trustRecommendationCoeff;
+    private float recommendationCoeff;
+    private boolean isBidirectionalRecommendationSharing;
     private boolean isUseExperience;
     private boolean isUseIndirectExperience;
+    private boolean isBidirectionalExperienceSharing;
     private boolean isUseObservation;
     private boolean isUseIndirectObservation;
-    private int   experienceDepthInRewarding;
+    private boolean isBidirectionalObservationSharing;
+    private int experienceDepthInRewarding;
     private float ignoringThresholdOfTrustValue;
     private float maximumConsideredRoutingHelpInTrustMechanism;
 
@@ -20,23 +23,26 @@ public class SimulationConfigItem {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "Method: " + methodology +
-                    " | ForgottenCoeff: " + trustForgottenCoeff +
-                    " | RecommCoeff: " + trustRecommendationCoeff +
-                    " | UseExp: " + isUseExperience +
+                    " | FrgCoeff: " + trustForgottenCoeff +
+                    " || RcmCoeff: " + recommendationCoeff +
+                    " | IsRcmBid: " + isBidirectionalRecommendationSharing +
+                    " || UseExp: " + isUseExperience +
                     " | UseIndrExp: " + isUseIndirectExperience +
-                    " | UseObs: " + isUseObservation +
+                    " | IsExpBid: " + isBidirectionalExperienceSharing +
+                    " || UseObs: " + isUseObservation +
                     " | UseIndrObs: " + isUseIndirectObservation +
-                    " | ExpDepthInRewarding: " + experienceDepthInRewarding +
-                    " | IgnoringThrldOfTV: " + ignoringThresholdOfTrustValue +
-                    " | MaxConsideredRHInTM: " + maximumConsideredRoutingHelpInTrustMechanism;
+                    " | IsObsBid: " + isBidirectionalObservationSharing +
+                    " || ExpDepthInRwd: " + experienceDepthInRewarding +
+                    " | IgrThrldOfTutV: " + ignoringThresholdOfTrustValue +
+                    " | MaxRtHpInTut: " + maximumConsideredRoutingHelpInTrustMechanism;
 
         }
         return "Method: " + methodology;
 
     }
 
-    public boolean isUseTrustForgottenCoeff() {
-        return trustForgottenCoeff > 0;
+    public boolean isUseRecommendation() {
+        return recommendationCoeff > 0;
     }
     //============================//============================//============================
 
@@ -57,8 +63,8 @@ public class SimulationConfigItem {
         return trustForgottenCoeff;
     }
 
-    public float getTrustRecommendationCoeff() {
-        return trustRecommendationCoeff;
+    public float getRecommendationCoeff() {
+        return recommendationCoeff;
     }
 
     public boolean isIsUseExperience() {
@@ -87,5 +93,17 @@ public class SimulationConfigItem {
 
     public float getMaximumConsideredRoutingHelpInTrustMechanism() {
         return maximumConsideredRoutingHelpInTrustMechanism;
+    }
+
+    public boolean isIsBidirectionalRecommendationSharing() {
+        return isBidirectionalRecommendationSharing;
+    }
+
+    public boolean isIsBidirectionalExperienceSharing() {
+        return isBidirectionalExperienceSharing;
+    }
+
+    public boolean isIsBidirectionalObservationSharing() {
+        return isBidirectionalObservationSharing;
     }
 }

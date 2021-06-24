@@ -1,6 +1,7 @@
 package trustLayer;
 
 import systemLayer.Agent;
+import trustLayer.data.TrustAbstract;
 import utils.Globals;
 import utils.statistics.WorldStatistics;
 
@@ -35,12 +36,11 @@ public class TrustMatrix {
         Agent responder;
         for (int i = 0; i < agentCount; i++) {
             Agent agent = sAgents.get(i);
-            float[] trustValues = agent.getTrust().getTrustValues();
-            int[] lastUpdateTimes = agent.getTrust().getLastUpdateTrustValues();
-            for (int k = 0, trustValuesLength = trustValues.length; k < trustValuesLength; k++) {
+            TrustAbstract[] trustAbstracts = agent.getTrust().getTrustAbstracts();
+            for (int k = 0, trustValuesLength = trustAbstracts.length; k < trustValuesLength; k++) {
                 responder = sAgents.get(k);
-                float tValue = trustValues[k];
-                int updateTime = lastUpdateTimes[k];
+                float tValue = trustAbstracts[k].getTrustValue();
+                int updateTime = trustAbstracts[k].getUpdateTime();
                 if (/*tValue != 0 && */updateTime == Globals.WORLD_TIMER) {
                     trustMatrix[i][k] = tValue;
                     if (tValue > 0 && !responder.getBehavior().getHasHonestState()) {

@@ -232,11 +232,10 @@ public class Router {
 
             if (routingHelp != null) {
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
-                //============================//============================ _Trust
-                /*if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
-                        simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath) {*/
-                    routingHelp.setTrustLevel(trustManager.getTrustValue(agent, wa.getAgent()));
-                /*}*/
+                //============================//============================ _Calculating _Trust
+
+                routingHelp.setTrustValue(trustManager.getTrustValue(agent, wa.getAgent()));
+
                 //============================//============================
                 routingHelps.add(routingHelp);
             }
@@ -255,7 +254,7 @@ public class Router {
         switch (simulationConfigItem.getTtMethod()) {
 
             case TrustMode_ShortPath:
-                sortedRoutingHelps = basicTrustMechanism(agent, goalState, routingHelps);
+                sortedRoutingHelps = sortByTrustMechanism(agent, goalState, routingHelps);
                 if (sortedRoutingHelps == null) return;
 
                 //-- Validating routingHelps according to observations
@@ -299,7 +298,26 @@ public class Router {
 
         if (simulationConfigItem.isIsUseIndirectExperience()) {
             trustManager.shareExperiences(agent, help.getHelperAgent());
+            if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
+                trustManager.getTrustValue(help.getHelperAgent(), agent);
+                trustManager.shareExperiences(help.getHelperAgent(), agent);
+            }
+        }
+
+        if (simulationConfigItem.isIsUseIndirectObservation()) {
             trustManager.shareObservations(agent, help.getHelperAgent());
+            if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
+                trustManager.getTrustValue(help.getHelperAgent(), agent);
+                trustManager.shareObservations(help.getHelperAgent(), agent);
+            }
+        }
+
+        if (simulationConfigItem.isUseRecommendation()) {
+            trustManager.sendRecommendations(agent, help.getHelperAgent());
+            if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
+                trustManager.getTrustValue(help.getHelperAgent(), agent);
+                trustManager.sendRecommendations(help.getHelperAgent(), agent);
+            }
         }
 
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {
@@ -353,12 +371,12 @@ public class Router {
         });
     }
 
-    private List<RoutingHelp> basicTrustMechanism(Agent agent, StateX goalState, ArrayList<RoutingHelp> routingHelps) {
+    private List<RoutingHelp> sortByTrustMechanism(Agent agent, StateX goalState, ArrayList<RoutingHelp> routingHelps) {
         // Sorting routerHelpers based on bigger trust level.
         routingHelps.sort((c1, c2) -> {
-            if (c1.getTrustLevel() > c2.getTrustLevel()) {
+            if (c1.getTrustValue() > c2.getTrustValue()) {
                 return -1;
-            } else if (c1.getTrustLevel() < c2.getTrustLevel()) {
+            } else if (c1.getTrustValue() < c2.getTrustValue()) {
                 return 1;
             } else {
                 if (c1.getFinalStepFromAgentToTarget() < c2.getFinalStepFromAgentToTarget()) {
@@ -375,7 +393,7 @@ public class Router {
              srIndex < routingHelpsSize && srIndex < simulationConfigItem.getMaximumConsideredRoutingHelpInTrustMechanism();
              srIndex++) {
             RoutingHelp help = routingHelps.get(srIndex);
-            if (help.getTrustLevel() < 0) {
+            if (help.getTrustValue() < 0) {
                 break;
             }
         }

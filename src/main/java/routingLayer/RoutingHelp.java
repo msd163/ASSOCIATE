@@ -10,7 +10,7 @@ public class RoutingHelp {
     private int stepFromHelperToTarget;
     private int stepFromAgentToHelper;
     private StateX nextState;
-    private float trustLevel;
+    private float trustValue;
     private TtIsValidatedInObservations validation;
 
     public RoutingHelp() {
@@ -55,12 +55,12 @@ public class RoutingHelp {
         this.stepFromAgentToHelper = stepFromAgentToHelper;
     }
 
-    public float getTrustLevel() {
-        return trustLevel;
+    public float getTrustValue() {
+        return trustValue;
     }
 
-    public void setTrustLevel(float trustLevel) {
-        this.trustLevel = trustLevel;
+    public void setTrustValue(float trustValue) {
+        this.trustValue = trustValue;
     }
 
     public void setValidation(TtIsValidatedInObservations validation) {

@@ -3,10 +3,7 @@ package trustLayer;
 import _type.TtTrustReplaceMethod;
 import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
-import trustLayer.data.TrustExperience;
-import trustLayer.data.TrustIndirectExperience;
-import trustLayer.data.TrustIndirectObservation;
-import trustLayer.data.TrustObservation;
+import trustLayer.data.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +51,7 @@ public class AgentTrust {
         this.recommendationItemCap = recommendationItemCap;
     }
 
-    public void init(Agent parentAgent, int agentsCount) {
+    public void init(Agent parentAgent) {
 
         this.agent = parentAgent;
 
@@ -66,9 +63,16 @@ public class AgentTrust {
         observations = new ArrayList<>();
         indirectObservations = new ArrayList<>();
 
-        this.trustValues = new float[agentsCount];
-        this.lastUpdateTrustValues = new int[agentsCount];
+    }
 
+    /**
+     * After creating agents and filling agents list in the world
+     */
+    public void postInit(){
+        this.trustAbstracts = new TrustAbstract[agent.getWorld().getAgentsCount()];
+        for (int i = 0; i < this.trustAbstracts.length; i++) {
+            trustAbstracts[i] = new TrustAbstract(agent.getWorld().getAgents().get(i));
+        }
     }
 
     private Agent agent;
@@ -76,8 +80,8 @@ public class AgentTrust {
     @Expose
     private TtTrustReplaceMethod trustReplaceMethod;
 
-    private float trustValues[];            // final trust values
-    private int lastUpdateTrustValues[];    // last update time of trust values
+    //-- Last values of trusts for each responder. These data will update after calculating trust values.
+    private TrustAbstract trustAbstracts[];
 
     //============================//============================//============================  Recommendation
     //-- Received recommendation form others
@@ -270,11 +274,7 @@ public class AgentTrust {
         return indirectObservationItemCap;
     }
 
-    public float[] getTrustValues() {
-        return trustValues;
-    }
-
-    public int[] getLastUpdateTrustValues() {
-        return lastUpdateTrustValues;
+    public TrustAbstract[] getTrustAbstracts() {
+        return trustAbstracts;
     }
 }

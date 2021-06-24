@@ -83,7 +83,7 @@ public class Agent {
 
     //============================//============================//============================
 
-    public void initForGenerator(SimulationProfiler profiler,int agentsCount) {
+    public void initForGenerator(SimulationProfiler profiler) {
         capacity = new AgentCapacity(this, profiler);
         trust = new AgentTrust(
                 profiler.getCurrentBunch().getTrustReplaceHistoryMethod(),
@@ -105,11 +105,11 @@ public class Agent {
         targetStateIds = new int[targetCount];
         targetStates = new StateX[targetCount];
 
-        initVars(agentsCount);
+        initVars();
 
     }
 
-    public void initVars(int agentsCount) {
+    public void initVars() {
         trust.setTrustParams(
                 capacity.getExperienceCap(),
                 capacity.getExperienceItemCap(),
@@ -123,7 +123,7 @@ public class Agent {
                 capacity.getTrustRecommendationItemCap()
         );
 
-        trust.init(this,agentsCount);
+        trust.init(this);
 
         watchedAgents = new ArrayList<>();
         watchedStates = new ArrayList<>();

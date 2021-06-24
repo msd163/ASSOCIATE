@@ -91,7 +91,7 @@ public class World {
             for (Agent agent : state.getAgents()) {
                 agent.setState(state);
                 agent.setWorld(this);
-                agent.initVars(agentsCount);
+                agent.initVars();
 
                 //============================ filling state array according to stateId array
                 agent.updateTargets();
@@ -126,6 +126,7 @@ public class World {
         int indexInSortedList = 0;
         for (Agent agent : agents) {
             agent.setIndex(indexInSortedList++);
+            agent.getTrust().postInit();
         }
 
         environment.reassigningStateLocationAndTransPath();
@@ -208,6 +209,11 @@ public class World {
 
     }
 
+    /**
+     * ============================
+     * RUN
+     * ==============================
+     **/
     public void run() {
 
         initDrawingWindows();

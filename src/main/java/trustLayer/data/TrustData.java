@@ -24,7 +24,7 @@ public class TrustData {
     protected int negativeRewards;
     //============================//============================//============================
 
-    public TrustData(Agent owner, Agent responder, int itemCap) {
+    protected TrustData(Agent owner, Agent responder, int itemCap) {
         this.owner = owner;
         this.responder = responder;
         this.itemCap = itemCap;
