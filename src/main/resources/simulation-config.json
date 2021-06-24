@@ -2,7 +2,7 @@
   "simulationRound": 1,
   "configs": [
     {
-      "method": 0,
+      "method": 2,
       "trustForgottenCoeff": 0.0,
       "ignoringThresholdOfTrustValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6,

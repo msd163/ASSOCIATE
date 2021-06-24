@@ -149,23 +149,23 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                     loAxisX += 8;
-                    prevPoints[0].y = stat.getTimedAverageTarget();
-                    prevPoints[1].y = stat.getTimedAveragePitfall();
+                    prevPoints[0].y = stat.getTimedAvgAgentTarget();
+                    prevPoints[1].y = stat.getTimedAvgAgentInPitfall();
                     prevPoints[0].x = prevPoints[1].x = loAxisX;
 
                 } else {
 
-                    prevPoints[0].y = statistics[i - 1].getTimedAverageTarget();
-                    prevPoints[1].y = statistics[i - 1].getTimedAveragePitfall();
+                    prevPoints[0].y = statistics[i - 1].getTimedAvgAgentTarget();
+                    prevPoints[1].y = statistics[i - 1].getTimedAvgAgentInPitfall();
                     prevPoints[0].x = prevPoints[1].x = loAxisX;
                     loAxisX += 8;
                 }
 
-                drawCurve(loAxisX, stat.getTimedAverageTarget(), Color.GREEN, j, i);
-                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimedAverageTarget());
+                drawCurve(loAxisX, stat.getTimedAvgAgentTarget(), Color.GREEN, j, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimedAvgAgentTarget());
 
-                drawCurve(loAxisX, stat.getTimedAveragePitfall(), Color.RED, j, i);
-                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimedAveragePitfall());
+                drawCurve(loAxisX, stat.getTimedAvgAgentInPitfall(), Color.RED, j, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimedAvgAgentInPitfall());
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;

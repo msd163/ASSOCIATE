@@ -459,7 +459,7 @@ public class WorldStatistics {
 
     //============================//============================//============================ Timed Average
 
-    public int getTimedAverageTarget() {
+    public int getTimedAvgAgentTarget() {
 
         if (xPrevStats == null) {
             timedAverageTarget = allAgentsInTarget / (worldTime == 0 ? 1 : worldTime);
@@ -470,7 +470,7 @@ public class WorldStatistics {
         return timedAverageTarget;
     }
 
-    public int getTimedAveragePitfall() {
+    public int getTimedAvgAgentInPitfall() {
         if (xPrevStats == null) {
             timedAveragePitfall = allAgentsInPitfall / (worldTime == 0 ? 1 : worldTime);
         } else {
@@ -478,5 +478,37 @@ public class WorldStatistics {
         }
 
         return timedAveragePitfall;
+    }
+
+    public int getTimedAvgTruePositive() {
+        if (xPrevStats == null) {
+             return  allTruePositiveTrust / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allTruePositiveTrust - xPrevStats.allTruePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }
+    }
+
+    public int getTimedAvgTrueNegative() {
+        if (xPrevStats == null) {
+             return  allTrueNegativeTrust / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allTrueNegativeTrust - xPrevStats.allTrueNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }
+    }
+
+    public int getTimedAvgFalsePositive() {
+        if (xPrevStats == null) {
+             return  allFalsePositiveTrust / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allFalsePositiveTrust - xPrevStats.allFalsePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }
+    }
+
+    public int getTimedAvgFalseNegative() {
+        if (xPrevStats == null) {
+            return  allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }
     }
 }
