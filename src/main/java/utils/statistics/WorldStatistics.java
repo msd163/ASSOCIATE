@@ -1,5 +1,7 @@
 package utils.statistics;
 
+import utils.Config;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +71,7 @@ public class WorldStatistics {
 
     //============================//============================
 
-    private WorldStatistics prev20Stats;
+    private WorldStatistics xPrevStats;
 
     private int timedAverageTarget;
     private int timedAveragePitfall;
@@ -77,9 +79,9 @@ public class WorldStatistics {
     //============================//============================
 
 
-    public WorldStatistics(WorldStatistics prevStats, int agentCount, WorldStatistics prev20Stats) {
+    public WorldStatistics(WorldStatistics prevStats, int agentCount, WorldStatistics xPrevStats) {
         this.prevStats = prevStats;
-        this.prev20Stats = prev20Stats;
+        this.xPrevStats = xPrevStats;
         worldTime
                 = allAgentsInTarget
                 = ittAgentsInTarget
@@ -214,7 +216,6 @@ public class WorldStatistics {
 
     }
 
-
     public void add_Itt_FalseNegativeTrust() {
         ittFalseNegativeTrust++;
         allFalseNegativeTrust++;
@@ -224,7 +225,6 @@ public class WorldStatistics {
         ittTruePositiveTrust++;
         allTruePositiveTrust++;
     }
-
 
     public void add_Itt_TrueNegativeTrust() {
         ittTrueNegativeTrust++;
@@ -453,26 +453,28 @@ public class WorldStatistics {
         return allTrueNegativeTrust;
     }
 
-    public WorldStatistics getPrev20Stats() {
-        return prev20Stats;
+    public WorldStatistics getxPrevStats() {
+        return xPrevStats;
     }
+
+    //============================//============================//============================ Timed Average
 
     public int getTimedAverageTarget() {
 
-        if (prev20Stats == null) {
+        if (xPrevStats == null) {
             timedAverageTarget = allAgentsInTarget / (worldTime == 0 ? 1 : worldTime);
         } else {
-            timedAverageTarget = (allAgentsInTarget - prev20Stats.allAgentsInTarget) / 20;
+            timedAverageTarget = (allAgentsInTarget - xPrevStats.allAgentsInTarget) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
         }
 
         return timedAverageTarget;
     }
 
     public int getTimedAveragePitfall() {
-        if (prev20Stats == null) {
+        if (xPrevStats == null) {
             timedAveragePitfall = allAgentsInPitfall / (worldTime == 0 ? 1 : worldTime);
         } else {
-            timedAveragePitfall = (allAgentsInPitfall - prev20Stats.allAgentsInPitfall) / 20;
+            timedAveragePitfall = (allAgentsInPitfall - xPrevStats.allAgentsInPitfall) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
         }
 
         return timedAveragePitfall;

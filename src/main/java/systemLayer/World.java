@@ -139,8 +139,8 @@ public class World {
             if (i == 0) {
                 wdStatistics[i] = new WorldStatistics(null, agentsCount, null);
             } else {
-                if (i >= 20) {
-                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i - 20]);
+                if (i >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i -  Config.STATISTICS_AVERAGE_TIME_WINDOW]);
                 } else {
                     wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, null);
                 }
