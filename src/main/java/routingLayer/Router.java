@@ -507,6 +507,10 @@ public class Router {
      */
     private RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
 
+        if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
+            return responseAsHonest(agent, goalState);
+        }
+
         switch (agent.getBehavior().getCurrentBehaviorState()) {
             case Honest:
                 return responseAsHonest(agent, goalState);

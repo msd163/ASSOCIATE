@@ -69,9 +69,17 @@ public class WorldStatistics {
 
     //============================//============================
 
+    private WorldStatistics prev20Stats;
 
-    public WorldStatistics(WorldStatistics prevStats, int agentCount) {
+    private int timedAverageTarget;
+    private int timedAveragePitfall;
+
+    //============================//============================
+
+
+    public WorldStatistics(WorldStatistics prevStats, int agentCount, WorldStatistics prev20Stats) {
         this.prevStats = prevStats;
+        this.prev20Stats = prev20Stats;
         worldTime
                 = allAgentsInTarget
                 = ittAgentsInTarget
@@ -237,6 +245,7 @@ public class WorldStatistics {
         allTrustSensitivity = tp_fn == 0 ? -1 : (float) allTruePositiveTrust / tp_fn;
         allTrustSpecificity = tn_fp == 0 ? -1 : (float) allTrueNegativeTrust / tn_fp;
         allTrustAccuracy = all_ == 0 ? -1 : (float) (allTruePositiveTrust + allTrueNegativeTrust) / all_;
+
 
     }
 
@@ -442,5 +451,30 @@ public class WorldStatistics {
 
     public int getAllTrueNegativeTrust() {
         return allTrueNegativeTrust;
+    }
+
+    public WorldStatistics getPrev20Stats() {
+        return prev20Stats;
+    }
+
+    public int getTimedAverageTarget() {
+
+        if (prev20Stats == null) {
+            timedAverageTarget = allAgentsInTarget / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            timedAverageTarget = (allAgentsInTarget - prev20Stats.allAgentsInTarget) / 20;
+        }
+
+        return timedAverageTarget;
+    }
+
+    public int getTimedAveragePitfall() {
+        if (prev20Stats == null) {
+            timedAveragePitfall = allAgentsInPitfall / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            timedAveragePitfall = (allAgentsInPitfall - prev20Stats.allAgentsInPitfall) / 20;
+        }
+
+        return timedAveragePitfall;
     }
 }

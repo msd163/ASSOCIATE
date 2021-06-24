@@ -126,9 +126,9 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         g.setColor(Color.YELLOW);
         g.drawLine(0, 0, getRealWith(), 0);
 
-        //============================//============================//============================ Average Chart
+        //============================//============================//============================ Timed Average Chart
 
-        g.translate(0, -600);
+        g.translate(0, -700);
         loAxisX = 0;
 
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
@@ -149,29 +149,28 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                     loAxisX += 8;
-                    prevPoints[0].y = getAverage(stat.getAllAgentsInTarget(), i);
-                    prevPoints[1].y = getAverage(stat.getAllAgentsInPitfall(), i);
+                    prevPoints[0].y = stat.getTimedAverageTarget();
+                    prevPoints[1].y = stat.getTimedAveragePitfall();
                     prevPoints[0].x = prevPoints[1].x = loAxisX;
 
                 } else {
 
-                    prevPoints[0].y = getAverage(statistics[i - 1].getAllAgentsInTarget(), i - 1);
-                    prevPoints[1].y = getAverage(statistics[i - 1].getAllAgentsInPitfall(), i - 1);
+                    prevPoints[0].y = statistics[i - 1].getTimedAverageTarget();
+                    prevPoints[1].y = statistics[i - 1].getTimedAveragePitfall();
                     prevPoints[0].x = prevPoints[1].x = loAxisX;
                     loAxisX += 8;
                 }
 
-                drawCurve(loAxisX, getAverage(stat.getAllAgentsInTarget(), i), Color.GREEN, j, i);
-                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, getAverage(stat.getAllAgentsInTarget(), i));
+                drawCurve(loAxisX, stat.getTimedAverageTarget(), Color.GREEN, j, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimedAverageTarget());
 
-                drawCurve(loAxisX, getAverage(stat.getAllAgentsInPitfall(), i), Color.RED, j, i);
-                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, getAverage(stat.getAllAgentsInPitfall(), i));
+                drawCurve(loAxisX, stat.getTimedAveragePitfall(), Color.RED, j, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimedAveragePitfall());
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;
                 }
             }
-
         }
         //============================//============================ Draw X-axis line
         g.setColor(Color.CYAN);

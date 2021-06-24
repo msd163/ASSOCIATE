@@ -1,14 +1,14 @@
 {
   "--------------------------------------------------2": "STATE",
-  "stateCount": 20,
-  "stateCapacity": "100",
-  "stateTargetCount": "#2..6",
-  "pitfallCount": "5",
+  "stateCount": 200,
+  "stateCapacity": "50",
+  "stateTargetCount": "#5..15",
+  "pitfallCount": "70",
   "--------------------------------------------------3": "AGENT",
-  "agentsCount": "200",
+  "agentsCount": "1000",
   "bunches": [
     {
-      "bunchCount": "%20@200",
+      "bunchCount": "%5@1000",
       "targetCount": "200",
       "watchDepth": "2",
       "watchListCap": "#800..1000",
@@ -41,7 +41,7 @@
       }
     },
     {
-      "bunchCount": "%20@200",
+      "bunchCount": "%10@1000",
       "targetCount": "200",
       "watchDepth": "1",
       "watchListCap": "#100..800",
@@ -74,7 +74,7 @@
       }
     },
     {
-      "bunchCount": "%50@200",
+      "bunchCount": "%85@1000",
       "targetCount": "200",
       "watchDepth": "0",
       "watchListCap": "#10..80",

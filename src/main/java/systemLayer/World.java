@@ -137,9 +137,13 @@ public class World {
         wdStatistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
         for (i = 0; i < wdStatistics.length; i++) {
             if (i == 0) {
-                wdStatistics[i] = new WorldStatistics(null, agentsCount);
+                wdStatistics[i] = new WorldStatistics(null, agentsCount, null);
             } else {
-                wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount);
+                if (i >= 20) {
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i - 20]);
+                } else {
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, null);
+                }
             }
         }
 
