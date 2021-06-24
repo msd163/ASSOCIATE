@@ -1,6 +1,26 @@
 {
-  "simulationRound": 1,
+  "simulationRound": 2,
   "configs": [
+    {
+      "method": 4,
+      "trustForgottenCoeff": 0.00,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "maximumConsideredRoutingHelpInTrustMechanism": 6,
+      "_EXP": "-----------------------------------",
+      "isUseExperience": true,
+      "isUseIndirectExperience": true,
+      "isBidirectionalExperienceSharing": false,
+      "experienceDepthInRewarding": 1,
+      "_OBS": "-----------------------------------",
+      "isUseObservation": true,
+      "isUseIndirectObservation": true,
+      "isBidirectionalObservationSharing": false,
+      "_RCM": "-----------------------------------",
+      "recommendationCoeff": 0.5,
+      "isBidirectionalRecommendationSharing": false,
+      "_CRT": "-----------------------------------",
+      "isUseCertification": false
+    },
     {
       "method": 4,
       "trustForgottenCoeff": 0.00,
