@@ -63,7 +63,7 @@ public class AgentTrust {
         observations = new ArrayList<>();
         indirectObservations = new ArrayList<>();
 
-        this.hasCertification = agent.getCapacity().getCapPower()>80;
+        this.hasCertification = agent.getCapacity().getCapPower()>80 && agent.getBehavior().getHasHonestState();
 
     }
 

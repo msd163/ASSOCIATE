@@ -27,13 +27,13 @@ public class SimulationConfigItem {
                     " | FrgCoeff: " + trustForgottenCoeff +
                     " | IsCert: " + isUseCertification +
                     " || RcmCoeff: " + recommendationCoeff +
-                    " ! IsRcmBid: " + isBidirectionalRecommendationSharing +
+                    " - IsRcmBid: " + isBidirectionalRecommendationSharing +
                     " || UseExp: " + isUseExperience +
-                    " ! UseIndrExp: " + isUseIndirectExperience +
-                    " ! IsExpBid: " + isBidirectionalExperienceSharing +
+                    " - UseIndrExp: " + isUseIndirectExperience +
+                    " - IsExpBid: " + isBidirectionalExperienceSharing +
                     " || UseObs: " + isUseObservation +
-                    " ! UseIndrObs: " + isUseIndirectObservation +
-                    " ! IsObsBid: " + isBidirectionalObservationSharing +
+                    " - UseIndrObs: " + isUseIndirectObservation +
+                    " - IsObsBid: " + isBidirectionalObservationSharing +
                     " || ExpDepthInRwd: " + experienceDepthInRewarding +
                     " | IgrThrldOfTutV: " + ignoringThresholdOfTrustValue +
                     " | MaxRtHpInTut: " + maximumConsideredRoutingHelpInTrustMechanism;

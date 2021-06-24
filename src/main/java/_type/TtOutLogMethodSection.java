@@ -10,6 +10,7 @@ public enum TtOutLogMethodSection {
     UpdateWatchList("UpWtch"),
     DoYouKnowWhereIs("DoYouKn"),
     TrustData_AddItem("Td-AddItem"),
+    TrustMng_GetTrustValue("TutMng-getTV"),
     //
     ;
 

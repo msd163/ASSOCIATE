@@ -1,6 +1,7 @@
 package trustLayer;
 
-import _type.TtBehaviorState;
+import _type.TtOutLogMethodSection;
+import _type.TtOutLogStatus;
 import simulateLayer.SimulationConfigItem;
 import stateLayer.StateX;
 import stateLayer.TravelHistory;
@@ -9,6 +10,7 @@ import systemLayer.WatchedAgent;
 import trustLayer.data.*;
 import utils.Config;
 import utils.Globals;
+import utils.OutLog____;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,16 +48,22 @@ public class TrustManager {
             return trust.getTrustAbstracts()[responder.getIndex()].getTrustValue();
         }
 
-        float innerTrustValue = calcInnerTrustValue(requester, responder);
+        float innerTrustValue;
+        if (simulationConfigItem.isIsUseCertification() && responder.getTrust().isHasCertification()) {
+            innerTrustValue = 1.0f;
+            OutLog____.pl(TtOutLogMethodSection.TrustMng_GetTrustValue, TtOutLogStatus.SUCCESS, "CRT: Responder (" + responder.getId() + ") with Certificate. Requester: " + requester.getId());
+        } else {
+            innerTrustValue = calcInnerTrustValue(requester, responder);
 
-        //-- trust of recommendation
-        if (simulationConfigItem.isUseRecommendation()) {
-            float recommenderTrustValue = calcRecommendedTrustValue(requester, responder);
-            if (recommenderTrustValue > 0) {
-                innerTrustValue =
-                        (simulationConfigItem.getRecommendationCoeff() * recommenderTrustValue)
-                                + ((1 - simulationConfigItem.getRecommendationCoeff()) * innerTrustValue)
-                ;
+            //-- trust of recommendation
+            if (simulationConfigItem.isUseRecommendation()) {
+                float recommenderTrustValue = calcRecommendedTrustValue(requester, responder);
+                if (recommenderTrustValue > 0) {
+                    innerTrustValue =
+                            (simulationConfigItem.getRecommendationCoeff() * recommenderTrustValue)
+                                    + ((1 - simulationConfigItem.getRecommendationCoeff()) * innerTrustValue)
+                    ;
+                }
             }
         }
 
@@ -182,14 +190,8 @@ public class TrustManager {
         List<Float> norList = new ArrayList<>();
 
         for (TrustDataItem item : items) {
-            float trustValue;
-            if (simulationConfigItem.isIsUseCertification()
-                    && item.getIssuer().getTrust().isHasCertification()
-                    && item.getIssuer().getBehavior().getBehaviorState() == TtBehaviorState.Honest) {
-                trustValue = 1.0f;
-            } else {
-                trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
-            }
+            float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
+
             //-- For preventing stack over flow in calculating trust, we use trust value that is calculated previously
             norList.add(trustValue * item.getReward() * getForgottenValue(item.getTime()));
         }

@@ -243,7 +243,7 @@ public class Router {
 
         // If there is no routerHelper...
         if (routingHelps.isEmpty()) {
-            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.FAILED, "There is no routerHelp that know where is the goal state", agent, agent.getState(), goalState);
+            OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.WARN, "There is no routerHelp that know where is the goal state", agent, agent.getState(), goalState);
             return;
         }
 

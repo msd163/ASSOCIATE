@@ -1,7 +1,26 @@
 {
-  "simulationRound": 2,
+  "simulationRound": 3,
   "configs": [
     {
+      "method": 4,
+      "trustForgottenCoeff": 0.00,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "maximumConsideredRoutingHelpInTrustMechanism": 6,
+      "_EXP": "-----------------------------------",
+      "isUseExperience": true,
+      "isUseIndirectExperience": false,
+      "isBidirectionalExperienceSharing": false,
+      "experienceDepthInRewarding": 1,
+      "_OBS": "-----------------------------------",
+      "isUseObservation": false,
+      "isUseIndirectObservation": false,
+      "isBidirectionalObservationSharing": false,
+      "_RCM": "-----------------------------------",
+      "recommendationCoeff": 0.0,
+      "isBidirectionalRecommendationSharing": false,
+      "_CRT": "-----------------------------------",
+      "isUseCertification": true
+    },  {
       "method": 4,
       "trustForgottenCoeff": 0.00,
       "ignoringThresholdOfTrustValue": 0.00001,
@@ -19,7 +38,7 @@
       "recommendationCoeff": 0.5,
       "isBidirectionalRecommendationSharing": true,
       "_CRT": "-----------------------------------",
-      "isUseCertification": false
+      "isUseCertification": true
     },
     {
       "method": 4,
@@ -39,7 +58,7 @@
       "recommendationCoeff": 0.5,
       "isBidirectionalRecommendationSharing": true,
       "_CRT": "-----------------------------------",
-      "isUseCertification": true
+      "isUseCertification": false
     },
     {
       "method": 0,
