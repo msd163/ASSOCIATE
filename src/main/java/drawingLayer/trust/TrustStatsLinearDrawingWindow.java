@@ -21,10 +21,6 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
         }
     }
 
-    private int getAverage(int value, int count) {
-        return count == 0 ? value : value / count;
-    }
-
     @Override
     public void paint(Graphics gr) {
 
@@ -131,7 +127,7 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
         }
 
         //============================//============================ Draw X-axis line
-        g.setColor(Color.YELLOW);
+        g.setColor(Color.cyan);
         g.drawLine(0, 0, getRealWith(), 0);
 
 

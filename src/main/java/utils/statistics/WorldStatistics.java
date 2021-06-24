@@ -27,12 +27,12 @@ public class WorldStatistics {
     //============================
     private int allTrustToHonest;                   // all agents that trust to a 'honest' agent
     private int allTrustToAdversary;                // all agents that trust to a 'adversary' agent
-    private int allTrustToHypocrite;     // all agents that trust to a 'int.adversary' agent
+    private int allTrustToHypocrite;                // all agents that trust to a 'int.adversary' agent
     private int allTrustToMischief;                 // all agents that trust to a 'mischief' agent
 
     private int ittTrustToHonest;                   // agents that trust to a 'honest' agent in this time
     private int ittTrustToAdversary;                // agents that trust to a 'dishonest' agent in this time
-    private int ittTrustToHypocrite;     // agents that trust to a 'int.adversary' agent
+    private int ittTrustToHypocrite;                // agents that trust to a 'int.adversary' agent
     private int ittTrustToMischief;                 // agents that trust to a 'mischief' agent
 
     // ============================
@@ -40,22 +40,32 @@ public class WorldStatistics {
     private int ittFalseNegativeTrust;
     private int ittTruePositiveTrust;
     private int ittTrueNegativeTrust;
+
+    // ============================
+    private int allFalsePositiveTrust;
+    private int allFalseNegativeTrust;
+    private int allTruePositiveTrust;
+    private int allTrueNegativeTrust;
+
     //============================
     private Map<Integer, AgentStatistics> agentStatistics;
 
 
     //--  (Number of correct assessments)/Number of all assessments)
     private float trustAccuracy;
+    private float allTrustAccuracy;
 
     //--  Sensitivity refers to the test's ability to correctly detect ill patients who do have the condition
     //--  (Number of true positive assessment)/(Number of all positive assessment)
     //--  True Positive rate
     private float trustSensitivity;
+    private float allTrustSensitivity;
 
     //--  Specificity relates to the test's ability to correctly reject healthy patients without a condition. Specificity of a test is the proportion of who truly do not have the condition who test negative for the condition.
     //--  (Number of true negative assessment)/(Number of all negative assessment)
     //--  True Negative rate
     private float trustSpecificity;
+    private float allTrustSpecificity;
 
     //============================//============================
 
@@ -94,6 +104,12 @@ public class WorldStatistics {
             allTrustToAdversary = prevStats.getAllTrustToAdversary();
             allTrustToHypocrite = prevStats.getAllTrustToHypocrite();
             allTrustToMischief = prevStats.getAllTrustToMischief();
+            allAgentsInTarget = prevStats.getAllAgentsInTarget();
+            allAgentsInPitfall = prevStats.getAllAgentsInPitfall();
+            allFalsePositiveTrust = prevStats.getAllFalsePositiveTrust();
+            allFalseNegativeTrust = prevStats.getAllFalseNegativeTrust();
+            allTruePositiveTrust = prevStats.getAllTruePositiveTrust();
+            allTrueNegativeTrust = prevStats.getAllTrueNegativeTrust();
 
         } else {
 
@@ -101,6 +117,12 @@ public class WorldStatistics {
                     = allTrustToHonest
                     = allTrustToHypocrite
                     = allTrustToMischief
+                    = allAgentsInTarget
+                    = allAgentsInPitfall
+                    = allFalsePositiveTrust
+                    = allFalseNegativeTrust
+                    = allTruePositiveTrust
+                    = allTrueNegativeTrust
                     = 0;
 
         }
@@ -180,20 +202,25 @@ public class WorldStatistics {
 
     public void add_Itt_FalsePositiveTrust() {
         ittFalsePositiveTrust++;
+        allFalsePositiveTrust++;
+
     }
 
 
     public void add_Itt_FalseNegativeTrust() {
         ittFalseNegativeTrust++;
+        allFalseNegativeTrust++;
     }
 
     public void add_Itt_TruePositiveTrust() {
         ittTruePositiveTrust++;
+        allTruePositiveTrust++;
     }
 
 
     public void add_Itt_TrueNegativeTrust() {
         ittTrueNegativeTrust++;
+        allTrueNegativeTrust++;
     }
 
     public void calcTrustParams() {
@@ -203,6 +230,14 @@ public class WorldStatistics {
         trustSensitivity = tp_fn == 0 ? -1 : (float) ittTruePositiveTrust / tp_fn;
         trustSpecificity = tn_fp == 0 ? -1 : (float) ittTrueNegativeTrust / tn_fp;
         trustAccuracy = all_ == 0 ? -1 : (float) (ittTruePositiveTrust + ittTrueNegativeTrust) / all_;
+
+        tp_fn = allTruePositiveTrust + allFalseNegativeTrust;
+        tn_fp = allTrueNegativeTrust + allFalsePositiveTrust;
+        all_ = allTruePositiveTrust + allTrueNegativeTrust + allFalsePositiveTrust + allFalseNegativeTrust;
+        allTrustSensitivity = tp_fn == 0 ? -1 : (float) allTruePositiveTrust / tp_fn;
+        allTrustSpecificity = tn_fp == 0 ? -1 : (float) allTrueNegativeTrust / tn_fp;
+        allTrustAccuracy = all_ == 0 ? -1 : (float) (allTruePositiveTrust + allTrueNegativeTrust) / all_;
+
     }
 
     //============================//============================
@@ -353,6 +388,30 @@ public class WorldStatistics {
         return (int) (trustSpecificity * 200);
     }
 
+    public float getAllTrustAccuracy() {
+        return allTrustAccuracy;
+    }
+
+    public int getAllTrustAccuracyI200() {
+        return (int) (allTrustAccuracy * 200);
+    }
+
+    public float getAllTrustSensitivity() {
+        return allTrustSensitivity;
+    }
+
+    public int getAllTrustSensitivityI200() {
+        return (int) (allTrustSensitivity * 200);
+    }
+
+    public float getAllTrustSpecificity() {
+        return allTrustSpecificity;
+    }
+
+    public int getAllTrustSpecificityI200() {
+        return (int) (allTrustSpecificity * 200);
+    }
+
     public int getAllTrustToMischief() {
         return allTrustToMischief;
     }
@@ -369,7 +428,19 @@ public class WorldStatistics {
         return ittTrustToMischief;
     }
 
-    public Map<Integer, AgentStatistics> getAgentStatistics() {
-        return agentStatistics;
+    public int getAllFalsePositiveTrust() {
+        return allFalsePositiveTrust;
+    }
+
+    public int getAllFalseNegativeTrust() {
+        return allFalseNegativeTrust;
+    }
+
+    public int getAllTruePositiveTrust() {
+        return allTruePositiveTrust;
+    }
+
+    public int getAllTrueNegativeTrust() {
+        return allTrueNegativeTrust;
     }
 }

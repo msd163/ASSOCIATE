@@ -18,7 +18,7 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 200;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 2000;          // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
@@ -35,11 +35,11 @@ public class Config {
     //============================ Drawing Windows
 
     public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
-    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = true;
+    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
     public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
-    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = true;
+    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
 
@@ -53,8 +53,8 @@ public class Config {
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 
-    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = false;
-    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = false;
+    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;

@@ -34,7 +34,7 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Integrated Trust Analysis Params",null)) {
+        if (!mainPaint(gr, "Integrated Trust Analysis Params", null)) {
             return;
         }
 
@@ -122,6 +122,65 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                 drawCurve(loAxisX, stat.getTrustSpecificityI200(), Color.PINK, j, i);
                 if (prevPoints[2].y >= 0) {
                     g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI200());
+                }
+
+                if (axisX < loAxisX) {
+                    axisX = loAxisX;
+                }
+            }
+        }
+        //============================//============================ Draw X-axis line
+        g.setColor(Color.YELLOW);
+        g.drawLine(0, 0, getRealWith(), 0);
+
+        //============================//============================//============================ Average Chart
+
+        g.translate(0, -600);
+        loAxisX = 0;
+
+        for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+            World world = worlds[j];
+
+            if (j > Globals.SIMULATION_TIMER || world == null) {
+                break;
+            }
+
+            loAxisX = j;
+            axisY = 0;
+
+            worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
+
+            WorldStatistics[] statistics = world.getWdStatistics();
+            for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                WorldStatistics stat = statistics[i];
+
+                if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    loAxisX += 8;
+                    prevPoints[0].y = stat.getAllTrustAccuracyI200();
+                    prevPoints[1].y = stat.getAllTrustSensitivityI200();
+                    prevPoints[2].y = stat.getAllTrustSpecificityI200();
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+
+                } else {
+
+                    prevPoints[0].y = statistics[i - 1].getAllTrustAccuracyI200();
+                    prevPoints[1].y = statistics[i - 1].getAllTrustSensitivityI200();
+                    prevPoints[2].y = statistics[i - 1].getAllTrustSpecificityI200();
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+                    loAxisX += 8;
+                }
+
+                drawCurve(loAxisX, stat.getAllTrustAccuracyI200(), Color.GREEN, j, i);
+                if (prevPoints[0].y >= 0) {
+                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAllTrustAccuracyI200());
+                }
+                drawCurve(loAxisX, stat.getAllTrustSensitivityI200(), Color.YELLOW, j, i);
+                if (prevPoints[1].y >= 0) {
+                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAllTrustSensitivityI200());
+                }
+                drawCurve(loAxisX, stat.getAllTrustSpecificityI200(), Color.PINK, j, i);
+                if (prevPoints[2].y >= 0) {
+                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getAllTrustSpecificityI200());
                 }
 
                 if (axisX < loAxisX) {

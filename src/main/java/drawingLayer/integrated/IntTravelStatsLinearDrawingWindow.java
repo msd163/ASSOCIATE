@@ -38,11 +38,16 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        int allAgentsInTarget = worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInTarget();
-        printStatsInfo(1, "Agents In Targets", allAgentsInTarget, "%" + 100 * (float) allAgentsInTarget / worlds[simulationTimer].getAgentsCount(), Color.GREEN);
+        int ittAgentsInTarget = worlds[simulationTimer].getWdStatistics()[worldTimer].getIttAgentsInTarget();
+        printStatsInfo(1, "Agents In Targets", ittAgentsInTarget, "%" + 100 * (float) ittAgentsInTarget / worlds[simulationTimer].getAgentsCount(), Color.GREEN);
 
-        int allAgentsInPitfall = worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInPitfall();
-        printStatsInfo(2, "Agents In Pitfall", allAgentsInPitfall, "%" + 100 * (float) allAgentsInPitfall / worlds[simulationTimer].getAgentsCount(), Color.RED);
+        int ittAgentsInPitfall = worlds[simulationTimer].getWdStatistics()[worldTimer].getIttAgentsInPitfall();
+        printStatsInfo(2, "Agents In Pitfall", ittAgentsInPitfall, "%" + 100 * (float) ittAgentsInPitfall / worlds[simulationTimer].getAgentsCount(), Color.RED);
+
+
+        printStatsInfo(4, "Avg Agents In Targets", worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInTarget() / worldTimer, Color.GREEN);
+        printStatsInfo(5, "Avg Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInPitfall() / worldTimer, Color.RED);
+
 
         //============================//============================ INFO
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
@@ -53,7 +58,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             //============================
-            int y = 40 * j + 220;
+            int y = 40 * j + 340;
             g.setColor(Color.YELLOW);
             g.drawString("Sim " + j + " |", 80, y);
             //============================
@@ -93,23 +98,23 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                     loAxisX += 8;
-                    prevPoints[0].y = stat.getAllAgentsInTarget();
-                    prevPoints[1].y = statistics[i].getAllAgentsInPitfall();
+                    prevPoints[0].y = stat.getIttAgentsInTarget();
+                    prevPoints[1].y = statistics[i].getIttAgentsInPitfall();
                     prevPoints[0].x = prevPoints[1].x = loAxisX;
 
                 } else {
 
-                    prevPoints[0].y = statistics[i - 1].getAllAgentsInTarget();
-                    prevPoints[1].y = statistics[i - 1].getAllAgentsInPitfall();
+                    prevPoints[0].y = statistics[i - 1].getIttAgentsInTarget();
+                    prevPoints[1].y = statistics[i - 1].getIttAgentsInPitfall();
                     prevPoints[0].x = prevPoints[1].x = loAxisX;
                     loAxisX += 8;
                 }
 
-                drawCurve(loAxisX, stat.getAllAgentsInTarget(), Color.GREEN, j, i);
-                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAllAgentsInTarget());
+                drawCurve(loAxisX, stat.getIttAgentsInTarget(), Color.GREEN, j, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttAgentsInTarget());
 
-                drawCurve(loAxisX, stat.getAllAgentsInPitfall(), Color.RED, j, i);
-                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAllAgentsInPitfall());
+                drawCurve(loAxisX, stat.getIttAgentsInPitfall(), Color.RED, j, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall());
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;
@@ -119,6 +124,57 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         }
         //============================//============================ Draw X-axis line
         g.setColor(Color.YELLOW);
+        g.drawLine(0, 0, getRealWith(), 0);
+
+        //============================//============================//============================ Average Chart
+
+        g.translate(0, -600);
+        loAxisX = 0;
+
+        for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+            World world = worlds[j];
+
+            if (j > Globals.SIMULATION_TIMER || world == null) {
+                break;
+            }
+
+            loAxisX = j;
+            axisY = 0;
+
+            worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
+
+            WorldStatistics[] statistics = world.getWdStatistics();
+            for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                WorldStatistics stat = statistics[i];
+
+                if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    loAxisX += 8;
+                    prevPoints[0].y = getAverage(stat.getAllAgentsInTarget(), i);
+                    prevPoints[1].y = getAverage(stat.getAllAgentsInPitfall(), i);
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
+
+                } else {
+
+                    prevPoints[0].y = getAverage(statistics[i - 1].getAllAgentsInTarget(), i - 1);
+                    prevPoints[1].y = getAverage(statistics[i - 1].getAllAgentsInPitfall(), i - 1);
+                    prevPoints[0].x = prevPoints[1].x = loAxisX;
+                    loAxisX += 8;
+                }
+
+                drawCurve(loAxisX, getAverage(stat.getAllAgentsInTarget(), i), Color.GREEN, j, i);
+                g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, getAverage(stat.getAllAgentsInTarget(), i));
+
+                drawCurve(loAxisX, getAverage(stat.getAllAgentsInPitfall(), i), Color.RED, j, i);
+                g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, getAverage(stat.getAllAgentsInPitfall(), i));
+
+                if (axisX < loAxisX) {
+                    axisX = loAxisX;
+                }
+            }
+
+        }
+        //============================//============================ Draw X-axis line
+        g.setColor(Color.CYAN);
         g.drawLine(0, 0, getRealWith(), 0);
 
 

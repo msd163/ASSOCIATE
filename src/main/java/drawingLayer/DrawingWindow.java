@@ -249,7 +249,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return axisY > 0 ? axisY + 1500 : getHeight();//axisY;
     }
     //============================//============================
-
+    protected int getAverage(int value, int count) {
+        return count == 0 ? value : value / count;
+    }
     protected void pauseNotice(Graphics2D g) {
         if (Globals.PAUSE) {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
