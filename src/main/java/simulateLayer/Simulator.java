@@ -88,9 +88,14 @@ public class Simulator {
             Path targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.EnvironmentDataFileName);
             Files.copy(sourcePath, targetPath);
 
-            //-- Copying simulation-x.json to statistics directory
+            //-- Copying simulation-profile-x.json to statistics directory
             sourcePath = Paths.get(Config.SimulatingFilePath);
             targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.SimulatingFileName);
+            Files.copy(sourcePath, targetPath);
+
+            //-- Copying simulation-config-x.json to statistics directory
+            sourcePath = Paths.get(Config.SimulationConfigFilePath);
+            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.SimulationConfigFileName);
             Files.copy(sourcePath, targetPath);
 
         }
