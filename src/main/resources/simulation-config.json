@@ -1,5 +1,5 @@
 {
-  "simulationRound": 2,
+  "simulationRound": 1,
   "configs": [
     {
       "method": 4,
@@ -9,15 +9,17 @@
       "_EXP": "-----------------------------------",
       "isUseExperience": true,
       "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
+      "isBidirectionalExperienceSharing": false,
       "experienceDepthInRewarding": 1,
       "_OBS": "-----------------------------------",
       "isUseObservation": true,
       "isUseIndirectObservation": true,
-      "isBidirectionalObservationSharing": true,
+      "isBidirectionalObservationSharing": false,
       "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.0,
-      "isBidirectionalRecommendationSharing": true
+      "recommendationCoeff": 0.5,
+      "isBidirectionalRecommendationSharing": false,
+      "_CRT": "-----------------------------------",
+      "isUseCertification": true
     },
     {
       "method": 4,
@@ -34,8 +36,10 @@
       "isUseIndirectObservation": true,
       "isBidirectionalObservationSharing": false,
       "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.0,
-      "isBidirectionalRecommendationSharing": false
+      "recommendationCoeff": 0.5,
+      "isBidirectionalRecommendationSharing": false,
+      "_CRT": "-----------------------------------",
+      "isUseCertification": true
     }
   ]
 }

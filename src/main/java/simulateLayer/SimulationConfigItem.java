@@ -17,6 +17,7 @@ public class SimulationConfigItem {
     private int experienceDepthInRewarding;
     private float ignoringThresholdOfTrustValue;
     private float maximumConsideredRoutingHelpInTrustMechanism;
+    private boolean isUseCertification;
 
     //============================//============================//============================
     public String getInfo() {
@@ -24,14 +25,15 @@ public class SimulationConfigItem {
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "Method: " + methodology +
                     " | FrgCoeff: " + trustForgottenCoeff +
+                    " | IsCert: " + isUseCertification +
                     " || RcmCoeff: " + recommendationCoeff +
-                    " | IsRcmBid: " + isBidirectionalRecommendationSharing +
+                    " ! IsRcmBid: " + isBidirectionalRecommendationSharing +
                     " || UseExp: " + isUseExperience +
-                    " | UseIndrExp: " + isUseIndirectExperience +
-                    " | IsExpBid: " + isBidirectionalExperienceSharing +
+                    " ! UseIndrExp: " + isUseIndirectExperience +
+                    " ! IsExpBid: " + isBidirectionalExperienceSharing +
                     " || UseObs: " + isUseObservation +
-                    " | UseIndrObs: " + isUseIndirectObservation +
-                    " | IsObsBid: " + isBidirectionalObservationSharing +
+                    " ! UseIndrObs: " + isUseIndirectObservation +
+                    " ! IsObsBid: " + isBidirectionalObservationSharing +
                     " || ExpDepthInRwd: " + experienceDepthInRewarding +
                     " | IgrThrldOfTutV: " + ignoringThresholdOfTrustValue +
                     " | MaxRtHpInTut: " + maximumConsideredRoutingHelpInTrustMechanism;
@@ -105,5 +107,9 @@ public class SimulationConfigItem {
 
     public boolean isIsBidirectionalObservationSharing() {
         return isBidirectionalObservationSharing;
+    }
+
+    public boolean isIsUseCertification() {
+        return isUseCertification;
     }
 }

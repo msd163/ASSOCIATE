@@ -1,5 +1,6 @@
 package trustLayer;
 
+import _type.TtBehaviorState;
 import simulateLayer.SimulationConfigItem;
 import stateLayer.StateX;
 import stateLayer.TravelHistory;
@@ -24,6 +25,9 @@ public class TrustManager {
     //============================//============================//============================
 
     private float getForgottenValue(int time) {
+        if (simulationConfigItem.getTrustForgottenCoeff() == 0) {
+            return 1.0f;
+        }
         return (float) Math.pow(1 - simulationConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - time);
     }
 
@@ -70,8 +74,11 @@ public class TrustManager {
         int index = 0;
         for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
             Float t = sntrs.get(i);
+            if (t == 0.0f) {
+                break;
+            }
             trustValue += ((t) / ((index + 2) * (index + 2)));
-            // System.out.println(i + ": index: " + index + " | " + t + "  > " + xxxxx);
+            //System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
             index++;
         }
 
@@ -175,9 +182,15 @@ public class TrustManager {
         List<Float> norList = new ArrayList<>();
 
         for (TrustDataItem item : items) {
-            //todo: for revert sharing (from requester to responder flow), the trust value (of responder to requester) have to be calculated
+            float trustValue;
+            if (simulationConfigItem.isIsUseCertification()
+                    && item.getIssuer().getTrust().isHasCertification()
+                    && item.getIssuer().getBehavior().getBehaviorState() == TtBehaviorState.Honest) {
+                trustValue = 1.0f;
+            } else {
+                trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
+            }
             //-- For preventing stack over flow in calculating trust, we use trust value that is calculated previously
-            float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
             norList.add(trustValue * item.getReward() * getForgottenValue(item.getTime()));
         }
         return norList;
@@ -518,19 +531,17 @@ public class TrustManager {
             }
         }
         return 0.0f;
-    }
-*/
-   /* public void ValidateHelperInObservations(Agent requester, RoutingHelp routingHelp) {
+    } public void ValidateHelperInObservations(Agent requester, RoutingHelp routingHelp) {
         List<Agent> observers = new ArrayList<>();
         List<Float> trusts = new ArrayList<>();
         for (WatchedAgent watchedAgent : requester.getWatchedAgents()) {
-          *//*  if (watchedAgent.getAgent().hasObservation()) {
+           if (watchedAgent.getAgent().hasObservation()) {
                 float trustLevel = getTrustValue(requester, watchedAgent.getAgent(), false);
                 if (trustLevel > 0 && canObserve(watchedAgent.getAgent(), routingHelp.getHelperAgent())) {
                     observers.add(watchedAgent.getAgent());
                     trusts.add(trustLevel);
                 }
-            }*//*
+            }
         }
 
         if (observers.isEmpty()) {

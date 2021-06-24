@@ -35,24 +35,26 @@ public class Config {
     //============================ Drawing Windows
 
     public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
-    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
+    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = true;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
-    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
+    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = true;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
 
-    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = true;
+    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = false;
     public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = false;
+
     public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = false;
     public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = false;
+
     public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = false;
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 
-    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
-    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = false;
+    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = false;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;

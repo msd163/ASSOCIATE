@@ -63,6 +63,8 @@ public class AgentTrust {
         observations = new ArrayList<>();
         indirectObservations = new ArrayList<>();
 
+        this.hasCertification = agent.getCapacity().getCapPower()>80;
+
     }
 
     /**
@@ -113,6 +115,10 @@ public class AgentTrust {
     private int indirectObservationCap;     // maximum size of indirect observations
     private int indirectObservationItemCap; // max size of items in each indirect observation
 
+    //============================//============================//============================ Certification
+
+    private boolean hasCertification;
+
     //============================//============================//============================
 
     public int[] getObservationRewardsCount() {
@@ -142,7 +148,6 @@ public class AgentTrust {
         }
         return tarPit;
     }
-
 
     public int[] getExperienceRewardsCount() {
         int[] tarPit = {0, 0};
@@ -276,5 +281,9 @@ public class AgentTrust {
 
     public TrustAbstract[] getTrustAbstracts() {
         return trustAbstracts;
+    }
+
+    public boolean isHasCertification() {
+        return hasCertification;
     }
 }

@@ -533,7 +533,7 @@ public class World {
     }
 
     public String getSimulationConfigInfo() {
-        return simulator.getSimulationConfigBunch().getByIndex(Globals.SIMULATION_TIMER).getInfo();
+        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo();
     }
 
     public String toString(int tabIndex) {
