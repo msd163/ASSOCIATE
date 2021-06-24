@@ -97,32 +97,32 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
 
             if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                 axisX += 8;
-                prevPoints[0].y = getAverage(stat.getAllTrustToMischief(), i);
-                prevPoints[1].y = getAverage(stat.getAllTrustToHonest(), i);
-                prevPoints[2].y = getAverage(stat.getAllTrustToHypocrite(), i);
-                prevPoints[3].y = getAverage(stat.getAllTrustToAdversary(), i);
+                prevPoints[0].y = stat.getTimeAvgTrustToMischief();
+                prevPoints[1].y = stat.getTimeAvgTrustToHonest();
+                prevPoints[2].y = stat.getTimeAvgTrustToHypocrite();
+                prevPoints[3].y = stat.getTimeAvgTrustToAdversary();
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
 
             } else {
-                prevPoints[0].y = getAverage(statistics[i - 1].getAllTrustToMischief(), i - 1);
-                prevPoints[1].y = getAverage(statistics[i - 1].getAllTrustToHonest(), i - 1);
-                prevPoints[2].y = getAverage(statistics[i - 1].getAllTrustToHypocrite(), i - 1);
-                prevPoints[3].y = getAverage(statistics[i - 1].getAllTrustToAdversary(), i - 1);
+                prevPoints[0].y = statistics[i - 1].getTimeAvgTrustToMischief();
+                prevPoints[1].y = statistics[i - 1].getTimeAvgTrustToHonest();
+                prevPoints[2].y = statistics[i - 1].getTimeAvgTrustToHypocrite();
+                prevPoints[3].y = statistics[i - 1].getTimeAvgTrustToAdversary();
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
                 axisX += 8;
             }
 
-            drawCurve(axisX, getAverage(stat.getAllTrustToMischief(), i), Color.WHITE, 1, i);
-            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, getAverage(stat.getAllTrustToMischief(), i));
+            drawCurve(axisX, stat.getTimeAvgTrustToMischief(), Color.WHITE, 1, i);
+            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTimeAvgTrustToMischief());
 
-            drawCurve(axisX, getAverage(stat.getAllTrustToHonest(), i), Color.GREEN, 2, i);
-            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, getAverage(stat.getAllTrustToHonest(), i));
+            drawCurve(axisX, stat.getTimeAvgTrustToHonest(), Color.GREEN, 2, i);
+            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTimeAvgTrustToHonest());
 
-            drawCurve(axisX, getAverage(stat.getAllTrustToHypocrite(), i), Color.MAGENTA, 3, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, getAverage(stat.getAllTrustToHypocrite(), i));
+            drawCurve(axisX, stat.getTimeAvgTrustToHypocrite(), Color.MAGENTA, 3, i);
+            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTimeAvgTrustToHypocrite());
 
-            drawCurve(axisX, getAverage(stat.getAllTrustToAdversary(), i), Color.RED, 4, i);
-            g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, getAverage(stat.getAllTrustToAdversary(), i));
+            drawCurve(axisX, stat.getTimeAvgTrustToAdversary(), Color.RED, 4, i);
+            g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getTimeAvgTrustToAdversary());
 
         }
 

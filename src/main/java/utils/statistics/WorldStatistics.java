@@ -511,4 +511,35 @@ public class WorldStatistics {
             return  (allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
         }
     }
+
+    public int getTimeAvgTrustToAdversary() {
+        if (xPrevStats == null) {
+            return  allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }    }
+
+    public int getTimeAvgTrustToHonest() {
+        if (xPrevStats == null) {
+            return  allTrustToHonest / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allTrustToHonest - xPrevStats.allTrustToHonest) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }    }
+
+    public int getTimeAvgTrustToMischief() {
+        if (xPrevStats == null) {
+            return  allTrustToMischief / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allTrustToMischief - xPrevStats.allTrustToMischief) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }    }
+
+    public int getTimeAvgTrustToHypocrite() {
+        if (xPrevStats == null) {
+            return  allTrustToHypocrite / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return  (allTrustToHypocrite - xPrevStats.allTrustToHypocrite) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }
+
+    }
+
 }
