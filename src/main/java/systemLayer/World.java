@@ -140,7 +140,7 @@ public class World {
                 wdStatistics[i] = new WorldStatistics(null, agentsCount, null);
             } else {
                 if (i >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
-                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i -  Config.STATISTICS_AVERAGE_TIME_WINDOW]);
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i - Config.STATISTICS_AVERAGE_TIME_WINDOW]);
                 } else {
                     wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, null);
                 }
@@ -244,7 +244,7 @@ public class World {
                 Globals.statsTrustGenerator.addHeader();
             }
 
-            System.out.println(Globals.WORLD_TIMER + " : World.run ------------------------------- ");
+            System.out.println("World: "+Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + " > run ------------------------------- ");
 
             //============================//============================  Updating agents statuses
             for (Agent agent : agents) {
@@ -380,7 +380,7 @@ public class World {
         //============================ Initializing Diagram Drawing Windows
         travelStatsLinearDrawingWindow = new TravelStatsLinearDrawingWindow(this);
         if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, travelStatsLinearDrawingWindow,  TtDrawingWindowLocation.TopRight);
+            initDrawingWindow(widthHalf, heightHalf, travelStatsLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
@@ -416,13 +416,13 @@ public class World {
         //============================ Initializing Diagram Drawing Windows
         experienceBarDrawingWindow = new ExperienceBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, experienceBarDrawingWindow,  TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, experienceBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
         indirectExperienceBarDrawingWindow = new IndirectExperienceBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, indirectExperienceBarDrawingWindow,  TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, indirectExperienceBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Recommendation Drawing Windows
@@ -443,8 +443,8 @@ public class World {
         }
     }
 
-    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow stateMachineDW,  TtDrawingWindowLocation location) {
-        initDrawingWindow(widthHalf, heightHalf, stateMachineDW,  location, false);
+    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow stateMachineDW, TtDrawingWindowLocation location) {
+        initDrawingWindow(widthHalf, heightHalf, stateMachineDW, location, false);
     }
 
     private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow drawingWindow, TtDrawingWindowLocation location, boolean exitAppOnCLose) {
@@ -456,7 +456,7 @@ public class World {
         if (exitAppOnCLose) {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
-        mainFrame.setTitle( drawingWindow.getHeaderTitle());
+        mainFrame.setTitle(drawingWindow.getHeaderTitle());
         switch (location) {
             case TopRight:
                 mainFrame.setLocation(widthHalf, 0);

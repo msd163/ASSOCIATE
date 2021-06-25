@@ -4,12 +4,14 @@ import _type.TtBehaviorState;
 import systemLayer.Agent;
 import systemLayer.World;
 import trustLayer.data.TrustData;
+import utils.Config;
 import utils.Globals;
 import utils.Point;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 import java.util.List;
 
 public class DrawingWindow extends JPanel implements MouseMotionListener, MouseWheelListener {
@@ -24,11 +26,18 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected int axisX = 0;
     protected int axisY = 0;
 
+    protected int _hs = 8; // For adding space to charts horizontally
+    protected int _vs = 1; // For adding space to charts vertically
+
     protected float scale = 1f;
 
     protected World world;
+    protected World worlds[];
+
     protected int worldTimer;
     protected int simulationTimer;
+    protected boolean showWorldsFlag[];
+    protected boolean showChartsFlag[];
 
     protected utils.Point prevPoints[];      //-- Previously visited point
 
@@ -45,10 +54,24 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected String headerTitle = "Drawing Windows";
 
     public String getHeaderTitle() {
-        return (world != null ? "W "+world.getId() + " [ " + world.getSimulationConfig().getTtMethod() + "] " : "") + headerTitle;
+        if (world != null) {
+            return "W " + world.getId() + " | " + headerTitle + " [ " + world.getSimulationConfig().getTtMethod() + "] ";
+        }
+        return headerTitle;
     }
 
     public DrawingWindow() {
+        this(1);
+    }
+
+    public DrawingWindow(int worldCount) {
+
+        showChartsFlag = new boolean[9];
+        Arrays.fill(showChartsFlag, true);
+
+        showWorldsFlag = new boolean[worldCount];
+        Arrays.fill(showWorldsFlag, true);
+
         //============================//============================
         addMouseListener(
                 new MouseAdapter() {
@@ -74,10 +97,90 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
 
+        setEnabled(true);
+        setRequestFocusEnabled(true);
+        setFocusable(true);
+
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int keyCode = e.getKeyCode();
+                if (e.isShiftDown()) {
+                    System.out.println(keyCode);
+                    switch (keyCode) {
+                        case 37:        // left
+                            if (_hs > 1) {
+                                _hs--;
+                            }
+                            break;
+                        case 38:        // top
+                            _vs++;
+                            break;
+                        case 39:        // right
+                            _hs++;
+                            break;
+                        case 40:        // bottom
+                            if (_vs > 1) {
+                                _vs--;
+                            }
+                            break;
+                        case 90:        // z
+                            _hs = 8;
+                            _vs = 1;
+                            break;
+
+                            /*
+                             This solution has error!
+                            // for changing statistics average time window
+                        case 45:
+                        case 109:
+                            if (Config.STATISTICS_AVERAGE_TIME_WINDOW > 1) {
+                                Config.STATISTICS_AVERAGE_TIME_WINDOW--;
+                            }
+                            break;
+                        case 61:
+                        case 107:
+                            Config.STATISTICS_AVERAGE_TIME_WINDOW++;
+                            break;*/
+
+                    }
+                    //-- for showing or hiding Simulation charts
+                    if (keyCode == 48) {
+                        Arrays.fill(showWorldsFlag, true);
+                    } else if (keyCode >= 49 && keyCode <= 57) {
+                        int index = keyCode - 49;
+                        if (index < showWorldsFlag.length) {
+                            showWorldsFlag[index] = !showWorldsFlag[index];
+                        }
+                    }
+                }
+                //-- For showing or hiding line charts in each chart
+                if (e.isAltDown()) {
+                    if (keyCode == 48) {
+                        Arrays.fill(showChartsFlag, true);
+                    } else if (keyCode >= 49 && keyCode <= 57) {
+                        int index = keyCode - 49;
+                        if (index < showChartsFlag.length) {
+                            showChartsFlag[index] = !showChartsFlag[index];
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
     }
 
     protected Graphics2D g;
-
 
     public void printDrawingTitle(String title, String subTitle) {
 
@@ -170,6 +273,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.drawString("Episode", 1100, 130);
         g.drawString(": " + Globals.EPISODE, 1300, 130);
 
+        g.setColor(Color.GRAY);
+        g.drawString("Vertical   : X " + _vs, 1500, 50);
+        g.drawString("Horizontal: X " + _hs, 1500, 90);
 
         return true;
     }
@@ -292,7 +398,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 g.drawLine(x, y, x, y + size * 3);
         }
     }
-
 
     //============================//============================
     public void resetParams() {

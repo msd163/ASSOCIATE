@@ -194,6 +194,7 @@ public class Simulator {
     private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf) {
         drawingWindow.setDoubleBuffered(true);
         JFrame statsFrame = new JFrame();
+
         statsFrame.getContentPane().add(drawingWindow);
         statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
         statsFrame.setVisible(true);

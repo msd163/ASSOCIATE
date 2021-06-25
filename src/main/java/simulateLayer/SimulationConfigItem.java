@@ -23,20 +23,21 @@ public class SimulationConfigItem {
     public String getInfo() {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
-            return "Method: " + methodology +
-                    " | FrgCoeff: " + trustForgottenCoeff +
-                    " | IsCert: " + isUseCertification +
-                    " || RcmCoeff: " + recommendationCoeff +
-                    " - IsRcmBid: " + isBidirectionalRecommendationSharing +
-                    " || UseExp: " + isUseExperience +
-                    " - UseIndrExp: " + isUseIndirectExperience +
-                    " - IsExpBid: " + isBidirectionalExperienceSharing +
-                    " || UseObs: " + isUseObservation +
-                    " - UseIndrObs: " + isUseIndirectObservation +
-                    " - IsObsBid: " + isBidirectionalObservationSharing +
-                    " || ExpDepthInRwd: " + experienceDepthInRewarding +
-                    " | IgrThrldOfTutV: " + ignoringThresholdOfTrustValue +
-                    " | MaxRtHpInTut: " + maximumConsideredRoutingHelpInTrustMechanism;
+            return "@Mtd: " + methodology +
+                    " - FrgCf: " + trustForgottenCoeff +
+                    " - IgrThrld: " + ignoringThresholdOfTrustValue +
+                    " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism +
+                    " @EXP is: " + isUseExperience +
+                    " - ind: " + isUseIndirectExperience +
+                    " - bid: " + isBidirectionalExperienceSharing +
+                    " - dpth: " + experienceDepthInRewarding +
+                    " @OBS is: " + isUseObservation +
+                    " - ind: " + isUseIndirectObservation +
+                    " - bid: " + isBidirectionalObservationSharing +
+                    " @RCM cf: " + recommendationCoeff +
+                    " - bid: " + isBidirectionalRecommendationSharing +
+                    " @CERT is: " + isUseCertification
+                    ;
 
         }
         return "Method: " + methodology;

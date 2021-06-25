@@ -12,13 +12,12 @@ import java.awt.*;
 
 public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
 
-    private World worlds[];
     private SimulationConfig configBunch;
 
     //============================//============================  panning params
 
     public IntTrustStatsLinearDrawingWindow(World worlds[], SimulationConfig configBunch) {
-        super();
+        super(worlds.length);
         this.worlds = worlds;
         this.configBunch = configBunch;
         this.prevPoints = new Point[4];
@@ -45,6 +44,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
 
         //============================//============================ INFO
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+
             World world = worlds[j];
 
             if (j > Globals.SIMULATION_TIMER || world == null) {
@@ -54,19 +54,30 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
             //============================
             int y = 40 * j + 250;
             g.setColor(Color.white);
-            g.drawString("Sim " + j + " |", 80, y);
+            g.drawString("Sim " + (j + 1) + " |", 80, y);
             //============================
-            drawCurve(200, y, Color.WHITE, j, 20, -1);
-            g.drawString("Mischief", 220, y);
-            //============================
-            drawCurve(450, y, Color.GREEN, j, 20, -1);
-            g.drawString("Honest", 470, y);
-            //============================
-            drawCurve(700, y, Color.MAGENTA, j, 20, -1);
-            g.drawString("Hypocrite", 720, y);
-            //============================
-            drawCurve(950, y, Color.RED, j, 20, -1);
-            g.drawString("Adversary", 970, y);
+
+            if (showWorldsFlag[j]) {
+                if (showChartsFlag[0]) {
+                    drawCurve(200, y, Color.WHITE, j, 20, -1);
+                    g.drawString("Mischief", 220, y);
+                    //============================
+                }
+                if (showChartsFlag[1]) {
+                    drawCurve(450, y, Color.GREEN, j, 20, -1);
+                    g.drawString("Honest", 470, y);
+                    //============================
+                }
+                if (showChartsFlag[2]) {
+                    drawCurve(700, y, Color.MAGENTA, j, 20, -1);
+                    g.drawString("Hypocrite", 720, y);
+                    //============================
+                }
+                if (showChartsFlag[3]) {
+                    drawCurve(950, y, Color.RED, j, 20, -1);
+                    g.drawString("Adversary", 970, y);
+                }
+            }
             //============================
             g.setColor(Globals.Color$.lightGray);
             g.drawString("|>  " + configBunch.getByIndex(j).getInfo(), 1100, y);
@@ -80,6 +91,10 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+            if (!showWorldsFlag[j]) {
+                continue;
+            }
+
             World world = worlds[j];
 
             if (j > Globals.SIMULATION_TIMER || world == null) {
@@ -96,38 +111,49 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                 WorldStatistics stat = statistics[i];
 
                 if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
-                    loAxisX += 8;
-                    prevPoints[0].y = stat.getTimeAvgTrustToMischief();
-                    prevPoints[1].y = stat.getTimeAvgTrustToHonest();
-                    prevPoints[2].y = stat.getTimeAvgTrustToHypocrite();
-                    prevPoints[3].y = stat.getTimeAvgTrustToAdversary();
+                    loAxisX += _hs;
+                    prevPoints[0].y = _vs * stat.getTimeAvgTrustToMischief();
+                    prevPoints[1].y = _vs * stat.getTimeAvgTrustToHonest();
+                    prevPoints[2].y = _vs * stat.getTimeAvgTrustToHypocrite();
+                    prevPoints[3].y = _vs * stat.getTimeAvgTrustToAdversary();
                     prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = loAxisX;
 
                 } else {
 
-                    prevPoints[0].y = statistics[i - 1].getTimeAvgTrustToMischief();
-                    prevPoints[1].y = statistics[i - 1].getTimeAvgTrustToHonest();
-                    prevPoints[2].y = statistics[i - 1].getTimeAvgTrustToHypocrite();
-                    prevPoints[3].y = statistics[i - 1].getTimeAvgTrustToAdversary();
+                    prevPoints[0].y = _vs * statistics[i - 1].getTimeAvgTrustToMischief();
+                    prevPoints[1].y = _vs * statistics[i - 1].getTimeAvgTrustToHonest();
+                    prevPoints[2].y = _vs * statistics[i - 1].getTimeAvgTrustToHypocrite();
+                    prevPoints[3].y = _vs * statistics[i - 1].getTimeAvgTrustToAdversary();
                     prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = loAxisX;
-                    loAxisX += 8;
+                    loAxisX += _hs;
                 }
 
-                drawCurve(loAxisX, stat.getTimeAvgTrustToMischief(), Color.WHITE, j, i);
-                if (prevPoints[0].y >= 0) {
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimeAvgTrustToMischief());
+                if (showChartsFlag[0]) {
+                    drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToMischief(), Color.WHITE, j, i);
+                    if (prevPoints[0].y >= 0) {
+                        g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getTimeAvgTrustToMischief());
+                    }
                 }
-                drawCurve(loAxisX, stat.getTimeAvgTrustToHonest(), Color.GREEN, j, i);
-                if (prevPoints[1].y >= 0) {
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimeAvgTrustToHonest());
+
+                if (showChartsFlag[1]) {
+                    drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHonest(), Color.GREEN, j, i);
+                    if (prevPoints[1].y >= 0) {
+                        g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getTimeAvgTrustToHonest());
+                    }
                 }
-                drawCurve(loAxisX, stat.getTimeAvgTrustToHypocrite(), Color.MAGENTA, j, i);
-                if (prevPoints[2].y >= 0) {
-                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimeAvgTrustToHypocrite());
+
+                if (showChartsFlag[2]) {
+                    drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHypocrite(), Color.MAGENTA, j, i);
+                    if (prevPoints[2].y >= 0) {
+                        g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getTimeAvgTrustToHypocrite());
+                    }
                 }
-                drawCurve(loAxisX, stat.getTimeAvgTrustToAdversary(), Color.RED, j, i);
-                if (prevPoints[2].y >= 0) {
-                    g.drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimeAvgTrustToAdversary());
+
+                if (showChartsFlag[3]) {
+                    drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToAdversary(), Color.RED, j, i);
+                    if (prevPoints[2].y >= 0) {
+                        g.drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, _vs * stat.getTimeAvgTrustToAdversary());
+                    }
                 }
 
                 if (axisX < loAxisX) {
