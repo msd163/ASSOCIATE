@@ -228,7 +228,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
     }
 
-
     //============================//============================
     public void normalizeCoordination() {
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);

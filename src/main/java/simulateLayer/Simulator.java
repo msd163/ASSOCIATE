@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import drawingLayer.DrawingWindow;
 import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
 import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
+import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
 import stateLayer.Environment;
 import systemLayer.World;
 import utils.Config;
@@ -36,8 +37,9 @@ public class Simulator {
 
     //============================//============================ Drawing Windows
 
-    private IntTravelStatsLinearDrawingWindow intStatsOfEnvDW;
-    private IntTrustAnalysisLinearDrawingWindow intAnalysisOfTrustDW;
+    private IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow;
+    private IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow;
+    private IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow;
 
     //============================//============================//============================
     private void init() throws Exception {
@@ -117,10 +119,13 @@ public class Simulator {
 
     public void updateWindows() {
         if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
-            intStatsOfEnvDW.repaint();
+            intTravelStatsLinearDrawingWindow.repaint();
         }
         if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
-            intAnalysisOfTrustDW.repaint();
+            intTrustAnalysisLinearDrawingWindow.repaint();
+        }
+        if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow){
+            intTrustStatsLinearDrawingWindow.repaint();
         }
     }
 
@@ -139,15 +144,19 @@ public class Simulator {
 
         //============================ Initializing Diagram Drawing Windows
         if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
-            intStatsOfEnvDW = new IntTravelStatsLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intStatsOfEnvDW, widthHalf, heightHalf);
+            intTravelStatsLinearDrawingWindow = new IntTravelStatsLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intTravelStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
-            intAnalysisOfTrustDW = new IntTrustAnalysisLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intAnalysisOfTrustDW, widthHalf, heightHalf);
+            intTrustAnalysisLinearDrawingWindow = new IntTrustAnalysisLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intTrustAnalysisLinearDrawingWindow, widthHalf, heightHalf);
         }
 
+        if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
+            intTrustStatsLinearDrawingWindow = new IntTrustStatsLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intTrustStatsLinearDrawingWindow, widthHalf, heightHalf);
+        }
 
         for (World world : worlds) {
             if (Globals.SIMULATION_TIMER > 0) {
@@ -163,7 +172,11 @@ public class Simulator {
         }
 
         Globals.SIMULATION_TIMER--;
-        new ImageBuilder().generateSimulationImages(intStatsOfEnvDW, intAnalysisOfTrustDW);
+        new ImageBuilder().generateSimulationImages(
+                intTravelStatsLinearDrawingWindow,
+                intTrustAnalysisLinearDrawingWindow,
+                intTrustStatsLinearDrawingWindow
+        );
 
         //============================//============================ Closing statistics file
         if (Config.STATISTICS_IS_GENERATE) {

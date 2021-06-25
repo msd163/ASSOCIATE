@@ -3,6 +3,7 @@ package utils;
 import drawingLayer.*;
 import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
 import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
+import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
 import drawingLayer.routing.TravelHistoryBarDrawingWindow;
 import drawingLayer.routing.StateMachineDrawingWindow;
 import drawingLayer.routing.TravelStatsLinearDrawingWindow;
@@ -70,12 +71,16 @@ public class ImageBuilder {
 
 
     public void generateSimulationImages(IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow,
-                                         IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow) {
+                                         IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow,
+                                         IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow) {
         if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
             generateStatisticsImage(intTravelStatsLinearDrawingWindow);
         }
         if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
             generateStatisticsImage(intTrustAnalysisLinearDrawingWindow);
+        }
+        if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
+            generateStatisticsImage(intTrustStatsLinearDrawingWindow);
         }
 
     }

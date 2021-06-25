@@ -40,14 +40,14 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = true;
-    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = true;
-    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = true;
+    public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
+    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
+    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
     public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = true;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = true;
-    public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = true;
+    public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
 
     public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = true;
     public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = true;
@@ -61,6 +61,7 @@ public class Config {
 
     public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
     public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
+    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
