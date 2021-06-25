@@ -125,7 +125,6 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                     loAxisX += _hs;
                 }
 
-
                 if (showChartsFlag[0]) {
                     drawCurve(loAxisX, _vs * stat.getTrustAccuracyI200(), Color.GREEN, j, i);
                     if (prevPoints[0].y >= 0) {
@@ -195,17 +194,23 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                     loAxisX += _hs;
                 }
 
-                drawCurve(loAxisX, _vs * stat.getAllTrustAccuracyI200(), Color.GREEN, j, i);
-                if (prevPoints[0].y >= 0) {
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getAllTrustAccuracyI200());
+                if (showChartsFlag[0]) {
+                    drawCurve(loAxisX, _vs * stat.getAllTrustAccuracyI200(), Color.GREEN, j, i);
+                    if (prevPoints[0].y >= 0) {
+                        g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getAllTrustAccuracyI200());
+                    }
                 }
-                drawCurve(loAxisX, _vs * stat.getAllTrustSensitivityI200(), Color.YELLOW, j, i);
-                if (prevPoints[1].y >= 0) {
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getAllTrustSensitivityI200());
+                if (showChartsFlag[1]) {
+                    drawCurve(loAxisX, _vs * stat.getAllTrustSensitivityI200(), Color.YELLOW, j, i);
+                    if (prevPoints[1].y >= 0) {
+                        g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getAllTrustSensitivityI200());
+                    }
                 }
-                drawCurve(loAxisX, _vs * stat.getAllTrustSpecificityI200(), Color.PINK, j, i);
-                if (prevPoints[2].y >= 0) {
-                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getAllTrustSpecificityI200());
+                if (showChartsFlag[2]) {
+                    drawCurve(loAxisX, _vs * stat.getAllTrustSpecificityI200(), Color.PINK, j, i);
+                    if (prevPoints[2].y >= 0) {
+                        g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getAllTrustSpecificityI200());
+                    }
                 }
 
                 if (axisX < loAxisX) {
