@@ -42,7 +42,7 @@ public class Config {
 
     public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
-    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
+    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = true;
 
     public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;

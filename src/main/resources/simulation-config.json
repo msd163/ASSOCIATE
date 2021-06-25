@@ -1,5 +1,5 @@
 {
-  "simulationRound": 6,
+  "simulationRound": 3,
   "configs": [
     {
       "method": 5,
@@ -22,46 +22,6 @@
       "isUseCertification": true
     },
     {
-      "method": 2,
-      "trustForgottenCoeff": 0.0,
-      "ignoringThresholdOfTrustValue": 0.00001,
-      "maximumConsideredRoutingHelpInTrustMechanism": 6,
-      "_EXP": "-----------------------------------",
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
-      "experienceDepthInRewarding": 4,
-      "_OBS": "-----------------------------------",
-      "isUseObservation": true,
-      "isUseIndirectObservation": true,
-      "isBidirectionalObservationSharing": true,
-      "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.5,
-      "isBidirectionalRecommendationSharing": true,
-      "_CRT": "-----------------------------------",
-      "isUseCertification": true
-    },
-    {
-      "method": 4,
-      "trustForgottenCoeff": 0.0,
-      "ignoringThresholdOfTrustValue": 0.00001,
-      "maximumConsideredRoutingHelpInTrustMechanism": 3,
-      "_EXP": "-----------------------------------",
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
-      "experienceDepthInRewarding": 4,
-      "_OBS": "-----------------------------------",
-      "isUseObservation": true,
-      "isUseIndirectObservation": true,
-      "isBidirectionalObservationSharing": true,
-      "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.0,
-      "isBidirectionalRecommendationSharing": false,
-      "_CRT": "-----------------------------------",
-      "isUseCertification": false
-    },
-    {
       "method": 4,
       "trustForgottenCoeff": 0.0,
       "ignoringThresholdOfTrustValue": 0.00001,
@@ -83,7 +43,7 @@
     },
     {
       "method": 4,
-      "trustForgottenCoeff": 0.1,
+      "trustForgottenCoeff": 0.01,
       "ignoringThresholdOfTrustValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6,
       "_EXP": "-----------------------------------",

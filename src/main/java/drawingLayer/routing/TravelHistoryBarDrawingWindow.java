@@ -24,7 +24,7 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, headerTitle + " :: "+world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 
@@ -54,6 +54,8 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
             g.setColor(Color.LIGHT_GRAY);
             g.drawString(size + " / " + agent.getCapacity().getTravelHistoryCap(),
                     size + 20, i * 21 + 15);
+
+            g.drawString("cTarget: " + (agent.getCurrentTargetStateIndex()) + "/" + agent.getTargetCounts(), size + 150, i * 21 + 15);
         }
     }
 }
