@@ -15,6 +15,7 @@ public class WorldStatistics {
     //============================
     private int allAgentsInTarget;          //
     private int allAgentsInPitfall;
+    private int allRandomTravelToNeighbor;
     //============================
     private int ittAgentsInTarget;
     private int ittAgentsInPitfall;
@@ -116,6 +117,7 @@ public class WorldStatistics {
             allTrustToMischief = prevStats.getAllTrustToMischief();
             allAgentsInTarget = prevStats.getAllAgentsInTarget();
             allAgentsInPitfall = prevStats.getAllAgentsInPitfall();
+            allRandomTravelToNeighbor = prevStats.getAllRandomTravelToNeighbor();
             allFalsePositiveTrust = prevStats.getAllFalsePositiveTrust();
             allFalseNegativeTrust = prevStats.getAllFalseNegativeTrust();
             allTruePositiveTrust = prevStats.getAllTruePositiveTrust();
@@ -129,6 +131,7 @@ public class WorldStatistics {
                     = allTrustToMischief
                     = allAgentsInTarget
                     = allAgentsInPitfall
+                    = allRandomTravelToNeighbor
                     = allFalsePositiveTrust
                     = allFalseNegativeTrust
                     = allTruePositiveTrust
@@ -174,6 +177,7 @@ public class WorldStatistics {
 
     public void addRandomTravelToNeighbors() {
         ittRandomTravelToNeighbors++;
+        allRandomTravelToNeighbor++;
     }
 
     public void add_All_AgentsInPitfall() {
@@ -480,6 +484,15 @@ public class WorldStatistics {
         return timedAveragePitfall;
     }
 
+    public int getTimedAvgRandomTravel() {
+        if (xPrevStats == null) {
+            return allRandomTravelToNeighbor / (worldTime == 0 ? 1 : worldTime);
+        } else {
+            return (allRandomTravelToNeighbor - xPrevStats.allRandomTravelToNeighbor) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+        }
+
+    }
+
     public int getTimedAvgTruePositive() {
         if (xPrevStats == null) {
              return  allTruePositiveTrust / (worldTime == 0 ? 1 : worldTime);
@@ -542,4 +555,7 @@ public class WorldStatistics {
 
     }
 
+    public int getAllRandomTravelToNeighbor() {
+        return allRandomTravelToNeighbor;
+    }
 }

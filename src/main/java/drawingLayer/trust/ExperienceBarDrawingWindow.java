@@ -5,8 +5,6 @@ import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
 import trustLayer.data.TrustExperience;
-import trustLayer.data.TrustIndirectExperience;
-import utils.Globals;
 
 import java.awt.*;
 import java.util.List;
@@ -22,11 +20,7 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
         axisY = world.getAgentsCount() * 21;
     }
 
-
-    List<TrustExperience> experiences;
-    int experienceCap;
     Agent agent;
-    TtBehaviorState behaviorState;
 
     @Override
     public void paint(Graphics gr) {
@@ -42,53 +36,18 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
         List<Agent> agents = world.getAgents();
         for (int i = 0, jj = agents.size() - 1, agentsLength = agents.size(); i < agentsLength; i++, jj--) {
+
             agent = agents.get(jj);
 
-            experiences = agent.getTrust().getExperiences();
-            experienceCap = agent.getCapacity().getExperienceCap();
-            behaviorState = agent.getBehavior().getBehaviorState();
-
-            //-- Drawing agent cap power rectangle
-            g.setColor(Globals.Color$.getNormal(behaviorState));
-            g.fillRect(-agent.getCapacity().getCapPower(), i * 21, agent.getCapacity().getCapPower(), 20);
-
-            //-- Printing agent ID
-            g.setColor(Color.BLACK);
-            g.drawString(agent.getId() + "", -30, i * 21 + 15);
-
-            //-- Drawing total number rectangle
-            g.setColor(Color.GRAY);
-            g.fillRect(5, i * 21, experienceCap, 20);
-
-            //-- Drawing filled number rectangle
-            g.setColor(Globals.Color$.lightGray);
-            g.fillRect(5, i * 21, experiences.size(), 20);
-
-            //-- Printing number/total
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawString(experiences.size() + " / " + experienceCap,
-                    experiences.size() + 20, i * 21 + 15);
-
-
-            int obsSize = agent.getTrust().getExperiences().size();
-
-            if (obsSize > 0) {
-                //-- Drawing positive and negative reward bars
-                int[] obsTarPit = agent.getTrust().getExperienceRewardsCount();
-                g.setColor(Globals.Color$.lightGreen);
-                g.fillRect(5, i * 21, obsTarPit[0], 20);
-                g.setColor(Globals.Color$.lightRed);
-                g.fillRect(5 + obsTarPit[0], i * 21, obsTarPit[1], 20);
-
-                //-- Drawing percentage of items size: itemSize/itemCap
-                List<TrustExperience> experiences = agent.getTrust().getExperiences();
-                for (int j = 0, experiencesSize = experiences.size(); j < experiencesSize; j++) {
-                    TrustExperience io = experiences.get(j);
-                    g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.green : Globals.Color$.red);
-                    g.drawLine(5 + j, i * 21, 5 + j, i * 21 + io.getItems().size() / io.getItemCap());
-                }
-            }
-
+            drawBar(agent,
+                    agent.getBehavior().getBehaviorState(),
+                    i,
+                    agent.getCapacity().getExperienceCap(),
+                    agent.getCapacity().getExperienceItemCap(),
+                    agent.getTrust().getExperienceRewardsCount(),
+                    agent.getTrust().getExperiences()
+            );
         }
     }
+
 }

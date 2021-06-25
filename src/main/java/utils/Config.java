@@ -27,6 +27,10 @@ public class Config {
 
     public static final int STATISTICS_AVERAGE_TIME_WINDOW = 20;
 
+
+    public static final int ROUTING_STAY_IN_TARGET_TIME = 1;
+    public static final int ROUTING_STAY_IN_PITFALL_TIME = 1;
+
     //============================ Trust
 
       public static boolean TRUST_RECOMMENDATION_SEND_NEGATIVE = true;

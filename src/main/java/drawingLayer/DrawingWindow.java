@@ -1,12 +1,16 @@
 package drawingLayer;
 
+import _type.TtBehaviorState;
+import systemLayer.Agent;
 import systemLayer.World;
+import trustLayer.data.TrustData;
 import utils.Globals;
 import utils.Point;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 public class DrawingWindow extends JPanel implements MouseMotionListener, MouseWheelListener {
 
@@ -164,6 +168,61 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return true;
     }
 
+    //============================//============================//============================
+
+    protected void drawBar(Agent agent, TtBehaviorState behaviorState, int i, int dataCap, int dataItemCap, int[] rewardCountArray, List<?> data) {
+
+        int dataSize = data.size();
+
+        //-- Drawing agent cap power rectangle
+        g.setColor(Globals.Color$.getNormal(behaviorState));
+        g.fillRect(-agent.getCapacity().getCapPower(), i * 21, agent.getCapacity().getCapPower(), 20);
+
+        //-- Printing agent ID
+        g.setColor(Color.BLACK);
+        g.drawString(agent.getId() + "", -30, i * 21 + 15);
+
+        //-- Drawing total number rectangle
+        g.setColor(Color.GRAY);
+        g.fillRect(5, i * 21, dataCap, 20);
+
+
+        //-- Drawing filled number rectangle
+        g.setColor(Globals.Color$.lightGray);
+        g.fillRect(5, i * 21, dataSize, 20);
+
+        //-- Printing data_number/data_cap
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawString(dataSize + " / " + dataCap,
+                dataSize + 20, i * 21 + 15);
+        //-- Printing dataItemCap
+        g.drawString("I.C: " + dataItemCap,
+                dataSize + 150, i * 21 + 15);
+
+        if (dataSize > 0) {
+            //-- Drawing positive and negative reward bars
+            g.setColor(Globals.Color$.lightGreen);
+            g.fillRect(5, i * 21, rewardCountArray[0], 20);
+            g.setColor(Globals.Color$.lightRed);
+            g.fillRect(5 + rewardCountArray[0], i * 21, rewardCountArray[1], 20);
+
+            //-- Drawing percentage of items size: itemSize/itemCap
+            for (int j = 0, dSize = data.size(); j < dSize; j++) {
+                TrustData io = (TrustData) data.get(j);
+                if (io.getItemCap() > 0) {
+                    if (io.isIsUpdated()) {
+                        g.setColor(Globals.Color$.darkGreen2);
+                        io.setIsUpdated(false);
+                    } else {
+                        g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen : Globals.Color$.red);
+                    }
+                    g.drawLine(5 + j, i * 21, 5 + j, i * 21 + 19 * io.getItems().size() / io.getItemCap());
+                }
+            }
+        }
+    }
+
+
     //============================//============================
     public void normalizeCoordination() {
         g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
@@ -251,7 +310,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     //============================//============================
     protected int getAverage(int value, int count) {
-        return count == 0 ? value *2 : (2 * value) / (count);
+        return count == 0 ? value * 2 : (2 * value) / (count);
     }
 
     protected void pauseNotice(Graphics2D g) {

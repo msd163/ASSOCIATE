@@ -35,6 +35,7 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
         List<Agent> agents = world.getAgents();
         for (int i = 0, jj = agents.size() - 1, agentsLength = agents.size(); i < agentsLength; jj--, i++) {
             Agent agent = agents.get(jj);
+            int size = agent.getTravelHistories().size();
 
             g.setColor(Globals.Color$.getNormal(agent.getBehavior().getBehaviorState()));
 
@@ -46,7 +47,14 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
 
             g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
 
-            g.fillRect(5, i * 21, agent.getTravelHistories().size(), 20);
+            g.fillRect(5, i * 21, size, 20);
+
+            //-- Printing data_number/data_cap
+            g.setColor(Color.LIGHT_GRAY);
+            g.drawString(size + " / " + agent.getCapacity().getTravelHistoryCap(),
+                    size + 20, i * 21 + 15);
+
+
 
         }
 

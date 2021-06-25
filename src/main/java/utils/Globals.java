@@ -1,7 +1,6 @@
 package utils;
 
 import _type.TtBehaviorState;
-import trustLayer.TrustManager;
 import utils.statistics.StatsEnvGenerator;
 import utils.statistics.StatsTrustGenerator;
 
@@ -29,6 +28,8 @@ public class Globals {
     }
 
     public static class Color$ {
+        public static Color black = new Color(0, 0, 0);
+        public static Color white = new Color(255, 255, 255);
         public static Color green = new Color(113, 253, 14);
         public static Color red = new Color(238, 38, 21);
         public static Color gray = new Color(250, 250, 250);
@@ -42,6 +43,7 @@ public class Globals {
         public static Color lightYellow = new Color(232, 223, 168);
 
         public static Color darkGreen = new Color(0, 158, 0);
+        public static Color darkGreen2 = new Color(5, 102, 5);
 
         public static Color getLight(TtBehaviorState state) {
             switch (state) {
@@ -86,7 +88,6 @@ public class Globals {
     public static int SIMULATION_TIMER = 0;     // Index of simulation. starts from zero
 
     public static int EPISODE = 0;
-
 
 
     //============================//============================//============================

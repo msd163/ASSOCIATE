@@ -163,6 +163,20 @@ public class AgentTrust {
         return tarPit;
     }
 
+    public int[] getRecommendationRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustRecommendation exp : recommendations) {
+            int ar = exp.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
+
     public int[] getIndirectExperienceRewardsCount() {
         int[] tarPit = {0, 0};
 

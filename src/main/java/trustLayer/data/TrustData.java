@@ -22,6 +22,8 @@ public class TrustData {
 
     protected int positiveRewards;
     protected int negativeRewards;
+
+    private boolean isUpdated;
     //============================//============================//============================
 
     protected TrustData(Agent owner, Agent responder, int itemCap) {
@@ -33,6 +35,7 @@ public class TrustData {
         //  finalReward = 0;
         items = new ArrayList<>();
         positiveRewards = negativeRewards = 0;
+        isUpdated = true;
         //  finalRewardUpdateTime = Globals.WORLD_TIMER;
     }
 
@@ -60,6 +63,8 @@ public class TrustData {
                 Globals.WORLD_TIMER,
                 reward
         ));
+
+        isUpdated = true;
     }
 
     private void purgeItems() {
@@ -143,6 +148,8 @@ public class TrustData {
                 Globals.WORLD_TIMER,
                 item.getReward()
         ));
+
+        isUpdated = true;
     }
 
     public void removeItem(int index) {
@@ -152,6 +159,8 @@ public class TrustData {
         } else {
             negativeRewards--;
         }
+
+        isUpdated = false;
     }
 
     public int getAbstractReward() {
@@ -191,5 +200,13 @@ public class TrustData {
 
     public int getItemCap() {
         return itemCap;
+    }
+
+    public void setIsUpdated(boolean updated) {
+        isUpdated = updated;
+    }
+
+    public boolean isIsUpdated() {
+        return isUpdated;
     }
 }

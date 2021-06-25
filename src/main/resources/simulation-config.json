@@ -16,7 +16,7 @@
       "isUseIndirectObservation": true,
       "isBidirectionalObservationSharing": true,
       "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.0,
+      "recommendationCoeff": 0.5,
       "isBidirectionalRecommendationSharing": true,
       "_CRT": "-----------------------------------",
       "isUseCertification": true

@@ -12,6 +12,7 @@ import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
 import systemLayer.World;
 import trustLayer.TrustManager;
+import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 import utils.statistics.WorldStatistics;
@@ -68,7 +69,7 @@ public class Router {
             statistics___.add_All_AgentsInTarget();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
-            if (agent.getSpentTimeAtTheTarget() > 1) {
+            if (agent.getSpentTimeAtTheTarget() > Config.ROUTING_STAY_IN_TARGET_TIME) {
                 int ct = agent.getCurrentTarget().getId();
                 agent.assignNextTargetState();
                 OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
@@ -89,7 +90,7 @@ public class Router {
 
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
-            if (agent.getSpentTimeAtTheTarget() > 1) {
+            if (agent.getSpentTimeAtTheTarget() > Config.ROUTING_STAY_IN_PITFALL_TIME) {
                 boolean isAdded = agent.getCurrentTarget().addAgent(agent);
                 if (isAdded) {
                     agent.getState().getAgents().remove(agent);

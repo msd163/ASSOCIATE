@@ -23,7 +23,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         super();
         this.worlds = worlds;
         this.configBunch = configBunch;
-        this.prevPoints = new Point[2];
+        this.prevPoints = new Point[3];
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
@@ -44,9 +44,13 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         int ittAgentsInPitfall = worlds[simulationTimer].getWdStatistics()[worldTimer].getIttAgentsInPitfall();
         printStatsInfo(2, "Agents In Pitfall", ittAgentsInPitfall, "%" + 100 * (float) ittAgentsInPitfall / worlds[simulationTimer].getAgentsCount(), Color.RED);
 
+        int ittRandom = worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors();
+        printStatsInfo(3, "Random Travel", ittRandom, "%" + 100 * (float) ittRandom / worlds[simulationTimer].getAgentsCount(), Color.MAGENTA);
 
-        printStatsInfo(4, "Avg Agents In Targets", worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInTarget() / worldTimer, Color.GREEN);
-        printStatsInfo(5, "Avg Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getAllAgentsInPitfall() / worldTimer, Color.RED);
+
+        printStatsInfo(4, "Avg Agents In Targets", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentTarget(), Color.GREEN);
+        printStatsInfo(5, "Avg Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentInPitfall(), Color.RED);
+        printStatsInfo(6, "Avg Random Travel", worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors(), Color.MAGENTA);
 
 
         //============================//============================ INFO
@@ -100,13 +104,15 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     loAxisX += 8;
                     prevPoints[0].y = stat.getIttAgentsInTarget();
                     prevPoints[1].y = statistics[i].getIttAgentsInPitfall();
-                    prevPoints[0].x = prevPoints[1].x = loAxisX;
+                    prevPoints[2].y = statistics[i].getIttRandomTravelToNeighbors();
+                    prevPoints[0].x = prevPoints[1].x= prevPoints[2].x = loAxisX;
 
                 } else {
 
                     prevPoints[0].y = statistics[i - 1].getIttAgentsInTarget();
                     prevPoints[1].y = statistics[i - 1].getIttAgentsInPitfall();
-                    prevPoints[0].x = prevPoints[1].x = loAxisX;
+                    prevPoints[2].y = statistics[i - 1].getIttRandomTravelToNeighbors();
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                     loAxisX += 8;
                 }
 
@@ -115,6 +121,9 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                 drawCurve(loAxisX, stat.getIttAgentsInPitfall(), Color.RED, j, i);
                 g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall());
+
+                drawCurve(loAxisX, stat.getIttRandomTravelToNeighbors(), Color.MAGENTA, j, i);
+                g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getIttRandomTravelToNeighbors());
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;
@@ -151,13 +160,15 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     loAxisX += 8;
                     prevPoints[0].y = stat.getTimedAvgAgentTarget();
                     prevPoints[1].y = stat.getTimedAvgAgentInPitfall();
-                    prevPoints[0].x = prevPoints[1].x = loAxisX;
+                    prevPoints[2].y = stat.getTimedAvgRandomTravel();
+                    prevPoints[0].x = prevPoints[1].x =prevPoints[2].x = loAxisX;
 
                 } else {
 
                     prevPoints[0].y = statistics[i - 1].getTimedAvgAgentTarget();
                     prevPoints[1].y = statistics[i - 1].getTimedAvgAgentInPitfall();
-                    prevPoints[0].x = prevPoints[1].x = loAxisX;
+                    prevPoints[2].y = statistics[i - 1].getTimedAvgRandomTravel();
+                    prevPoints[0].x = prevPoints[1].x =prevPoints[2].x = loAxisX;
                     loAxisX += 8;
                 }
 
@@ -166,6 +177,9 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                 drawCurve(loAxisX, stat.getTimedAvgAgentInPitfall(), Color.RED, j, i);
                 g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimedAvgAgentInPitfall());
+
+                drawCurve(loAxisX, stat.getTimedAvgRandomTravel(), Color.MAGENTA, j, i);
+                g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimedAvgRandomTravel());
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;
