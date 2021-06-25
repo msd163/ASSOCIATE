@@ -66,7 +66,7 @@ public class Router {
 
         // If the agent is in target agent
         if (agent.isInTargetState()) {
-            statistics___.add_All_AgentsInTarget();
+            statistics___.add_Itt_AgentsInTarget();
             agent.clearNextSteps();
             agent.addSpentTimeAtTheTarget();
             if (agent.getSpentTimeAtTheTarget() > Config.ROUTING_STAY_IN_TARGET_TIME) {
@@ -80,7 +80,7 @@ public class Router {
         }
 
         if (state.isIsPitfall()) {
-            statistics___.add_All_AgentsInPitfall();
+            statistics___.add_Itt_AgentsInPitfall();
 
             OutLog____.pl(
                     TtOutLogMethodSection.TakeAStepTowardTheTarget,
@@ -136,6 +136,7 @@ public class Router {
         //-- Getting first entity of the nextSteps of the agent.
         StateX nextState = agent.getNextSteps().get(0);
 
+        //-- Check if selected nextState is the neighbor of the state
         if (!isStateTheNeighborOfAgent(agent, nextState)) {
             statistics___.add_Itt_FailedTravelToNeighbor();
             OutLog____.pl(
@@ -150,6 +151,7 @@ public class Router {
             return null;
         }
 
+        // Go to next state
         int currentAgentStateId = agent.getState().getId();
         /**============================
          ==============================**/

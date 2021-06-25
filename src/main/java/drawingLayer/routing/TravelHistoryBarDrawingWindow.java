@@ -53,10 +53,6 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
             g.setColor(Color.LIGHT_GRAY);
             g.drawString(size + " / " + agent.getCapacity().getTravelHistoryCap(),
                     size + 20, i * 21 + 15);
-
-
-
         }
-
     }
 }
