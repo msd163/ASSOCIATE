@@ -40,7 +40,8 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         pnOffset.x = 400;
         pnOffset.y = -200;
         scale = 0.03f;
-
+        headerTitle = "State Machine Map";
+        setName("sta_mch");
 
     }
 

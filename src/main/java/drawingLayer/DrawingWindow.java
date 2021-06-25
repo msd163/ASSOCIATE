@@ -42,6 +42,12 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return world == null ? -1 : world.getId();
     }
 
+    protected String headerTitle = "Drawing Windows";
+
+    public String getHeaderTitle() {
+        return (world != null ? "W "+world.getId() + " [ " + world.getSimulationConfig().getTtMethod() + "] " : "") + headerTitle;
+    }
+
     public DrawingWindow() {
         //============================//============================
         addMouseListener(
@@ -211,12 +217,12 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 TrustData io = (TrustData) data.get(j);
                 if (io.getItemCap() > 0) {
                     if (io.isIsUpdated()) {
-                        g.setColor(Globals.Color$.darkGreen2);
+                        g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen2 : Globals.Color$.darkRed);
                         io.setIsUpdated(false);
                     } else {
                         g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen : Globals.Color$.red);
                     }
-                    g.drawLine(5 + j, i * 21, 5 + j, i * 21 + 19 * io.getItems().size() / io.getItemCap());
+                    g.drawLine(5 + j, i * 21 + 3, 5 + j, i * 21 + 3 + 16 * io.getItems().size() / io.getItemCap());
                 }
             }
         }

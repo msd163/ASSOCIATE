@@ -3,8 +3,6 @@ package drawingLayer.trust;
 import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
-import trustLayer.data.TrustIndirectObservation;
-import utils.Globals;
 
 import java.awt.*;
 import java.util.List;
@@ -19,12 +17,14 @@ public class IndirectObservationBarDrawingWindow extends DrawingWindow {
         this.world = world;
         axisX = world.getEnvironment().getProMax().getMaxObservationCap();
         axisY = world.getAgentsCount() * 21;
+        headerTitle = "Indirect Trust Observation Bar Chart";
+        setName("tut_ibs");
     }
 
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Indirect Observation Data :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 

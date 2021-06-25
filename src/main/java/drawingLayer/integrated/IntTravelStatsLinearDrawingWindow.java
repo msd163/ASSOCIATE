@@ -27,6 +27,8 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
+        headerTitle = "Integrated Statistics of Environment [#Worlds: " + worlds.length + "]";
+        setName("i_tvl_stt");
     }
 
     int loAxisX = 0;
@@ -34,7 +36,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Integrated Statistics of Environment", null)) {
+        if (!mainPaint(gr, headerTitle, null)) {
             return;
         }
 
@@ -105,7 +107,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     prevPoints[0].y = stat.getIttAgentsInTarget();
                     prevPoints[1].y = statistics[i].getIttAgentsInPitfall();
                     prevPoints[2].y = statistics[i].getIttRandomTravelToNeighbors();
-                    prevPoints[0].x = prevPoints[1].x= prevPoints[2].x = loAxisX;
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
 
                 } else {
 
@@ -161,14 +163,14 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     prevPoints[0].y = stat.getTimedAvgAgentTarget();
                     prevPoints[1].y = stat.getTimedAvgAgentInPitfall();
                     prevPoints[2].y = stat.getTimedAvgRandomTravel();
-                    prevPoints[0].x = prevPoints[1].x =prevPoints[2].x = loAxisX;
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
 
                 } else {
 
                     prevPoints[0].y = statistics[i - 1].getTimedAvgAgentTarget();
                     prevPoints[1].y = statistics[i - 1].getTimedAvgAgentInPitfall();
                     prevPoints[2].y = statistics[i - 1].getTimedAvgRandomTravel();
-                    prevPoints[0].x = prevPoints[1].x =prevPoints[2].x = loAxisX;
+                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                     loAxisX += 8;
                 }
 

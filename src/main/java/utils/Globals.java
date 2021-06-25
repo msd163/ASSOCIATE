@@ -42,6 +42,8 @@ public class Globals {
         public static Color lightMagenta = new Color(224, 186, 223);
         public static Color lightYellow = new Color(232, 223, 168);
 
+        public static Color darkRed = new Color(170, 24, 10);
+        public static Color darkRed2 = new Color(135, 16, 5);
         public static Color darkGreen = new Color(0, 158, 0);
         public static Color darkGreen2 = new Color(5, 102, 5);
 

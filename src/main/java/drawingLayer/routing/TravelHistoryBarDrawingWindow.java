@@ -17,13 +17,14 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
         this.world = world;
         axisX = world.getEnvironment().getProMax().getMaxTravelHistoryCap();
         axisY = world.getAgentsCount() * 21;
+        headerTitle = "Travel History Bar Chart";
+        setName("tvl_his");
     }
-
 
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr,"Travel History Data :: "+world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: "+world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 

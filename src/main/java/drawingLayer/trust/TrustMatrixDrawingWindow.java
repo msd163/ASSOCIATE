@@ -27,6 +27,8 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         sAgents = matrixGenerator.getsAgents();
         axisY = axisX = matCount * 5;
         trusteeData = new int[matCount][3];     // 0: totalTrust  |  1: FP | 2: FN
+        headerTitle = "Trust Matrix";
+        setName("tut_mtx");
     }
 
     Agent agentInCol;
@@ -36,7 +38,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Matrix :: "+ world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 
@@ -45,7 +47,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         int pnScl_y = pnOffset.y + scaleOffset.y;
         g.translate(pnScl_x, pnScl_y);
         g.scale(scale, -scale);
-        g.translate(110, (-getHeight() +translateInTitle_Y+ translateInNormCoord_Y)/ scale );
+        g.translate(110, (-getHeight() + translateInTitle_Y + translateInNormCoord_Y) / scale);
 
         int pnY = (pnScl_y > 0 ? (int) (pnScl_y / scale) + 10 : 0) - 5;
         int pnX = (pnScl_x < 0 ? -(int) (pnScl_x / scale) + 10 : 0) - 5;

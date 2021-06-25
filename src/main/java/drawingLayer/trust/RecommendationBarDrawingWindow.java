@@ -16,12 +16,14 @@ public class RecommendationBarDrawingWindow extends DrawingWindow {
         this.world = world;
         axisX = world.getEnvironment().getProMax().getMaxTrustRecommendationCap();
         axisY = world.getAgentsCount() * 21;
+        headerTitle = "Trust Recommendation Bar Chart";
+        setName("tut_rcm");
     }
 
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Recommendation Data :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         normalizeCoordination();

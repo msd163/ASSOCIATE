@@ -1,10 +1,8 @@
 package drawingLayer.trust;
 
-import _type.TtBehaviorState;
 import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
-import trustLayer.data.TrustIndirectExperience;
 
 import java.awt.*;
 import java.util.List;
@@ -18,6 +16,8 @@ public class IndirectExperienceBarDrawingWindow extends DrawingWindow {
         this.world = world;
         axisX = world.getEnvironment().getProMax().getMaxExperienceCap();
         axisY = world.getAgentsCount() * 21;
+        headerTitle = "Indirect Trust Experience Bar Chart";
+        setName("tut_ixp");
     }
 
     Agent agent;
@@ -25,7 +25,7 @@ public class IndirectExperienceBarDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Indirect Experience Data :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 

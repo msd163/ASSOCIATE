@@ -19,6 +19,8 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
+        headerTitle = "Travel Statistics Linear Chart";
+        setName("tvl_stt");
     }
 
     int loAxisX = 0;
@@ -26,7 +28,7 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Environment Data :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr,headerTitle+ " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         axisX = 0;

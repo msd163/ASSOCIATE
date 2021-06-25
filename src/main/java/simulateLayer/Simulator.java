@@ -140,12 +140,12 @@ public class Simulator {
         //============================ Initializing Diagram Drawing Windows
         if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
             intStatsOfEnvDW = new IntTravelStatsLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intStatsOfEnvDW, widthHalf, heightHalf, "int_s_env", "Integrated Environment Statistics");
+            initDrawingWindow(intStatsOfEnvDW, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
             intAnalysisOfTrustDW = new IntTrustAnalysisLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intAnalysisOfTrustDW, widthHalf, heightHalf, "int_t_anl", "Integrated Analysis of Trust (Acc|Sens|Spec)");
+            initDrawingWindow(intAnalysisOfTrustDW, widthHalf, heightHalf);
         }
 
 
@@ -178,14 +178,13 @@ public class Simulator {
         }
     }
 
-    private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf, String name, String title) {
+    private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf) {
         drawingWindow.setDoubleBuffered(true);
-        drawingWindow.setName(name);
         JFrame statsFrame = new JFrame();
         statsFrame.getContentPane().add(drawingWindow);
         statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
         statsFrame.setVisible(true);
         statsFrame.setLocation(0, heightHalf);
-        statsFrame.setTitle(title);
+        statsFrame.setTitle(drawingWindow.getHeaderTitle());
     }
 }

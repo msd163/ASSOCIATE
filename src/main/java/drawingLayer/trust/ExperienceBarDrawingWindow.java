@@ -1,10 +1,8 @@
 package drawingLayer.trust;
 
-import _type.TtBehaviorState;
 import drawingLayer.DrawingWindow;
 import systemLayer.Agent;
 import systemLayer.World;
-import trustLayer.data.TrustExperience;
 
 import java.awt.*;
 import java.util.List;
@@ -18,6 +16,8 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
         this.world = world;
         axisX = world.getEnvironment().getProMax().getMaxExperienceCap();
         axisY = world.getAgentsCount() * 21;
+        headerTitle = "Trust Experience Bar Chart";
+        setName("tut_exp");
     }
 
     Agent agent;
@@ -25,7 +25,7 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Experience Data :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
 

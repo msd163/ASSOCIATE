@@ -375,89 +375,88 @@ public class World {
         //============================ Initializing Main Drawing Windows
         stateMachineDrawingWindow = new StateMachineDrawingWindow(this);
         if (Config.DRAWING_SHOW_stateMachineWindow) {
-            initDrawingWindow(widthHalf, heightHalf, stateMachineDrawingWindow, "sta_mch", "State Machine Map", TtDrawingWindowLocation.TopLeft, true);
+            initDrawingWindow(widthHalf, heightHalf, stateMachineDrawingWindow, TtDrawingWindowLocation.TopLeft, true);
         }
         //============================ Initializing Diagram Drawing Windows
         travelStatsLinearDrawingWindow = new TravelStatsLinearDrawingWindow(this);
         if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, travelStatsLinearDrawingWindow, "tvl_stt", "Travel Statistics Linear Chart", TtDrawingWindowLocation.TopRight);
+            initDrawingWindow(widthHalf, heightHalf, travelStatsLinearDrawingWindow,  TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
         trustMatrixDrawingWindow = new TrustMatrixDrawingWindow(matrixGenerator, this);
         if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustMatrixDrawingWindow, "tut_mtx", "Trust Matrix", TtDrawingWindowLocation.TopLeft);
+            initDrawingWindow(widthHalf, heightHalf, trustMatrixDrawingWindow, TtDrawingWindowLocation.TopLeft);
         }
 
         //============================ Initializing Diagram Drawing Windows
         trustStatsLinearDrawingWindow = new TrustStatsLinearDrawingWindow(this);
         if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustStatsLinearDrawingWindow, "tut_stt", "Trust Statistics Linear Chart", TtDrawingWindowLocation.TopRight);
+            initDrawingWindow(widthHalf, heightHalf, trustStatsLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
         trustRecogniseLinearDrawingWindow = new TrustRecogniseLinearDrawingWindow(this);
         if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustRecogniseLinearDrawingWindow, "tut_rcg", "Trust Recognition (TP | TN | FP | FN) Statistics Linear Chart", TtDrawingWindowLocation.TopRight);
+            initDrawingWindow(widthHalf, heightHalf, trustRecogniseLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
         trustAnalysisLinearDrawingWindow = new TrustAnalysisLinearDrawingWindow(this);
         if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustAnalysisLinearDrawingWindow, "tut_anl", "Trust Analyzing (Accuracy | Sensitivity | Specificity) Linear Chart", TtDrawingWindowLocation.TopRight);
+            initDrawingWindow(widthHalf, heightHalf, trustAnalysisLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
         travelHistoryBarDrawingWindow = new TravelHistoryBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, travelHistoryBarDrawingWindow, "tvl_his", "Travel History Bar Chart", TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, travelHistoryBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
         experienceBarDrawingWindow = new ExperienceBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, experienceBarDrawingWindow, "tut_exp", "Trust Experience Bar Chart", TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, experienceBarDrawingWindow,  TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Diagram Drawing Windows
         indirectExperienceBarDrawingWindow = new IndirectExperienceBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, indirectExperienceBarDrawingWindow, "tut_ixp", "Indirect Trust Experience Bar Chart", TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, indirectExperienceBarDrawingWindow,  TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Recommendation Drawing Windows
         recommendationBarDrawingWindow = new RecommendationBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, recommendationBarDrawingWindow, "tut_rcm", "Trust Recommendation Bar Chart", TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, recommendationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
 
         //============================ Initializing Observation Drawing Windows
         observationBarDrawingWindow = new ObservationBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, observationBarDrawingWindow, "tut_obs", "Trust Observation Bar Chart", TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, observationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
         //============================ Initializing Observation Drawing Windows
         indirectObservationBarDrawingWindow = new IndirectObservationBarDrawingWindow(this);
         if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, indirectObservationBarDrawingWindow, "tut_ibs", "Indirect Trust Observation Bar Chart", TtDrawingWindowLocation.BottomRight);
+            initDrawingWindow(widthHalf, heightHalf, indirectObservationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
     }
 
-    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow stateMachineDW, String name, String title, TtDrawingWindowLocation location) {
-        initDrawingWindow(widthHalf, heightHalf, stateMachineDW, name, title, location, false);
+    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow stateMachineDW,  TtDrawingWindowLocation location) {
+        initDrawingWindow(widthHalf, heightHalf, stateMachineDW,  location, false);
     }
 
-    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow stateMachineDW, String name, String title, TtDrawingWindowLocation location, boolean exitAppOnCLose) {
-        stateMachineDW.setDoubleBuffered(true);
-        stateMachineDW.setName(name);
+    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow drawingWindow, TtDrawingWindowLocation location, boolean exitAppOnCLose) {
+        drawingWindow.setDoubleBuffered(true);
         JFrame mainFrame = new JFrame();
-        mainFrame.getContentPane().add(stateMachineDW);
+        mainFrame.getContentPane().add(drawingWindow);
         mainFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
         mainFrame.setVisible(true);
         if (exitAppOnCLose) {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
-        mainFrame.setTitle(title);
+        mainFrame.setTitle( drawingWindow.getHeaderTitle());
         switch (location) {
             case TopRight:
                 mainFrame.setLocation(widthHalf, 0);
@@ -583,7 +582,6 @@ public class World {
     public EpisodeStatistics[] getEpStatistics() {
         return epStatistics;
     }
-
 
     public SimulationConfigItem getSimulationConfig() {
         return simulationConfigItem;

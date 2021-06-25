@@ -27,6 +27,8 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
+        headerTitle = "Integrated Trust Analysis Params [#Worlds: " + worlds.length + "]";
+        setName("i_tut_anl");
     }
 
     int loAxisX;
@@ -34,7 +36,7 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Integrated Trust Analysis Params", null)) {
+        if (!mainPaint(gr, headerTitle, null)) {
             return;
         }
 

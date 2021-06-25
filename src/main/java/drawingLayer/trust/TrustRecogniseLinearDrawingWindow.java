@@ -18,12 +18,14 @@ public class TrustRecogniseLinearDrawingWindow extends DrawingWindow {
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
+        headerTitle = "Trust Recognition (TP|TN|FP|FN) Statistics Linear Chart";
+        setName("tut_rcg");
     }
 
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Trust FP/FN/TP/TN Data :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         axisX = 0;

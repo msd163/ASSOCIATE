@@ -74,7 +74,7 @@
       }
     },
     {
-      "bunchCount": "%50@200",
+      "bunchCount": "%60@200",
       "targetCount": "200",
       "watchDepth": "0",
       "watchListCap": "#10..80",

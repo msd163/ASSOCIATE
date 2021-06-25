@@ -19,12 +19,14 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
+        headerTitle = "Trust Statistics Linear Chart";
+        setName("tut_stt");
     }
 
     @Override
     public void paint(Graphics gr) {
 
-        if (!mainPaint(gr, "Trust To ... Info :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         axisX = 0;
