@@ -2,11 +2,20 @@ package simulateLayer.profiler;
 
 public class PopulationBunchBehaviorParam {
 
+    private int certifiedHonestPercent;                          // Only certified honest agents percentage. these agents navigate others to correct targets.
     private int honestPercent;                                   // Only honest agents percentage. these agents navigate others to correct targets.
     private int adversaryPercent;                                // only dishonest and adversary percentage. these agents navigate others to pitfalls.
     private int mischiefPercent;                                 // only mischief percentage. these agents navigate others to a random target, not correct targets.
     private PopulationBunchHypocriteBehavior hypocriteBehavior;      // an hypocrite agent that
     //============================//============================
+
+    public int getCertifiedHonestPercent() {
+        return certifiedHonestPercent;
+    }
+
+    public void setCertifiedHonestPercent(int certifiedHonestPercent) {
+        this.certifiedHonestPercent = certifiedHonestPercent;
+    }
 
     public int getHonestPercent() {
         return honestPercent;

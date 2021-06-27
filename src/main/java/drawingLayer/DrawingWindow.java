@@ -110,7 +110,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
                 if (e.isShiftDown()) {
-                    System.out.println(keyCode);
+                    //System.out.println(keyCode);
                     switch (keyCode) {
                         case 37:        // left
                             if (_hs > 1) {

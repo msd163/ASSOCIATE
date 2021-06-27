@@ -11,6 +11,7 @@ public enum TtOutLogMethodSection {
     DoYouKnowWhereIs("DoYouKn"),
     TrustData_AddItem("Td-AddItem"),
     TrustMng_GetTrustValue("TutMng-getTV"),
+    Env_UpdateAgentCount("Env_UpAgCnt"),
     //
     ;
 

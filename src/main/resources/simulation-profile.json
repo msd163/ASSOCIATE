@@ -3,12 +3,12 @@
   "stateCount": 50,
   "stateCapacity": "50",
   "stateTargetCount": "#2..10",
-  "pitfallCount": "5",
+  "pitfallCount": "25",
   "--------------------------------------------------3": "AGENT",
   "agentsCount": "400",
   "bunches": [
     {
-      "bunchCount": "%5@400",
+      "bunchCount": "%10@400",
       "targetCount": "200",
       "watchDepth": "#2..4",
       "watchListCap": "#300..400",
@@ -30,9 +30,9 @@
       "trustRecommendationItemCap": "#80..100",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 80,
-        "adversaryPercent": 10,
-        "mischiefPercent": 0,
+        "honestPercent": 60,
+        "adversaryPercent": 20,
+        "mischiefPercent": 10,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -41,7 +41,7 @@
       }
     },
     {
-      "bunchCount": "%20@400",
+      "bunchCount": "%15@400",
       "targetCount": "200",
       "watchDepth": "1",
       "watchListCap": "#100..800",
@@ -74,7 +74,7 @@
       }
     },
     {
-      "bunchCount": "%60@200",
+      "bunchCount": "%75@400",
       "targetCount": "200",
       "watchDepth": "0",
       "watchListCap": "#10..80",

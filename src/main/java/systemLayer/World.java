@@ -129,6 +129,8 @@ public class World {
             agent.getTrust().postInit();
         }
 
+        environment.updateAgentsCount();
+
         environment.reassigningStateLocationAndTransPath();
 
         // Resetting the timer of the world.
@@ -244,7 +246,7 @@ public class World {
                 Globals.statsTrustGenerator.addHeader();
             }
 
-            System.out.println("World: "+Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + " > run ------------------------------- ");
+            System.out.println("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + " > run ------------------------------- ");
 
             //============================//============================  Updating agents statuses
             for (Agent agent : agents) {
@@ -536,7 +538,7 @@ public class World {
     }
 
     public String getSimulationConfigInfo() {
-        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo();
+        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo(environment.getCertifiedCount());
     }
 
     public String toString(int tabIndex) {

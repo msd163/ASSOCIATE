@@ -68,6 +68,8 @@ public class Environment {
     private int hypocriteCount;                   // Only for generating environment-x.json file
     @Expose
     private int mischiefCount;                                // Only for generating environment-x.json file
+    @Expose
+    private int certifiedCount;                               // Only for generating environment-x.json file. agents with certification
 
     @Expose
     private String _C3 = "______________________________";    // Only for generating environment-x.json file
@@ -77,12 +79,13 @@ public class Environment {
 
     //============================//============================//============================
 
-    @Expose(deserialize = false,serialize = false)
+    @Expose(deserialize = false, serialize = false)
     private World world;
 
     private TransitionX[] transitions;
 
     //============================//============================//============================
+
     /**
      * Assigning point to states in environment
      *
@@ -205,11 +208,12 @@ public class Environment {
         }
     }
 
-    public void updateAgentsCount() {
+    public void updateAgentsCount() throws Exception {
         agentsCount
                 = mischiefCount
                 = honestCount
                 = adversaryCount
+                = certifiedCount
                 = hypocriteCount = 0;
 
         for (StateX state : states) {
@@ -227,6 +231,12 @@ public class Environment {
                         mischiefCount++;
                     }
 
+                    if (agent.getTrust().isHasCertification()) {
+                        if (!agent.getBehavior().getHasHonestState()) {
+                            throw new Exception("Wrong certification for " + agent.getBehavior().getBehaviorState() + " agent.");
+                        }
+                        certifiedCount++;
+                    }
 
                 }
             }
@@ -419,5 +429,12 @@ public class Environment {
 
     public EnvironmentProfilerMaxParams getProMax() {
         return proMax;
+    }
+
+    public int getCertifiedCount() {
+        return certifiedCount;
+    }
+    public void addCertifiedCount() {
+         certifiedCount++;
     }
 }

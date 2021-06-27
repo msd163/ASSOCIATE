@@ -8,6 +8,8 @@ public class SimulationConfigItem {
     private float trustForgottenCoeff;
     private float recommendationCoeff;
     private boolean isBidirectionalRecommendationSharing;
+    private boolean isSafeUseRecommendation;                // TRUE: if inner trust value is zero, final trust value is equals to recommendation trust value. in otherwise, final trust value is weighted average of inner and recommendation trust value.
+    private boolean isUseNegativeRecommendationEffect;      // TRUE: using negative recommended trust value in calculating final trust value. | FALSE: only use positive recommendation in calculating trust value.
     private boolean isUseExperience;
     private boolean isUseIndirectExperience;
     private boolean isBidirectionalExperienceSharing;
@@ -20,11 +22,11 @@ public class SimulationConfigItem {
     private boolean isUseCertification;
 
     //============================//============================//============================
-    public String getInfo() {
+    public String getInfo(int certificationCount) {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "@Mtd: " + methodology +
-                    " - FrgCf: " + trustForgottenCoeff +
+                    "@ FrgCf: " + trustForgottenCoeff +
                     " - IgrThrld: " + ignoringThresholdOfTrustValue +
                     " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism +
                     " @EXP is: " + isUseExperience +
@@ -36,7 +38,10 @@ public class SimulationConfigItem {
                     " - bid: " + isBidirectionalObservationSharing +
                     " @RCM cf: " + recommendationCoeff +
                     " - bid: " + isBidirectionalRecommendationSharing +
-                    " @CERT is: " + isUseCertification
+                    " - sfm: " + isSafeUseRecommendation +
+                    " - ngEff: " + isUseNegativeRecommendationEffect +
+                    " @CERT is: " + isUseCertification+
+                    " - cnt: " + certificationCount
                     ;
 
         }
@@ -48,6 +53,15 @@ public class SimulationConfigItem {
         return recommendationCoeff > 0;
     }
     //============================//============================//============================
+
+
+    public boolean isIsUseNegativeRecommendationEffect() {
+        return isUseNegativeRecommendationEffect;
+    }
+
+    public boolean isIsSafeUseRecommendation() {
+        return isSafeUseRecommendation;
+    }
 
     public TtTrustMethodology getTtMethod() {
         return TtTrustMethodology.getByOrdinal(method);

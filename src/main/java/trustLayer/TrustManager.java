@@ -57,12 +57,34 @@ public class TrustManager {
 
             //-- trust of recommendation
             if (simulationConfigItem.isUseRecommendation()) {
-                float recommenderTrustValue = calcRecommendedTrustValue(requester, responder);
-                if (recommenderTrustValue > 0) {
-                    innerTrustValue =
-                            (simulationConfigItem.getRecommendationCoeff() * recommenderTrustValue)
-                                    + ((1 - simulationConfigItem.getRecommendationCoeff()) * innerTrustValue)
-                    ;
+                float calculatedTrustValueFromRecom = calcRecommendedTrustValue(requester, responder);
+                //-- If there is any trust value from recommendation
+            if (
+                    (simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom != 0)||
+                    (!simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom > 0)
+            ) {
+                    //-- In safe mode, if there is no inner trust value, final trust value will be recommendation trust value.
+                    if (simulationConfigItem.isIsSafeUseRecommendation()) {
+                        if (innerTrustValue != 0) {
+                            innerTrustValue =
+                                    (simulationConfigItem.getRecommendationCoeff() * calculatedTrustValueFromRecom)
+                                            + ((1 - simulationConfigItem.getRecommendationCoeff()) * innerTrustValue)
+                            ;
+
+                        } else
+                        //-- If inner trust value is Zero
+                        {
+                            innerTrustValue = calculatedTrustValueFromRecom;
+                        }
+                    }
+                    //-- If dont use safe mode recommendation
+                    else {
+                        innerTrustValue =
+                                (simulationConfigItem.getRecommendationCoeff() * calculatedTrustValueFromRecom)
+                                        + ((1 - simulationConfigItem.getRecommendationCoeff()) * innerTrustValue)
+                        ;
+                    }
+
                 }
             }
         }
@@ -79,15 +101,47 @@ public class TrustManager {
         List<Float> sntrs = getSortedNormalizedTrustRewards(requester, responder);
 
         float trustValue = 0.0f;
-        int index = 0;
-        for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
-            Float t = sntrs.get(i);
-            if (t == 0.0f) {
-                break;
+        if (1 == 1) {
+            int index = 0;
+            for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
+                Float t = sntrs.get(i);
+                if (t == 0.0f) {
+                    break;
+                }
+                trustValue += ((t) / ((index + 2) * (index + 2)));
+                //System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
+                index++;
             }
-            trustValue += ((t) / ((index + 2) * (index + 2)));
-            //System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
-            index++;
+        } else {
+           /* float tempT = 0;
+            float prev = -1111;
+            float sum = 0;
+            float count = 0;
+            int index = 0;
+            for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
+                Float t = sntrs.get(i);
+                if (t == 0.0f) {
+                    break;
+                }
+
+                if (prev != t) {
+                    sum += tempT;
+                    tempT = 0;
+                    index = 0;
+                    count++;
+                }
+
+                tempT += ((t) / ((index + 2) * (index + 2)));
+                prev = t;
+                //System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
+                index++;
+            }
+
+            sum += tempT;
+
+            if (count > 0) {
+                trustValue = sum / count;
+            }*/
         }
 
         return trustValue;
@@ -190,10 +244,12 @@ public class TrustManager {
         List<Float> norList = new ArrayList<>();
 
         for (TrustDataItem item : items) {
-            float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
-
             //-- For preventing stack over flow in calculating trust, we use trust value that is calculated previously
-            norList.add(trustValue * item.getReward() * getForgottenValue(item.getTime()));
+            //-- Calculating trust value of requester to recommender
+            float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
+            if (trustValue > 0) {
+                norList.add(trustValue * item.getReward() * getForgottenValue(item.getTime()));
+            }
         }
         return norList;
     }

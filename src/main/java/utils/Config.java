@@ -18,20 +18,21 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 1000;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 300;          // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
 
     public static int STATE_TILE_WIDTH = 40;
 
-    public static  int STATISTICS_AVERAGE_TIME_WINDOW = 20;
+    public static  int STATISTICS_AVERAGE_TIME_WINDOW = 50;
 
 
     public static final int ROUTING_STAY_IN_TARGET_TIME = 1;
     public static final int ROUTING_STAY_IN_PITFALL_TIME = 1;
 
     //============================ Trust
+    public static  int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 70;
 
       public static boolean TRUST_RECOMMENDATION_SEND_NEGATIVE = true;
     //  public static float TRUST_LEVEL_VALUE_IGNORE_THRESHOLD = 0.001f;    // A threshold value that identify trust levels which are less than it will be ignored in trust calculations
@@ -42,7 +43,7 @@ public class Config {
 
     public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
-    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = true;
+    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
     public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;

@@ -4,6 +4,7 @@ import _type.TtTrustReplaceMethod;
 import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 import trustLayer.data.*;
+import utils.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,14 +64,15 @@ public class AgentTrust {
         observations = new ArrayList<>();
         indirectObservations = new ArrayList<>();
 
-        this.hasCertification = agent.getCapacity().getCapPower()>80 && agent.getBehavior().getHasHonestState();
+        this.hasCertification = agent.getCapacity().getCapPower() > Config.TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD
+                && agent.getBehavior().getHasHonestState();
 
     }
 
     /**
      * After creating agents and filling agents list in the world
      */
-    public void postInit(){
+    public void postInit() {
         this.trustAbstracts = new TrustAbstract[agent.getWorld().getAgentsCount()];
         for (int i = 0; i < this.trustAbstracts.length; i++) {
             trustAbstracts[i] = new TrustAbstract(agent.getWorld().getAgents().get(i));

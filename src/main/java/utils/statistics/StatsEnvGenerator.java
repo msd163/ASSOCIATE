@@ -45,7 +45,7 @@ public class StatsEnvGenerator {
     public void addComment(Environment environment) {
         try {
             writer.write("# Simulation Report,Env.Code: " + environment.getCode() + ", " + ParsCalendar.getInstance().getShortDateTime() + ", Des: " + environment.getDescription()
-                    + "\n# " + environment.getWorld().getSimulationConfig().getInfo()
+                    + "\n# " + environment.getWorld().getSimulationConfig().getInfo(environment.getAdversaryCount())
                     + "\n# StateCount: " + environment.getStateCount()
                     + ", PitfallCount: " + environment.getPitfallCount()
                     + ", TransitionCount: " + environment.getTransitionCount()

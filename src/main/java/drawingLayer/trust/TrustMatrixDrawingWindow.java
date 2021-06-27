@@ -42,6 +42,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             return;
         }
 
+        g.drawString("Certified Count: " +world.getEnvironment().getCertifiedCount(),100,70);
 
         int pnScl_x = pnOffset.x + scaleOffset.x;
         int pnScl_y = pnOffset.y + scaleOffset.y;
@@ -68,9 +69,25 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             //============================ axisY
             //-- drawing axis Y
             g.fillRect(pnX, row * 5, 5, 5);
+
             //-- drawing capPower in side of axis Y
             g.setColor(Globals.Color$.getLight(agentInRow.getBehavior().getCurrentBehaviorState()));
             g.fillRect(pnX - agentInRow.getCapacity().getCapPower() - 10, row * 5 + 1, agentInRow.getCapacity().getCapPower(), 3);
+
+            //-- drawing grid line for percentage of capPower of states
+            g.setColor(Color.darkGray);
+            g.drawLine(pnX - 110, 1, pnX - 110, matCount * 5 + 1);
+            g.drawLine(pnX - 85, 1, pnX - 85, matCount * 5 + 1);
+            g.drawLine(pnX - 60, 1, pnX - 60, matCount * 5 + 1);
+            g.drawLine(pnX - 35, 1, pnX - 35, matCount * 5 + 1);
+
+            //-- drawing sign of agents with certification
+            if (agentInRow.getTrust().isHasCertification()) {
+                g.setColor(Color.YELLOW);
+                g.fillOval(pnX - 7, row * 5 + 1, 4, 4);
+                g.fillOval(row * 5, pnY-7, 5, 5);
+
+            }
 
             //-- updating trust data array that are shown in below of axis X
             for (int col = 0; col < matCount; col++) {
@@ -116,10 +133,10 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
                                 : 5;
 
                 g.fillRect(col * 5 + ((5 - bigness) / 2), row * 5 + ((5 - bigness) / 2), bigness, bigness);
-
             }
         }
 
+        //-- Drawing trust count info in bottom of axis X
         for (int i = 0, trusteeDataLength = trusteeData.length; i < trusteeDataLength; i++) {
             int[] td = trusteeData[i];
             g.setColor(Globals.Color$.getLight(sAgents.get(i).getBehavior().getCurrentBehaviorState()));

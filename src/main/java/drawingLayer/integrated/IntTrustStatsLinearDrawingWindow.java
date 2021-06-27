@@ -80,7 +80,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
             }
             //============================
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + configBunch.getByIndex(j).getInfo(), 1100, y);
+            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, y);
             //============================
         }
 
