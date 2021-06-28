@@ -49,9 +49,9 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         printStatsInfo(3, "Random Travel", ittRandom, "%" + 100 * (float) ittRandom / worlds[simulationTimer].getAgentsCount(), Color.MAGENTA);
 
 
-        printStatsInfo(4, "Avg("+Config.STATISTICS_AVERAGE_TIME_WINDOW+") Agents In Targets", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentTarget(), Color.GREEN);
-        printStatsInfo(5, "Avg("+Config.STATISTICS_AVERAGE_TIME_WINDOW+") Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentInPitfall(), Color.RED);
-        printStatsInfo(6, "Avg("+Config.STATISTICS_AVERAGE_TIME_WINDOW+") Random Travel", worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors(), Color.MAGENTA);
+        printStatsInfo(4, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Agents In Targets", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentTarget(), Color.GREEN);
+        printStatsInfo(5, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentInPitfall(), Color.RED);
+        printStatsInfo(6, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Random Travel", worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors(), Color.MAGENTA);
 
 
         //============================//============================ INFO
@@ -69,17 +69,17 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             g.drawString("Sim " + (j + 1) + " |", 80, y);
 
             if (showWorldsFlag[j]) {
-                if (showChartsFlag[0]) {
+                if (showLineChartsFlag[0]) {
                     //============================
                     drawCurve(200, y, Color.GREEN, j, 20, -1);
                     g.drawString("AgentsInTarget", 220, y);
                 }
-                if (showChartsFlag[1]) {
+                if (showLineChartsFlag[1]) {
                     //============================
                     drawCurve(500, y, Color.RED, j, 20, -1);
                     g.drawString("AgentsInPitfall", 520, y);
                 }
-                if (showChartsFlag[2]) {
+                if (showLineChartsFlag[2]) {
                     //============================
                     drawCurve(800, y, Color.MAGENTA, j, 20, -1);
                     g.drawString("RandomTravel", 820, y);
@@ -98,138 +98,72 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
-        for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+        if (showChartsFlag[0]) {
+            for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
-            if (!showWorldsFlag[j]) {
-                continue;
+                if (!showWorldsFlag[j]) {
+                    continue;
+                }
+
+                World world = worlds[j];
+
+                if (j > Globals.SIMULATION_TIMER || world == null) {
+                    break;
+                }
+
+                loAxisX = j;
+                axisY = 0;
+
+                worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
+
+                WorldStatistics[] statistics = world.getWdStatistics();
+                for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                    WorldStatistics stat = statistics[i];
+
+                    if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                        loAxisX += _hs;
+                        prevPoints[0].y = _vs * stat.getIttAgentsInTarget();
+                        prevPoints[1].y = _vs * stat.getIttAgentsInPitfall();
+                        prevPoints[2].y = _vs * stat.getIttRandomTravelToNeighbors();
+                        prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+
+                    } else {
+
+                        prevPoints[0].y = _vs * statistics[i - 1].getIttAgentsInTarget();
+                        prevPoints[1].y = _vs * statistics[i - 1].getIttAgentsInPitfall();
+                        prevPoints[2].y = _vs * statistics[i - 1].getIttRandomTravelToNeighbors();
+                        prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+                        loAxisX += _hs;
+                    }
+
+                    if (showLineChartsFlag[0]) {
+                        drawCurve(loAxisX, _vs * stat.getIttAgentsInTarget(), Color.GREEN, j, i);
+                        g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getIttAgentsInTarget());
+                    }
+                    if (showLineChartsFlag[1]) {
+                        drawCurve(loAxisX, _vs * stat.getIttAgentsInPitfall(), Color.RED, j, i);
+                        g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getIttAgentsInPitfall());
+                    }
+                    if (showLineChartsFlag[2]) {
+                        drawCurve(loAxisX, _vs * stat.getIttRandomTravelToNeighbors(), Color.MAGENTA, j, i);
+                        g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getIttRandomTravelToNeighbors());
+                    }
+                    if (axisX < loAxisX) {
+                        axisX = loAxisX;
+                    }
+                }
+
             }
-
-            World world = worlds[j];
-
-            if (j > Globals.SIMULATION_TIMER || world == null) {
-                break;
-            }
-
-            loAxisX = j;
-            axisY = 0;
-
-            worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
-
-            WorldStatistics[] statistics = world.getWdStatistics();
-            for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                WorldStatistics stat = statistics[i];
-
-                if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
-                    loAxisX += _hs;
-                    prevPoints[0].y = _vs * stat.getIttAgentsInTarget();
-                    prevPoints[1].y = _vs * stat.getIttAgentsInPitfall();
-                    prevPoints[2].y = _vs * stat.getIttRandomTravelToNeighbors();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
-
-                } else {
-
-                    prevPoints[0].y = _vs * statistics[i - 1].getIttAgentsInTarget();
-                    prevPoints[1].y = _vs * statistics[i - 1].getIttAgentsInPitfall();
-                    prevPoints[2].y = _vs * statistics[i - 1].getIttRandomTravelToNeighbors();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
-                    loAxisX += _hs;
-                }
-
-                if (showChartsFlag[0]) {
-                    drawCurve(loAxisX, _vs * stat.getIttAgentsInTarget(), Color.GREEN, j, i);
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getIttAgentsInTarget());
-                }
-                if (showChartsFlag[1]) {
-                    drawCurve(loAxisX, _vs * stat.getIttAgentsInPitfall(), Color.RED, j, i);
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getIttAgentsInPitfall());
-                }
-                if (showChartsFlag[2]) {
-                    drawCurve(loAxisX, _vs * stat.getIttRandomTravelToNeighbors(), Color.MAGENTA, j, i);
-                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getIttRandomTravelToNeighbors());
-                }
-                if (axisX < loAxisX) {
-                    axisX = loAxisX;
-                }
-            }
-
+            //============================//============================ Draw X-axis line
+            g.setColor(Color.LIGHT_GRAY);
+            g.drawLine(0, 0, getRealWith(), 0);
         }
-        //============================//============================ Draw X-axis line
-        g.setColor(Color.YELLOW);
-        g.drawLine(0, 0, getRealWith(), 0);
 
         //============================//============================//============================ Timed Average Chart
 
-        g.translate(0, -700);
-        loAxisX = 0;
-
-        for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
-            if (!showWorldsFlag[j]) {
-                continue;
-            }
-
-            World world = worlds[j];
-
-            if (j > Globals.SIMULATION_TIMER || world == null) {
-                break;
-            }
-
-            loAxisX = j;
-            axisY = 0;
-
-            worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
-
-            WorldStatistics[] statistics = world.getWdStatistics();
-            for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                WorldStatistics stat = statistics[i];
-
-                if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
-                    loAxisX += _hs;
-                    prevPoints[0].y = _vs * stat.getTimedAvgAgentTarget();
-                    prevPoints[1].y = _vs * stat.getTimedAvgAgentInPitfall();
-                    prevPoints[2].y = _vs * stat.getTimedAvgRandomTravel();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
-
-                } else {
-
-                    prevPoints[0].y = _vs * statistics[i - 1].getTimedAvgAgentTarget();
-                    prevPoints[1].y = _vs * statistics[i - 1].getTimedAvgAgentInPitfall();
-                    prevPoints[2].y = _vs * statistics[i - 1].getTimedAvgRandomTravel();
-                    prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
-                    loAxisX += _hs;
-                }
-
-                if (showChartsFlag[0]) {
-                    drawCurve(loAxisX, _vs * stat.getTimedAvgAgentTarget(), Color.GREEN, j, i);
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getTimedAvgAgentTarget());
-                }
-
-                if (showChartsFlag[1]) {
-                    drawCurve(loAxisX, _vs * stat.getTimedAvgAgentInPitfall(), Color.RED, j, i);
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getTimedAvgAgentInPitfall());
-                }
-
-                if (showChartsFlag[2]) {
-                    drawCurve(loAxisX, _vs * stat.getTimedAvgRandomTravel(), Color.MAGENTA, j, i);
-                    g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getTimedAvgRandomTravel());
-                }
-
-                if (axisX < loAxisX) {
-                    axisX = loAxisX;
-                }
-            }
-        }
-        //============================//============================ Draw X-axis line
-        g.setColor(Color.CYAN);
-        g.drawLine(0, 0, getRealWith(), 0);
-
-
-        //============================//============================//============================ Episode Drawing
-        if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
-
-            g.translate(0, -1200);
-            g.setColor(Color.ORANGE);
-            g.drawLine(0, 0, getRealWith(), 0);
-
+        if (showChartsFlag[1]) {
+            g.translate(0, -700);
+            loAxisX = 0;
 
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
                 if (!showWorldsFlag[j]) {
@@ -245,35 +179,105 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 loAxisX = j;
                 axisY = 0;
 
-                worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
+                worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
-                EpisodeStatistics[] statistics = world.getEpStatistics();
+                WorldStatistics[] statistics = world.getWdStatistics();
                 for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                    EpisodeStatistics stat = statistics[i];
+                    WorldStatistics stat = statistics[i];
 
-                    if (stat.getToTime() == 0) {
+                    if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                        loAxisX += _hs;
+                        prevPoints[0].y = _vs * stat.getTimedAvgAgentTarget();
+                        prevPoints[1].y = _vs * stat.getTimedAvgAgentInPitfall();
+                        prevPoints[2].y = _vs * stat.getTimedAvgRandomTravel();
+                        prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+
+                    } else {
+
+                        prevPoints[0].y = _vs * statistics[i - 1].getTimedAvgAgentTarget();
+                        prevPoints[1].y = _vs * statistics[i - 1].getTimedAvgAgentInPitfall();
+                        prevPoints[2].y = _vs * statistics[i - 1].getTimedAvgRandomTravel();
+                        prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
+                        loAxisX += _hs;
+                    }
+
+                    if (showLineChartsFlag[0]) {
+                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentTarget(), Color.GREEN, j, i);
+                        g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getTimedAvgAgentTarget());
+                    }
+
+                    if (showLineChartsFlag[1]) {
+                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentInPitfall(), Color.RED, j, i);
+                        g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getTimedAvgAgentInPitfall());
+                    }
+
+                    if (showLineChartsFlag[2]) {
+                        drawCurve(loAxisX, _vs * stat.getTimedAvgRandomTravel(), Color.MAGENTA, j, i);
+                        g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getTimedAvgRandomTravel());
+                    }
+
+                    if (axisX < loAxisX) {
+                        axisX = loAxisX;
+                    }
+                }
+            }
+            //============================//============================ Draw X-axis line
+            g.setColor(Color.LIGHT_GRAY);
+            g.drawLine(0, 0, getRealWith(), 0);
+
+        }
+        //============================//============================//============================ Episode Drawing
+        if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
+            if (showChartsFlag[2]) {
+                g.translate(0, -1200);
+                g.setColor(Color.ORANGE);
+                g.drawLine(0, 0, getRealWith(), 0);
+
+
+                for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+                    if (!showWorldsFlag[j]) {
+                        continue;
+                    }
+
+                    World world = worlds[j];
+
+                    if (j > Globals.SIMULATION_TIMER || world == null) {
                         break;
                     }
 
-                    if (i > 0) {
-                        prevPoints[0].x = prevPoints[1].x = loAxisX;
-                        prevPoints[0].y = _vs * statistics[i - 1].getMidAgentsInTarget();
-                        prevPoints[1].y = _vs * statistics[i - 1].getMidAgentsInPitfall();
-                        loAxisX += 100;
+                    loAxisX = j;
+                    axisY = 0;
 
-                    } else {
-                        loAxisX += 100;
-                        prevPoints[0].x = prevPoints[1].x = loAxisX;
-                        prevPoints[0].y = _vs * stat.getMidAgentsInTarget();
-                        prevPoints[1].y = _vs * stat.getMidAgentsInPitfall();
+                    worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
+
+                    EpisodeStatistics[] statistics = world.getEpStatistics();
+                    for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                        EpisodeStatistics stat = statistics[i];
+
+                        if (stat.getToTime() == 0) {
+                            break;
+                        }
+
+                        if (i > 0) {
+                            prevPoints[0].x = prevPoints[1].x = loAxisX;
+                            prevPoints[0].y = _vs * statistics[i - 1].getMidAgentsInTarget();
+                            prevPoints[1].y = _vs * statistics[i - 1].getMidAgentsInPitfall();
+                            loAxisX += 100;
+
+                        } else {
+                            loAxisX += 100;
+                            prevPoints[0].x = prevPoints[1].x = loAxisX;
+                            prevPoints[0].y = _vs * stat.getMidAgentsInTarget();
+                            prevPoints[1].y = _vs * stat.getMidAgentsInPitfall();
+                        }
+
+                        drawCurve(loAxisX, _vs * stat.getMidAgentsInTarget(), Color.GREEN, j, 20, i);
+                        g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getMidAgentsInTarget());
+
+                        drawCurve(loAxisX, _vs * stat.getMidAgentsInPitfall(), Color.RED, j, 20, i);
+                        g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getMidAgentsInPitfall());
+
                     }
-
-                    drawCurve(loAxisX, _vs * stat.getMidAgentsInTarget(), Color.GREEN, j, 20, i);
-                    g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getMidAgentsInTarget());
-
-                    drawCurve(loAxisX, _vs * stat.getMidAgentsInPitfall(), Color.RED, j, 20, i);
-                    g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getMidAgentsInPitfall());
-
                 }
             }
         }

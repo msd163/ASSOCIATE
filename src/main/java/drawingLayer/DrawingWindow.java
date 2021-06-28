@@ -4,7 +4,6 @@ import _type.TtBehaviorState;
 import systemLayer.Agent;
 import systemLayer.World;
 import trustLayer.data.TrustData;
-import utils.Config;
 import utils.Globals;
 import utils.Point;
 
@@ -37,6 +36,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected int worldTimer;
     protected int simulationTimer;
     protected boolean showWorldsFlag[];
+    protected boolean showLineChartsFlag[];
     protected boolean showChartsFlag[];
 
     protected utils.Point prevPoints[];      //-- Previously visited point
@@ -65,6 +65,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public DrawingWindow(int worldCount) {
+
+        showLineChartsFlag = new boolean[9];
+        Arrays.fill(showLineChartsFlag, true);
 
         showChartsFlag = new boolean[9];
         Arrays.fill(showChartsFlag, true);
@@ -132,21 +135,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             _hs = 8;
                             _vs = 1;
                             break;
-
-                            /*
-                             This solution has error!
-                            // for changing statistics average time window
-                        case 45:
-                        case 109:
-                            if (Config.STATISTICS_AVERAGE_TIME_WINDOW > 1) {
-                                Config.STATISTICS_AVERAGE_TIME_WINDOW--;
-                            }
-                            break;
-                        case 61:
-                        case 107:
-                            Config.STATISTICS_AVERAGE_TIME_WINDOW++;
-                            break;*/
-
                     }
                     //-- for showing or hiding Simulation charts
                     if (keyCode == 48) {
@@ -160,6 +148,17 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 }
                 //-- For showing or hiding line charts in each chart
                 if (e.isAltDown()) {
+                    if (keyCode == 48) {
+                        Arrays.fill(showLineChartsFlag, true);
+                    } else if (keyCode >= 49 && keyCode <= 57) {
+                        int index = keyCode - 49;
+                        if (index < showLineChartsFlag.length) {
+                            showLineChartsFlag[index] = !showLineChartsFlag[index];
+                        }
+                    }
+                }
+                //-- For showing or hiding line charts in each chart
+                if (e.isControlDown()) {
                     if (keyCode == 48) {
                         Arrays.fill(showChartsFlag, true);
                     } else if (keyCode >= 49 && keyCode <= 57) {
