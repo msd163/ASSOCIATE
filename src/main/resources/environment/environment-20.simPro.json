@@ -3,12 +3,12 @@
   "stateCount": 50,
   "stateCapacity": "50",
   "stateTargetCount": "#2..10",
-  "pitfallCount": "25",
+  "pitfallCount": "5",
   "--------------------------------------------------3": "AGENT",
   "agentsCount": "400",
   "bunches": [
     {
-      "bunchCount": "%10@400",
+      "bunchCount": "%5@400",
       "targetCount": "200",
       "watchDepth": "#2..4",
       "watchListCap": "#300..400",
@@ -26,13 +26,13 @@
       "indirectObservationCap": "#350..400",
       "indirectObservationItemCap": "#180..300",
       "_4": "-----------------------------------",
-      "trustRecommendationCap": "#399..400",
+      "trustRecommendationCap": "#350..400",
       "trustRecommendationItemCap": "#80..100",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 60,
-        "adversaryPercent": 20,
-        "mischiefPercent": 10,
+        "honestPercent": 80,
+        "adversaryPercent": 10,
+        "mischiefPercent": 0,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -41,7 +41,7 @@
       }
     },
     {
-      "bunchCount": "%15@400",
+      "bunchCount": "%20@400",
       "targetCount": "200",
       "watchDepth": "1",
       "watchListCap": "#100..800",
@@ -59,7 +59,7 @@
       "indirectObservationCap": "#100..300",
       "indirectObservationItemCap": "#10..80",
       "_4": "-----------------------------------",
-      "trustRecommendationCap": "#399..400",
+      "trustRecommendationCap": "#280..380",
       "trustRecommendationItemCap": "#40..90",
       "_5": "-----------------------------------",
       "behavior": {
@@ -74,7 +74,7 @@
       }
     },
     {
-      "bunchCount": "%75@400",
+      "bunchCount": "%60@200",
       "targetCount": "200",
       "watchDepth": "0",
       "watchListCap": "#10..80",
@@ -92,7 +92,7 @@
       "indirectObservationCap": "0",
       "indirectObservationItemCap": "0",
       "_4": "-----------------------------------",
-      "trustRecommendationCap": "#399..400",
+      "trustRecommendationCap": "#250..350",
       "trustRecommendationItemCap": "#40..80",
       "_5": "-----------------------------------",
       "behavior": {

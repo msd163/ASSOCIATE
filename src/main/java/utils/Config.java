@@ -23,7 +23,7 @@ public class Config {
 
     public final static int EPISODE_TIMOUT = 200;
 
-    public static int STATE_TILE_WIDTH = 40;
+    public static int STATE_TILE_WIDTH = 30;
 
     public static  int STATISTICS_AVERAGE_TIME_WINDOW = 50;
 
@@ -34,7 +34,7 @@ public class Config {
     //============================ Trust
     public static  int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 70;
 
-      public static boolean TRUST_RECOMMENDATION_SEND_NEGATIVE = true;
+     // public static boolean TRUST_RECOMMENDATION_SEND_NEGATIVE = true;
     //  public static float TRUST_LEVEL_VALUE_IGNORE_THRESHOLD = 0.001f;    // A threshold value that identify trust levels which are less than it will be ignored in trust calculations
     //  public static int TRUST_MAXIMUM_CONSIDERED_ROUTING_HELP_IN_TRUST_MECHANISM = 6;
     //  public static boolean TRUST_VALIDATING_ROUTING_HELPER_ACCORDING_OBSERVATIONS = false;
@@ -45,7 +45,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
@@ -56,13 +56,13 @@ public class Config {
     public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = false;
     public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = false;
 
-    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = false;
+    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = true;
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 
     public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
     public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
-    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
+    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = false;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;

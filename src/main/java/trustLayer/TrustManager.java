@@ -774,7 +774,7 @@ public class TrustManager {
         for (TrustAbstract trustAbstract : recommender.getTrust().getTrustAbstracts()) {
             if (trustAbstract.getTrustValue() > 0) {
                 addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
-            } else if (trustAbstract.getTrustValue() < 0 && Config.TRUST_RECOMMENDATION_SEND_NEGATIVE) {
+            } else if (trustAbstract.getTrustValue() < 0 && simulationConfigItem.isIsUseNegativeRecommendationEffect()) {
                 addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
             }
         }
