@@ -53,6 +53,7 @@ public class AgentCapacity {
                         (int) (15 * ((float) watchDepth / Globals.ProfileBunchMax.maxWatchDepth))
         ;
 
+        hasInternet = (capPower >= profiler.getCurrentBunch().getWithInternetCapPowerThresholdD().nextValue());
 
     }
 
@@ -85,6 +86,10 @@ public class AgentCapacity {
     private int indirectObservationCap;
     @Expose
     private int indirectObservationItemCap;
+
+    @Expose
+    private boolean hasInternet;
+
     @Expose
     private int capPower; // it will be calculated by other params
 
@@ -186,5 +191,9 @@ public class AgentCapacity {
 
     public void setObservationCap(int observationCap) {
         this.observationCap = observationCap;
+    }
+
+    public boolean isHasInternet() {
+        return hasInternet;
     }
 }

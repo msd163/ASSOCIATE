@@ -25,6 +25,7 @@ public class Globals {
         public static int maxIndirectObservationCap = 0;
         public static int maxIndirectObservationItemCap = 0;
         public static int maxAgentTargetCount = 0;
+        public static int maxWithInternetCount = 0;
     }
 
     public static class Color$ {

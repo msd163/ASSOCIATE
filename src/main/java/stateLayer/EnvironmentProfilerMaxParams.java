@@ -36,6 +36,8 @@ public class EnvironmentProfilerMaxParams {
     private int maxTravelHistoryCap = 0;
     @Expose
     private int maxAgentTargetCount = 0;
+    @Expose
+    private int maxWithInternetCount = 0;
 
     //============================//============================//============================
 
@@ -109,6 +111,14 @@ public class EnvironmentProfilerMaxParams {
 
     public void setMaxAgentTargetCount(int maxAgentTargetCount) {
         this.maxAgentTargetCount = maxAgentTargetCount;
+    }
+
+    public int getMaxWithInternetCount() {
+        return maxWithInternetCount;
+    }
+
+    public void setMaxWithInternetCount(int maxWithInternetCount) {
+        this.maxWithInternetCount = maxWithInternetCount;
     }
 
     public int getMaxIndirectExperienceCap() {

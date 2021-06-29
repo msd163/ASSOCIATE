@@ -42,7 +42,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             return;
         }
 
-        g.drawString("Certified Count: " +world.getEnvironment().getCertifiedCount(),100,70);
+        g.drawString("Certified Count: " + world.getEnvironment().getCertifiedCount(), 100, 70);
 
         int pnScl_x = pnOffset.x + scaleOffset.x;
         int pnScl_y = pnOffset.y + scaleOffset.y;
@@ -84,8 +84,16 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             //-- drawing sign of agents with certification
             if (agentInRow.getTrust().isHasCertification()) {
                 g.setColor(Color.YELLOW);
-                g.fillOval(pnX - 7, row * 5 + 1, 4, 4);
-                g.fillOval(row * 5, pnY-7, 5, 5);
+                g.fillOval(pnX - 7, row * 5 + 1, 5, 5);
+                g.fillOval(row * 5, pnY - 7, 5, 5);
+
+            }
+
+            //-- drawing sign of agents with internet
+            if (agentInRow.getCapacity().isHasInternet()) {
+                g.setColor(Color.RED);
+                g.fillOval(pnX - 6, row * 5 + 2, 3, 3);
+                g.fillOval(row * 5 + 1, pnY - 6, 3, 3);
 
             }
 

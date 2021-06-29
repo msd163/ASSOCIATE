@@ -124,6 +124,9 @@ public class SimulationProfiler {
             if (Globals.ProfileBunchMax.maxAgentTargetCount < bunch.getTargetCountD().getMaxValue()) {
                 Globals.ProfileBunchMax.maxAgentTargetCount = bunch.getTargetCountD().getMaxValue();
             }
+            if (Globals.ProfileBunchMax.maxWithInternetCount < bunch.getWithInternetCapPowerThresholdD().getMaxValue()) {
+                Globals.ProfileBunchMax.maxWithInternetCount = bunch.getWithInternetCapPowerThresholdD().getMaxValue();
+            }
         }
     }
     //============================//============================

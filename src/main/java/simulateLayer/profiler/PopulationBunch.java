@@ -14,23 +14,24 @@ public class PopulationBunch {
 
     private String trustRecommendationCap;
     private String trustRecommendationItemCap;
-    
+
     private String observationCap;
     private String observationItemCap;
-    
+
     private String indirectObservationCap;
     private String indirectObservationItemCap;
-    
+
     private String watchListCap;
     private String watchDepth;
     private String travelHistoryCap;
     private String targetCount;
     private String trustReplaceHistoryMethod;
+    private String withInternetCapPowerThreshold;      // Minimum capPower of agents that have internet.
     private PopulationBunchBehaviorParam behavior;
 
     //============================
     private DefParameter bunchCountD;
-    
+
     private DefParameter experienceCapD;
     private DefParameter experienceItemCapD;
 
@@ -43,7 +44,7 @@ public class PopulationBunch {
 
     private DefParameter indirectObservationCapD;
     private DefParameter indirectObservationItemCapD;
-    
+
     private DefParameter watchListCapD;
     private DefParameter trustRecommendationCapD;
     private DefParameter trustRecommendationItemCapD;
@@ -52,15 +53,16 @@ public class PopulationBunch {
     private DefParameter targetCountD;
     private DefParameter trustReplaceHistoryMethodD;
 
+    private DefParameter withInternetCapPowerThresholdD;
 
     //============================//============================
 
     public void initDefParams() {
         bunchCountD = new DefParameter(bunchCount);
-        
+
         experienceCapD = new DefParameter(experienceCap);
         experienceItemCapD = new DefParameter(experienceItemCap);
-        
+
         indirectExperienceCapD = new DefParameter(indirectExperienceCap);
         indirectExperienceItemCapD = new DefParameter(indirectExperienceItemCap);
 
@@ -71,13 +73,14 @@ public class PopulationBunch {
         travelHistoryCapD = new DefParameter(travelHistoryCap);
         targetCountD = new DefParameter(targetCount);
         trustReplaceHistoryMethodD = new DefParameter(trustReplaceHistoryMethod);
-        
+        withInternetCapPowerThresholdD = new DefParameter(withInternetCapPowerThreshold);
+
         observationCapD = new DefParameter(observationCap);
         observationItemCapD = new DefParameter(observationItemCap);
-        
+
         indirectObservationCapD = new DefParameter(indirectObservationCap);
         indirectObservationItemCapD = new DefParameter(indirectObservationItemCap);
-        
+
     }
 
     //============================//============================
@@ -154,6 +157,10 @@ public class PopulationBunch {
 
     public DefParameter getObservationCapD() {
         return observationCapD;
+    }
+
+    public DefParameter getWithInternetCapPowerThresholdD() {
+        return withInternetCapPowerThresholdD;
     }
 
     //============================//============================

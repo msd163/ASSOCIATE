@@ -121,7 +121,6 @@ public class EnvGenerator {
 
         int id = 0;
         int thisBunchFinished = profiler.getCurrentBunch().getBunchCount();
-
         for (int i = 0; i < agentsCount; i++) {
             if (i >= thisBunchFinished) {
                 profiler.NextBunch();

@@ -282,6 +282,8 @@ public class Environment {
         proMax.setMaxTravelHistoryCap(Globals.ProfileBunchMax.maxTravelHistoryCap);
 
         proMax.setMaxAgentTargetCount(Globals.ProfileBunchMax.maxAgentTargetCount);
+
+        proMax.setMaxWithInternetCount(Globals.ProfileBunchMax.maxWithInternetCount);
     }
 
     //============================//============================
