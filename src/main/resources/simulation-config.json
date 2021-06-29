@@ -1,5 +1,5 @@
 {
-  "simulationRound": 1,
+  "simulationRound": 3,
   "configs": [
     {
       "method": 5,
@@ -21,73 +21,9 @@
       "isSafeUseRecommendation": false,
       "isUseNegativeRecommendationEffect": true,
       "_CRT": "-----------------------------------",
-      "isUseCertification": false
-    },
-    {
-      "method": 2,
-      "trustForgottenCoeff": 0.001,
-      "ignoringThresholdOfTrustValue": 0.00001,
-      "maximumConsideredRoutingHelpInTrustMechanism": 6,
-      "_EXP": "-----------------------------------",
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
-      "experienceDepthInRewarding": 4,
-      "_OBS": "-----------------------------------",
-      "isUseObservation": true,
-      "isUseIndirectObservation": true,
-      "isBidirectionalObservationSharing": true,
-      "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.5,
-      "isBidirectionalRecommendationSharing": true,
-      "isSafeUseRecommendation": false,
-      "isUseNegativeRecommendationEffect": true,
-      "_CRT": "-----------------------------------",
-      "isUseCertification": false
-    },
-    {
-      "method": 4,
-      "trustForgottenCoeff": 0.001,
-      "ignoringThresholdOfTrustValue": 0.00001,
-      "maximumConsideredRoutingHelpInTrustMechanism": 6,
-      "_EXP": "-----------------------------------",
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
-      "experienceDepthInRewarding": 4,
-      "_OBS": "-----------------------------------",
-      "isUseObservation": false,
-      "isUseIndirectObservation": false,
-      "isBidirectionalObservationSharing": false,
-      "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.0,
-      "isBidirectionalRecommendationSharing": false,
-      "isSafeUseRecommendation": false,
-      "isUseNegativeRecommendationEffect": false,
-      "_CRT": "-----------------------------------",
-      "isUseCertification": false
-    },
-    {
-      "method": 4,
-      "trustForgottenCoeff": 0.001,
-      "ignoringThresholdOfTrustValue": 0.00001,
-      "maximumConsideredRoutingHelpInTrustMechanism": 6,
-      "_EXP": "-----------------------------------",
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
-      "experienceDepthInRewarding": 4,
-      "_OBS": "-----------------------------------",
-      "isUseObservation": true,
-      "isUseIndirectObservation": true,
-      "isBidirectionalObservationSharing": true,
-      "_RCM": "-----------------------------------",
-      "recommendationCoeff": 0.0,
-      "isBidirectionalRecommendationSharing": false,
-      "isSafeUseRecommendation": false,
-      "isUseNegativeRecommendationEffect": false,
-      "_CRT": "-----------------------------------",
-      "isUseCertification": false
+      "isUseCertification": true,
+      "_INT": "-----------------------------------",
+      "isUseSharingRecommendationWithInternet": false
     },
     {
       "method": 4,
@@ -109,7 +45,9 @@
       "isSafeUseRecommendation": true,
       "isUseNegativeRecommendationEffect": true,
       "_CRT": "-----------------------------------",
-      "isUseCertification": false
+      "isUseCertification": true,
+      "_INT": "-----------------------------------",
+      "isUseSharingRecommendationWithInternet": false
     },
     {
       "method": 4,
@@ -131,7 +69,9 @@
       "isSafeUseRecommendation": true,
       "isUseNegativeRecommendationEffect": true,
       "_CRT": "-----------------------------------",
-      "isUseCertification": true
+      "isUseCertification": true,
+      "_INT": "-----------------------------------",
+      "isUseSharingRecommendationWithInternet": true
     }
 
   ]

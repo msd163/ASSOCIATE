@@ -20,6 +20,7 @@ public class SimulationConfigItem {
     private float ignoringThresholdOfTrustValue;
     private float maximumConsideredRoutingHelpInTrustMechanism;
     private boolean isUseCertification;
+    private boolean isUseSharingRecommendationWithInternet;
 
     //============================//============================//============================
     public String getInfo(int certificationCount) {
@@ -41,6 +42,7 @@ public class SimulationConfigItem {
                     " - sfm: " + isSafeUseRecommendation +
                     " - ngEff: " + isUseNegativeRecommendationEffect +
                     " @CERT is: " + isUseCertification+
+                    " @INT rcm: " + isUseSharingRecommendationWithInternet+
                     " - cnt: " + certificationCount
                     ;
 
@@ -126,5 +128,9 @@ public class SimulationConfigItem {
 
     public boolean isIsUseCertification() {
         return isUseCertification;
+    }
+
+    public boolean isIsUseSharingRecommendationWithInternet() {
+        return isUseSharingRecommendationWithInternet;
     }
 }

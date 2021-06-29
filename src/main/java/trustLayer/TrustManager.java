@@ -8,7 +8,6 @@ import stateLayer.TravelHistory;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import trustLayer.data.*;
-import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 
@@ -59,10 +58,10 @@ public class TrustManager {
             if (simulationConfigItem.isUseRecommendation()) {
                 float calculatedTrustValueFromRecom = calcRecommendedTrustValue(requester, responder);
                 //-- If there is any trust value from recommendation
-            if (
-                    (simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom != 0)||
-                    (!simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom > 0)
-            ) {
+                if (
+                        (simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom != 0) ||
+                                (!simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom > 0)
+                ) {
                     //-- In safe mode, if there is no inner trust value, final trust value will be recommendation trust value.
                     if (simulationConfigItem.isIsSafeUseRecommendation()) {
                         if (innerTrustValue != 0) {
@@ -772,6 +771,12 @@ public class TrustManager {
         }
 
         for (TrustAbstract trustAbstract : recommender.getTrust().getTrustAbstracts()) {
+            //-- If trustAbstract of recommender is about receiver of recommender, ignore it.
+            //-- It is not necessary to save recommendation of itself by self.
+            //todo: use recommendation values about us by other for analysing environment sight about us (as receiver of recommendation)
+            if(trustAbstract.getResponder().getId()== receiver.getId()){
+
+            }
             if (trustAbstract.getTrustValue() > 0) {
                 addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
             } else if (trustAbstract.getTrustValue() < 0 && simulationConfigItem.isIsUseNegativeRecommendationEffect()) {
@@ -850,6 +855,18 @@ public class TrustManager {
             }
         }
         return null;
+    }
+
+    public void sendRecommendationsWithInternet(List<Agent> agentList) {
+
+        for (Agent from : agentList) {
+            for (Agent to : agentList) {
+                if (from.getId() == to.getId()) {
+                    continue;
+                }
+                sendRecommendations(from, to);
+            }
+        }
     }
 
     //============================//============================//============================ Recommendation

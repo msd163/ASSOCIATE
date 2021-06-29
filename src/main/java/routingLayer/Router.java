@@ -234,6 +234,10 @@ public class Router {
             routingHelp = doYouKnowWhereIs(wa.getAgent(), goalState);
 
             if (routingHelp != null) {
+                if (agent.getId() == routingHelp.getHelperAgent().getId()) {
+                    OutLog____.pl(TtOutLogMethodSection.Router, TtOutLogStatus.ERROR, "Requester agent is equals to helper: " + agent.getId());
+                    continue;
+                }
                 routingHelp.setStepFromAgentToHelper(wa.getPathSize());
                 //============================//============================ _Calculating _Trust
 

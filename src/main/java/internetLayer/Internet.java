@@ -15,6 +15,7 @@ public class Internet {
 
 
     public Internet(World world) {
+        updateTime = -1;
         this.world = world;
         intAgents = new ArrayList<>();
     }

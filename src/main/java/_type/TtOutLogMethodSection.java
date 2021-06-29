@@ -13,7 +13,7 @@ public enum TtOutLogMethodSection {
     TrustMng_GetTrustValue("TutMng-getTV"),
     Env_UpdateAgentCount("Env_UpAgCnt"),
     //
-    ;
+    Router("Rt_Rcm");
 
     private String code;
 

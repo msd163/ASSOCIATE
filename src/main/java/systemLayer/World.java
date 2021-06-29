@@ -7,6 +7,7 @@ import drawingLayer.routing.StateMachineDrawingWindow;
 import drawingLayer.routing.TravelHistoryBarDrawingWindow;
 import drawingLayer.routing.TravelStatsLinearDrawingWindow;
 import drawingLayer.trust.*;
+import internetLayer.Internet;
 import routingLayer.Router;
 import simulateLayer.SimulationConfigItem;
 import simulateLayer.Simulator;
@@ -58,8 +59,12 @@ public class World {
 
     private TrustManager trustManager;
 
+    private Internet internet;
+
     //============================//============================//============================
     public void init(Environment _environment) throws Exception {
+
+        internet = new Internet(this);
 
         initStatistics();
 
@@ -269,6 +274,13 @@ public class World {
                     }
                 }
             }
+
+            //============================//============================ Sharing With Internet
+
+            if(simulationConfigItem.isIsUseSharingRecommendationWithInternet()){
+                trustManager.sendRecommendationsWithInternet(internet.getAgentList());
+            }
+
 
             //============================//============================  updating full state statistics
             for (StateX state : environment.getStates()) {
