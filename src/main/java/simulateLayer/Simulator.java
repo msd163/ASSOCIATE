@@ -5,7 +5,7 @@ import drawingLayer.DrawingWindow;
 import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
 import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
 import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
-import stateLayer.Environment;
+import environmentLayer.Environment;
 import systemLayer.World;
 import utils.Config;
 import utils.Globals;

@@ -1,6 +1,6 @@
 package trustLayer.data;
 
-import stateLayer.StateX;
+import environmentLayer.StateX;
 import systemLayer.Agent;
 
 public class TrustExperience extends TrustData {

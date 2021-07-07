@@ -1,4 +1,4 @@
-package stateLayer;
+package environmentLayer;
 
 import systemLayer.Agent;
 import utils.Globals;
