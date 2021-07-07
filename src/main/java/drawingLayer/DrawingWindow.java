@@ -293,6 +293,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.setColor(Color.GRAY);
         g.drawString("Vertical   : X " + _vs, 1500, 50);
         g.drawString("Horizontal: X " + _hs, 1500, 90);
+        g.drawString("Zoom: X " + scale, 1500, 130);
 
         return true;
     }
