@@ -1,8 +1,8 @@
 package utils;
 
 import _type.TtBehaviorState;
-import utils.statistics.StatsEnvGenerator;
-import utils.statistics.StatsTrustGenerator;
+import simulateLayer.statistics.StatsEnvGenerator;
+import simulateLayer.statistics.StatsTrustGenerator;
 
 import java.awt.*;
 import java.util.Date;

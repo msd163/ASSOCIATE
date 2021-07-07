@@ -1,7 +1,6 @@
-package utils.statistics;
+package simulateLayer.statistics;
 
 import stateLayer.Environment;
-import utils.Config;
 import utils.Globals;
 import utils.ParsCalendar;
 

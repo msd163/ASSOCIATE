@@ -3,13 +3,12 @@ package trustLayer;
 import systemLayer.Agent;
 import trustLayer.data.TrustAbstract;
 import utils.Globals;
-import utils.statistics.WorldStatistics;
+import simulateLayer.statistics.WorldStatistics;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public class TrustMatrix {
 

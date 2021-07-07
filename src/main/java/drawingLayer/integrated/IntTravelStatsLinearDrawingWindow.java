@@ -3,12 +3,12 @@ package drawingLayer.integrated;
 import _type.TtSimulationMode;
 import drawingLayer.DrawingWindow;
 import simulateLayer.SimulationConfig;
+import simulateLayer.statistics.EpisodeStatistics;
+import simulateLayer.statistics.WorldStatistics;
 import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
-import utils.statistics.EpisodeStatistics;
-import utils.statistics.WorldStatistics;
 
 import java.awt.*;
 
@@ -53,8 +53,8 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         printStatsInfo(5, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentInPitfall(), Color.RED);
         printStatsInfo(6, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Random Travel", worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors(), Color.MAGENTA);
 
-
         //============================//============================ INFO
+        heightOfInfo = 20 + heightOfInfo;
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
             World world = worlds[j];
@@ -64,41 +64,43 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             //============================
-            int y = 40 * j + 340;
+            heightOfInfo = 40 + heightOfInfo;
             g.setColor(Color.YELLOW);
-            g.drawString("Sim " + (j + 1) + " |", 80, y);
+            g.drawString("Sim " + (j + 1) + " |", 80, heightOfInfo);
 
             if (showWorldsFlag[j]) {
                 if (showLineChartsFlag[0]) {
                     //============================
-                    drawCurve(200, y, Color.GREEN, j, 20, -1);
-                    g.drawString("AgentsInTarget", 220, y);
+                    drawCurve(200, heightOfInfo, Color.GREEN, j, 20, -1);
+                    g.drawString("AgentsInTarget", 220, heightOfInfo);
                 }
                 if (showLineChartsFlag[1]) {
                     //============================
-                    drawCurve(500, y, Color.RED, j, 20, -1);
-                    g.drawString("AgentsInPitfall", 520, y);
+                    drawCurve(500, heightOfInfo, Color.RED, j, 20, -1);
+                    g.drawString("AgentsInPitfall", 520, heightOfInfo);
                 }
                 if (showLineChartsFlag[2]) {
                     //============================
-                    drawCurve(800, y, Color.MAGENTA, j, 20, -1);
-                    g.drawString("RandomTravel", 820, y);
+                    drawCurve(800, heightOfInfo, Color.MAGENTA, j, 20, -1);
+                    g.drawString("RandomTravel", 820, heightOfInfo);
                 }
             }
             //============================
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, y);
+            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, heightOfInfo);
             //============================
         }
 
+        drawInfoSplitterLine();
+
         //============================//============================//============================ Diagram drawing
 
-        //============================ Translate
         reverseNormalizeCoordination();
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
+            g.translate(0, _vs * -maxAxisY[0] - 50);
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
                 if (!showWorldsFlag[j]) {
@@ -117,6 +119,11 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
                 WorldStatistics[] statistics = world.getWdStatistics();
+
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getIttAgentsInTarget());
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getIttAgentsInPitfall());
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getIttRandomTravelToNeighbors());
+
                 for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
                     WorldStatistics stat = statistics[i];
 
@@ -162,7 +169,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         //============================//============================//============================ Timed Average Chart
 
         if (showChartsFlag[1]) {
-            g.translate(0, -700);
+            g.translate(0, _vs * -maxAxisY[1] - 50);
             loAxisX = 0;
 
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
@@ -182,6 +189,12 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
                 WorldStatistics[] statistics = world.getWdStatistics();
+
+                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getTimedAvgAgentTarget());
+                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getTimedAvgAgentInPitfall());
+                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getTimedAvgRandomTravel());
+
+
                 for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
                     WorldStatistics stat = statistics[i];
 

@@ -5,7 +5,7 @@ import systemLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
-import utils.statistics.WorldStatistics;
+import simulateLayer.statistics.WorldStatistics;
 
 import java.awt.*;
 

@@ -19,8 +19,8 @@ import utils.Config;
 import utils.Globals;
 import utils.ImageBuilder;
 import utils.ProjectPath;
-import utils.statistics.EpisodeStatistics;
-import utils.statistics.WorldStatistics;
+import simulateLayer.statistics.EpisodeStatistics;
+import simulateLayer.statistics.WorldStatistics;
 
 import javax.swing.*;
 import java.awt.*;

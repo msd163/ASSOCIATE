@@ -24,6 +24,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected int axisX = 0;
     protected int axisY = 0;
+    protected int heightOfInfo = 0;
+    protected int widthOfInfo = 0;
+    protected int maxAxisY[];
 
     protected int _hs = 8; // For adding space to charts horizontally
     protected int _vs = 1; // For adding space to charts vertically
@@ -45,7 +48,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private int translateInNormCoord_X = 200;
     protected int translateInNormCoord_Y = 300;
     private int translateInRevCoord_X = 100;
-    private float translateInRevCoord_Y = -getHeight() / scale + 100;
+    private float translateInRevCoord_Y = 100;
+
+    private boolean showMousePlus = true;
 
     public int getWorldId() {
         return world == null ? -1 : world.getId();
@@ -74,6 +79,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         showWorldsFlag = new boolean[worldCount];
         Arrays.fill(showWorldsFlag, true);
+
+        maxAxisY = new int[worldCount];
+        Arrays.fill(maxAxisY, 0);
 
         //============================//============================
         addMouseListener(
@@ -184,7 +192,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     public void printDrawingTitle(String title, String subTitle) {
 
         java.awt.Point mousePoint = getMousePosition();
-        if (mousePoint != null) {
+        if (showMousePlus && mousePoint != null) {
             g.setColor(Color.WHITE);
             //-- (TOP-DOWN) Drawing vertical line for mouse pointer
             g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
@@ -213,18 +221,21 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     public void printStatsInfo(int index, String title, Color color) {
         g.setColor(color);
         g.drawString(title, 100, index * 50);
+        heightOfInfo = Math.max(index * 50, heightOfInfo);
     }
 
     public void printStatsInfo(int index, String title, int value, Color color) {
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
+        heightOfInfo = Math.max(index * 50, heightOfInfo);
     }
 
     public void printStatsInfo(int index, String title, float value, Color color) {
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
+        heightOfInfo = Math.max(index * 50, heightOfInfo);
     }
 
     public void printStatsInfo(int index, String title, int value1, String value2, Color color) {
@@ -232,6 +243,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value1, 600, index * 50);
         g.drawString(": " + value2, 800, index * 50);
+        heightOfInfo = Math.max(index * 50, heightOfInfo);
+    }
+
+    public void drawInfoSplitterLine() {
+        g.drawLine(0, heightOfInfo, 2000, heightOfInfo);
     }
 
     public boolean mainPaint(Graphics gr) {
@@ -239,6 +255,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public boolean mainPaint(Graphics gr, String title, String subTitle) {
+
+        heightOfInfo = 0;
 
         worldTimer = Globals.WORLD_TIMER - 1;
         simulationTimer = Globals.SIMULATION_TIMER;
@@ -342,11 +360,12 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void reverseNormalizeCoordination() {
-        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
+        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y + heightOfInfo);
+        g.translate(translateInRevCoord_X, translateInRevCoord_Y);
         g.scale(scale, -scale);
 
-        translateInRevCoord_Y = -getHeight() / scale + 100;
-        g.translate(translateInRevCoord_X, translateInRevCoord_Y);
+        //translateInRevCoord_Y = -getHeight() / scale + 100;
+        //g.translate(translateInRevCoord_X, translateInRevCoord_Y);
         //g.translate(100, -getHeight() / scale + 100);
     }
 
@@ -406,7 +425,23 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         pnOffsetOld.x = pnOffset.x;
         pnOffsetOld.y = pnOffset.y;
         scaleOffset = new Point(0, 0);
+        _hs = 8;
+        _vs = 1;
         scale = 1f;
+
+
+        showLineChartsFlag = new boolean[9];
+        Arrays.fill(showLineChartsFlag, true);
+
+        showChartsFlag = new boolean[9];
+        Arrays.fill(showChartsFlag, true);
+
+        Arrays.fill(showWorldsFlag, true);
+
+    }
+
+    public void setShowMousePlus(boolean showMousePlus) {
+        this.showMousePlus = showMousePlus;
     }
 
     public int getRealWith() {

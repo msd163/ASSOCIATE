@@ -15,7 +15,7 @@ import trustLayer.TrustManager;
 import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
-import utils.statistics.WorldStatistics;
+import simulateLayer.statistics.WorldStatistics;
 
 import java.util.ArrayList;
 import java.util.List;

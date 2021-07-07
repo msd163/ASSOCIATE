@@ -88,6 +88,7 @@ public class ImageBuilder {
     private static void generateStatisticsImage(DrawingWindow drawingWindow) {
         try {
             drawingWindow.resetParams();
+            drawingWindow.setShowMousePlus(false);
 
             int w = drawingWindow.getRealWith();
             if (w > 22000) {
@@ -121,6 +122,7 @@ public class ImageBuilder {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+        drawingWindow.setShowMousePlus(true);
     }
 
 }
