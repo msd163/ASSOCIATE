@@ -54,7 +54,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         printStatsInfo(6, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Random Travel", worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors(), Color.MAGENTA);
 
         //============================//============================ INFO
-        heightOfInfo = 20 + heightOfInfo;
+        dynamicHeight = 20 + dynamicHeight;
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
             World world = worlds[j];
@@ -64,30 +64,30 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             //============================
-            heightOfInfo += 40 ;
+            dynamicHeight += 40 ;
             g.setColor(Color.YELLOW);
-            g.drawString("Sim " + (j + 1) + " |", 80, heightOfInfo);
+            g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
 
             if (showWorldsFlag[j]) {
                 if (showLineChartsFlag[0]) {
                     //============================
-                    drawCurve(200, heightOfInfo, Color.GREEN, j, 20, -1);
-                    g.drawString("AgentsInTarget", 220, heightOfInfo);
+                    drawCurve(200, dynamicHeight, Color.GREEN, j, 20, -1);
+                    g.drawString("AgentsInTarget", 220, dynamicHeight);
                 }
                 if (showLineChartsFlag[1]) {
                     //============================
-                    drawCurve(500, heightOfInfo, Color.RED, j, 20, -1);
-                    g.drawString("AgentsInPitfall", 520, heightOfInfo);
+                    drawCurve(500, dynamicHeight, Color.RED, j, 20, -1);
+                    g.drawString("AgentsInPitfall", 520, dynamicHeight);
                 }
                 if (showLineChartsFlag[2]) {
                     //============================
-                    drawCurve(800, heightOfInfo, Color.MAGENTA, j, 20, -1);
-                    g.drawString("RandomTravel", 820, heightOfInfo);
+                    drawCurve(800, dynamicHeight, Color.MAGENTA, j, 20, -1);
+                    g.drawString("RandomTravel", 820, dynamicHeight);
                 }
             }
             //============================
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, heightOfInfo);
+            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, dynamicHeight);
             //============================
         }
 

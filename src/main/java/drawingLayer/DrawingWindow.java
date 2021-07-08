@@ -24,7 +24,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected int axisX = 0;
     protected int axisY = 0;
-    protected int heightOfInfo = 0;
+    protected int dynamicHeight = 0;
     protected int widthOfInfo = 0;
     protected int maxAxisY[];
 
@@ -221,21 +221,21 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     public void printStatsInfo(int index, String title, Color color) {
         g.setColor(color);
         g.drawString(title, 100, index * 50);
-        heightOfInfo = Math.max(index * 50, heightOfInfo);
+        dynamicHeight = Math.max(index * 50, dynamicHeight);
     }
 
     public void printStatsInfo(int index, String title, int value, Color color) {
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
-        heightOfInfo = Math.max(index * 50, heightOfInfo);
+        dynamicHeight = Math.max(index * 50, dynamicHeight);
     }
 
     public void printStatsInfo(int index, String title, float value, Color color) {
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
-        heightOfInfo = Math.max(index * 50, heightOfInfo);
+        dynamicHeight = Math.max(index * 50, dynamicHeight);
     }
 
     public void printStatsInfo(int index, String title, int value1, String value2, Color color) {
@@ -243,11 +243,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value1, 600, index * 50);
         g.drawString(": " + value2, 800, index * 50);
-        heightOfInfo = Math.max(index * 50, heightOfInfo);
+        dynamicHeight = Math.max(index * 50, dynamicHeight);
     }
 
     public void drawInfoSplitterLine() {
-        g.drawLine(0, heightOfInfo, 2000, heightOfInfo);
+        g.drawLine(0, dynamicHeight, 2000, dynamicHeight);
     }
 
     public void drawBottomSlitterLine() {
@@ -261,7 +261,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     public boolean mainPaint(Graphics gr, String title, String subTitle) {
 
-        heightOfInfo = 0;
+        dynamicHeight = 0;
 
         worldTimer = Globals.WORLD_TIMER - 1;
         simulationTimer = Globals.SIMULATION_TIMER;
@@ -320,7 +320,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                     }
                     g.drawLine(i, -5, i, 5);
                     g.setColor(Globals.Color$.darkGray);
-                    g.drawLine(i, 5, i, maxAxisY[index]);
+                    g.drawLine(i, 5, i, maxAxisY[index]* _vs);
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
                     g.setColor(Globals.Color$.darkGray2);
@@ -333,7 +333,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     protected void drawAxisY(int index) {
-        int realWith = maxAxisY[index] * _vs;
+        int realWith = (maxAxisY[index] + 10) * _vs;
         g.setColor(Color.WHITE);
         g.drawLine(0, 0, 0, realWith);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
@@ -343,10 +343,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 if (i % (10 * _vs) == 0) {
                     if (_vs > 5 || i % (20 * _vs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", -30, -i+5);
+                        g.drawString(x + "", -30, -i + 5);
                         g.scale(1, -1);
                         g.drawLine(-8, i, 5, i);
-                    }else{
+                    } else {
                         g.drawLine(-4, i, 5, i);
                     }
                     g.setColor(Globals.Color$.darkGray);
@@ -424,7 +424,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void reverseNormalizeCoordination() {
-        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y + heightOfInfo);
+        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y + dynamicHeight);
         g.translate(translateInRevCoord_X, translateInRevCoord_Y);
         g.scale(scale, -scale);
 

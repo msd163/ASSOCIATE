@@ -381,48 +381,48 @@ public class WorldStatistics {
         return trustAccuracy;
     }
 
-    public int getTrustAccuracyI200() {
-        return (int) (trustAccuracy * 200);
+    public int getTrustAccuracyI100() {
+        return (int) (trustAccuracy * 100);
     }
 
     public float getTrustSensitivity() {
         return trustSensitivity;
     }
 
-    public int getTrustSensitivityI200() {
-        return (int) (trustSensitivity * 200);
+    public int getTrustSensitivityI100() {
+        return (int) (trustSensitivity * 100);
     }
 
     public float getTrustSpecificity() {
         return trustSpecificity;
     }
 
-    public int getTrustSpecificityI200() {
-        return (int) (trustSpecificity * 200);
+    public int getTrustSpecificityI100() {
+        return (int) (trustSpecificity * 100);
     }
 
     public float getAllTrustAccuracy() {
         return allTrustAccuracy;
     }
 
-    public int getAllTrustAccuracyI200() {
-        return (int) (allTrustAccuracy * 200);
+    public int getAllTrustAccuracyI100() {
+        return (int) (allTrustAccuracy * 100);
     }
 
     public float getAllTrustSensitivity() {
         return allTrustSensitivity;
     }
 
-    public int getAllTrustSensitivityI200() {
-        return (int) (allTrustSensitivity * 200);
+    public int getAllTrustSensitivityI100() {
+        return (int) (allTrustSensitivity * 100);
     }
 
     public float getAllTrustSpecificity() {
         return allTrustSpecificity;
     }
 
-    public int getAllTrustSpecificityI200() {
-        return (int) (allTrustSpecificity * 200);
+    public int getAllTrustSpecificityI100() {
+        return (int) (allTrustSpecificity * 100);
     }
 
     public int getAllTrustToMischief() {

@@ -43,6 +43,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
         printStatsInfo(4, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Adversary", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToAdversary(), Color.RED);
 
         //============================//============================ INFO
+        dynamicHeight += 20;
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
             World world = worlds[j];
@@ -52,35 +53,35 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             //============================
-            int y = 40 * j + 250;
+            dynamicHeight += 40;
             g.setColor(Color.white);
-            g.drawString("Sim " + (j + 1) + " |", 80, y);
+            g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
             //============================
 
             if (showWorldsFlag[j]) {
                 if (showLineChartsFlag[0]) {
-                    drawCurve(200, y, Color.WHITE, j, 20, -1);
-                    g.drawString("Mischief", 220, y);
+                    drawCurve(200, dynamicHeight, Color.WHITE, j, 20, -1);
+                    g.drawString("Mischief", 220, dynamicHeight);
                     //============================
                 }
                 if (showLineChartsFlag[1]) {
-                    drawCurve(450, y, Color.GREEN, j, 20, -1);
-                    g.drawString("Honest", 470, y);
+                    drawCurve(450, dynamicHeight, Color.GREEN, j, 20, -1);
+                    g.drawString("Honest", 470, dynamicHeight);
                     //============================
                 }
                 if (showLineChartsFlag[2]) {
-                    drawCurve(700, y, Color.MAGENTA, j, 20, -1);
-                    g.drawString("Hypocrite", 720, y);
+                    drawCurve(700, dynamicHeight, Color.MAGENTA, j, 20, -1);
+                    g.drawString("Hypocrite", 720, dynamicHeight);
                     //============================
                 }
                 if (showLineChartsFlag[3]) {
-                    drawCurve(950, y, Color.RED, j, 20, -1);
-                    g.drawString("Adversary", 970, y);
+                    drawCurve(950, dynamicHeight, Color.RED, j, 20, -1);
+                    g.drawString("Adversary", 970, dynamicHeight);
                 }
             }
             //============================
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, y);
+            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, dynamicHeight);
             //============================
         }
 
@@ -91,6 +92,10 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
+            g.translate(0, _vs * -maxAxisY[0] - 50);
+            drawAxisX(0);
+            drawAxisY(0);
+
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
                 if (!showWorldsFlag[j]) {
                     continue;
@@ -107,6 +112,12 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
                 WorldStatistics[] statistics = world.getWdStatistics();
+
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTimeAvgTrustToMischief());
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTimeAvgTrustToHonest());
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTimeAvgTrustToHypocrite());
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTimeAvgTrustToAdversary());
+
                 for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
                     WorldStatistics stat = statistics[i];
 
@@ -161,10 +172,6 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                     }
                 }
             }
-            //============================//============================ Draw X-axis line
-            g.setColor(Color.YELLOW);
-            g.drawLine(0, 0, getRealWith(), 0);
-
         }
     }
 }
