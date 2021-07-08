@@ -250,6 +250,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.drawLine(0, heightOfInfo, 2000, heightOfInfo);
     }
 
+    public void drawBottomSlitterLine() {
+        g.setColor(Color.red);
+        g.drawLine(0, -50, 2100, -50);
+    }
+
     public boolean mainPaint(Graphics gr) {
         return mainPaint(gr, getName(), null);
     }
@@ -298,6 +303,64 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return true;
     }
 
+
+    protected void drawAxisX(int index) {
+        int realWith = getRealWith();
+        g.setColor(Color.WHITE);
+        g.drawLine(0, 0, realWith, 0);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+        for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
+            g.setColor(Color.WHITE);
+            if (i > 0) {
+                if (i % (10 * _hs) == 0) {
+                    if (_hs > 5 || i % (20 * _hs) == 0) {
+                        g.scale(1, -1);
+                        g.drawString(x + "", i - 5, 15);
+                        g.scale(1, -1);
+                    }
+                    g.drawLine(i, -5, i, 5);
+                    g.setColor(Globals.Color$.darkGray);
+                    g.drawLine(i, 5, i, maxAxisY[index]);
+                } else if (i % (5 * _hs) == 0) {
+                    g.drawLine(i, -3, i, 1);
+                    g.setColor(Globals.Color$.darkGray2);
+                    g.drawLine(i, 5, i, maxAxisY[index] * _vs);
+                } else if (_hs > 1) {
+                    g.drawLine(i, 0, i, 1);
+                }
+            }
+        }
+    }
+
+    protected void drawAxisY(int index) {
+        int realWith = maxAxisY[index] * _vs;
+        g.setColor(Color.WHITE);
+        g.drawLine(0, 0, 0, realWith);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+        for (int i = 0, x = 0; i < realWith; i += _vs, x++) {
+            g.setColor(Color.WHITE);
+            if (i > 0) {
+                if (i % (10 * _vs) == 0) {
+                    if (_vs > 5 || i % (20 * _vs) == 0) {
+                        g.scale(1, -1);
+                        g.drawString(x + "", -30, -i+5);
+                        g.scale(1, -1);
+                        g.drawLine(-8, i, 5, i);
+                    }else{
+                        g.drawLine(-4, i, 5, i);
+                    }
+                    g.setColor(Globals.Color$.darkGray);
+                    g.drawLine(5, i, getRealWith(), i);
+                } else if (_vs > 1 && i % (5 * _vs) == 0) {
+                    g.drawLine(-3, i, 1, i);
+                    g.setColor(Globals.Color$.darkGray2);
+                    g.drawLine(5, i, getRealWith(), i);
+                } else if (_vs > 3) {
+                    g.drawLine(0, i, 1, i);
+                }
+            }
+        }
+    }
     //============================//============================//============================
 
     protected void drawBar(Agent agent, TtBehaviorState behaviorState, int i, int dataCap, int dataItemCap, int[] rewardCountArray, List<?> data) {
@@ -450,7 +513,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public int getRealHeight() {
-        return axisY > 0 ? axisY + 1500 : getHeight();//axisY;
+        return axisY > 0 ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
+
     }
 
     //============================//============================

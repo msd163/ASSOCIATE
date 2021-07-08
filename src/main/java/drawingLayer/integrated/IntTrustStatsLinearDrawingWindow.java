@@ -103,7 +103,6 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                 }
 
                 loAxisX = j;
-                axisY = 0;
 
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 

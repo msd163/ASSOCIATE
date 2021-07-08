@@ -64,7 +64,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             //============================
-            heightOfInfo = 40 + heightOfInfo;
+            heightOfInfo += 40 ;
             g.setColor(Color.YELLOW);
             g.drawString("Sim " + (j + 1) + " |", 80, heightOfInfo);
 
@@ -101,6 +101,10 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
         if (showChartsFlag[0]) {
             g.translate(0, _vs * -maxAxisY[0] - 50);
+
+            drawAxisX(0);
+            drawAxisY(0);
+
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
                 if (!showWorldsFlag[j]) {
@@ -114,7 +118,6 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 }
 
                 loAxisX = j;
-                axisY = 0;
 
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
@@ -161,9 +164,6 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 }
 
             }
-            //============================//============================ Draw X-axis line
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawLine(0, 0, getRealWith(), 0);
         }
 
         //============================//============================//============================ Timed Average Chart
@@ -171,6 +171,9 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         if (showChartsFlag[1]) {
             g.translate(0, _vs * -maxAxisY[1] - 50);
             loAxisX = 0;
+
+            drawAxisX(1);
+            drawAxisY(1);
 
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
                 if (!showWorldsFlag[j]) {
@@ -184,7 +187,6 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 }
 
                 loAxisX = j;
-                axisY = 0;
 
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
@@ -234,10 +236,6 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     }
                 }
             }
-            //============================//============================ Draw X-axis line
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawLine(0, 0, getRealWith(), 0);
-
         }
         //============================//============================//============================ Episode Drawing
         if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
@@ -294,5 +292,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 }
             }
         }
+
+        drawBottomSlitterLine();
     }
 }

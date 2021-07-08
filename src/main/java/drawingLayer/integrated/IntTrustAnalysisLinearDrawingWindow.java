@@ -47,6 +47,7 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
 
 
         //============================//============================ INFO
+        heightOfInfo = 20 + heightOfInfo;
         for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
             World world = worlds[j];
@@ -56,40 +57,42 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
             }
 
             //============================
-            int y = 40 * j + 220;
+            heightOfInfo += 40;
             g.setColor(Color.white);
-            g.drawString("Sim " + (j + 1) + " |", 80, y);
+            g.drawString("Sim " + (j + 1) + " |", 80, heightOfInfo);
             //============================
             if (showWorldsFlag[j]) {
                 if (showLineChartsFlag[0]) {
-                    drawCurve(200, y, Color.GREEN, j, 20, -1);
-                    g.drawString("Accuracy", 220, y);
+                    drawCurve(200, heightOfInfo, Color.GREEN, j, 20, -1);
+                    g.drawString("Accuracy", 220, heightOfInfo);
                     //============================
                 }
                 if (showLineChartsFlag[1]) {
-                    drawCurve(500, y, Color.YELLOW, j, 20, -1);
-                    g.drawString("Sensitivity", 520, y);
+                    drawCurve(500, heightOfInfo, Color.YELLOW, j, 20, -1);
+                    g.drawString("Sensitivity", 520, heightOfInfo);
                     //============================
                 }
                 if (showLineChartsFlag[2]) {
-                    drawCurve(800, y, Color.PINK, j, 20, -1);
-                    g.drawString("Specificity", 820, y);
+                    drawCurve(800, heightOfInfo, Color.PINK, j, 20, -1);
+                    g.drawString("Specificity", 820, heightOfInfo);
                     //============================
                 }
             }
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, y);
+            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, heightOfInfo);
             //============================
         }
+        drawInfoSplitterLine();
 
         //============================//============================//============================ Diagram drawing
 
-        //============================ Translate
         reverseNormalizeCoordination();
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
+            g.translate(0, _vs * -maxAxisY[0] - 50);
+
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
                 if (!showWorldsFlag[j]) {
                     continue;
@@ -102,11 +105,16 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                 }
 
                 loAxisX = j;
-                axisY = 0;
 
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
                 WorldStatistics[] statistics = world.getWdStatistics();
+
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTrustAccuracyI200());
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTrustSensitivityI200());
+                maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTrustSpecificityI200());
+
+
                 for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
                     WorldStatistics stat = statistics[i];
 
@@ -156,9 +164,8 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
         }
         //============================//============================//============================ Average Chart
 
-
         if (showChartsFlag[1]) {
-            g.translate(0, -600);
+            g.translate(0, _vs * (-maxAxisY[1] -maxAxisY[0]) -50);
             loAxisX = 0;
 
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
@@ -173,11 +180,15 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                 }
 
                 loAxisX = j;
-                axisY = 0;
 
                 worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
                 WorldStatistics[] statistics = world.getWdStatistics();
+
+                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getAllTrustAccuracyI200());
+                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getAllTrustSensitivityI200());
+                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getAllTrustSpecificityI200());
+
                 for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
                     WorldStatistics stat = statistics[i];
 
@@ -246,7 +257,6 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                     }
 
                     loAxisX = j;
-                    axisY = 0;
 
                     worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
 
@@ -286,5 +296,10 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                 }
             }
         }
+
+        //============================//============================//============================
+
+        drawBottomSlitterLine();
+
     }
 }

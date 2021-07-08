@@ -32,7 +32,6 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
         axisX = 0;
-        axisY = 0;
         //============================//============================ Translate for panning and scaling
 
         printStatsInfo(1, "Agents In Targets ITT", world.getWdStatistics()[worldTimer].getIttAgentsInTarget(), Color.GREEN);
@@ -49,7 +48,6 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         loAxisX = 0;
-        axisY = 0;
 
         WorldStatistics[] statistics = world.getWdStatistics();
         for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {

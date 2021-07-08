@@ -29,7 +29,6 @@ public class TrustRecogniseLinearDrawingWindow extends DrawingWindow {
             return;
         }
         axisX = 0;
-        axisY = 0;
 
         printStatsInfo(1, "False Positive", world.getWdStatistics()[worldTimer].getIttFalsePositiveTrust(), Color.PINK);
         printStatsInfo(2, "False Negative", world.getWdStatistics()[worldTimer].getIttFalseNegativeTrust(), Color.RED);

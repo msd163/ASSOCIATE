@@ -30,7 +30,6 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
         axisX = 0;
-        axisY = 0;
 
         printStatsInfo(1, "All Trust To HONEST", world.getWdStatistics()[worldTimer].getAllTrustToHonest(), Color.GREEN);
         printStatsInfo(2, "All Trust To Adversary", world.getWdStatistics()[worldTimer].getAllTrustToAdversary(), Color.RED);
