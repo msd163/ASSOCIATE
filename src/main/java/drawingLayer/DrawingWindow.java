@@ -26,7 +26,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected int axisY = 0;
     protected int dynamicHeight = 0;
     protected int widthOfInfo = 0;
-    protected int maxAxisY[];
+    protected int maxAxisY[];       // For holding maximum Y value of each chart
 
     protected int _hs = 8; // For adding space to charts horizontally
     protected int _vs = 1; // For adding space to charts vertically
@@ -303,24 +303,23 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return true;
     }
 
-
     protected void drawAxisX(int index) {
         int realWith = getRealWith();
         g.setColor(Color.WHITE);
         g.drawLine(0, 0, realWith, 0);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
         for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
             g.setColor(Color.WHITE);
             if (i > 0) {
                 if (i % (10 * _hs) == 0) {
                     if (_hs > 5 || i % (20 * _hs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", i - 5, 15);
+                        g.drawString(x + "", i - 5, 20);
                         g.scale(1, -1);
                     }
                     g.drawLine(i, -5, i, 5);
                     g.setColor(Globals.Color$.darkGray);
-                    g.drawLine(i, 5, i, maxAxisY[index]* _vs);
+                    g.drawLine(i, 5, i, maxAxisY[index] * _vs);
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
                     g.setColor(Globals.Color$.darkGray2);
@@ -336,14 +335,14 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         int realWith = (maxAxisY[index] + 10) * _vs;
         g.setColor(Color.WHITE);
         g.drawLine(0, 0, 0, realWith);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
         for (int i = 0, x = 0; i < realWith; i += _vs, x++) {
             g.setColor(Color.WHITE);
             if (i > 0) {
                 if (i % (10 * _vs) == 0) {
                     if (_vs > 5 || i % (20 * _vs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", -30, -i + 5);
+                        g.drawString(x + "", -40, -i + 5);
                         g.scale(1, -1);
                         g.drawLine(-8, i, 5, i);
                     } else {
@@ -436,12 +435,13 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     //============================//============================
 
     public void drawCurve(int x, int y, Color color, int index, int xIndex) {
-        drawCurve(x, y, color, index, 10, xIndex);
+        drawCurve(x, y, color, index, 18, xIndex);
     }
 
     public void drawCurve(int x, int y, Color color, int index, int size, int xIndex) {
-        if (xIndex != -1 && (index + xIndex) % 10 != 0) {
-            size = 4;
+        if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
+            size = (_hs / 2);
+            size = Math.min(size, 4);
         }
         int sizeHf = size / 2;
         switch (index) {

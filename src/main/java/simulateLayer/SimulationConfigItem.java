@@ -27,7 +27,7 @@ public class SimulationConfigItem {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "@Mtd: " + methodology +
-                    "@ FrgCf: " + trustForgottenCoeff +
+                    " @ FrgCf: " + trustForgottenCoeff +
                     " - IgrThrld: " + ignoringThresholdOfTrustValue +
                     " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism +
                     " @EXP is: " + isUseExperience +
@@ -41,13 +41,60 @@ public class SimulationConfigItem {
                     " - bid: " + isBidirectionalRecommendationSharing +
                     " - sfm: " + isSafeUseRecommendation +
                     " - ngEff: " + isUseNegativeRecommendationEffect +
-                    " @CERT is: " + isUseCertification+
-                    " @INT rcm: " + isUseSharingRecommendationWithInternet+
+                    " @CERT is: " + isUseCertification +
+                    " @INT rcm: " + isUseSharingRecommendationWithInternet +
                     " - cnt: " + certificationCount
                     ;
 
         }
         return "Method: " + methodology;
+
+    }
+
+    public String getInfo_1() {
+        TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
+        if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
+            return "Method: " + methodology +
+                    "  @ FrgCf: " + trustForgottenCoeff +
+                    " - IgrThrld: " + ignoringThresholdOfTrustValue +
+                    " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism
+                    ;
+        }
+        return "Method: " + methodology;
+
+    }
+
+    public String getInfo_2() {
+        TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
+        if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
+            return
+                    "         @EXP is: " + isUseExperience +
+                            " - ind: " + isUseIndirectExperience +
+                            " - bid: " + isBidirectionalExperienceSharing +
+                            " - dpth: " + experienceDepthInRewarding +
+                            "  @OBS is: " + isUseObservation +
+                            " - ind: " + isUseIndirectObservation +
+                            " - bid: " + isBidirectionalObservationSharing
+                    ;
+        }
+        return "";
+
+    }
+
+    public String getInfo_3(int certificationCount) {
+        TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
+        if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
+            return
+                    "         @RCM cf: " + recommendationCoeff +
+                            " - bid: " + isBidirectionalRecommendationSharing +
+                            " - sfm: " + isSafeUseRecommendation +
+                            " - ngEff: " + isUseNegativeRecommendationEffect +
+                            "  @CERT is: " + isUseCertification +
+                            "  @INT rcm: " + isUseSharingRecommendationWithInternet +
+                            " - cnt: " + certificationCount
+                    ;
+        }
+        return "";
 
     }
 

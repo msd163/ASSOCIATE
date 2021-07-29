@@ -18,7 +18,7 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 100;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 400;          // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
@@ -41,22 +41,22 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
-    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
-    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
+    public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ =true;
+    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ =true;
+    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ =true;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
-    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
-    public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
-    public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
+    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = true;
+    public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = true;
+    public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = true;
 
-    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = false;
-    public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = false;
+    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = true;
+    public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = true;
 
-    public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = false;
-    public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = false;
+    public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = true;
+    public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = true;
 
-    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = false;
+    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = true;
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 

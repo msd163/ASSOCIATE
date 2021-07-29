@@ -1,8 +1,8 @@
 {
-  "simulationRound": 2,
+  "simulationRound": 4,
   "configs": [
     {
-      "method": 5,
+      "method": 0,
       "trustForgottenCoeff": 0.001,
       "ignoringThresholdOfTrustValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6,
@@ -26,7 +26,31 @@
       "isUseSharingRecommendationWithInternet": false
     },
     {
-      "method": 4,
+      "method": 2,
+      "trustForgottenCoeff": 0.001,
+      "ignoringThresholdOfTrustValue": 0.00001,
+      "maximumConsideredRoutingHelpInTrustMechanism": 6,
+      "_EXP": "-----------------------------------",
+      "isUseExperience": true,
+      "isUseIndirectExperience": true,
+      "isBidirectionalExperienceSharing": true,
+      "experienceDepthInRewarding": 4,
+      "_OBS": "-----------------------------------",
+      "isUseObservation": true,
+      "isUseIndirectObservation": true,
+      "isBidirectionalObservationSharing": true,
+      "_RCM": "-----------------------------------",
+      "recommendationCoeff": 0.5,
+      "isBidirectionalRecommendationSharing": true,
+      "isSafeUseRecommendation": false,
+      "isUseNegativeRecommendationEffect": true,
+      "_CRT": "-----------------------------------",
+      "isUseCertification": true,
+      "_INT": "-----------------------------------",
+      "isUseSharingRecommendationWithInternet": false
+    },
+    {
+      "method": 5,
       "trustForgottenCoeff": 0.001,
       "ignoringThresholdOfTrustValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6,
@@ -51,14 +75,14 @@
     },
     {
       "method": 4,
-      "trustForgottenCoeff": 0.001,
+      "trustForgottenCoeff": 0.0001,
       "ignoringThresholdOfTrustValue": 0.00001,
       "maximumConsideredRoutingHelpInTrustMechanism": 6,
       "_EXP": "-----------------------------------",
       "isUseExperience": true,
       "isUseIndirectExperience": true,
       "isBidirectionalExperienceSharing": true,
-      "experienceDepthInRewarding": 4,
+      "experienceDepthInRewarding": 3,
       "_OBS": "-----------------------------------",
       "isUseObservation": true,
       "isUseIndirectObservation": true,
@@ -73,6 +97,5 @@
       "_INT": "-----------------------------------",
       "isUseSharingRecommendationWithInternet": true
     }
-
   ]
 }

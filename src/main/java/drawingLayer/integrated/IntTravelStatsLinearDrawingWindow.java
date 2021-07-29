@@ -1,6 +1,7 @@
 package drawingLayer.integrated;
 
 import _type.TtSimulationMode;
+import _type.TtTrustMethodology;
 import drawingLayer.DrawingWindow;
 import simulateLayer.SimulationConfig;
 import simulateLayer.statistics.EpisodeStatistics;
@@ -64,7 +65,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             //============================
-            dynamicHeight += 40 ;
+            dynamicHeight += 40;
             g.setColor(Color.YELLOW);
             g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
 
@@ -87,11 +88,18 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             }
             //============================
             g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, dynamicHeight);
+            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(1), 1100, dynamicHeight);
+            TtTrustMethodology ttMethod = worlds[j].getSimulationConfig().getTtMethod();
+            if (ttMethod == TtTrustMethodology.TrustMode_ShortPath || ttMethod == TtTrustMethodology.TrustMode_RandomPath) {
+                dynamicHeight += 40;
+                g.drawString("    > " + worlds[j].getSimulationConfigInfo(2), 1100, dynamicHeight);
+                dynamicHeight += 40;
+                g.drawString("    > " + worlds[j].getSimulationConfigInfo(3), 1100, dynamicHeight);
+            }
             //============================
         }
 
-        drawInfoSplitterLine();
+        //drawInfoSplitterLine();
 
         //============================//============================//============================ Diagram drawing
 
@@ -293,6 +301,6 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
             }
         }
 
-        drawBottomSlitterLine();
+        //drawBottomSlitterLine();
     }
 }

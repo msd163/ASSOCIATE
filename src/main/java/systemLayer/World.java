@@ -552,6 +552,17 @@ public class World {
     public String getSimulationConfigInfo() {
         return simulator.getSimulationConfigBunch().getByIndex(id).getInfo(environment.getCertifiedCount());
     }
+    public String getSimulationConfigInfo(int i) {
+        switch (i){
+            case 1:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
+            case 2:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_2();
+            case 3:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_3(environment.getCertifiedCount());
+        }
+        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
+    }
 
     public String toString(int tabIndex) {
         tabIndex++;
