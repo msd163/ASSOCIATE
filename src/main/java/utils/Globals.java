@@ -86,6 +86,8 @@ public class Globals {
 
     public static boolean PAUSE = false;
 
+    public static long CONTRACT_NEXT_ID;         // an static variable for counting CertContract is
+
     //============================//============================//============================
     public static int WORLD_TIMER;              // The timer of world which is increased by every run of world
 

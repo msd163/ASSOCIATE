@@ -34,6 +34,12 @@ public class Config {
     //============================ Trust
     public static  int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 70;
 
+    public static  int DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_SIGNED = 2;
+    public static  int DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_VERIFIED = 2;
+    public static  int DAGRA_ACCEPT_STAGE__EXPIRE_TIME_THRESHOLD = 200;
+    public static  int DAGRA_ACCEPT_STAGE__NEEDED_SIGNS = 6;
+    public static  int DAGRA_ACCEPT_STAGE__NEEDED_VERIFICATIONS = 2;
+
      // public static boolean TRUST_RECOMMENDATION_SEND_NEGATIVE = true;
     //  public static float TRUST_LEVEL_VALUE_IGNORE_THRESHOLD = 0.001f;    // A threshold value that identify trust levels which are less than it will be ignored in trust calculations
     //  public static int TRUST_MAXIMUM_CONSIDERED_ROUTING_HELP_IN_TRUST_MECHANISM = 6;

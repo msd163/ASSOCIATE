@@ -1,26 +1,24 @@
 package systemLayer;
 
-import _type.TtDrawingWindowLocation;
-import _type.TtSimulationMode;
+import _type.*;
 import drawingLayer.DrawingWindow;
 import drawingLayer.routing.StateMachineDrawingWindow;
 import drawingLayer.routing.TravelHistoryBarDrawingWindow;
 import drawingLayer.routing.TravelStatsLinearDrawingWindow;
 import drawingLayer.trust.*;
-import internetLayer.Internet;
-import transitionLayer.Router;
-import simulateLayer.SimulationConfigItem;
-import simulateLayer.Simulator;
 import environmentLayer.Environment;
 import environmentLayer.StateX;
-import trustLayer.TrustManager;
-import trustLayer.TrustMatrix;
-import utils.Config;
-import utils.Globals;
-import utils.ImageBuilder;
-import utils.ProjectPath;
+import internetLayer.Internet;
+import simulateLayer.SimulationConfigItem;
+import simulateLayer.Simulator;
 import simulateLayer.statistics.EpisodeStatistics;
 import simulateLayer.statistics.WorldStatistics;
+import transitionLayer.Router;
+import trustLayer.TrustManager;
+import trustLayer.TrustMatrix;
+import trustLayer.consensus.CertContract;
+import trustLayer.consensus.DaGra;
+import utils.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -164,9 +162,28 @@ public class World {
 
         //============================//============================ Init trust matrix
         initTrustMatrix();
+
+        //============================//============================ Init DaGra
+        initDaGra();
+
     }
 
+    private void initDaGra() {
+        /* Creating Genesis Certification and broadcasting */
+        CertContract genesis = new CertContract();
+        genesis.setRequestTime(Globals.WORLD_TIMER);
+        genesis.setIsGenesis(true);
+        for (Agent agent : agents) {
+            if (agent.getTrust().isHasCertification()) {
+                agent.setDaGra(new DaGra(agent));
+                agent.getDaGra().setGenesis(genesis);
+                //agent.getDaGra().assignMyContract();
+            }
+        }
 
+    }
+
+    //============================//============================//============================
     private StateMachineDrawingWindow stateMachineDrawingWindow;
     private TravelStatsLinearDrawingWindow travelStatsLinearDrawingWindow;
     private TravelHistoryBarDrawingWindow travelHistoryBarDrawingWindow;
@@ -277,10 +294,39 @@ public class World {
 
             //============================//============================ Sharing With Internet
 
-            if(simulationConfigItem.isIsUseSharingRecommendationWithInternet()){
+            if (simulationConfigItem.isIsUseSharingRecommendationWithInternet()) {
                 trustManager.sendRecommendationsWithInternet(internet.getAgentList());
             }
 
+
+            //============================//============================ DaGra processes
+            for (Agent agent : agents) {
+                if (agent.getTrust().isHasCertification()) {
+                    TtDaGraContractStatus status = agent.getDaGra().hasValidCertification();
+                    switch (status) {
+                        case NoContract:
+                        case Expired:
+                            agent.getDaGra().sendRegisterRequest();
+//                       agent.getDaGra().sendValidateRequest();
+                            break;
+                        case Request_New:
+                        case Request_Signing:
+                            agent.getDaGra().processSigning();
+                            break;
+                        case Request_Verifying:
+                            agent.getDaGra().processVerifying();
+                            break;
+                        case Accept_New:
+                        case Accept_Signing:
+                        case Accept_Verifying:
+                            OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.WARN, "Has Certification in ACCEPTING process. stage: "+ status+" | agentId: " + agent.getId());
+                            break;
+                        case Accept_Accept:
+                            OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, "Has ACCEPTED Certification. agentId: " + agent.getId());
+                            break;
+                    }
+                }
+            }
 
             //============================//============================  updating full state statistics
             for (StateX state : environment.getStates()) {
@@ -552,8 +598,9 @@ public class World {
     public String getSimulationConfigInfo() {
         return simulator.getSimulationConfigBunch().getByIndex(id).getInfo(environment.getCertifiedCount());
     }
+
     public String getSimulationConfigInfo(int i) {
-        switch (i){
+        switch (i) {
             case 1:
                 return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
             case 2:

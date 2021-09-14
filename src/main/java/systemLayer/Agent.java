@@ -3,13 +3,16 @@ package systemLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
-import simulateLayer.profiler.SimulationProfiler;
 import environmentLayer.StateX;
 import environmentLayer.TravelHistory;
+import simulateLayer.profiler.SimulationProfiler;
 import trustLayer.AgentTrust;
+import trustLayer.consensus.DaGra;
+import utils.Cryptor;
 import utils.Globals;
 import utils.OutLog____;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,15 @@ public class Agent {
                         simConfigShowRequestedService =
                                 simConfigShowTargetState =
                                         simConfigLinkToWatchedAgents = false;
+        String[] keys;
+        try {
+            keys = Cryptor.generateKey();
+            this.privateKey = keys[0];
+            this.publicKey = keys[1];
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -43,6 +55,14 @@ public class Agent {
     private int id;
     @Expose
     private int index; // index of agent in sorted list
+
+    //============================ Trust consensus
+    @Expose
+    private String privateKey;
+    @Expose
+    private String publicKey;
+
+    private DaGra daGra;
 
     //============================ processing variables
 
@@ -460,5 +480,29 @@ public class Agent {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public DaGra getDaGra() {
+        return daGra;
+    }
+
+    public void setDaGra(DaGra daGra) {
+        this.daGra = daGra;
     }
 }
