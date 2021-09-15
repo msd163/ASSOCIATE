@@ -159,7 +159,7 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
         }
         //============================//============================//============================ Average Chart
 
-        if (showChartsFlag[1]) {
+        if (showChartsFlag[1] && maxAxisY.length>1) {
             g.translate(0, _vs * (-maxAxisY[1] -maxAxisY[0]) -50);
             loAxisX = 0;
 

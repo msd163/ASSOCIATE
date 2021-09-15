@@ -176,7 +176,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================ Timed Average Chart
 
-        if (showChartsFlag[1]) {
+        if (showChartsFlag[1] && maxAxisY.length>1 ) {
             g.translate(0, _vs * -maxAxisY[1] - 50);
             loAxisX = 0;
 
