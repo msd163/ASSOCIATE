@@ -173,8 +173,12 @@ public class World {
         CertContract genesis = new CertContract();
         genesis.setRequestTime(Globals.WORLD_TIMER);
         genesis.setIsGenesis(true);
+        genesis.setStatus(TtDaGraContractStatus.Accept_Accept);
+        Agent genesisAgent = new Agent(this, -99);
+        genesisAgent.setIndex(-99);
+        genesis.setRequester(genesisAgent);
         for (Agent agent : agents) {
-            if (agent.getTrust().isHasCertification()) {
+            if (agent.getTrust().isHasCandidateForCertification()) {
                 agent.setDaGra(new DaGra(agent));
                 agent.getDaGra().setGenesis(genesis);
                 //agent.getDaGra().assignMyContract();
@@ -256,6 +260,8 @@ public class World {
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
 
+            Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD = 0;
+
             WorldStatistics wdStats = wdStatistics[Globals.WORLD_TIMER];
             wdStats.setWorldTime(Globals.WORLD_TIMER);
             wdStats.init(Globals.EPISODE);
@@ -301,30 +307,9 @@ public class World {
 
             //============================//============================ DaGra processes
             for (Agent agent : agents) {
-                if (agent.getTrust().isHasCertification()) {
-                    TtDaGraContractStatus status = agent.getDaGra().hasValidCertification();
-                    switch (status) {
-                        case NoContract:
-                        case Expired:
-                            agent.getDaGra().sendRegisterRequest();
-//                       agent.getDaGra().sendValidateRequest();
-                            break;
-                        case Request_New:
-                        case Request_Signing:
-                            agent.getDaGra().processSigning();
-                            break;
-                        case Request_Verifying:
-                            agent.getDaGra().processVerifying();
-                            break;
-                        case Accept_New:
-                        case Accept_Signing:
-                        case Accept_Verifying:
-                            OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.WARN, "Has Certification in ACCEPTING process. stage: "+ status+" | agentId: " + agent.getId());
-                            break;
-                        case Accept_Accept:
-                            OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, "Has ACCEPTED Certification. agentId: " + agent.getId());
-                            break;
-                    }
+                if (agent.getTrust().isHasCandidateForCertification()) {
+                    OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, ">> Agents with certification Cap. agentId: " + agent.getId());
+                    agent.getDaGra().process();
                 }
             }
 

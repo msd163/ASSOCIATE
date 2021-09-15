@@ -48,6 +48,11 @@ public class CertContract {
 
     public TtDaGraContractStatus updateStatus() {
 
+        if(isGenesis){
+            status = TtDaGraContractStatus.Accept_Accept;
+            return status;
+        }
+
         //============================//============================ Request Stage: Checking 'New' and 'Signing' statuses
         int signedContractCount = 0;
         for (CertSign signedContract : signedContracts) {
@@ -87,7 +92,7 @@ public class CertContract {
             }
         }
 
-        if (validSignCount == Config.DAGRA_ACCEPT_STAGE__NEEDED_SIGNS) {
+        if (validSignCount == 0) {
             status = TtDaGraContractStatus.Accept_New;
             return status;
         }
@@ -105,9 +110,11 @@ public class CertContract {
         }
 
         //============================//============================ Accept Stage: Checking 'Accept' and 'Expired' statuses
-        return notExpiredValidSignCount >= Config.DAGRA_ACCEPT_STAGE__NEEDED_SIGNS
+        status = notExpiredValidSignCount >= Config.DAGRA_ACCEPT_STAGE__NEEDED_SIGNS
                 ? TtDaGraContractStatus.Accept_Accept
                 : TtDaGraContractStatus.Expired;
+
+        return status;
     }
 
 
@@ -168,5 +175,9 @@ public class CertContract {
 
     public TtDaGraContractStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(TtDaGraContractStatus status) {
+        this.status = status;
     }
 }

@@ -64,8 +64,9 @@ public class AgentTrust {
         observations = new ArrayList<>();
         indirectObservations = new ArrayList<>();
 
-        this.hasCertification = agent.getCapacity().getCapPower() > Config.TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD
-                && agent.getBehavior().getHasHonestState();
+        /* Selecting candidate for getting certification from the network */
+        this.hasCandidateForCertification = agent.getCapacity().getCapPower() > Config.TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD
+                /*&& agent.getBehavior().getHasHonestState()*/;
 
     }
 
@@ -119,7 +120,7 @@ public class AgentTrust {
 
     //============================//============================//============================ Certification
 
-    private boolean hasCertification;
+    private boolean hasCandidateForCertification;
 
     //============================//============================//============================
 
@@ -299,7 +300,7 @@ public class AgentTrust {
         return trustAbstracts;
     }
 
-    public boolean isHasCertification() {
-        return hasCertification;
+    public boolean isHasCandidateForCertification() {
+        return hasCandidateForCertification;
     }
 }

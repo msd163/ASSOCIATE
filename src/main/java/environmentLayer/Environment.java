@@ -1,9 +1,12 @@
 package environmentLayer;
 
+import _type.TtOutLogMethodSection;
+import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
 import systemLayer.World;
 import utils.Globals;
+import utils.OutLog____;
 import utils.ParsCalendar;
 import utils.Point;
 
@@ -231,9 +234,10 @@ public class Environment {
                         mischiefCount++;
                     }
 
-                    if (agent.getTrust().isHasCertification()) {
+                    if (agent.getTrust().isHasCandidateForCertification()) {
                         if (!agent.getBehavior().getHasHonestState()) {
-                            throw new Exception("Wrong certification for " + agent.getBehavior().getBehaviorState() + " agent.");
+                            //throw new Exception("Wrong certification for " + agent.getBehavior().getBehaviorState() + " agent.");
+                            OutLog____.pl(TtOutLogMethodSection.Env_UpdateAgentCount, TtOutLogStatus.WARN, "A candidate agent with dishonest behavior. agentId: " + agent.getId());
                         }
                         certifiedCount++;
                     }
@@ -436,7 +440,8 @@ public class Environment {
     public int getCertifiedCount() {
         return certifiedCount;
     }
+
     public void addCertifiedCount() {
-         certifiedCount++;
+        certifiedCount++;
     }
 }

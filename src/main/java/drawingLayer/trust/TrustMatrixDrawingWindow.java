@@ -81,8 +81,8 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
             g.drawLine(pnX - 60, 1, pnX - 60, matCount * 5 + 1);
             g.drawLine(pnX - 35, 1, pnX - 35, matCount * 5 + 1);
 
-            //-- drawing sign of agents with certification
-            if (agentInRow.getTrust().isHasCertification()) {
+            //-- drawing sign of agents that are candidate for certification
+            if (agentInRow.getTrust().isHasCandidateForCertification()) {
                 g.setColor(Color.YELLOW);
                 g.fillOval(pnX - 7, row * 5 + 1, 5, 5);
                 g.fillOval(row * 5, pnY - 7, 5, 5);

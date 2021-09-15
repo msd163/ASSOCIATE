@@ -2,9 +2,9 @@ package trustLayer;
 
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
-import simulateLayer.SimulationConfigItem;
 import environmentLayer.StateX;
 import environmentLayer.TravelHistory;
+import simulateLayer.SimulationConfigItem;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import trustLayer.data.*;
@@ -23,6 +23,35 @@ public class TrustManager {
         this.simulationConfigItem = simConfig;
     }
 
+    //============================//============================//============================ Certification Verifier
+
+    /**
+     * Checking if the responder has valid certification in the network.
+     * @param verifier
+     * @param toBeVerified
+     * @return TRUE/FALSE
+     */
+    private boolean isHasValidCertificationInDaGra(Agent verifier, Agent toBeVerified) {
+
+        if (verifier.getDaGra() != null) {
+            return verifier.getDaGra().isValidCertificationFor(toBeVerified);
+        }
+
+        for (WatchedAgent watchedAgent : verifier.getWatchedAgents()) {
+            // For preventing request from the agent that we want verify it.
+            if (watchedAgent.getAgent().getId() == toBeVerified.getId()) {
+                continue;
+            }
+
+            if (verifier.getTrust().getTrustAbstracts()[watchedAgent.getAgent().getIndex()].getTrustValue() > 0) {
+                if (watchedAgent.getAgent().getDaGra() != null) {
+                    return watchedAgent.getAgent().getDaGra().isValidCertificationFor(toBeVerified);
+                }
+            }
+        }
+
+        return false;
+    }
     //============================//============================//============================
 
     private float getForgottenValue(int time) {
@@ -48,9 +77,12 @@ public class TrustManager {
         }
 
         float innerTrustValue;
-        if (simulationConfigItem.isIsUseCertification() && responder.getTrust().isHasCertification()) {
+        if (simulationConfigItem.isIsUseCertification() && responder.getTrust().isHasCandidateForCertification()
+                && isHasValidCertificationInDaGra(requester, responder)
+        ) {
             innerTrustValue = 1.0f;
             OutLog____.pl(TtOutLogMethodSection.TrustMng_GetTrustValue, TtOutLogStatus.SUCCESS, "CRT: Responder (" + responder.getId() + ") with Certificate. Requester: " + requester.getId());
+            System.out.println("------------------------------------------------------------- Certification");
         } else {
             innerTrustValue = calcInnerTrustValue(requester, responder);
 
@@ -774,7 +806,7 @@ public class TrustManager {
             //-- If trustAbstract of recommender is about receiver of recommender, ignore it.
             //-- It is not necessary to save recommendation of itself by self.
             //todo: use recommendation values about us by other for analysing environment sight about us (as receiver of recommendation)
-            if(trustAbstract.getResponder().getId()== receiver.getId()){
+            if (trustAbstract.getResponder().getId() == receiver.getId()) {
 
             }
             if (trustAbstract.getTrustValue() > 0) {

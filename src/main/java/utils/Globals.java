@@ -89,6 +89,8 @@ public class Globals {
     public static long CONTRACT_NEXT_ID;         // an static variable for counting CertContract is
 
     //============================//============================//============================
+    public static int DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD = 0;
+    //============================//============================//============================
     public static int WORLD_TIMER;              // The timer of world which is increased by every run of world
 
     public static int SIMULATION_ROUND = 1;     // This value filled by environment profile as input parameter. number of simulation. starts from one.

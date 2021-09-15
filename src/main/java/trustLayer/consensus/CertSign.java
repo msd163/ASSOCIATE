@@ -7,14 +7,14 @@ import utils.Cryptor;
 public class CertSign {
 
     private int time;
-    private Agent signer;
-    private Agent signed;
+    private CertContract signer;
+    private CertContract signed;
     private float trustValue;
     private String sign;
 
     //============================//============================//============================
     public String doSign() {
-        byte[] bytes = Cryptor.sign_RSA(signer, signed, trustValue, time);
+        byte[] bytes = Cryptor.sign_RSA(signer.getRequester(), signed.getRequester(), trustValue, time);
 
         sign = Base64.encodeBase64String(bytes);
         return sign;
@@ -22,7 +22,7 @@ public class CertSign {
 
 
     public boolean isValid() {
-        return Cryptor.verifySign_RSA(signer, signed, trustValue, time, sign);
+        return Cryptor.verifySign_RSA(signer.getRequester(), signed.getRequester(), trustValue, time, sign);
     }
 
     //============================//============================//============================
@@ -36,19 +36,19 @@ public class CertSign {
         this.time = time;
     }
 
-    public Agent getSigner() {
+    public CertContract getSigner() {
         return signer;
     }
 
-    public void setSigner(Agent signer) {
+    public void setSigner(CertContract signer) {
         this.signer = signer;
     }
 
-    public Agent getSigned() {
+    public CertContract getSigned() {
         return signed;
     }
 
-    public void setSigned(Agent signed) {
+    public void setSigned(CertContract signed) {
         this.signed = signed;
     }
 
