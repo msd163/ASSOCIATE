@@ -19,8 +19,8 @@ public class SimulationConfigItem {
     private int experienceDepthInRewarding;
     private float ignoringThresholdOfTrustValue;
     private float maximumConsideredRoutingHelpInTrustMechanism;
-    private boolean isUseCertification;
     private boolean isUseSharingRecommendationWithInternet;
+    private SimulationConfigItemCertification cert;
 
     //============================//============================//============================
     public String getInfo(int certificationCount) {
@@ -41,7 +41,7 @@ public class SimulationConfigItem {
                     " - bid: " + isBidirectionalRecommendationSharing +
                     " - sfm: " + isSafeUseRecommendation +
                     " - ngEff: " + isUseNegativeRecommendationEffect +
-                    " @CERT is: " + isUseCertification +
+                    " @CERT is: " + cert.isIsUseCertification() +
                     " @INT rcm: " + isUseSharingRecommendationWithInternet +
                     " - cnt: " + certificationCount
                     ;
@@ -89,13 +89,15 @@ public class SimulationConfigItem {
                             " - bid: " + isBidirectionalRecommendationSharing +
                             " - sfm: " + isSafeUseRecommendation +
                             " - ngEff: " + isUseNegativeRecommendationEffect +
-                            "  @CERT is: " + isUseCertification +
                             "  @INT rcm: " + isUseSharingRecommendationWithInternet +
                             " - cnt: " + certificationCount
                     ;
         }
         return "";
+    }
 
+    public String getInfo_4() {
+        return cert.getInfo();
     }
 
     public boolean isUseRecommendation() {
@@ -123,7 +125,6 @@ public class SimulationConfigItem {
     public void setMethod(int method) {
         this.method = method;
     }
-
 
     public float getTrustForgottenCoeff() {
         return trustForgottenCoeff;
@@ -173,11 +174,11 @@ public class SimulationConfigItem {
         return isBidirectionalObservationSharing;
     }
 
-    public boolean isIsUseCertification() {
-        return isUseCertification;
-    }
-
     public boolean isIsUseSharingRecommendationWithInternet() {
         return isUseSharingRecommendationWithInternet;
+    }
+
+    public SimulationConfigItemCertification getCert() {
+        return cert;
     }
 }

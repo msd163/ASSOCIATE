@@ -1,8 +1,8 @@
 package trustLayer.consensus;
 
 import _type.TtDaGraContractStatus;
+import simulateLayer.SimulationConfigItem;
 import systemLayer.Agent;
-import utils.Config;
 import utils.Globals;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class CertContract {
     private TtDaGraContractStatus status;
     //============================//============================//============================
 
-    public TtDaGraContractStatus updateStatus() {
+    public TtDaGraContractStatus updateStatus(SimulationConfigItem simulationConfig) {
 
         if (isGenesis) {
             status = TtDaGraContractStatus.Accept_Accept;
@@ -72,7 +72,7 @@ public class CertContract {
             return status;
         }
 
-        if (signedContractCount < Config.DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_SIGNED) {
+        if (signedContractCount <  simulationConfig.getCert().getNumberOfCertToBeSigned_DaGra()) {
             status = TtDaGraContractStatus.Request_Signing;
             return status;
         }
@@ -80,7 +80,7 @@ public class CertContract {
         //============================//============================ Request Stage: Checking 'Verifying' status
         int verifiedContractCount = verifiedContracts.size();
 
-        if (verifiedContractCount < Config.DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_VERIFIED) {
+        if (verifiedContractCount < simulationConfig.getCert().getNumberOfCertToBeVerified_DaGra()) {
             status = TtDaGraContractStatus.Request_Verifying;
             return status;
         }
@@ -92,7 +92,7 @@ public class CertContract {
         for (CertSign sign : signs) {
             if (sign.isValid()) {
                 validSignCount++;
-                if (!sign.isExpired() /*&& sign.getTrustValue() > 0*/) {
+                if (!sign.isExpired(simulationConfig.getCert().getExpiredTimeOfCert_DaGra()) /*&& sign.getTrustValue() > 0*/) {
                     notExpiredValidSignCount++;
                 }
             }
@@ -102,7 +102,7 @@ public class CertContract {
             status = TtDaGraContractStatus.Accept_New;
             return status;
         }
-        if (validSignCount < Config.DAGRA_ACCEPT_STAGE__NEEDED_SIGNS) {
+        if (validSignCount < simulationConfig.getCert().getNumberOfNeededSing_DaGra()) {
             status = TtDaGraContractStatus.Accept_Signing;
             return status;
         }
@@ -110,13 +110,13 @@ public class CertContract {
         //============================//============================ Accept Stage: Checking 'Verifying' status
         int verifiesCount = verifies.size();
 
-        if (verifiesCount < Config.DAGRA_ACCEPT_STAGE__NEEDED_VERIFICATIONS) {
+        if (verifiesCount < simulationConfig.getCert().getNumberOfNeededVerify_DaGra()) {
             status = TtDaGraContractStatus.Accept_Verifying;
             return status;
         }
 
         //============================//============================ Accept Stage: Checking 'Accept' and 'Expired' statuses
-        status = notExpiredValidSignCount >= Config.DAGRA_ACCEPT_STAGE__NEEDED_SIGNS
+        status = notExpiredValidSignCount >= simulationConfig.getCert().getNumberOfNeededSing_DaGra()
                 ? TtDaGraContractStatus.Accept_Accept
                 : TtDaGraContractStatus.Expired;
 

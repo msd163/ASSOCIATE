@@ -592,6 +592,8 @@ public class World {
                 return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_2();
             case 3:
                 return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_3(environment.getCertifiedCount());
+            case 4:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_4();
         }
         return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
     }

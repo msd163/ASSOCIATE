@@ -5,7 +5,6 @@ import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import systemLayer.Agent;
 import systemLayer.World;
-import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 
@@ -139,7 +138,7 @@ public class DaGra {
         toBeVerifiedContracts.clear();
 
         for (CertContract contract : contracts) {
-            TtDaGraContractStatus status = contract.updateStatus();
+            TtDaGraContractStatus status = contract.updateStatus(world.getSimulationConfig());
             if (status == TtDaGraContractStatus.Accept_New || status == TtDaGraContractStatus.Accept_Signing) {
                 toBeSignedContracts.add(contract);
             } else if (status == TtDaGraContractStatus.Accept_Verifying) {
@@ -152,8 +151,8 @@ public class DaGra {
         switch (status) {
             case NoContract:
             case Expired:
-                if ((Globals.WORLD_TIMER + 1) % Config.DAGRA_REQUEST_STAGE__ALLOWED_REQUEST_PERIOD == 0) {
-                    if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD < Config.DAGRA_REQUEST_STAGE__NUMBER_OF_REQUEST_IN_EACH_PERIOD) {
+                if ((Globals.WORLD_TIMER + 1) % world.getSimulationConfig().getCert().getCertRequestPeriodTime_DaGra() == 0) {
+                    if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD < world.getSimulationConfig().getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
                         sendRegisterRequest();
                         Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD++;
                     }
@@ -433,7 +432,7 @@ public class DaGra {
             /* 4- Checking sings of the contract do not expired */
             boolean isExpiredOrInvalid = false;
             for (CertSign sign : contract.getSigns()) {
-                if (sign.isExpired() || !sign.isValid()) {
+                if (sign.isExpired(world.getSimulationConfig().getCert().getExpiredTimeOfCert_DaGra()) || !sign.isValid()) {
                     isExpiredOrInvalid = true;
                     break;
                 }
@@ -467,7 +466,7 @@ public class DaGra {
                         isFindCycle = true;
                         break;
                     }
-                    if (sign.isValid() && !sign.isExpired()) {
+                    if (sign.isValid() && !sign.isExpired(world.getSimulationConfig().getCert().getExpiredTimeOfCert_DaGra())) {
                         openList.add(sign.getSigner());
                     }
                 }

@@ -90,8 +90,8 @@ public class CertSign {
         this.sign = sign;
     }
 
-    public boolean isExpired() {
-        return (Globals.WORLD_TIMER - time) >= Config.DAGRA_ACCEPT_STAGE__EXPIRE_TIME_THRESHOLD;
+    public boolean isExpired(int expiredTimeOfCert_daGra) {
+        return (Globals.WORLD_TIMER - time) >= expiredTimeOfCert_daGra;
     }
 
     public int getId() {

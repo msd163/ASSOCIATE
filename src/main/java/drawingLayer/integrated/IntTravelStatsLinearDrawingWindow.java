@@ -95,6 +95,8 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 g.drawString("    > " + worlds[j].getSimulationConfigInfo(2), 1100, dynamicHeight);
                 dynamicHeight += 40;
                 g.drawString("    > " + worlds[j].getSimulationConfigInfo(3), 1100, dynamicHeight);
+                dynamicHeight += 40;
+                g.drawString("    > " + worlds[j].getSimulationConfigInfo(4), 1100, dynamicHeight);
             }
             //============================
         }

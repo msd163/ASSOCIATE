@@ -27,6 +27,7 @@ public class TrustManager {
 
     /**
      * Checking if the responder has valid certification in the network.
+     *
      * @param verifier
      * @param toBeVerified
      * @return TRUE/FALSE
@@ -77,8 +78,15 @@ public class TrustManager {
         }
 
         float innerTrustValue;
-        if (simulationConfigItem.isIsUseCertification() && responder.getTrust().isHasCandidateForCertification()
-                && isHasValidCertificationInDaGra(requester, responder)
+        if (
+                simulationConfigItem.getCert().isIsUseCertification()                   // certification mode is enabled in config file
+                        && responder.getTrust().isHasCandidateForCertification()        // the responder agent has capability of gaining certification
+                        &&                                                              // if DaGra mode is disabled of the responder has a valid certification
+                        (
+                                !simulationConfigItem.getCert().isIsUseDaGra()                  // do not use DaGra
+                                        ||
+                                        isHasValidCertificationInDaGra(requester, responder)    // the responder gained a valid certification from DaGra
+                        )
         ) {
             innerTrustValue = 1.0f;
             OutLog____.pl(TtOutLogMethodSection.TrustMng_GetTrustValue, TtOutLogStatus.SUCCESS, "CRT: Responder (" + responder.getId() + ") with Certificate. Requester: " + requester.getId());

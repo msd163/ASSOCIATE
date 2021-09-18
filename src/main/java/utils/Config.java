@@ -18,7 +18,7 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 4000;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 1000;          // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
@@ -33,20 +33,6 @@ public class Config {
 
     //============================ Trust
     public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 70;
-
-    public static int DAGRA_REQUEST_STAGE__ALLOWED_REQUEST_PERIOD = 100;                 // The new certification request is sent in this period times
-    public static int DAGRA_REQUEST_STAGE__NUMBER_OF_REQUEST_IN_EACH_PERIOD = 2;       // The new certification request is sent in this period times
-
-    public static int DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_SIGNED = 2;
-    public static int DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_VERIFIED = 1;
-    public static int DAGRA_ACCEPT_STAGE__EXPIRE_TIME_THRESHOLD = 1000;
-    public static int DAGRA_ACCEPT_STAGE__NEEDED_SIGNS = 1;
-    public static int DAGRA_ACCEPT_STAGE__NEEDED_VERIFICATIONS = 1;
-
-    // public static boolean TRUST_RECOMMENDATION_SEND_NEGATIVE = true;
-    //  public static float TRUST_LEVEL_VALUE_IGNORE_THRESHOLD = 0.001f;    // A threshold value that identify trust levels which are less than it will be ignored in trust calculations
-    //  public static int TRUST_MAXIMUM_CONSIDERED_ROUTING_HELP_IN_TRUST_MECHANISM = 6;
-    //  public static boolean TRUST_VALIDATING_ROUTING_HELPER_ACCORDING_OBSERVATIONS = false;
 
     //============================ Drawing Windows
 
