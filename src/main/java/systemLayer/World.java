@@ -1,166 +1,136 @@
 package systemLayer;
 
-import _type.TtSimulationMode;
-import drawingLayer.DiagramDrawingWindow;
-import drawingLayer.MainDrawingWindow;
-import routingLayer.Router;
-import stateLayer.Environment;
-import stateLayer.StateX;
-import trustLayer.TrustHistory;
-import trustLayer.TrustHistoryItem;
-import utils.Config;
-import utils.Globals;
-import utils.WorldStatistics;
+import _type.*;
+import drawingLayer.DrawingWindow;
+import drawingLayer.routing.StateMachineDrawingWindow;
+import drawingLayer.routing.TravelHistoryBarDrawingWindow;
+import drawingLayer.routing.TravelStatsLinearDrawingWindow;
+import drawingLayer.trust.*;
+import environmentLayer.Environment;
+import environmentLayer.StateX;
+import internetLayer.Internet;
+import simulateLayer.SimulationConfigItem;
+import simulateLayer.Simulator;
+import simulateLayer.statistics.EpisodeStatistics;
+import simulateLayer.statistics.WorldStatistics;
+import transitionLayer.Router;
+import trustLayer.TrustManager;
+import trustLayer.TrustMatrix;
+import trustLayer.consensus.CertContract;
+import trustLayer.consensus.DaGra;
+import utils.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class World {
 
-    public World(Environment environment) throws Exception {
-        init(environment);
+    public World(int id, Simulator simulator, SimulationConfigItem simulationConfigItem) {
+        this.id = id;
+        this.simulator = simulator;
+        this.simulationConfigItem = simulationConfigItem;
     }
 
-    private Agent[] agents;
+    private int id;
+
+    private Simulator simulator;
+
+    private List<Agent> agents;             // Sorted agents by capPower
+
     private int agentsCount;
 
     private int[] traceAgentIds;            // Ids that will be traced in simulation time, in the MainDiagram window
 
     private Environment environment;
 
-    private WorldStatistics[] statistics;
+    private WorldStatistics[] wdStatistics;
+
+    private EpisodeStatistics[] epStatistics;
 
     private Router router;
 
+    TrustMatrix matrixGenerator = new TrustMatrix();
+
+    private SimulationConfigItem simulationConfigItem;
+
+    private TrustManager trustManager;
+
+    private Internet internet;
+
     //============================//============================//============================
-    private void init(Environment _environment) throws Exception {
-        //============================
+    public void init(Environment _environment) throws Exception {
 
-        // Identifying the agents that we want to trace in Main diagram.
-        traceAgentIds = new int[]{1};
+        internet = new Internet(this);
 
-        // Initializing the timer of the world.
-        // Setting -1 for registering first history of travel time to -1;
-        // it used in initVar() of agent
-        Globals.WORLD_TIMER = -1;
+        initStatistics();
 
-        statistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
-        for (int i = 0; i < statistics.length; i++) {
-            statistics[i] = new WorldStatistics();
-        }
+        //-- Identifying the agents that we want to trace in Main diagram.
+        //-- Indicating the agent and it's communications in environments with different colors
+        traceAgentIds = new int[]{};
+
+        //============================//============================
+        trustManager = new TrustManager(simulationConfigItem);
 
         router = new Router(this);
         //============================ Setting agents count
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.FullEnvironment) {
-            agentsCount = 0;
-            for (StateX state : _environment.getStates()) {
-                if (state.getAgents() != null) {
-                    agentsCount += state.getAgents().size();
-                }
-            }
-        } else {
-            agentsCount = Globals.profiler.getAgentsCount();
-        }
-        agents = new Agent[agentsCount];
+        agentsCount = _environment.getAgentsCount();
 
         //============================ Initializing Environment
-        this.environment = new Environment(_environment);
-        this.environment.init(this);
-
-
-        if (environment.getMaximumAgentCapability() < agentsCount) {
-            throw new Exception(">> Error: Agents count is bigger than maximum capability of environment:  " + agentsCount + " > " + environment.getMaximumAgentCapability() + ". simulation_X.json -> \"agentsCount\": " + agentsCount);
-        }
+        this.environment = _environment;
+        this.environment.initForSimulation(this);
 
         //============================//============================  Initializing agents
         System.out.println(
                 " | agentsCount: " + agentsCount
         );
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.PureEnvironment) {
-            int id = 0;
-            int thisBunchFinished = Globals.profiler.getCurrentBunch().getBunchCount();
+        ArrayList<StateX> states = environment.getStates();
+        agents = new ArrayList<>();
+        int i;
+        for (StateX state : states) {
+            for (Agent agent : state.getAgents()) {
+                agent.setState(state);
+                agent.setWorld(this);
+                agent.initVars();
 
-            for (int i = 0; i < agentsCount; i++) {
-                if (i >= thisBunchFinished) {
-                    thisBunchFinished = thisBunchFinished + Globals.profiler.getCurrentBunch().getBunchCount();
+                //============================ filling state array according to stateId array
+                agent.updateTargets();
+
+                //-- First updating travel history as initialization state
+                if (agent.getState() != null) {
+                    agent.updateTravelHistory();
                 }
 
-                //============================ Creating new state
-                agents[i] = new Agent(this, ++id);
-                agents[i].init();
-
-                //============================  Adding agent to an state
-                StateX randomState;
-                int tryCount = 0;
-                boolean isAddedToState;
-                do {
-                    randomState = environment.getRandomState();
-                    if (randomState.isIsPitfall()) {
-                        isAddedToState = false;
-                    } else {
-                        // checking state capability and adding the agent to it.
-                        isAddedToState = randomState.addAgent(agents[i]);
-                    }
-                } while (!isAddedToState && tryCount++ < agentsCount);
-
-                if (isAddedToState) {
-                    agents[i].setState(randomState);
-                    boolean isAnyPathTo;
-                    //============================ Adding target state to agents
-                    do {
-                        randomState = environment.getRandomState();
-                        //
-                        if (randomState.isIsPitfall()) {
-                            isAnyPathTo = false;
-                        } else {
-                            // checking state capability and adding the agent to it.
-                            isAnyPathTo = agents[i].getState().isAnyPathTo(randomState);
-                        }
-                    } while (!isAnyPathTo && tryCount++ < agentsCount);
-
-                    if (isAnyPathTo) {
-                        agents[i].setTargetState(randomState);
-                    }
-
-                }
                 //============================  if agentId is in 'traceAgentIds', it will set as traceable
-//            Agent agent = agents[i];
-                if (isTraceable(i)) {
-                    agents[i].setAsTraceable();
+                if (isTraceable(agent.getId())) {
+                    agent.setAsTraceable();
                 }
-                System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getTargetState() != null ? agents[i].getTargetState().getId() : "NULL"));
-            }
-        }
-        //============================  FullEnv
-        else {
-            StateX[] states = environment.getStates();
 
-            int i = 0;
-            for (StateX state : states) {
-                for (Agent agent : state.getAgents()) {
-                    agent.setState(state);
-                    agent.setWorld(this);
-                    agent.initVars();
+                System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
 
-                    agent.setTargetState(environment.getState(agent.getTargetStateId()));
-                    //============================  if agentId is in 'traceAgentIds', it will set as traceable
-                    if (isTraceable(i)) {
-                        agent.setAsTraceable();
-                    }
-
-                    System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getTargetState() != null ? agent.getTargetState().getId() : "NULL"));
-
-                    agents[i++] = agent;
-
-                }
+                agents.add(agent);
             }
         }
 
-      /*  for (Agent agent : agents) {
-            System.out.println("agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + agent.getTargetState().getId());
-        }*/
+        agents.sort((Agent a1, Agent a2) -> {
+            if (a1.getCapacity().getCapPower() > a2.getCapacity().getCapPower()) {
+                return 1;
+            }
+            if (a1.getCapacity().getCapPower() < a2.getCapacity().getCapPower()) {
+                return -1;
+            }
+            return 0;
+        });
+
+        //-- Setting index of agent in sorted list
+        int indexInSortedList = 0;
+        for (Agent agent : agents) {
+            agent.setIndex(indexInSortedList++);
+            agent.getTrust().postInit();
+        }
 
         environment.updateAgentsCount();
 
@@ -168,6 +138,94 @@ public class World {
 
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
+
+        wdStatistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
+        for (i = 0; i < wdStatistics.length; i++) {
+            if (i == 0) {
+                wdStatistics[i] = new WorldStatistics(null, agentsCount, null);
+            } else {
+                if (i >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i - Config.STATISTICS_AVERAGE_TIME_WINDOW]);
+                } else {
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, null);
+                }
+            }
+        }
+
+        if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
+            int maxEpisodeCount = Math.max(environment.getProMax().getMaxAgentTargetCount(), Config.WORLD_LIFE_TIME / Config.EPISODE_TIMOUT);
+            epStatistics = new EpisodeStatistics[maxEpisodeCount];
+            for (i = 0; i < maxEpisodeCount; i++) {
+                epStatistics[i] = new EpisodeStatistics();
+            }
+        }
+
+        //============================//============================ Init trust matrix
+        initTrustMatrix();
+
+        //============================//============================ Init DaGra
+        initDaGra();
+
+    }
+
+    private void initDaGra() {
+        /* Creating Genesis Certification and broadcasting */
+        CertContract genesis = new CertContract(-1);
+        genesis.setRequestTime(Globals.WORLD_TIMER);
+        genesis.setIsGenesis(true);
+        genesis.setStatus(TtDaGraContractStatus.Accept_Accept);
+        Agent genesisAgent = new Agent(this, -99);
+        genesisAgent.setIndex(-99);
+        genesis.setRequester(genesisAgent);
+        for (Agent agent : agents) {
+            if (agent.getTrust().isHasCandidateForCertification()) {
+                agent.setDaGra(new DaGra(agent));
+                agent.getDaGra().setGenesis(genesis.clone());
+                //agent.getDaGra().assignMyContract();
+            }
+        }
+
+    }
+
+    //============================//============================//============================
+    private StateMachineDrawingWindow stateMachineDrawingWindow;
+    private TravelStatsLinearDrawingWindow travelStatsLinearDrawingWindow;
+    private TravelHistoryBarDrawingWindow travelHistoryBarDrawingWindow;
+
+    private TrustMatrixDrawingWindow trustMatrixDrawingWindow;
+
+    private TrustStatsLinearDrawingWindow trustStatsLinearDrawingWindow;
+    private TrustRecogniseLinearDrawingWindow trustRecogniseLinearDrawingWindow;
+    private TrustAnalysisLinearDrawingWindow trustAnalysisLinearDrawingWindow;
+
+    private ExperienceBarDrawingWindow experienceBarDrawingWindow;
+    private IndirectExperienceBarDrawingWindow indirectExperienceBarDrawingWindow;
+
+    private ObservationBarDrawingWindow observationBarDrawingWindow;
+    private IndirectObservationBarDrawingWindow indirectObservationBarDrawingWindow;
+
+    private RecommendationBarDrawingWindow recommendationBarDrawingWindow;
+
+
+    private void initStatistics() {
+        //============================//============================ Initializing statistics report file
+        if (Config.STATISTICS_IS_GENERATE) {
+
+            String statName = Globals.STATS_FILE_NAME;
+
+            System.out.println(statName);
+
+            //-- Creating environment statistics file
+            Globals.statsEnvGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".csv");
+
+            //-- Creating trust statistics file
+            Globals.statsTrustGenerator.init(ProjectPath.instance().statisticsDir() + "/" + statName, statName + ".trust.csv");
+
+        }
+    }
+
+    private void initTrustMatrix() {
+        matrixGenerator.init(agents);
     }
 
     private boolean isTraceable(int i) {
@@ -183,121 +241,329 @@ public class World {
 
     }
 
+    /**
+     * ============================
+     * RUN
+     * ==============================
+     **/
     public void run() {
 
-        boolean showMainWindow = Config.DRAWING_SHOW_MAIN_WINDOW;           // Whether show MainWindow or not.
-        boolean showDiagramWindow = Config.DRAWING_SHOW_DIAGRAM_WINDOW;     // Whether show DrawingWindow or not.
-
-        //============================ Initializing Main Drawing Windows
-        MainDrawingWindow mainWindow = new MainDrawingWindow(this);
-        mainWindow.setDoubleBuffered(true);
-        if (showMainWindow) {
-            JFrame mainFrame = new JFrame();
-            mainFrame.getContentPane().add(mainWindow);
-            mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            mainFrame.setMinimumSize(new Dimension(1500, 800));
-            mainFrame.setVisible(true);
-            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            // boolean doubleBuffered = mainFrame.isDoubleBuffered();
-        }
-        //============================ Initializing Diagram Drawing Windows
-        DiagramDrawingWindow diagramWindow = new DiagramDrawingWindow(this);
-        diagramWindow.setDoubleBuffered(true);
-        if (showDiagramWindow) {
-            JFrame diagramFrame = new JFrame();
-            diagramFrame.getContentPane().add(diagramWindow);
-            diagramFrame.setExtendedState(diagramFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            diagramFrame.setMinimumSize(new Dimension(1500, 800));
-            diagramFrame.setVisible(true);
-        }
+        initDrawingWindows();
 
         /* ****************************
          *            MAIN LOOP      *
          * ****************************/
 
+        if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
+            epStatistics[0].setFromTime(Globals.WORLD_TIMER);
+        }
         //============================//============================  Main loop of running in a world
         for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
-            WorldStatistics statistic = statistics[Globals.WORLD_TIMER];
-            statistic.setWorldTime(Globals.WORLD_TIMER);
-            router.setStatistics(statistic);
 
-            if (Globals.WORLD_TIMER == 0) {
-                Globals.statGenerator.addHeader(statistic);
-                Globals.statGenerator.addComment();
+            Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD = 0;
+
+            WorldStatistics wdStats = wdStatistics[Globals.WORLD_TIMER];
+            wdStats.setWorldTime(Globals.WORLD_TIMER);
+            wdStats.init(Globals.EPISODE);
+
+            router.setStatistics(wdStats);
+
+            if (Globals.WORLD_TIMER == 0 && Config.STATISTICS_IS_GENERATE) {
+                Globals.statsEnvGenerator.addComment(environment);
+                Globals.statsEnvGenerator.addHeader();
+                Globals.statsTrustGenerator.addHeader();
             }
 
-            System.out.println(Globals.WORLD_TIMER + " : World.run ------------------------------- ");
+            System.out.println("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + " > run ------------------------------- ");
 
             //============================//============================  Updating agents statuses
             for (Agent agent : agents) {
-                agent.resetParams();
-                //agent.updateTravelHistory();
-                agent.updateWatchList();
+                //todo: adding doing service capacity to agents as capacity param
                 agent.updateProfile();
+                agent.updateWatchList();
+                router.updateNextSteps(agent);
             }
 
             //============================//============================ Traveling
-
             for (Agent agent : agents) {
                 router.takeAStepTowardTheTarget(agent);
+            }
+
+            //============================//============================ Observation
+            if (simulationConfigItem.isIsUseObservation() || simulationConfigItem.isIsUseIndirectObservation()) {
+                for (Agent agent : agents) {
+                    if (agent.getCapacity().getObservationCap() > 0) {
+                        trustManager.observe(agent);
+                    }
+                }
+            }
+
+            //============================//============================ Sharing With Internet
+
+            if (simulationConfigItem.isIsUseSharingRecommendationWithInternet()) {
+                trustManager.sendRecommendationsWithInternet(internet.getAgentList());
+            }
+
+
+            //============================//============================ DaGra processes
+            for (Agent agent : agents) {
+                if (agent.getTrust().isHasCandidateForCertification()) {
+                    OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, ">> Agents with certification Cap. agentId: " + agent.getId());
+                    agent.getDaGra().process();
+                }
             }
 
             //============================//============================  updating full state statistics
             for (StateX state : environment.getStates()) {
                 if (state.isFullCapability()) {
-                    statistic.addFullStateCount();
+                    wdStats.addFullStateCount();
                 }
                 if (state.getTargets().size() == 0) {
-                    statistic.addStatesWithNoTarget();
+                    wdStats.addStatesWithNoTarget();
                 }
             }
 
-            // System.out.println(statistic.toString());
-            Globals.statGenerator.addStat(statistic);
+            matrixGenerator.update(wdStats);
 
-            if (showMainWindow) {
-                mainWindow.repaint();
+            if (Config.STATISTICS_IS_GENERATE) {
+                Globals.statsEnvGenerator.addStat(wdStats);
+                Globals.statsTrustGenerator.addStat(wdStats);
             }
+            //============================//============================ Repainting
+            updateWindows();
 
-            if (showDiagramWindow) {
-                diagramWindow.repaint();
-            }
-            try {
-                Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+            //============================//============================//============================ Adding Episode of environment
+            // and exiting the agents from pitfalls
+            /*if ((Globals.WORLD_TIMER + 1) % Config.EPISODE_TIMOUT == 0 || wdStats.getAllAgentsInTarget() + wdStats.getAllAgentsInPitfall() == agentsCount) {
 
-        for (Agent agent : agents) {
-            TrustHistory[] histories = agent.getTrust().getHistories();
-            String hiss = "";
-            System.out.println(agent.getId() + "------------------------------");
-            for (int i = 0; i < histories.length; i++) {
-                TrustHistory history = histories[i];
-                if (history != null) {
-                    hiss += " | " + history.getAgent().getId() + " > " + history.getFinalTrustLevel() + " : ";
-                    for (TrustHistoryItem item : history.getItems()) {
-                        if (item != null) {
-                            hiss += item.getTrustScore() + ", ";
-                        }
+
+                if (Globals.WORLD_TIMER > 0) {
+                    //-- updating episode statistics
+                    epStatistics[Globals.EPISODE].update(wdStatistics);
+                    epStatistics[Globals.EPISODE].setFromTime(Globals.WORLD_TIMER);
+                }
+
+                for (StateX state : environment.getStates()) {
+                    state.getAgents().clear();
+                }
+
+                //-- Increasing Episode
+                Globals.EPISODE++;
+
+                for (Agent agent : agents) {
+
+                    if (agent.getState().isIsPitfall()) {
+                        agent.setState(agent.getCurrentTarget());
                     }
+                    int ct = agent.getCurrentTarget().getId();
+                    agent.assignNextTargetState();
+                    OutLog____.pl(TtOutLogMethodSection.TakeAStepTowardTheTarget, TtOutLogStatus.SUCCESS,
+                            "Assigning new target to agent (" + agent.getId() + "). current target: " + ct + " | new target: " + agent.getCurrentTarget().getId());
+
                 }
+
+            }*/
+
+            while (Globals.PAUSE) {
+                updateWindows();
             }
-            System.out.println(hiss);
 
         }
 
+        //============================//============================ Creating trust matrix and saving in csv file
+
+        if (Config.TRUST_MATRIX_IS_GENERATE) {
+            System.out.println("Generating Trust Matrix");
+            String matrixPath = Globals.STATS_FILE_NAME;
+
+            String simDir = "/sim-" + (Globals.SIMULATION_TIMER < 10 ? "0" + Globals.SIMULATION_TIMER : Globals.SIMULATION_TIMER);
+
+            matrixPath = ProjectPath.instance().statisticsDir() + "/" + matrixPath + simDir + "/" + matrixPath + ".mat.csv";
+
+            //matrixGenerator.update(null);
+            matrixGenerator.write(matrixPath);
+            matrixGenerator.close();
+            System.out.println("Trust Matrix Generated.");
+        }
+
+        new ImageBuilder().generateStatisticsImages(
+                stateMachineDrawingWindow,
+                travelStatsLinearDrawingWindow,
+                trustMatrixDrawingWindow,
+                trustStatsLinearDrawingWindow,
+                trustRecogniseLinearDrawingWindow,
+                trustAnalysisLinearDrawingWindow,
+                observationBarDrawingWindow,
+                recommendationBarDrawingWindow,
+                travelHistoryBarDrawingWindow,
+                experienceBarDrawingWindow,
+                indirectExperienceBarDrawingWindow,
+                indirectObservationBarDrawingWindow
+        );
+
+        System.out.println("Finished");
+
+
+        //============================//============================ Running program after finishing lifeTime of the world.
+
+
+        /*while (Globals.SIMULATION_TIMER == Globals.SIMULATION_ROUND - 1) {
+            updateWindows(stateMachineDW, statsOfEnvDW, trustMatrixDW, statsOfTrustDW, statsOfFalsePoNeDW,
+                    analysisOfTrustParamsDW, agentTravelInfoDW, agentTrustDW, agentRecommendationDW, agentObservationDW);
+        }*/
+    }  //  End of running
+
+    private void initDrawingWindows() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int widthHalf = (int) screenSize.getWidth() / 2;
+        int heightHalf = (int) screenSize.getHeight() / 2;
+        //============================ Initializing Main Drawing Windows
+        stateMachineDrawingWindow = new StateMachineDrawingWindow(this);
+        if (Config.DRAWING_SHOW_stateMachineWindow) {
+            initDrawingWindow(widthHalf, heightHalf, stateMachineDrawingWindow, TtDrawingWindowLocation.TopLeft, true);
+        }
+        //============================ Initializing Diagram Drawing Windows
+        travelStatsLinearDrawingWindow = new TravelStatsLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, travelStatsLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        trustMatrixDrawingWindow = new TrustMatrixDrawingWindow(matrixGenerator, this);
+        if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustMatrixDrawingWindow, TtDrawingWindowLocation.TopLeft);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        trustStatsLinearDrawingWindow = new TrustStatsLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustStatsLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        trustRecogniseLinearDrawingWindow = new TrustRecogniseLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustRecogniseLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        trustAnalysisLinearDrawingWindow = new TrustAnalysisLinearDrawingWindow(this);
+        if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, trustAnalysisLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        travelHistoryBarDrawingWindow = new TravelHistoryBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, travelHistoryBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        experienceBarDrawingWindow = new ExperienceBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, experienceBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
+        }
+
+        //============================ Initializing Diagram Drawing Windows
+        indirectExperienceBarDrawingWindow = new IndirectExperienceBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, indirectExperienceBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
+        }
+
+        //============================ Initializing Recommendation Drawing Windows
+        recommendationBarDrawingWindow = new RecommendationBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, recommendationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
+        }
+
+        //============================ Initializing Observation Drawing Windows
+        observationBarDrawingWindow = new ObservationBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, observationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
+        }
+        //============================ Initializing Observation Drawing Windows
+        indirectObservationBarDrawingWindow = new IndirectObservationBarDrawingWindow(this);
+        if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, indirectObservationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
+        }
+    }
+
+    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow stateMachineDW, TtDrawingWindowLocation location) {
+        initDrawingWindow(widthHalf, heightHalf, stateMachineDW, location, false);
+    }
+
+    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow drawingWindow, TtDrawingWindowLocation location, boolean exitAppOnCLose) {
+        drawingWindow.setDoubleBuffered(true);
+        JFrame mainFrame = new JFrame();
+        mainFrame.getContentPane().add(drawingWindow);
+        mainFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+        mainFrame.setVisible(true);
+        if (exitAppOnCLose) {
+            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
+        mainFrame.setTitle(drawingWindow.getHeaderTitle());
+        switch (location) {
+            case TopRight:
+                mainFrame.setLocation(widthHalf, 0);
+                break;
+            case BottomLeft:
+                mainFrame.setLocation(0, heightHalf);
+                break;
+            case BottomRight:
+                mainFrame.setLocation(widthHalf, heightHalf);
+                break;
+            case TopLeft:
+            default:
+                mainFrame.setLocation(0, 0);
+                break;
+        }
+    }
+
+
+    public void updateWindows() {
         try {
             Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mainWindow.repaint();
+        if (Config.DRAWING_SHOW_stateMachineWindow) {
+            stateMachineDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
+            travelStatsLinearDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
+            trustMatrixDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
+            trustStatsLinearDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
+            trustRecogniseLinearDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
+            trustAnalysisLinearDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
+            travelHistoryBarDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
+            experienceBarDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
+            indirectExperienceBarDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
+            recommendationBarDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
+            observationBarDrawingWindow.repaint();
+        }
+        if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
+            indirectObservationBarDrawingWindow.repaint();
+        }
 
-        System.out.println("Finished");
-
-
+        simulator.updateWindows();
     }
 
     //============================//============================//============================
@@ -308,6 +574,28 @@ public class World {
 
         return tx + "World: " +
                 ti + " | agentsCount=" + agentsCount;
+    }
+
+    public String getDrawingTitle() {
+        return "E-Code: " + environment.getCode() + " | #Ags: " + agentsCount + " | #Sts: " + environment.getStateCount();
+    }
+
+    public String getSimulationConfigInfo() {
+        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo(environment.getCertifiedCount());
+    }
+
+    public String getSimulationConfigInfo(int i) {
+        switch (i) {
+            case 1:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
+            case 2:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_2();
+            case 3:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_3(environment.getCertifiedCount());
+            case 4:
+                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_4();
+        }
+        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
     }
 
     public String toString(int tabIndex) {
@@ -330,7 +618,7 @@ public class World {
         return toString(0);
     }
 
-    public Agent[] getAgents() {
+    public List<Agent> getAgents() {
         return agents;
     }
 
@@ -346,7 +634,27 @@ public class World {
         this.environment = environment;
     }
 
-    public WorldStatistics[] getStatistics() {
-        return statistics;
+    public WorldStatistics[] getWdStatistics() {
+        return wdStatistics;
+    }
+
+    public EpisodeStatistics[] getEpStatistics() {
+        return epStatistics;
+    }
+
+    public SimulationConfigItem getSimulationConfig() {
+        return simulationConfigItem;
+    }
+
+    public TrustManager getTrustManager() {
+        return trustManager;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

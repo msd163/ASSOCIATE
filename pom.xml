@@ -18,16 +18,22 @@
             <artifactId>icu4j</artifactId>
             <version>63.1</version>
         </dependency>
-       <!-- <dependency>
-            <groupId>org.jgrapht</groupId>
-            <artifactId>jgrapht-core</artifactId>
-            <version>1.5.1</version>
-        </dependency>
         <dependency>
-            <groupId>org.jgrapht</groupId>
-            <artifactId>jgrapht-ext</artifactId>
-            <version>0.9.1</version>
-        </dependency>-->
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
+
+        <!-- <dependency>
+             <groupId>org.jgrapht</groupId>
+             <artifactId>jgrapht-core</artifactId>
+             <version>1.5.1</version>
+         </dependency>
+         <dependency>
+             <groupId>org.jgrapht</groupId>
+             <artifactId>jgrapht-ext</artifactId>
+             <version>0.9.1</version>
+         </dependency>-->
 
     </dependencies>
     <properties>

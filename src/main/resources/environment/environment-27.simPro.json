@@ -1,0 +1,116 @@
+{
+  "--------------------------------------------------2": "STATE",
+  "stateCount": 50,
+  "stateCapacity": "50",
+  "stateTargetCount": "#2..10",
+  "pitfallCount": "25",
+  "--------------------------------------------------3": "AGENT",
+  "agentsCount": "400",
+  "bunches": [
+    {
+      "bunchCount": "%10@400",
+      "targetCount": "200",
+      "watchDepth": "#2..4",
+      "watchListCap": "#300..400",
+      "travelHistoryCap": "#1000..2000",
+      "_0": "-----------------------------------",
+      "withInternetCapPowerThreshold": 80,
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#350..400",
+      "experienceItemCap": "#80..100",
+      "indirectExperienceCap": "#350..400",
+      "indirectExperienceItemCap": "#80..100",
+      "_3": "-----------------------------------",
+      "observationCap": "#350..400",
+      "observationItemCap": "#80..100",
+      "indirectObservationCap": "#350..400",
+      "indirectObservationItemCap": "#180..300",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#399..400",
+      "trustRecommendationItemCap": "#80..100",
+      "_5": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 60,
+        "adversaryPercent": 20,
+        "mischiefPercent": 10,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    },
+    {
+      "bunchCount": "%15@400",
+      "targetCount": "200",
+      "watchDepth": "1",
+      "watchListCap": "#100..800",
+      "travelHistoryCap": "#100..800",
+      "_0": "-----------------------------------",
+      "withInternetCapPowerThreshold": 100,
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#100..300",
+      "experienceItemCap": "#10..70",
+      "indirectExperienceCap": "#100..300",
+      "indirectExperienceItemCap": "#10..70",
+      "_3": "-----------------------------------",
+      "observationCap": "#100..300",
+      "observationItemCap": "#10..80",
+      "indirectObservationCap": "#100..300",
+      "indirectObservationItemCap": "#10..80",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#399..400",
+      "trustRecommendationItemCap": "#40..90",
+      "_5": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 60,
+        "adversaryPercent": 20,
+        "mischiefPercent": 10,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    },
+    {
+      "bunchCount": "%75@400",
+      "targetCount": "200",
+      "watchDepth": "0",
+      "watchListCap": "#10..80",
+      "travelHistoryCap": "#10..20",
+      "_0": "-----------------------------------",
+      "withInternetCapPowerThreshold": 100,
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#10..40",
+      "experienceItemCap": "#2..5",
+      "indirectExperienceCap": "#2..10",
+      "indirectExperienceItemCap": "#1..2",
+      "_3": "-----------------------------------",
+      "observationCap": "0",
+      "observationItemCap": "0",
+      "indirectObservationCap": "0",
+      "indirectObservationItemCap": "0",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#399..400",
+      "trustRecommendationItemCap": "#40..80",
+      "_5": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 50,
+        "adversaryPercent": 30,
+        "mischiefPercent": 20,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    }
+  ]
+}

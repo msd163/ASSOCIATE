@@ -1,195 +1,306 @@
 package trustLayer;
 
+import _type.TtTrustReplaceMethod;
+import com.google.gson.annotations.Expose;
 import systemLayer.Agent;
+import trustLayer.data.*;
+import utils.Config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class AgentTrust {
 
-    public AgentTrust(Agent parentAgent, int trustHistoryCap, int historyItemCap) {
+    public AgentTrust(
+            TtTrustReplaceMethod replaceHistoryMethod,
+            int experienceCap, int experienceItemCap,
+            int indirectExperienceCap, int indirectExperienceItemCap,
+            int observationCap, int observationItemCap,
+            int indirectObservationCap, int indirectObservationItemCap,
+            int recommendationCap, int recommendationItemCap
+    ) {
+        this.trustReplaceMethod = replaceHistoryMethod;
+        this.experienceCap = experienceCap;
+        this.experienceItemCap = experienceItemCap;
+        this.indirectExperienceCap = indirectExperienceCap;
+        this.indirectExperienceItemCap = indirectExperienceItemCap;
+        this.observationCap = observationCap;
+        this.observationItemCap = observationItemCap;
+        this.indirectObservationCap = indirectObservationCap;
+        this.indirectObservationItemCap = indirectObservationItemCap;
+        this.recommendationCap = recommendationCap;
+        this.recommendationItemCap = recommendationItemCap;
+    }
+
+    public void setTrustParams(
+            int experienceCap, int experienceItemCap,
+            int indirectExperienceCap, int indirectExperienceItemCap,
+            int observationCap, int observationItemCap,
+            int indirectObservationCap, int indirectObservationItemCap,
+            int recommendationCap, int recommendationItemCap
+    ) {
+
+        this.experienceCap = experienceCap;
+        this.experienceItemCap = experienceItemCap;
+        this.indirectExperienceCap = indirectExperienceCap;
+        this.indirectExperienceItemCap = indirectExperienceItemCap;
+        this.observationCap = observationCap;
+        this.observationItemCap = observationItemCap;
+        this.indirectObservationCap = indirectObservationCap;
+        this.indirectObservationItemCap = indirectObservationItemCap;
+        this.recommendationCap = recommendationCap;
+        this.recommendationItemCap = recommendationItemCap;
+    }
+
+    public void init(Agent parentAgent) {
 
         this.agent = parentAgent;
 
-        historyIndex = -1;
-        historySize = 0;
+        experiences = new ArrayList<>();
+        indirectExperiences = new ArrayList<>();
 
-        this.historyCap = trustHistoryCap;
-        this.historyItemCap = historyItemCap;
+        recommendations = new ArrayList<>();
 
-        histories = new TrustHistory[historyCap];
-        for (int i = 0; i < historyCap; i++) {
-            histories[i] = null;
-        }
+        observations = new ArrayList<>();
+        indirectObservations = new ArrayList<>();
 
-        historiesSortedIndex = new int[historyCap];
-        for (int i = 0; i < historyCap; i++) {
-            historiesSortedIndex[i] = i;
-        }
+        /* Selecting candidate for getting certification from the network */
+        this.hasCandidateForCertification = agent.getCapacity().getCapPower() > Config.TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD
+                /*&& agent.getBehavior().getHasHonestState()*/;
+
     }
-
-    private final Agent agent;
-
-    // all services received by this agent across world run
-    private TrustHistory[] histories;
-    // An array of history indic that are sorted based on trustScore
-    private int[] historiesSortedIndex;
-    private int historyCap;     // maximum size of history
-    private int historyIndex;   // current index of history that will be fill
-    private int historySize;    // current capacity of history
-    private int historyItemCap; // max size of services in each history
-
-    //============================//============================//============================
-
-    public boolean canTrustToAgent(Agent agent) {
-        return false;
-    }
-
-    /***
-     * Sorting Indexing array of the history.
-     * according to the values of history array, indexing array will be rearranged
-     */
-    public void sortHistoryByTrustLevel() {
-        final int size = historyCap;
-
-        for (int i = 0; i < size; i++)
-            historiesSortedIndex[i] = i;
-
-       /* boolean sorted;
-        do {
-            sorted = true;
-            int bubble = historiesSortedIndex[0];
-            for (int i = 0; i < size - 1; i++) {
-                if (
-                        (histories[bubble] != null
-                                && histories[historiesSortedIndex[i + 1]] != null
-                                && histories[bubble].getEffectiveTrustLevel() < histories[historiesSortedIndex[i + 1]].getEffectiveTrustLevel()
-                        ) || (
-                                histories[bubble] == null
-                                        && histories[historiesSortedIndex[i + 1]] != null
-                        )
-                ) {
-                    historiesSortedIndex[i] = historiesSortedIndex[i + 1];
-                    historiesSortedIndex[i + 1] = bubble;
-                    sorted = false;
-                } else {
-                    bubble = historiesSortedIndex[i + 1];
-                }
-            }
-        } while (!sorted);*/
-
-   /*     System.out.println("======= sorted list for " + agent.getId());
-        for (int index : historiesSortedIndex) {
-            System.out.println(index + ": " + (histories[index] == null ? "NUL" : histories[index].getTrustScore()));
-        }*/
-        /*for (AgentHistory history : histories) {
-            System.out.println(history == null ? "NULL" : history.getTrustScore());
-        }*/
-    }
-
-
-    //============================//============================//============================
 
     /**
-     * @param agent
-     * @return If there is not the input agent in the history: return 0;
+     * After creating agents and filling agents list in the world
      */
-    public float getTrustScore(Agent agent) {
-       /* for (AgentHistory history : histories) {
-            if (history != null && history.getDoerAgent().getId() == agent.getId()) {
-                return history.getEffectiveTrustLevel();
-            }
-        }*/
-
-        return 0;
-    }
-
-
-    public void createNewHistory(Agent helper, float trustScore) {
-
-        histories[historyIndex] = new TrustHistory(helper);
-        histories[historyIndex].addHistory(trustScore);
-
-    }
-
-
-    public void addHistory(float trustScore) {
-        ArrayList<TrustHistoryItem> items = histories[historyIndex].getItems();
-        if (items.size() >= historyItemCap) {
-            // Removing trust score of removed item from finalTrustLevel
-            histories[historyIndex].setFinalTrustLevel(
-                    histories[historyIndex].getFinalTrustLevel() -
-                            items.get(0).getTrustScore()
-            );
-            histories[historyIndex].getItems().remove(0);
+    public void postInit() {
+        this.trustAbstracts = new TrustAbstract[agent.getWorld().getAgentsCount()];
+        for (int i = 0; i < this.trustAbstracts.length; i++) {
+            trustAbstracts[i] = new TrustAbstract(agent.getWorld().getAgents().get(i));
         }
-        histories[historyIndex].addHistory(trustScore);
     }
 
+    private Agent agent;
+
+    @Expose
+    private TtTrustReplaceMethod trustReplaceMethod;
+
+    //-- Last values of trusts for each responder. These data will update after calculating trust values.
+    private TrustAbstract trustAbstracts[];
+
+    //============================//============================//============================  Recommendation
+    //-- Received recommendation form others
+    private List<TrustRecommendation> recommendations;
+    private int recommendationCap;
+    private int recommendationItemCap;
+
+    //============================//============================//============================ Direct Experience
+    //-- All experience tuples that calculated across world run
+    private List<TrustExperience> experiences;
+    private int experienceCap;     // maximum size of history
+    private int experienceItemCap; // max size of services in each history
+
+    //============================//============================//============================ Direct Experience
+    //-- All indirect experience tuples that calculated across world run
+    private List<TrustIndirectExperience> indirectExperiences;
+    private int indirectExperienceCap;     // maximum size of indirectExperience
+    private int indirectExperienceItemCap; // max size of items in each indirectExperience
+
+    //============================//============================//============================ Direct Observation
+    //-- All observation tuples that calculated across world run
+    private List<TrustObservation> observations;
+    private int observationCap;     // maximum size of observations
+    private int observationItemCap; // max size of items in each observation
+
+    //============================//============================//============================ Indirect Observation
+    //-- All indirect observation tuples that calculated across world run
+    private List<TrustIndirectObservation> indirectObservations;
+    private int indirectObservationCap;     // maximum size of indirect observations
+    private int indirectObservationItemCap; // max size of items in each indirect observation
+
+    //============================//============================//============================ Certification
+
+    private boolean hasCandidateForCertification;
+
+    //============================//============================//============================
+
+    public int[] getObservationRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustObservation obs : observations) {
+            int ar = obs.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
+
+    public int[] getIndirectObservationRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustIndirectObservation obs : indirectObservations) {
+            int ar = obs.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
+
+    public int[] getExperienceRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustExperience exp : experiences) {
+            int ar = exp.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
+
+    public int[] getRecommendationRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustRecommendation exp : recommendations) {
+            int ar = exp.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
+
+    public int[] getIndirectExperienceRewardsCount() {
+        int[] tarPit = {0, 0};
+
+        for (TrustIndirectExperience obs : indirectExperiences) {
+            int ar = obs.getAbstractReward();
+            if (ar > 0) {
+                tarPit[0]++;
+            } else if (ar < 0) {
+                tarPit[1]++;
+            }
+        }
+        return tarPit;
+    }
 
     //============================//============================//============================
 
 
-    protected AgentTrust clone() {
-        AgentTrust trust = new AgentTrust(agent, historyCap, historyItemCap);
-        trust.histories = this.histories;
-        trust.historyIndex = this.historyIndex;
-        trust.historyItemCap = this.historyItemCap;
+/*    protected AgentTrust clone() {
+        AgentTrust trust = new AgentTrust(
+                trustReplaceMethod,
+                experienceCap, experienceItemCap,
+                indirectExperienceCap, indirectExperienceItemCap,
+                observationCap, observationItemCap,
+                indirectObservationCap, indirectObservationItemCap,
+                recommendationCap, recommendationItemCap);
+
+        trust.init(agent);
+        trust.experiences = this.experiences;
+        trust.experienceItemCap = this.experienceItemCap;
         return trust;
-    }
+    }*/
 
     @Override
     public String toString() {
         return "AgentTrust{" +
                 "\n\t\tagent=" + agent +
-                ",\n\t\t histories=" + Arrays.toString(histories) +
-                ",\n\t\t historyCap=" + historyCap +
-                ",\n\t\t historyIndex=" + historyIndex +
-                ",\n\t\t historySize=" + historySize +
-                ",\n\t\t trustHistoryItemCap=" + historyItemCap +
+                ",\n\t\t experienceCap=" + experienceCap +
+                ",\n\t\t experienceItemCap=" + experienceItemCap +
                 '}';
     }
 
-    public int getHistorySize() {
-        return historySize;
+    //============================//============================//============================
+
+
+    public Agent getAgent() {
+        return agent;
     }
 
-    public int[] getHistoriesSortedIndex() {
-        return historiesSortedIndex;
+    public List<TrustExperience> getExperiences() {
+        return experiences;
     }
 
-    public TrustHistory[] getHistories() {
-        return histories;
+    public int getExperienceItemCap() {
+        return experienceItemCap;
     }
 
-    public int getHistoryCap() {
-        return historyCap;
+    public int getExperienceCap() {
+        return experienceCap;
     }
 
-    public int getHistoryIndex() {
-        return historyIndex;
+    public TtTrustReplaceMethod getTrustReplaceMethod() {
+        return trustReplaceMethod;
     }
 
-    public int getHistoryItemCap() {
-        return historyItemCap;
+    public void setTrustReplaceMethod(TtTrustReplaceMethod trustReplaceMethod) {
+        this.trustReplaceMethod = trustReplaceMethod;
     }
 
-    public void addHistorySizeIfPossible() {
-        if (historySize < historyCap) {
-            historySize++;
-        }
+    public List<TrustRecommendation> getRecommendations() {
+        return recommendations;
     }
 
-    public void addHistoryIndex() {
-        historyIndex++;
+    public int getRecommendationCap() {
+        return recommendationCap;
     }
 
-    public boolean isIndexExceedFromCap() {
-        return historyIndex >= historyCap;
+    public int getRecommendationItemCap() {
+        return recommendationItemCap;
     }
 
-    public void setHistoryIndex(int historyIndex) {
-        this.historyIndex = historyIndex;
+    public int getObservationCap() {
+        return observationCap;
     }
 
+    public List<TrustIndirectExperience> getIndirectExperiences() {
+        return indirectExperiences;
+    }
+
+    public int getIndirectExperienceCap() {
+        return indirectExperienceCap;
+    }
+
+    public int getIndirectExperienceItemCap() {
+        return indirectExperienceItemCap;
+    }
+
+    public List<TrustObservation> getObservations() {
+        return observations;
+    }
+
+    public int getObservationItemCap() {
+        return observationItemCap;
+    }
+
+    public List<TrustIndirectObservation> getIndirectObservations() {
+        return indirectObservations;
+    }
+
+    public int getIndirectObservationCap() {
+        return indirectObservationCap;
+    }
+
+    public int getIndirectObservationItemCap() {
+        return indirectObservationItemCap;
+    }
+
+    public TrustAbstract[] getTrustAbstracts() {
+        return trustAbstracts;
+    }
+
+    public boolean isHasCandidateForCertification() {
+        return hasCandidateForCertification;
+    }
 }

@@ -1,36 +1,66 @@
 package utils;
 
-import _type.TtBehaviorStrategy;
 import _type.TtSimulationMode;
-import _type.TtTrustReplaceHistoryMethod;
 
 public class Config {
 
-    public static TtSimulationMode SIMULATION_MODE = TtSimulationMode.FullEnvironment;
+    //============================//============================
+    public static final String SimulatingFilePath = ProjectPath.instance().simulationProfileFile();
+    public static final String SimulatingFileName = SimulatingFilePath.substring(SimulatingFilePath.lastIndexOf("/"));
 
-    public static final String SimulatingFile = ProjectPath.instance().simulationData(1);
-    public static final String PureEnvironmentDataFile = ProjectPath.instance().pureEnvData(1);
-    public static final String FullEnvironmentDataFile = ProjectPath.instance().fullEnvData();
+    public static final String SimulationConfigFilePath = ProjectPath.instance().simulationConfigFile();
+    public static final String SimulationConfigFileName = SimulationConfigFilePath.substring(SimulationConfigFilePath.lastIndexOf("/"));
+
+    public static final String EnvironmentDataFilePath = ProjectPath.instance().environmentData();
+    public static final String EnvironmentDataFileName = EnvironmentDataFilePath.substring(EnvironmentDataFilePath.lastIndexOf("/"));
 
 
     //============================ World
-    public static int WORLD_LIFE_TIME = 200;                        // time of execution in each world
-    public static int WORLD_SLEEP_MILLISECOND = 100;                 // time of execution in each world
+    public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static final TtBehaviorStrategy TRUST_BEHAVIOR_STRATEGY = TtBehaviorStrategy.Discrete;
-    public static final int TRUST_HONEST_DISCRETE_PERCENT = 50;   // if TtHonestStrategy.Discrete selected, this defines the percentage of honest agents
+    public static int WORLD_LIFE_TIME = 500;          // Time of execution in each world
+    public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
-    public static final TtTrustReplaceHistoryMethod TRUST_REPLACE_HISTORY_METHOD = TtTrustReplaceHistoryMethod.Sequential_Circular;
+    public final static int EPISODE_TIMOUT = 200;
+
+    public static int STATE_TILE_WIDTH = 30;
+
+    public static int STATISTICS_AVERAGE_TIME_WINDOW = 50;
+
+
+    public static final int ROUTING_STAY_IN_TARGET_TIME = 1;
+    public static final int ROUTING_STAY_IN_PITFALL_TIME = 1;
+
+    //============================ Trust
+    public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 70;
 
     //============================ Drawing Windows
 
-    public static final boolean DRAWING_SHOW_MAIN_WINDOW = true;
-    public static final boolean DRAWING_SHOW_DIAGRAM_WINDOW = true;
+    public static final boolean DRAWING_SHOW_stateMachineWindow /*                  */ = false;
+    public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
+    public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_POWERFUL_AGENTS_RADIUS = true;
-    public static final int DRAWING_POWERFUL_AGENTS_THRESHOLD = 95;                // [1,100]
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
+    public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
+    public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
+    public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
+
+    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = false;
+    public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = false;
+
+    public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = false;
+    public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = false;
+
+    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = false;
+
+    //============================ Integrated Drawing Windows in Simulation Rounds
+
+    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
+    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
 
     //============================ Statistics
-    public static final boolean STATISTICS_IS_GENERATE = true;
+    public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
+    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
 
 }

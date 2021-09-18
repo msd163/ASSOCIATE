@@ -13,51 +13,56 @@ public class ProjectPath {
     public String root() {
         String hostPath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
 
-        return hostPath.substring(0, hostPath.indexOf("/target"));
+        return hostPath.substring(1, hostPath.indexOf("/target"));
     }
 
     public String resourcesDir() {
         return root() + "/src/main/resources";
     }
 
-    public String pureEnvDir() {
-        return root() + "/src/main/resources/pure-env";
+
+    public String environmentDir() {
+        return root() + "/src/main/resources/environment";
     }
 
-    public String fullEnvDir() {
-        return root() + "/src/main/resources/full-env";
+    public String environmentData(int i) {
+        return environmentDir() + "/environment-" + i + ".json";
     }
 
-    public String pureEnvData(int i) {
-        return pureEnvDir() + "/p-environment-" + i + ".json";
-    }
-
-    public String fullEnvData(int i) {
-        return fullEnvDir() + "/f-environment-" + i + ".json";
-    }
-
-    public String fullEnvData() {
+    public String environmentData() {
         int i = 100;
         for (; i > 0; i--) {
-            if (new File(fullEnvDir() + "/f-environment-" + i + ".json").exists()) {
+            if (new File(environmentDir() + "/environment-" + i + ".json").exists()) {
                 break;
             }
         }
-        System.out.println("|>  Selected FullEnvironment file: " + fullEnvDir() + "/f-environment-" + i + ".json");
-        return fullEnvDir() + "/f-environment-" + i + ".json";
+        System.out.println("|>  Selected FullEnvironment file: " + environmentDir() + "/environment-" + i + ".json");
+        return environmentDir() + "/environment-" + i + ".json";
     }
 
-    public String autoEnvGeneratorData() {
-        return resourcesDir() + "/autoEnvGen.json";
+    public String simulationProfileFile() {
+        return resourcesDir() + "/simulation-profile.json";
     }
 
-    public String simulationData(int i) {
-        return resourcesDir() + "/simulation-" + i + ".json";
+
+    public String simulationConfigFile() {
+        return resourcesDir() + "/simulation-config.json";
     }
 
     //============================//============================
 
     public String statisticsDir() {
         return root() + "/statistics";
+    }
+
+    public void createDirectoryIfNotExist(String statPath) {
+        File file = new File(statPath);
+
+        if (!file.exists()) {
+            boolean mkdir = file.mkdir();
+            if (mkdir) {
+                System.out.println("Statistics directory created: " + statPath);
+            }
+        }
     }
 }

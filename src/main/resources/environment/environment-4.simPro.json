@@ -1,0 +1,77 @@
+{
+  "--------------------------------------------------2": "STATE",
+  "stateCount": 50,
+  "stateCapacity": "100",
+  "stateTargetCount": "#2..6",
+  "pitfallCount": "20",
+  "--------------------------------------------------3": "AGENT",
+  "agentsCount": "500",
+  "bunches": [
+    {
+      "bunchCount": "%30@500",
+      "targetCount": "200",
+      "watchDepth": "2",
+      "watchListCap": "#800..1000",
+      "travelHistoryCap": "#1000..2000",
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#800..1000",
+      "experienceItemCap": "#800..1000",
+      "indirectExperienceCap": "#800..1000",
+      "indirectExperienceItemCap": "#800..1000",
+      "_3": "-----------------------------------",
+      "observationCap": "#800..2000",
+      "observationItemCap": "#800..2000",
+      "indirectObservationCap": "#800..2000",
+      "indirectObservationItemCap": "#800..2000",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#800..1000",
+      "trustRecommendationItemCap": "#80..100",
+      "_5": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 90,
+        "adversaryPercent": 5,
+        "mischiefPercent": 0,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    },
+    {
+      "bunchCount": "%70@500",
+      "targetCount": "200",
+      "watchDepth": "#0..1",
+      "watchListCap": "#8..800",
+      "travelHistoryCap": "#100..800",
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#10..800",
+      "experienceItemCap": "#10..800",
+      "indirectExperienceCap": "#10..800",
+      "indirectExperienceItemCap": "#10..800",
+      "_3": "-----------------------------------",
+      "observationCap": "#100..800",
+      "observationItemCap": "#100..800",
+      "indirectObservationCap": "#100..800",
+      "indirectObservationItemCap": "#100..800",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#100..1000",
+      "trustRecommendationItemCap": "#80..100",
+      "_5": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 80,
+        "adversaryPercent": 5,
+        "mischiefPercent": 5,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    }
+  ]
+}
