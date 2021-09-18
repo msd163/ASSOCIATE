@@ -42,7 +42,7 @@ public class SimulationConfigItem {
                     " - sfm: " + isSafeUseRecommendation +
                     " - ngEff: " + isUseNegativeRecommendationEffect +
                     " @CERT is: " + cert.isIsUseCertification() +
-                    " @INT rcm: " + isUseSharingRecommendationWithInternet +
+                    " @INT is: " + isUseSharingRecommendationWithInternet +
                     " - cnt: " + certificationCount
                     ;
 
@@ -89,7 +89,7 @@ public class SimulationConfigItem {
                             " - bid: " + isBidirectionalRecommendationSharing +
                             " - sfm: " + isSafeUseRecommendation +
                             " - ngEff: " + isUseNegativeRecommendationEffect +
-                            "  @INT rcm: " + isUseSharingRecommendationWithInternet +
+                            "  @INT is: " + isUseSharingRecommendationWithInternet +
                             " - cnt: " + certificationCount
                     ;
         }
