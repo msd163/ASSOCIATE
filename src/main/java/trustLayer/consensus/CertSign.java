@@ -1,11 +1,21 @@
 package trustLayer.consensus;
 
 import org.apache.commons.codec.binary.Base64;
-import systemLayer.Agent;
+import utils.Config;
 import utils.Cryptor;
+import utils.Globals;
 
 public class CertSign {
 
+    public CertSign(int id) {
+        if(id == -1) {
+            this.id = Globals.DAGRA_SIGN_NEXT_ID++;
+        }else{
+            this.id = id;
+        }
+    }
+
+    private int id;
     private int time;
     private CertContract signer;
     private CertContract signed;
@@ -25,6 +35,18 @@ public class CertSign {
         return Cryptor.verifySign_RSA(signer.getRequester(), signed.getRequester(), trustValue, time, sign);
     }
 
+    //============================//============================//============================
+
+    public CertSign clone() {
+        CertSign obj = new CertSign(this.id);
+        obj.setTrustValue(trustValue);
+        obj.setSigned(signed);
+        obj.setSigner(signer);
+        obj.setTime(time);
+        obj.setSign(sign);
+
+        return obj;
+    }
     //============================//============================//============================
 
 
@@ -68,4 +90,15 @@ public class CertSign {
         this.sign = sign;
     }
 
+    public boolean isExpired() {
+        return (Globals.WORLD_TIMER - time) >= Config.DAGRA_ACCEPT_STAGE__EXPIRE_TIME_THRESHOLD;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

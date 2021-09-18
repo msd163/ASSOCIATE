@@ -20,7 +20,10 @@ public class DaGra {
         contracts = new ArrayList<>();
         toBeVerifiedContracts = new ArrayList<>();
         toBeSignedContracts = new ArrayList<>();
+        id = Globals.DAGRA_NEXT_ID++;
     }
+
+    private int id;
 
     private CertContract genesis;
 
@@ -50,6 +53,8 @@ public class DaGra {
         }
 
         contract.setRequestTime(Globals.WORLD_TIMER);
+
+        contract.setDagraId(id);
 
         contracts.add(contract);
 
@@ -107,7 +112,7 @@ public class DaGra {
 
     //============================//============================
     public void sendRegisterRequest() {
-        CertContract contract = new CertContract();
+        CertContract contract = new CertContract(-1);
         contract.setRequester(owner);
         contract.setRequestTime(Globals.WORLD_TIMER);
         contract.setPreviousCertification(findLastByRequester(owner));
@@ -118,13 +123,12 @@ public class DaGra {
         my = contract;
         for (Agent agent : world.getAgents()) {
             if (agent.getDaGra() != null && agent.getId() != owner.getId()) {
-                agent.getDaGra().addRequest(contract);
+                agent.getDaGra().addRequest(contract.clone());
             }
         }
     }
 
     //============================//============================//============================
-
 
     /**
      * Main method of DaGra
@@ -173,14 +177,23 @@ public class DaGra {
         }
     }
 
-    private CertSign performSign(CertContract toBeSignedContract, float trustValue) {
-        CertSign sign = new CertSign();
+    private boolean performSign(CertContract toBeSignedContract, float trustValue) {
+        CertSign sign = new CertSign(-1);
         sign.setSigner(my);
         sign.setSigned(toBeSignedContract);
         sign.setTime(Globals.WORLD_TIMER);
         sign.setTrustValue(trustValue);
         sign.doSign();
-        return sign;
+
+
+        /* Adding sign to Signed contract*/
+        toBeSignedContract.getSigns().add(sign);
+        /* Adding sign to its contract */
+        my.getSignedContracts().add(sign);
+
+        broadcastSign(sign);
+
+        return true;
     }
 
     /**
@@ -191,9 +204,67 @@ public class DaGra {
     private void broadcastSign(CertSign sign) {
         for (Agent agent : world.getAgents()) {
             if (agent.getDaGra() != null && agent.getId() != owner.getId()) {
-                agent.getDaGra().addSign(sign);
+                agent.getDaGra().addSign(sign.clone());
             }
         }
+    }
+
+    private void broadcastVerify(CertVerify certVerify) {
+        for (Agent agent : world.getAgents()) {
+            if (agent.getDaGra() != null && agent.getId() != owner.getId()) {
+                agent.getDaGra().addVerify(certVerify.clone());
+            }
+        }
+    }
+
+    private void addVerify(CertVerify verify) {
+
+        /* Finding verifier contract and verified contract in current DaGra */
+        CertContract localVerifier = findContractById(verify.getVerifier().getId());
+        CertContract localVerified = findContractById(verify.getVerified().getId());
+
+        /* If can not find related verifier or verified contract, there is and error in DaGra */
+        if (localVerified == null || localVerifier == null) {
+            OutLog____.pl(TtOutLogMethodSection.DaGra, TtOutLogStatus.ERROR, "null contract in certSign: localVerifier" + (localVerifier == null ? "NULL" : localVerifier.getId()) + "  localVerified: " + (localVerified == null ? "NULL" : localVerified.getId()));
+            return;
+        }
+        CertVerify prevVerify = null;
+
+        //============================//============================ Adding Verified 
+        /* Checking whether previously added to Signs */
+        for (CertVerify cv : localVerified.getVerifies()) {
+            if (cv.getId() == verify.getId()) {
+                prevVerify = cv;
+                break;
+            }
+        }
+
+        //============================//============================ Adding Verifier
+        /* Checking whether previously added to Signs */
+        for (CertVerify cv : localVerifier.getVerifiedContracts()) {
+            if (cv.getId() == verify.getId()) {
+                if (prevVerify != null) {
+                    /* If the sign of verified and the sign of verifier is not equals, there is an error  */
+                    if (!cv.equals(prevVerify)) {
+                        OutLog____.pl(TtOutLogMethodSection.DaGra, TtOutLogStatus.ERROR, "Conflict in previously added verify in process of adding verify to other dags ");
+                        return;
+                    }
+                } else {
+                    prevVerify = cv;
+                }
+                break;
+            }
+        }
+
+        if (prevVerify == null) {
+            prevVerify = verify.clone();
+            prevVerify.setVerified(localVerified);
+            prevVerify.setVerifier(localVerifier);
+        }
+
+        localVerified.getVerifies().add(prevVerify);
+        localVerifier.getVerifiedContracts().add(prevVerify);
+
     }
 
     /**
@@ -202,48 +273,62 @@ public class DaGra {
      * @param sign is the received sign from the network
      */
     private void addSign(CertSign sign) {
-        boolean isSignedAdded = false;
-        boolean isSignerAdded = false;
-        boolean isAddedPreviously;
-        for (CertContract contract : contracts) {
 
-            /* Adding the input sign to Signs list of the signed contract */
-            if (contract.getId() == sign.getSigned().getId()) {
+        /* Finding signer contract and signed contract in current DaGra */
+        CertContract localSigner = findContractById(sign.getSigner().getId());
+        CertContract localSigned = findContractById(sign.getSigned().getId());
 
-                /* Checking whether previously added to Signs */
-                isAddedPreviously = false;
-                for (CertSign cs : contract.getSigns()) {
-                    if (cs.getSigner().getId() == sign.getSigner().getId() && cs.getSigned().getId() == sign.getSigned().getId()) {
-                        isAddedPreviously = true;
-                        break;
-                    }
-                }
-                if (!isAddedPreviously) {
-                    contract.getSigns().add(sign);
-                }
-                isSignedAdded = true;
-            }
+        /* If can not find related signer or signed contract, there is and error in DaGra */
+        if (localSigned == null || localSigner == null) {
+            OutLog____.pl(TtOutLogMethodSection.DaGra, TtOutLogStatus.ERROR, "null contract in certSign: localSigner" + (localSigner == null ? "NULL" : localSigner.getId()) + "  localSigned: " + (localSigned == null ? "NULL" : localSigned.getId()));
+            return;
+        }
+        CertSign prevSign = null;
 
-            /* Adding the input sign to SignedContracts list of the signer contract */
-            else if (contract.getId() == sign.getSigner().getId()) {
-
-                /* Checking whether previously added to SignedContracts */
-                isAddedPreviously = false;
-                for (CertSign cs : contract.getSignedContracts()) {
-                    if (cs.getSigner().getId() == sign.getSigner().getId() && cs.getSigned().getId() == sign.getSigned().getId()) {
-                        isAddedPreviously = true;
-                        break;
-                    }
-                }
-                if (!isAddedPreviously) {
-                    contract.getSignedContracts().add(sign);
-                }
-                isSignerAdded = true;
-            }
-            if (isSignedAdded && isSignerAdded) {
+        //============================//============================ Adding Signed 
+        /* Checking whether previously added to Signs */
+        for (CertSign cs : localSigned.getSigns()) {
+            if (cs.getId() == sign.getId()) {
+                prevSign = cs;
                 break;
             }
         }
+
+        //============================//============================ Adding Signer
+        /* Checking whether previously added to Signs */
+        for (CertSign cs : localSigner.getSignedContracts()) {
+            if (cs.getId() == sign.getId()) {
+                if (prevSign != null) {
+                    /* If the sign of signed and the sign of signer is not equals, there is an error  */
+                    if (!cs.equals(prevSign)) {
+                        OutLog____.pl(TtOutLogMethodSection.DaGra, TtOutLogStatus.ERROR, "Conflict in previously added sign in process of adding sign to other dags ");
+                        return;
+                    }
+                } else {
+                    prevSign = cs;
+                }
+                break;
+            }
+        }
+
+        if (prevSign == null) {
+            prevSign = sign.clone();
+            prevSign.setSigned(localSigned);
+            prevSign.setSigner(localSigner);
+        }
+
+        localSigned.getSigns().add(prevSign);
+        localSigner.getSignedContracts().add(prevSign);
+
+    }
+
+    private CertContract findContractById(int id) {
+        for (CertContract contract : contracts) {
+            if (contract.getId() == id) {
+                return contract;
+            }
+        }
+        return null;
     }
 
     public boolean processSigning() {
@@ -254,17 +339,7 @@ public class DaGra {
 
         /* If there is no contract to be signed, the Genesis contract will be signed */
         if (toBeSignedContracts.size() == 0) {
-
-            CertSign sign = performSign(genesis, 1.0f);
-
-            /* Adding sign to Signed contract*/
-            genesis.getSigns().add(sign);
-            /* Adding sign to its contract */
-            my.getSignedContracts().add(sign);
-
-            broadcastSign(sign);
-
-            return true;
+            return performSign(genesis, 1.0f);
         }
 
         boolean isSignedPreviously;
@@ -282,7 +357,7 @@ public class DaGra {
 
             /* For checking if selected contract is signed previously via this contract */
             isSignedPreviously = false;
-            for (CertSign sign : my.getSigns()) {
+            for (CertSign sign : my.getSignedContracts()) {
                 if (sign.getSigned().getId() == contract.getId()) {
                     isSignedPreviously = true;
                     break;
@@ -295,16 +370,7 @@ public class DaGra {
 
             float trustValue = world.getTrustManager().getTrustValue(owner, contract.getRequester());
             if (trustValue != 0.0f) {
-                CertSign sign = performSign(contract, trustValue);
-
-                /* Adding sign to Signed contract*/
-                contract.getSigns().add(sign);
-                /* Adding sign to its contract */
-                my.getSignedContracts().add(sign);
-
-                broadcastSign(sign);
-
-                return true;
+                return performSign(contract, trustValue);
             }
 
         }
@@ -312,8 +378,123 @@ public class DaGra {
         return false;
     }
 
-    public void processVerifying() {
+    public boolean processVerifying() {
 
+        if (my == null) {
+            return false;
+        }
+
+        if (my.getStatus() == TtDaGraContractStatus.Request_Signing) {
+            OutLog____.pl("sss");
+        }
+        /* If there is no contract to be verified, return false */
+        if (toBeVerifiedContracts.size() == 0) {
+            return performVerify(genesis);
+        }
+
+        boolean isVerifiedPreviously;
+
+        for (int i = 0; i < 10; i++) {
+
+            /* Selecting a contract randomly */
+            int selectedIndex = Globals.RANDOM.nextInt(toBeVerifiedContracts.size());
+            CertContract contract = toBeVerifiedContracts.get(selectedIndex);
+
+            /* 1- For preventing self verifying */
+            if (contract.getId() == my.getId()) {
+                continue;
+            }
+
+            /* 2-  For checking if selected contract is verified previously via this contract */
+            isVerifiedPreviously = false;
+            for (CertVerify verify : my.getVerifiedContracts()) {
+                if (verify.getVerifier().getId() == contract.getId()) {
+                    isVerifiedPreviously = true;
+                    break;
+                }
+            }
+            /* For preventing double signing */
+            if (isVerifiedPreviously) {
+                continue;
+            }
+
+            /* 3- For preventing verifying the signed contract by itself */
+            boolean isItsOwn = false;
+            for (CertSign sign : contract.getSigns()) {
+                if (sign.getSigner().getId() == my.getId()) {
+                    isItsOwn = true;
+                    break;
+                }
+            }
+            if (isItsOwn) {
+                continue;
+            }
+
+            /* 4- Checking sings of the contract do not expired */
+            boolean isExpiredOrInvalid = false;
+            for (CertSign sign : contract.getSigns()) {
+                if (sign.isExpired() || !sign.isValid()) {
+                    isExpiredOrInvalid = true;
+                    break;
+                }
+            }
+            if (isExpiredOrInvalid) {
+                continue;
+            }
+
+            /* 5- There is no signer with negative trust */
+            boolean isSignWithNegativeVal = false;
+            for (CertSign sign : contract.getSigns()) {
+                float trustValue = world.getTrustManager().getTrustValue(owner, sign.getSigner().getRequester());
+                if (trustValue < 0) {
+                    isSignWithNegativeVal = true;
+                    break;
+                }
+            }
+            if (isSignWithNegativeVal) {
+                continue;
+            }
+
+            /* 6- There is no cycle in the signed graphs */
+            List<CertContract> openList = new ArrayList<>();
+            openList.add(contract);
+            boolean isFindCycle;
+            isFindCycle = false;
+            while (!openList.isEmpty() && !isFindCycle) {
+                CertContract cnt = openList.remove(0);
+                for (CertSign sign : cnt.getSigns()) {
+                    if (sign.getSigner().getId() == my.getId()) {
+                        isFindCycle = true;
+                        break;
+                    }
+                    if (sign.isValid() && !sign.isExpired()) {
+                        openList.add(sign.getSigner());
+                    }
+                }
+            }
+            if (isFindCycle) {
+                continue;
+            }
+
+            return performVerify(contract);
+        }
+
+        return false;
+    }
+
+    private boolean performVerify(CertContract contract) {
+        CertVerify certVerify = new CertVerify(-1);
+        certVerify.setTime(Globals.WORLD_TIMER);
+        certVerify.setVerifier(my);
+        certVerify.setVerified(contract);
+        certVerify.setResult(true);
+
+        my.getVerifiedContracts().add(certVerify);
+        contract.getVerifies().add(certVerify);
+
+        broadcastVerify(certVerify);
+
+        return true;
     }
 
     //============================//============================//============================
@@ -324,6 +505,7 @@ public class DaGra {
 
     public void setGenesis(CertContract genesis) {
         this.genesis = genesis;
+        this.genesis.setDagraId(id);
         contracts.add(genesis);
     }
 
@@ -351,4 +533,15 @@ public class DaGra {
         this.toBeVerifiedContracts = toBeVerifiedContracts;
     }
 
+    public CertContract getMy() {
+        return my;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

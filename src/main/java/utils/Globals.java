@@ -86,9 +86,12 @@ public class Globals {
 
     public static boolean PAUSE = false;
 
-    public static long CONTRACT_NEXT_ID;         // an static variable for counting CertContract is
 
     //============================//============================//============================
+    public static int DAGRA_SIGN_NEXT_ID = 0;               // an static variable for counting CertSign ID
+    public static int DAGRA_VERIFY_NEXT_ID = 0;             // an static variable for counting CertSign ID
+    public static int DAGRA_CONTRACT_NEXT_ID = 0;           // an static variable for counting CertContract ID
+    public static int DAGRA_NEXT_ID = 0;                    // an static variable for counting DaGra ID
     public static int DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD = 0;
     //============================//============================//============================
     public static int WORLD_TIMER;              // The timer of world which is increased by every run of world

@@ -10,15 +10,21 @@ import java.util.List;
 
 public class CertContract {
 
-    public CertContract() {
+    public CertContract(int id) {
         signs = new ArrayList<>();
         signedContracts = new ArrayList<>();
         verifies = new ArrayList<>();
         verifiedContracts = new ArrayList<>();
-        id = Globals.CONTRACT_NEXT_ID++;
+        if (id == -1) {
+            this.id = Globals.DAGRA_CONTRACT_NEXT_ID++;
+        }else{
+            this.id = id;
+        }
     }
 
-    private final long id;
+    private int dagraId;
+
+    private final int id;
 
     /* Whether this certification is genesis Node in DAG? */
     private boolean isGenesis;
@@ -48,7 +54,7 @@ public class CertContract {
 
     public TtDaGraContractStatus updateStatus() {
 
-        if(isGenesis){
+        if (isGenesis) {
             status = TtDaGraContractStatus.Accept_Accept;
             return status;
         }
@@ -86,7 +92,7 @@ public class CertContract {
         for (CertSign sign : signs) {
             if (sign.isValid()) {
                 validSignCount++;
-                if (Globals.WORLD_TIMER - sign.getTime() < Config.DAGRA_ACCEPT_STAGE__EXPIRE_TIME_THRESHOLD /*&& sign.getTrustValue() > 0*/) {
+                if (!sign.isExpired() /*&& sign.getTrustValue() > 0*/) {
                     notExpiredValidSignCount++;
                 }
             }
@@ -117,6 +123,23 @@ public class CertContract {
         return status;
     }
 
+    public CertContract clone() {
+        CertContract obj = new CertContract(this.id);
+        obj.setDagraId(getDagraId());
+        obj.setRequester(requester);
+        obj.setStatus(status);
+        obj.setRequestTime(requestTime);
+        obj.setIsGenesis(isGenesis);
+        obj.setPreviousCertification(previousCertification);
+
+     /*   obj.setVerifies();
+        obj.setVerifiedContracts();
+
+        obj.setSigns();
+        obj.setSignedContracts();*/
+
+        return obj;
+    }
 
     //============================//============================//============================
 
@@ -169,7 +192,7 @@ public class CertContract {
         this.previousCertification = previousCertification;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -180,4 +203,29 @@ public class CertContract {
     public void setStatus(TtDaGraContractStatus status) {
         this.status = status;
     }
+
+    public List<CertVerify> getVerifies() {
+        return verifies;
+    }
+
+    public void setVerifies(List<CertVerify> verifies) {
+        this.verifies = verifies;
+    }
+
+    public List<CertVerify> getVerifiedContracts() {
+        return verifiedContracts;
+    }
+
+    public void setVerifiedContracts(List<CertVerify> verifiedContracts) {
+        this.verifiedContracts = verifiedContracts;
+    }
+
+    public int getDagraId() {
+        return dagraId;
+    }
+
+    public void setDagraId(int dagraId) {
+        this.dagraId = dagraId;
+    }
+
 }

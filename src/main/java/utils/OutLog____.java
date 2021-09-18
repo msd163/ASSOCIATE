@@ -26,4 +26,9 @@ public class OutLog____ {
         pl(methodSection, status, message, null, null, null);
 
     }
+
+    public static void pl(String message) {
+        pl(null, TtOutLogStatus.SUCCESS, message, null, null, null);
+
+    }
 }

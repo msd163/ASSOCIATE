@@ -170,7 +170,7 @@ public class World {
 
     private void initDaGra() {
         /* Creating Genesis Certification and broadcasting */
-        CertContract genesis = new CertContract();
+        CertContract genesis = new CertContract(-1);
         genesis.setRequestTime(Globals.WORLD_TIMER);
         genesis.setIsGenesis(true);
         genesis.setStatus(TtDaGraContractStatus.Accept_Accept);
@@ -180,7 +180,7 @@ public class World {
         for (Agent agent : agents) {
             if (agent.getTrust().isHasCandidateForCertification()) {
                 agent.setDaGra(new DaGra(agent));
-                agent.getDaGra().setGenesis(genesis);
+                agent.getDaGra().setGenesis(genesis.clone());
                 //agent.getDaGra().assignMyContract();
             }
         }

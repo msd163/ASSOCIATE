@@ -38,10 +38,10 @@ public class Config {
     public static int DAGRA_REQUEST_STAGE__NUMBER_OF_REQUEST_IN_EACH_PERIOD = 2;       // The new certification request is sent in this period times
 
     public static int DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_SIGNED = 2;
-    public static int DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_VERIFIED = 0;
+    public static int DAGRA_REQUEST_STAGE__CERTIFICATIONS_TO_BE_VERIFIED = 1;
     public static int DAGRA_ACCEPT_STAGE__EXPIRE_TIME_THRESHOLD = 1000;
     public static int DAGRA_ACCEPT_STAGE__NEEDED_SIGNS = 1;
-    public static int DAGRA_ACCEPT_STAGE__NEEDED_VERIFICATIONS = 0;
+    public static int DAGRA_ACCEPT_STAGE__NEEDED_VERIFICATIONS = 1;
 
     // public static boolean TRUST_RECOMMENDATION_SEND_NEGATIVE = true;
     //  public static float TRUST_LEVEL_VALUE_IGNORE_THRESHOLD = 0.001f;    // A threshold value that identify trust levels which are less than it will be ignored in trust calculations
