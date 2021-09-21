@@ -46,6 +46,8 @@ public class TrustManager {
 
             if (verifier.getTrust().getTrustAbstracts()[watchedAgent.getAgent().getIndex()].getTrustValue() > 0) {
                 if (watchedAgent.getAgent().getDaGra() != null) {
+                    //todo: it is need to check other agents with DaGra if current agent has no validity info . continuing for loop
+                    System.out.println("------------>>>> Verifier: " + watchedAgent.getAgent().getId());
                     return watchedAgent.getAgent().getDaGra().isValidCertificationFor(toBeVerified);
                 }
             }
@@ -90,7 +92,7 @@ public class TrustManager {
         ) {
             innerTrustValue = 1.0f;
             OutLog____.pl(TtOutLogMethodSection.TrustMng_GetTrustValue, TtOutLogStatus.SUCCESS, "CRT: Responder (" + responder.getId() + ") with Certificate. Requester: " + requester.getId());
-            System.out.println("------------------------------------------------------------- Certification");
+            System.out.println("------------------------------------------------------------- Certification requester: " + requester.getId() + " | responder: " + responder.getId() + "");
         } else {
             innerTrustValue = calcInnerTrustValue(requester, responder);
 

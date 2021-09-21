@@ -83,10 +83,81 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
             //-- drawing sign of agents that are candidate for certification
             if (agentInRow.getTrust().isHasCandidateForCertification()) {
-                g.setColor(Color.YELLOW);
-                g.fillOval(pnX - 7, row * 5 + 1, 5, 5);
-                g.fillOval(row * 5, pnY - 7, 5, 5);
+                //-- If Use DaGra method
+                if (world.getSimulationConfig().getCert().isIsUseDaGra()) {
+                    //-- Drawing curve or circle according to CertCertification status
+                    if (agentInRow.getDaGra() != null && agentInRow.getDaGra().getMy() != null) {
+                        switch (agentInRow.getDaGra().getMy().getStatus()) {
+                            case NoContract:
+                                g.setColor(Globals.Color$.lightYellow);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 15);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 15);
+                                break;
 
+                            case Expired:
+                                g.setColor(Globals.Color$.lightRed);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 20);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 20);
+                                break;
+
+                            case Request_New:
+                                g.setColor(Globals.Color$.yellow);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 45);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 45);
+                                break;
+
+                            case Request_Signing:
+                                g.setColor(Globals.Color$.yellow);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 90);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 90);
+                                break;
+
+                            case Request_Verifying:
+                                g.setColor(Globals.Color$.yellow);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 180);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 180);
+                                break;
+
+                            case Accept_New:
+                                g.setColor(Globals.Color$.lightGreen);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 220);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 220);
+                                break;
+
+                            case Accept_Signing:
+                                g.setColor(Globals.Color$.green);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 260);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 260);
+                                break;
+
+                            case Accept_Verifying:
+                                g.setColor(Globals.Color$.green);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 300);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 300);
+                                break;
+                            case Accept_Accept:
+                                g.setColor(Globals.Color$.darkGreen);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 359);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 359);
+                                break;
+
+                        }
+                    } else {
+                        g.setColor(Color.LIGHT_GRAY);
+                        g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 5);
+                        g.fillArc(row * 5, pnY - 7, 5, 5, 0, 5);
+
+                    }
+                }
+
+                // If dont use DaGra method
+                else {
+
+                    g.setColor(Color.YELLOW);
+                    g.fillOval(pnX - 7, row * 5 + 1, 5, 5);
+                    g.fillOval(row * 5, pnY - 7, 5, 5);
+
+                }
             }
 
             //-- drawing sign of agents with internet
