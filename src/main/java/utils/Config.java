@@ -18,7 +18,7 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 500;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 222;          // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
@@ -32,7 +32,9 @@ public class Config {
     public static final int ROUTING_STAY_IN_PITFALL_TIME = 1;
 
     //============================ Trust
-    public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 70;
+    public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 30;
+    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_SIGN_TRY = 20;
+    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_VERIFICATION_TRY = 20;
 
     //============================ Drawing Windows
 
@@ -60,7 +62,7 @@ public class Config {
     public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
 
     //============================ Statistics
-    public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
-    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
+    public static final boolean STATISTICS_IS_GENERATE /*           */ = false;
+    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = false;
 
 }

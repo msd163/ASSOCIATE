@@ -297,7 +297,7 @@ public class StateX {
                                  ArrayList<StateX> path) {
 
         //============================  For all agents in this state..., Adding agents of current state to watchedAgents list
-        // - If the watchedAgents is filled,adding agents will ignored.
+        // - If the watchedAgents is filled,adding agents will be ignored.
         if (remainedAgentCount > 0) {
             for (Agent agent : agents) {
                 //-- If the watch list of the source agent is full...

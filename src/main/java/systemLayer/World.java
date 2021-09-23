@@ -117,10 +117,10 @@ public class World {
 
         agents.sort((Agent a1, Agent a2) -> {
             if (a1.getCapacity().getCapPower() > a2.getCapacity().getCapPower()) {
-                return 1;
+                return -1;
             }
             if (a1.getCapacity().getCapPower() < a2.getCapacity().getCapPower()) {
-                return -1;
+                return 1;
             }
             return 0;
         });
@@ -170,7 +170,7 @@ public class World {
 
     private void initDaGra() {
         /* Creating Genesis Certification and broadcasting */
-        CertContract genesis = new CertContract(-1);
+        CertContract genesis = new CertContract(-1, -1);
         genesis.setRequestTime(Globals.WORLD_TIMER);
         genesis.setIsGenesis(true);
         genesis.setStatus(TtDaGraContractStatus.Accept_Accept);
@@ -306,6 +306,45 @@ public class World {
 
 
             //============================//============================ DaGra processes
+            /* Updating all contracts status and filling toBeSignedContracts and toBeVerifiedContracts lists  */
+            for (Agent agent : agents) {
+                if (agent.getTrust().isHasCandidateForCertification()) {
+                    agent.getDaGra().updatingStatusAndList();
+                }
+            }
+
+            /* Creating a list for agents that have register request, and sent a certain request to the DaGra randomly*/
+            /* If the request period has arrived */
+            if ((Globals.WORLD_TIMER + 1) % simulationConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
+               /* If the maximum allowed number of requests is not consumed */
+                if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
+
+                    /* Creating register request list */
+                    List<Agent> registerRequestList = new ArrayList<>();
+                    for (Agent agent : agents) {
+                        if (agent.getTrust().isHasCandidateForCertification()) {
+                            if (agent.getDaGra().isHasRegisterRequest()) {
+                                registerRequestList.add(agent);
+                            }
+                        }
+                    }
+
+                    /* As long as there is a request, and the capacity of request registration is not full. */
+                    while (registerRequestList.size() > 0 &&
+                            Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD
+                                    <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
+
+                        /* Selecting a requester randomly */
+                        int nextInt = Globals.RANDOM.nextInt(registerRequestList.size());
+                        Agent selectedAgent = registerRequestList.remove(nextInt);
+                        /* Sending a request to DaGra */
+                        selectedAgent.getDaGra().sendRegisterRequest();
+                        Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD++;
+                    }
+                }
+            }
+
+            /* Processing DaGra for all statues EXCEPT 'NoContract' and 'Expired' statuses */
             for (Agent agent : agents) {
                 if (agent.getTrust().isHasCandidateForCertification()) {
                     OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, ">> Agents with certification Cap. agentId: " + agent.getId());
@@ -386,21 +425,22 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
-        new ImageBuilder().generateStatisticsImages(
-                stateMachineDrawingWindow,
-                travelStatsLinearDrawingWindow,
-                trustMatrixDrawingWindow,
-                trustStatsLinearDrawingWindow,
-                trustRecogniseLinearDrawingWindow,
-                trustAnalysisLinearDrawingWindow,
-                observationBarDrawingWindow,
-                recommendationBarDrawingWindow,
-                travelHistoryBarDrawingWindow,
-                experienceBarDrawingWindow,
-                indirectExperienceBarDrawingWindow,
-                indirectObservationBarDrawingWindow
-        );
-
+        if (Config.STATISTICS_IS_GENERATE) {
+            new ImageBuilder().generateStatisticsImages(
+                    stateMachineDrawingWindow,
+                    travelStatsLinearDrawingWindow,
+                    trustMatrixDrawingWindow,
+                    trustStatsLinearDrawingWindow,
+                    trustRecogniseLinearDrawingWindow,
+                    trustAnalysisLinearDrawingWindow,
+                    observationBarDrawingWindow,
+                    recommendationBarDrawingWindow,
+                    travelHistoryBarDrawingWindow,
+                    experienceBarDrawingWindow,
+                    indirectExperienceBarDrawingWindow,
+                    indirectObservationBarDrawingWindow
+            );
+        }
         System.out.println("Finished");
 
 

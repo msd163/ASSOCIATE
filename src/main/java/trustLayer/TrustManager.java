@@ -1,5 +1,6 @@
 package trustLayer;
 
+import _type.TtDaGraContractStatus;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import environmentLayer.StateX;
@@ -32,28 +33,28 @@ public class TrustManager {
      * @param toBeVerified
      * @return TRUE/FALSE
      */
-    private boolean isHasValidCertificationInDaGra(Agent verifier, Agent toBeVerified) {
+    private Float getValidCertificationTrustValueInDaGra(Agent verifier, Agent toBeVerified) {
 
         if (verifier.getDaGra() != null) {
-            return verifier.getDaGra().isValidCertificationFor(toBeVerified);
+            return verifier.getDaGra().getValidCertificationTrustValue(toBeVerified);
         }
 
         for (WatchedAgent watchedAgent : verifier.getWatchedAgents()) {
-            // For preventing request from the agent that we want verify it.
+            // For preventing request from the agent that we want to verify it.
             if (watchedAgent.getAgent().getId() == toBeVerified.getId()) {
                 continue;
             }
 
-            if (verifier.getTrust().getTrustAbstracts()[watchedAgent.getAgent().getIndex()].getTrustValue() > 0) {
+            //if (verifier.getTrust().getTrustAbstracts()[watchedAgent.getAgent().getIndex()].getTrustValue() > 0) {
                 if (watchedAgent.getAgent().getDaGra() != null) {
-                    //todo: it is need to check other agents with DaGra if current agent has no validity info . continuing for loop
-                    System.out.println("------------>>>> Verifier: " + watchedAgent.getAgent().getId());
-                    return watchedAgent.getAgent().getDaGra().isValidCertificationFor(toBeVerified);
+                    //todo: it is need to check other agents with DaGra if current agent has no validity info . Continuing for loop
+//                    System.out.println("------------>>>> Verifier: " + watchedAgent.getAgent().getId());
+                    return watchedAgent.getAgent().getDaGra().getValidCertificationTrustValue(toBeVerified);
                 }
-            }
+            //}
         }
 
-        return false;
+        return null;
     }
     //============================//============================//============================
 
@@ -79,21 +80,30 @@ public class TrustManager {
             return trust.getTrustAbstracts()[responder.getIndex()].getTrustValue();
         }
 
-        float innerTrustValue;
-        if (
-                simulationConfigItem.getCert().isIsUseCertification()                   // certification mode is enabled in config file
-                        && responder.getTrust().isHasCandidateForCertification()        // the responder agent has capability of gaining certification
-                        &&                                                              // if DaGra mode is disabled of the responder has a valid certification
-                        (
-                                !simulationConfigItem.getCert().isIsUseDaGra()                  // do not use DaGra
-                                        ||
-                                        isHasValidCertificationInDaGra(requester, responder)    // the responder gained a valid certification from DaGra
-                        )
-        ) {
-            innerTrustValue = 1.0f;
-            OutLog____.pl(TtOutLogMethodSection.TrustMng_GetTrustValue, TtOutLogStatus.SUCCESS, "CRT: Responder (" + responder.getId() + ") with Certificate. Requester: " + requester.getId());
-            System.out.println("------------------------------------------------------------- Certification requester: " + requester.getId() + " | responder: " + responder.getId() + "");
-        } else {
+        float innerTrustValue = -64;
+        if (simulationConfigItem.getCert().isIsUseCertification()                   // Certification mode is enabled in config file
+                && responder.getTrust().isHasCandidateForCertification()) {         // The responder agent has capability of gaining certification
+
+            // If DaGra mode is enabled
+            if (simulationConfigItem.getCert().isIsUseDaGra()) {
+                Float trustValueInDaGra = getValidCertificationTrustValueInDaGra(requester, responder);
+                if (trustValueInDaGra != null) {
+                    innerTrustValue =
+                            (trustValueInDaGra > 0) ? +1.0f
+                                    : ((trustValueInDaGra < 0) ? -1.0f
+                                    : 0.0f);
+                    //System.out.println("-------------------------------- DaGra Certification <<" + trustValueInDaGra + ">> requester: " + requester.getId() + " | responder: " + responder.getId() + "");
+                }
+            }
+            // If DaGra mode is disabled, use absolute trust value
+            else {
+                innerTrustValue = 1.0f;
+                OutLog____.pl(TtOutLogMethodSection.TrustMng_GetTrustValue, TtOutLogStatus.SUCCESS, "CRT: Responder (" + responder.getId() + ") with Certificate. Requester: " + requester.getId());
+                System.out.println("-------------------------------- Absolute Certification ((1.0)) requester: " + requester.getId() + " | responder: " + responder.getId() + "");
+            }
+        }
+
+        if (innerTrustValue == -64) {
             innerTrustValue = calcInnerTrustValue(requester, responder);
 
             //-- trust of recommendation

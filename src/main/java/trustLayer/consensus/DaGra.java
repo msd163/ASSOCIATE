@@ -1,10 +1,12 @@
 package trustLayer.consensus;
 
+import _type.TtBehaviorState;
 import _type.TtDaGraContractStatus;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import systemLayer.Agent;
 import systemLayer.World;
+import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 
@@ -100,18 +102,22 @@ public class DaGra {
     //============================//============================
 
 
-    public boolean isValidCertificationFor(Agent toBeVerified) {
+    public Float getValidCertificationTrustValue(Agent toBeVerified) {
         for (CertContract contract : contracts) {
             if (!contract.isIsGenesis() && contract.getRequester().getId() == toBeVerified.getId()) {
-                return contract.getStatus() == TtDaGraContractStatus.Accept_Accept;
+                if (contract.getStatus() == TtDaGraContractStatus.Accept_Accept) {
+                    return contract.getFinalTrustValue();
+                } else {
+                    return null;
+                }
             }
         }
-        return false;
+        return null;
     }
 
     //============================//============================
     public void sendRegisterRequest() {
-        CertContract contract = new CertContract(-1);
+        CertContract contract = new CertContract(-1, world.getSimulationConfig().getCert().getExpiredTimeOfCert_DaGra());
         contract.setRequester(owner);
         contract.setRequestTime(Globals.WORLD_TIMER);
         contract.setPreviousCertification(findLastByRequester(owner));
@@ -129,11 +135,8 @@ public class DaGra {
 
     //============================//============================//============================
 
-    /**
-     * Main method of DaGra
-     */
-    public void process() {
-        // updating the status of all contracts in this DaGra and list
+    public void updatingStatusAndList() {
+        // Updating the status of all contracts in this DaGra and list
         toBeSignedContracts.clear();
         toBeVerifiedContracts.clear();
 
@@ -146,17 +149,23 @@ public class DaGra {
             }
         }
 
+    }
+
+    public boolean isHasRegisterRequest() {
+        return my == null || my.getStatus() == TtDaGraContractStatus.Expired;
+    }
+
+    /**
+     * Main method of DaGra
+     */
+    public void process() {
+
         // Do work
         TtDaGraContractStatus status = my == null ? TtDaGraContractStatus.NoContract : my.getStatus();
         switch (status) {
             case NoContract:
             case Expired:
-                if ((Globals.WORLD_TIMER + 1) % world.getSimulationConfig().getCert().getCertRequestPeriodTime_DaGra() == 0) {
-                    if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD < world.getSimulationConfig().getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
-                        sendRegisterRequest();
-                        Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD++;
-                    }
-                }
+                // For these statues, process will be done in World main loop.
                 break;
             case Request_New:
             case Request_Signing:
@@ -243,7 +252,7 @@ public class DaGra {
         for (CertVerify cv : localVerifier.getVerifiedContracts()) {
             if (cv.getId() == verify.getId()) {
                 if (prevVerify != null) {
-                    /* If the sign of verified and the sign of verifier is not equals, there is an error  */
+                    /* If both, the sign of verified and verifier is not equals, there is an error  */
                     if (!cv.equals(prevVerify)) {
                         OutLog____.pl(TtOutLogMethodSection.DaGra, TtOutLogStatus.ERROR, "Conflict in previously added verify in process of adding verify to other dags ");
                         return;
@@ -262,6 +271,7 @@ public class DaGra {
         }
 
         localVerified.getVerifies().add(prevVerify);
+        localVerified.setAcceptTime(prevVerify.getTime());
         localVerifier.getVerifiedContracts().add(prevVerify);
 
     }
@@ -298,7 +308,7 @@ public class DaGra {
         for (CertSign cs : localSigner.getSignedContracts()) {
             if (cs.getId() == sign.getId()) {
                 if (prevSign != null) {
-                    /* If the sign of signed and the sign of signer is not equals, there is an error  */
+                    /* If the sign of signed, and the sign of signer is not equals, there is an error  */
                     if (!cs.equals(prevSign)) {
                         OutLog____.pl(TtOutLogMethodSection.DaGra, TtOutLogStatus.ERROR, "Conflict in previously added sign in process of adding sign to other dags ");
                         return;
@@ -343,18 +353,21 @@ public class DaGra {
 
         boolean isSignedPreviously;
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Config.TRUST_CERTIFIED_DAGRA_NUMBER_OF_SIGN_TRY; i++) {
 
             /* Selecting a contract randomly */
             int selectedIndex = Globals.RANDOM.nextInt(toBeSignedContracts.size());
             CertContract contract = toBeSignedContracts.get(selectedIndex);
 
-            /* For preventing self signing */
-            if (contract.getId() == my.getId()) {
-                continue;
+            /* HONEST BEHAVES */
+            if (owner.getBehavior().getCurrentBehaviorState() == TtBehaviorState.Honest) {
+                /* HONEST BEHAVES: For preventing self signing */
+                if (contract.getId() == my.getId()) {
+                    continue;
+                }
             }
 
-            /* For checking if selected contract is signed previously via this contract */
+            /* It is for checking whether the selected contract signed previously via this contract */
             isSignedPreviously = false;
             for (CertSign sign : my.getSignedContracts()) {
                 if (sign.getSigned().getId() == contract.getId()) {
@@ -368,8 +381,41 @@ public class DaGra {
             }
 
             float trustValue = world.getTrustManager().getTrustValue(owner, contract.getRequester());
-            if (trustValue != 0.0f) {
+
+
+            /* NOT MISCHIEF BEHAVES */
+            if (owner.getBehavior().getCurrentBehaviorState() != TtBehaviorState.Mischief) {
+                // NOT MISCHIEF BEHAVING: Checking the existence of trust history for the target contract.
+                if (trustValue != 0.0f) {
+
+                    //HONEST BEHAVES: There is no cycle in the signed graphs
+                    List<CertContract> openList = new ArrayList<>();
+                    openList.add(contract);
+                    boolean isFindCycle;
+                    isFindCycle = false;
+                    while (!openList.isEmpty() && !isFindCycle) {
+                        CertContract cnt = openList.remove(0);
+                        for (CertSign sign : cnt.getSigns()) {
+                            if (sign.getSigner().getId() == my.getId()) {
+                                isFindCycle = true;
+                                break;
+                            }
+                            if (sign.isValid()) {
+                                openList.add(sign.getSigner());
+                            }
+                        }
+                    }
+                    // There is a cycle, continue.
+                    if (isFindCycle) {
+                        continue;
+                    }
+
+                    return performSign(contract, trustValue);
+                }
+            } else {
+                // MISCHIEF BEHAVES: Mischief agent do not check if he has trust value of target. Mischief signs in every situation
                 return performSign(contract, trustValue);
+
             }
 
         }
@@ -383,9 +429,6 @@ public class DaGra {
             return false;
         }
 
-        if (my.getStatus() == TtDaGraContractStatus.Request_Signing) {
-            OutLog____.pl("sss");
-        }
         /* If there is no contract to be verified, return false */
         if (toBeVerifiedContracts.size() == 0) {
             return performVerify(genesis);
@@ -393,7 +436,7 @@ public class DaGra {
 
         boolean isVerifiedPreviously;
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Config.TRUST_CERTIFIED_DAGRA_NUMBER_OF_VERIFICATION_TRY; i++) {
 
             /* Selecting a contract randomly */
             int selectedIndex = Globals.RANDOM.nextInt(toBeVerifiedContracts.size());
@@ -426,31 +469,31 @@ public class DaGra {
                 }
             }
             if (isItsOwn) {
-                continue;
+                //   continue;
             }
 
             /* 4- Checking sings of the contract do not expired */
-            boolean isExpiredOrInvalid = false;
+            boolean isInvalid = false;
             for (CertSign sign : contract.getSigns()) {
-                if (sign.isExpired(world.getSimulationConfig().getCert().getExpiredTimeOfCert_DaGra()) || !sign.isValid()) {
-                    isExpiredOrInvalid = true;
+                if (!sign.isValid()) {
+                    isInvalid = true;
                     break;
                 }
             }
-            if (isExpiredOrInvalid) {
+            if (isInvalid) {
                 continue;
             }
 
             /* 5- There is no signer with negative trust */
-            boolean isSignWithNegativeVal = false;
+            int signWithNegativeValCount = 0;
             for (CertSign sign : contract.getSigns()) {
                 float trustValue = world.getTrustManager().getTrustValue(owner, sign.getSigner().getRequester());
                 if (trustValue < 0) {
-                    isSignWithNegativeVal = true;
+                    signWithNegativeValCount++;
                     break;
                 }
             }
-            if (isSignWithNegativeVal) {
+            if (signWithNegativeValCount > ((float) world.getSimulationConfig().getCert().getNumberOfNeededSing_DaGra())) {
                 continue;
             }
 
@@ -466,7 +509,7 @@ public class DaGra {
                         isFindCycle = true;
                         break;
                     }
-                    if (sign.isValid() && !sign.isExpired(world.getSimulationConfig().getCert().getExpiredTimeOfCert_DaGra())) {
+                    if (sign.isValid()) {
                         openList.add(sign.getSigner());
                     }
                 }
@@ -490,6 +533,7 @@ public class DaGra {
 
         my.getVerifiedContracts().add(certVerify);
         contract.getVerifies().add(certVerify);
+        contract.setAcceptTime(certVerify.getTime());
 
         broadcastVerify(certVerify);
 

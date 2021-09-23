@@ -255,8 +255,6 @@ public class Router {
         }
 
 
-        //todo: Implementing trust mechanism
-
         List<RoutingHelp> sortedRoutingHelps = routingHelps;
         switch (simulationConfigItem.getTtMethod()) {
 

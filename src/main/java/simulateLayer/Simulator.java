@@ -172,12 +172,13 @@ public class Simulator {
         }
 
         Globals.SIMULATION_TIMER--;
-        new ImageBuilder().generateSimulationImages(
-                intTravelStatsLinearDrawingWindow,
-                intTrustAnalysisLinearDrawingWindow,
-                intTrustStatsLinearDrawingWindow
-        );
-
+        if (Config.STATISTICS_IS_GENERATE) {
+            new ImageBuilder().generateSimulationImages(
+                    intTravelStatsLinearDrawingWindow,
+                    intTrustAnalysisLinearDrawingWindow,
+                    intTrustStatsLinearDrawingWindow
+            );
+        }
         //============================//============================ Closing statistics file
         if (Config.STATISTICS_IS_GENERATE) {
             Globals.statsEnvGenerator.close();

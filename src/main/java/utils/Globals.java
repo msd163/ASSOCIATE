@@ -50,6 +50,9 @@ public class Globals {
         public static Color darkGray = new Color(56, 56, 56);
         public static Color darkGray2 = new Color(33, 33, 33);
 
+        public static Color orange= new Color(255, 127, 30);
+        public static Color lightOrange= new Color(255, 173, 108);
+
         public static Color getLight(TtBehaviorState state) {
             switch (state) {
                 case Honest:

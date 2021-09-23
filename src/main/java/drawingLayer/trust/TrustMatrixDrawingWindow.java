@@ -90,20 +90,20 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
                         switch (agentInRow.getDaGra().getMy().getStatus()) {
                             case NoContract:
                                 g.setColor(Globals.Color$.lightYellow);
-                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 15);
-                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 15);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 10);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 10);
                                 break;
 
                             case Expired:
                                 g.setColor(Globals.Color$.lightRed);
-                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 20);
-                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 20);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 35);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 35);
                                 break;
 
                             case Request_New:
                                 g.setColor(Globals.Color$.yellow);
-                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 45);
-                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 45);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 55);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 55);
                                 break;
 
                             case Request_Signing:
@@ -120,23 +120,23 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
                             case Accept_New:
                                 g.setColor(Globals.Color$.lightGreen);
-                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 220);
-                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 220);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 210);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 210);
                                 break;
 
                             case Accept_Signing:
-                                g.setColor(Globals.Color$.green);
+                                g.setColor(agentInRow.getDaGra().getMy().getFinalTrustValue() < 0 ? Globals.Color$.red : Globals.Color$.green);
                                 g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 260);
                                 g.fillArc(row * 5, pnY - 7, 5, 5, 0, 260);
                                 break;
 
                             case Accept_Verifying:
-                                g.setColor(Globals.Color$.green);
-                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 300);
-                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 300);
+                                g.setColor(agentInRow.getDaGra().getMy().getFinalTrustValue() < 0 ? Globals.Color$.red : Globals.Color$.green);
+                                g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 320);
+                                g.fillArc(row * 5, pnY - 7, 5, 5, 0, 320);
                                 break;
                             case Accept_Accept:
-                                g.setColor(Globals.Color$.darkGreen);
+                                g.setColor(agentInRow.getDaGra().getMy().getFinalTrustValue() < 0 ? Globals.Color$.darkRed : Globals.Color$.darkGreen);
                                 g.fillArc(pnX - 7, row * 5 + 1, 5, 5, 0, 359);
                                 g.fillArc(row * 5, pnY - 7, 5, 5, 0, 359);
                                 break;
@@ -162,7 +162,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
             //-- drawing sign of agents with internet
             if (agentInRow.getCapacity().isHasInternet()) {
-                g.setColor(Color.RED);
+                g.setColor(Globals.Color$.orange);
                 g.fillOval(pnX - 6, row * 5 + 2, 3, 3);
                 g.fillOval(row * 5 + 1, pnY - 6, 3, 3);
 
