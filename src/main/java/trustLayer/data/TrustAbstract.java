@@ -14,9 +14,9 @@ public class TrustAbstract {
         updateTime = Globals.WORLD_TIMER;
     }
 
-    private Agent responder;
-    private float trustValue;            // final trust value
-    private int updateTime;    // last update time of trust value
+    private Agent responder;                // trustee
+    private float trustValue;               // final trust value
+    private int updateTime;                 // last update time of trust value
 
 
     public Agent getResponder() {

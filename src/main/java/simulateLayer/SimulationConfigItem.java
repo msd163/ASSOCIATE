@@ -1,9 +1,11 @@
 package simulateLayer;
 
+import _type.TtTrustFormula;
 import _type.TtTrustMethodology;
 
 public class SimulationConfigItem {
     private int method;
+    private int trustFormula;
     // private boolean isValidateByTrustObservation;
     private float trustForgottenCoeff;
     private float recommendationCoeff;
@@ -27,6 +29,7 @@ public class SimulationConfigItem {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "@Mtd: " + methodology +
+                    " @ TrFrml: " + TtTrustFormula.getByOrdinal(trustFormula) +
                     " @ FrgCf: " + trustForgottenCoeff +
                     " - IgrThrld: " + ignoringThresholdOfTrustValue +
                     " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism +
@@ -55,6 +58,7 @@ public class SimulationConfigItem {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
             return "Method: " + methodology +
+                    " @ TrFrml: " + TtTrustFormula.getByOrdinal(trustFormula) +
                     "  @ FrgCf: " + trustForgottenCoeff +
                     " - IgrThrld: " + ignoringThresholdOfTrustValue +
                     " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism
@@ -122,12 +126,16 @@ public class SimulationConfigItem {
         return method;
     }
 
-    public void setMethod(int method) {
-        this.method = method;
+    public int getTrustFormula() {
+        return trustFormula;
     }
 
     public float getTrustForgottenCoeff() {
         return trustForgottenCoeff;
+    }
+
+    public TtTrustFormula getTtTrustFormula() {
+        return TtTrustFormula.getByOrdinal(trustFormula);
     }
 
     public float getRecommendationCoeff() {

@@ -1,6 +1,5 @@
 package trustLayer;
 
-import _type.TtDaGraContractStatus;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import environmentLayer.StateX;
@@ -46,11 +45,11 @@ public class TrustManager {
             }
 
             //if (verifier.getTrust().getTrustAbstracts()[watchedAgent.getAgent().getIndex()].getTrustValue() > 0) {
-                if (watchedAgent.getAgent().getDaGra() != null) {
-                    //todo: it is need to check other agents with DaGra if current agent has no validity info . Continuing for loop
+            if (watchedAgent.getAgent().getDaGra() != null) {
+                //todo: it is need to check other agents with DaGra if current agent has no validity info . Continuing for loop
 //                    System.out.println("------------>>>> Verifier: " + watchedAgent.getAgent().getId());
-                    return watchedAgent.getAgent().getDaGra().getValidCertificationTrustValue(toBeVerified);
-                }
+                return watchedAgent.getAgent().getDaGra().getValidCertificationTrustValue(toBeVerified);
+            }
             //}
         }
 
@@ -69,7 +68,8 @@ public class TrustManager {
         if (index < 0) {
             System.out.println(">> Error::getScoreByOrder: index is less than ZERO: " + index);
         }
-        return 1 / (float) ((index + 1) * (index + 1));
+        return 1 / (float) (Math.pow(2, index));
+//        return 1 / (float) ((index + 1) * (index + 1));
 
     }
 
@@ -151,19 +151,36 @@ public class TrustManager {
 
         List<Float> sntrs = getSortedNormalizedTrustRewards(requester, responder);
 
+
+        //todo: todo is in following comment...
+        /*
+        * در حالت بسیار نادر ممکن است که قدر مطلق امتیازات موجود در لیست  با هم برابر باشد
+        * مثلا 5 قدرمطلق 1 داشته باشیم که مثلا دو عدد -1 بوده و سه عدد +1
+        * برای این حالت باید سه اتفاق به صورت همزمان رخ دهد:
+        * 1) منتشر کنندگان در یک زمان یکسان امتیازات را منتشر کرده باشند
+        * 2) امتیاز داده شده توسط منتشر کننده به اعتماد شونده با هم برابر باشند
+        * 3) اعتماد دریافت کننده به همه منتشر کنندگان با هم برابر باشد
+        * نکته: منتشر کنندگان با هم متفاوت هستند. یعنی نمی توان یک منتشر کننده دو امتیاز را با سه شرط بالا داشته باشد.
+        *
+        * در این حالت نیاز است که این اتفاق در لیست مرتب شده شناسایی شود و مرتب سازی بر اساس این که تعداد کدام علامت بیشتر است چیده شود.
+        * مثلا اگر سه +1 وجود داشت ابتدا سه +1 در لیست قرار گیرد و سپس دو -1
+        * با این کار اولویت امتیازات به عامل هایی که بیشترین امتیاز را داده اند اختصاص داده می شود
+        *
+        * */
+
         float trustValue = 0.0f;
-        if (1 == 1) {
-            int index = 0;
-            for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
-                Float t = sntrs.get(i);
-                if (t == 0.0f) {
-                    break;
-                }
-                trustValue += ((t) / ((index + 2) * (index + 2)));
-                //System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
-                index++;
+        // if (1 == 1) {
+        int index = 0;
+        for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
+            Float t = sntrs.get(i);
+            if (t == 0.0f) {
+                break;
             }
-        } else {
+            trustValue += formulateTrustValue(index, t);
+            // System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
+            index++;
+        }
+        //} else {
            /* float tempT = 0;
             float prev = -1111;
             float sum = 0;
@@ -193,9 +210,20 @@ public class TrustManager {
             if (count > 0) {
                 trustValue = sum / count;
             }*/
-        }
+        // }
 
         return trustValue;
+    }
+
+    private double formulateTrustValue(int index, Float t) {
+
+        switch (simulationConfigItem.getTtTrustFormula()) {
+            case Formula_1:
+                return ((t) / ((index + 2) * (index + 2)));
+            case Formula_2:
+                return 0.5f * t * Math.pow(0.5, index);
+        }
+        return t;
     }
 
     private List<Float> getSortedNormalizedTrustRewards(Agent requester, Agent responder) {
@@ -270,8 +298,7 @@ public class TrustManager {
         float trustValue = 0;
         int index = 0;
         for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
-            Float t = sntrs.get(i);
-            trustValue += ((t) / ((index + 2) * (index + 2)));
+            trustValue += formulateTrustValue(index, sntrs.get(i));
             // System.out.println(i + ": index: " + index + " | " + t + "  > " + xxxxx);
             index++;
         }
@@ -285,7 +312,7 @@ public class TrustManager {
         List<Float> norList = new ArrayList<>();
 
         for (TrustDataItem item : items) {
-            norList.add(item.getReward() * getForgottenValue(item.getTime()));
+            norList.add(item.getScore() * getForgottenValue(item.getTime()));
         }
         return norList;
     }
@@ -295,11 +322,11 @@ public class TrustManager {
         List<Float> norList = new ArrayList<>();
 
         for (TrustDataItem item : items) {
-            //-- For preventing stack over flow in calculating trust, we use trust value that is calculated previously
+            //-- For preventing stack overflow in calculating trust, we use trust value that is calculated previously
             //-- Calculating trust value of requester to recommender
             float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
             if (trustValue > 0) {
-                norList.add(trustValue * item.getReward() * getForgottenValue(item.getTime()));
+                norList.add(trustValue * item.getScore() * getForgottenValue(item.getTime()));
             }
         }
         return norList;
@@ -392,7 +419,7 @@ public class TrustManager {
             //============================//============================  // If the agent not added previously
 
             if (__trust.getExperiences().size() >= __trust.getExperienceCap()) {
-                // Replacing new history item with an exist one according selected method.
+                // Replacing new history item with an existence one according selected method.
                 switch (__trust.getTrustReplaceMethod()) {
                     case Sequential_Circular:
                         __trust.getExperiences().remove(0);
@@ -583,7 +610,7 @@ public class TrustManager {
         //============================//============================  // If the agent not added previously
 
         if (__trust.getObservations().size() >= __trust.getObservationCap()) {
-            // Replacing new history item with an exist one according selected method.
+            // Replacing new history item with an existence one according selected method.
             switch (__trust.getTrustReplaceMethod()) {
                 case Sequential_Circular:
                     __trust.getObservations().remove(0);

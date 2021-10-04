@@ -134,7 +134,7 @@ public class TrustData {
         lastTime = Globals.WORLD_TIMER;
         lastEpisode = Globals.EPISODE;
 
-        if (item.getReward() >= 0) {
+        if (item.getScore() >= 0) {
             positiveRewards++;
         } else {
             negativeRewards++;
@@ -146,7 +146,7 @@ public class TrustData {
                 item.getSource(),
                 item.getDestination(),
                 Globals.WORLD_TIMER,
-                item.getReward()
+                item.getScore()
         ));
 
         isUpdated = true;
@@ -154,7 +154,7 @@ public class TrustData {
 
     public void removeItem(int index) {
         TrustDataItem remove = items.remove(index);
-        if (remove.getReward() >= 0) {
+        if (remove.getScore() >= 0) {
             positiveRewards--;
         } else {
             negativeRewards--;

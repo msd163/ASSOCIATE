@@ -3,10 +3,11 @@ package transitionLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
-import simulateLayer.SimulationConfigItem;
 import environmentLayer.StateX;
 import environmentLayer.TransitionX;
 import environmentLayer.TravelHistory;
+import simulateLayer.SimulationConfigItem;
+import simulateLayer.statistics.WorldStatistics;
 import systemLayer.Agent;
 import systemLayer.WatchedAgent;
 import systemLayer.WatchedState;
@@ -15,7 +16,6 @@ import trustLayer.TrustManager;
 import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
-import simulateLayer.statistics.WorldStatistics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -301,26 +301,35 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
+        float trustValueOfHelperToAgent = trustManager.getTrustValue(help.getHelperAgent(), agent);
         if (simulationConfigItem.isIsUseIndirectExperience()) {
-            trustManager.shareExperiences(agent, help.getHelperAgent());
+            /* If receiver of experiences (the helper or truster in routing procedure) trusts to the sender (the trustee in routing procedure),
+            the helper accepts experiences of the agent
+            * */
+            if (trustValueOfHelperToAgent > 0) {
+                trustManager.shareExperiences(agent, help.getHelperAgent());
+            }
             if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
-                trustManager.getTrustValue(help.getHelperAgent(), agent);
+                /* The agent trusts to helper, thus he accepts experiences of helper  */
                 trustManager.shareExperiences(help.getHelperAgent(), agent);
             }
         }
-
+        /*
+         * */
         if (simulationConfigItem.isIsUseIndirectObservation()) {
-            trustManager.shareObservations(agent, help.getHelperAgent());
+            if (trustValueOfHelperToAgent > 0) {
+                trustManager.shareObservations(agent, help.getHelperAgent());
+            }
             if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
-                trustManager.getTrustValue(help.getHelperAgent(), agent);
                 trustManager.shareObservations(help.getHelperAgent(), agent);
             }
         }
 
         if (simulationConfigItem.isUseRecommendation()) {
-            trustManager.sendRecommendations(agent, help.getHelperAgent());
+            if (trustValueOfHelperToAgent > 0) {
+                trustManager.sendRecommendations(agent, help.getHelperAgent());
+            }
             if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
-                trustManager.getTrustValue(help.getHelperAgent(), agent);
                 trustManager.sendRecommendations(help.getHelperAgent(), agent);
             }
         }
