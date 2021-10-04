@@ -18,7 +18,7 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 333;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 400;          // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
@@ -62,7 +62,7 @@ public class Config {
     public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = false;
 
     //============================ Statistics
-    public static final boolean STATISTICS_IS_GENERATE /*           */ = false;
-    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = false;
+    public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
+    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
 
 }

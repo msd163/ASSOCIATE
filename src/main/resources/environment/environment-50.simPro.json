@@ -32,9 +32,9 @@
       "trustRecommendationItemCap": "#80..100",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 55,
-        "adversaryPercent": 0,
-        "mischiefPercent": 10,
+        "honestPercent": 60,
+        "adversaryPercent": 2,
+        "mischiefPercent": 2,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -68,8 +68,8 @@
       "_5": "-----------------------------------",
       "behavior": {
         "honestPercent": 60,
-        "adversaryPercent": 0,
-        "mischiefPercent": 10,
+        "adversaryPercent": 5,
+        "mischiefPercent": 5,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -103,7 +103,7 @@
       "_5": "-----------------------------------",
       "behavior": {
         "honestPercent": 55,
-        "adversaryPercent": 0,
+        "adversaryPercent": 10,
         "mischiefPercent": 10,
         "hypocriteBehavior": {
           "honestPercent": 50,

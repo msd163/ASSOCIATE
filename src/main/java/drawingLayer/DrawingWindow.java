@@ -266,7 +266,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         worldTimer = Globals.WORLD_TIMER - 1;
         simulationTimer = Globals.SIMULATION_TIMER;
 
-        if (worldTimer < 0 || worlds[simulationTimer].getWdStatistics() == null) {
+        if (worldTimer < 0) {
             return false;
         }
 

@@ -6,6 +6,7 @@ import _type.TtTrustMethodology;
 public class SimulationConfigItem {
     private int method;
     private int trustFormula;
+    private float trustFormula2MaclaurinAlpha;
     // private boolean isValidateByTrustObservation;
     private float trustForgottenCoeff;
     private float recommendationCoeff;
@@ -18,7 +19,7 @@ public class SimulationConfigItem {
     private boolean isUseObservation;
     private boolean isUseIndirectObservation;
     private boolean isBidirectionalObservationSharing;
-    private int experienceDepthInRewarding;
+    private int experienceDepthInScoring;
     private float ignoringThresholdOfTrustValue;
     private float maximumConsideredRoutingHelpInTrustMechanism;
     private boolean isUseSharingRecommendationWithInternet;
@@ -28,15 +29,19 @@ public class SimulationConfigItem {
     public String getInfo(int certificationCount) {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
+            TtTrustFormula trustFormula = TtTrustFormula.getByOrdinal(this.trustFormula);
             return "@Mtd: " + methodology +
-                    " @ TrFrml: " + TtTrustFormula.getByOrdinal(trustFormula) +
+                    " @ TrFrml: " + trustFormula +
+                    (trustFormula == TtTrustFormula.Formula_2_Maclaurin ?
+                            " (" + trustFormula2MaclaurinAlpha + ")"
+                            : "") +
                     " @ FrgCf: " + trustForgottenCoeff +
                     " - IgrThrld: " + ignoringThresholdOfTrustValue +
                     " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism +
                     " @EXP is: " + isUseExperience +
                     " - ind: " + isUseIndirectExperience +
                     " - bid: " + isBidirectionalExperienceSharing +
-                    " - dpth: " + experienceDepthInRewarding +
+                    " - dpth: " + experienceDepthInScoring +
                     " @OBS is: " + isUseObservation +
                     " - ind: " + isUseIndirectObservation +
                     " - bid: " + isBidirectionalObservationSharing +
@@ -57,8 +62,12 @@ public class SimulationConfigItem {
     public String getInfo_1() {
         TtTrustMethodology methodology = TtTrustMethodology.getByOrdinal(method);
         if (methodology == TtTrustMethodology.TrustMode_RandomPath || methodology == TtTrustMethodology.TrustMode_ShortPath) {
+            TtTrustFormula trustFormula = TtTrustFormula.getByOrdinal(this.trustFormula);
             return "Method: " + methodology +
-                    " @ TrFrml: " + TtTrustFormula.getByOrdinal(trustFormula) +
+                    " @ TrFrml: " + trustFormula +
+                    (trustFormula == TtTrustFormula.Formula_2_Maclaurin ?
+                            " (" + trustFormula2MaclaurinAlpha + ")"
+                            : "") +
                     "  @ FrgCf: " + trustForgottenCoeff +
                     " - IgrThrld: " + ignoringThresholdOfTrustValue +
                     " - MaxRtHp: " + maximumConsideredRoutingHelpInTrustMechanism
@@ -75,7 +84,7 @@ public class SimulationConfigItem {
                     "         @EXP is: " + isUseExperience +
                             " - ind: " + isUseIndirectExperience +
                             " - bid: " + isBidirectionalExperienceSharing +
-                            " - dpth: " + experienceDepthInRewarding +
+                            " - dpth: " + experienceDepthInScoring +
                             "  @OBS is: " + isUseObservation +
                             " - ind: " + isUseIndirectObservation +
                             " - bid: " + isBidirectionalObservationSharing
@@ -138,6 +147,10 @@ public class SimulationConfigItem {
         return TtTrustFormula.getByOrdinal(trustFormula);
     }
 
+    public float getTrustFormula2MaclaurinAlpha() {
+        return trustFormula2MaclaurinAlpha;
+    }
+
     public float getRecommendationCoeff() {
         return recommendationCoeff;
     }
@@ -158,8 +171,8 @@ public class SimulationConfigItem {
         return isUseIndirectObservation;
     }
 
-    public int getExperienceDepthInRewarding() {
-        return experienceDepthInRewarding;
+    public int getExperienceDepthInScoring() {
+        return experienceDepthInScoring;
     }
 
     public float getIgnoringThresholdOfTrustValue() {

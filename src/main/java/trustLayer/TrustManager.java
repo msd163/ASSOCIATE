@@ -64,11 +64,20 @@ public class TrustManager {
         return (float) Math.pow(1 - simulationConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - time);
     }
 
-    private float getRewardByOrder(int index) {
+    private float getScoreByOrder(int index) {
         if (index < 0) {
             System.out.println(">> Error::getScoreByOrder: index is less than ZERO: " + index);
         }
-        return 1 / (float) (Math.pow(2, index));
+        switch (simulationConfigItem.getTtTrustFormula()) {
+            case Formula_1:
+                return 1 / (float) ((index + 1) * (index + 1));
+            case Formula_2_Maclaurin:
+                float alpha = simulationConfigItem.getTrustFormula2MaclaurinAlpha();
+                return (float) Math.pow(alpha, index);
+            //return 1 / (float) (Math.pow(2, index));
+            default:
+                return 1 / (float) (index + 1);
+        }
 //        return 1 / (float) ((index + 1) * (index + 1));
 
     }
@@ -149,24 +158,24 @@ public class TrustManager {
     //============================
     private float calcInnerTrustValue(Agent requester, Agent responder) {
 
-        List<Float> sntrs = getSortedNormalizedTrustRewards(requester, responder);
+        List<Float> sntrs = getSortedNormalizedTrustScores(requester, responder);
 
 
         //todo: todo is in following comment...
         /*
-        * در حالت بسیار نادر ممکن است که قدر مطلق امتیازات موجود در لیست  با هم برابر باشد
-        * مثلا 5 قدرمطلق 1 داشته باشیم که مثلا دو عدد -1 بوده و سه عدد +1
-        * برای این حالت باید سه اتفاق به صورت همزمان رخ دهد:
-        * 1) منتشر کنندگان در یک زمان یکسان امتیازات را منتشر کرده باشند
-        * 2) امتیاز داده شده توسط منتشر کننده به اعتماد شونده با هم برابر باشند
-        * 3) اعتماد دریافت کننده به همه منتشر کنندگان با هم برابر باشد
-        * نکته: منتشر کنندگان با هم متفاوت هستند. یعنی نمی توان یک منتشر کننده دو امتیاز را با سه شرط بالا داشته باشد.
-        *
-        * در این حالت نیاز است که این اتفاق در لیست مرتب شده شناسایی شود و مرتب سازی بر اساس این که تعداد کدام علامت بیشتر است چیده شود.
-        * مثلا اگر سه +1 وجود داشت ابتدا سه +1 در لیست قرار گیرد و سپس دو -1
-        * با این کار اولویت امتیازات به عامل هایی که بیشترین امتیاز را داده اند اختصاص داده می شود
-        *
-        * */
+         * در حالت بسیار نادر ممکن است که قدر مطلق امتیازات موجود در لیست  با هم برابر باشد
+         * مثلا 5 قدرمطلق 1 داشته باشیم که مثلا دو عدد -1 بوده و سه عدد +1
+         * برای این حالت باید سه اتفاق به صورت همزمان رخ دهد:
+         * 1) منتشر کنندگان در یک زمان یکسان امتیازات را منتشر کرده باشند
+         * 2) امتیاز داده شده توسط منتشر کننده به اعتماد شونده با هم برابر باشند
+         * 3) اعتماد دریافت کننده به همه منتشر کنندگان با هم برابر باشد
+         * نکته: منتشر کنندگان با هم متفاوت هستند. یعنی نمی توان یک منتشر کننده دو امتیاز را با سه شرط بالا داشته باشد.
+         *
+         * در این حالت نیاز است که این اتفاق در لیست مرتب شده شناسایی شود و مرتب سازی بر اساس این که تعداد کدام علامت بیشتر است چیده شود.
+         * مثلا اگر سه +1 وجود داشت ابتدا سه +1 در لیست قرار گیرد و سپس دو -1
+         * با این کار اولویت امتیازات به عامل هایی که بیشترین امتیاز را داده اند اختصاص داده می شود
+         *
+         * */
 
         float trustValue = 0.0f;
         // if (1 == 1) {
@@ -220,13 +229,15 @@ public class TrustManager {
         switch (simulationConfigItem.getTtTrustFormula()) {
             case Formula_1:
                 return ((t) / ((index + 2) * (index + 2)));
-            case Formula_2:
-                return 0.5f * t * Math.pow(0.5, index);
+            case Formula_2_Maclaurin:
+                float alpha = simulationConfigItem.getTrustFormula2MaclaurinAlpha();
+                return (1 - alpha) * t * Math.pow(alpha, index);
+                //return 0.5f * t * Math.pow(0.5, index);
         }
         return t;
     }
 
-    private List<Float> getSortedNormalizedTrustRewards(Agent requester, Agent responder) {
+    private List<Float> getSortedNormalizedTrustScores(Agent requester, Agent responder) {
 
         List<Float> normList = new ArrayList<>();
 
@@ -370,10 +381,10 @@ public class TrustManager {
 
         int responderId = -1;
         int consideredExpCount = -1;
-        for (int tvhIndex = travelHistory.size() - 1, rewardCount = 0; tvhIndex > -1; tvhIndex--) {
+        for (int tvhIndex = travelHistory.size() - 1, scoreCount = 0; tvhIndex > -1; tvhIndex--) {
 
-            //-- If experience depth exceeded. this depth defines how many of responder agents considered in reward mechanism.
-            if (rewardCount >= simulationConfigItem.getExperienceDepthInRewarding()) {
+            //-- If experience depth exceeded. this depth defines how many of responder agents considered in score mechanism.
+            if (scoreCount >= simulationConfigItem.getExperienceDepthInScoring()) {
                 return;
             }
 
@@ -397,22 +408,22 @@ public class TrustManager {
             }
 
             //============================//============================ // Check if the agent added to trustHistory previously and return it's ID.
-            boolean isRewarded = false;
+            boolean isScored = false;
             for (int k = 0, expLen = experiences.size(); k < expLen; k++) {
                 TrustExperience exp = experiences.get(k);
                 if (exp.getResponder().getId() == tvh.getResponder().getId()) {
-                    float reward = effect * getRewardByOrder(++consideredExpCount);
+                    float score = effect * getScoreByOrder(++consideredExpCount);
                     //-- Adding experience
-                    exp.addExperience(requester, source, destination, reward);
+                    exp.addExperience(requester, source, destination, score);
 
                     travelHistory.get(tvhIndex).setIsTrustCalculated(true);
                     responderId = exp.getResponder().getId();
-                    rewardCount++;
-                    isRewarded = true;
+                    scoreCount++;
+                    isScored = true;
                     break;
                 }
             }
-            if (isRewarded) {
+            if (isScored) {
                 continue;
             }
 
@@ -442,15 +453,15 @@ public class TrustManager {
                 }
             }
 
-            float reward = effect * getRewardByOrder(++consideredExpCount);
+            float score = effect * getScoreByOrder(++consideredExpCount);
 
             //-- Creating experience
             TrustExperience experience = new TrustExperience(requester, tvh.getResponder());
-            experience.addExperience(requester, source, destination, reward);
+            experience.addExperience(requester, source, destination, score);
             experiences.add(experience);
 
             responderId = tvh.getResponder().getId();
-            rewardCount++;
+            scoreCount++;
             travelHistory.get(tvhIndex).setIsTrustCalculated(true);
 
         }
@@ -596,8 +607,8 @@ public class TrustManager {
             TrustObservation obs = observations.get(k);
             if (obs.getResponder().getId() == responder.getId()) {
                 //-- Adding observation
-                float reward = (isInTarget ? 1 : -1) * getRewardByOrder(0);
-                obs.addObservation(observer, observed, null, null, reward);
+                float score = (isInTarget ? 1 : -1) * getScoreByOrder(0);
+                obs.addObservation(observer, observed, null, null, score);
 
                 isAdded = true;
                 break;
@@ -635,8 +646,8 @@ public class TrustManager {
 
         //-- Creating observation
         TrustObservation observation = new TrustObservation(observer, responder);
-        float reward = (isInTarget ? 1 : -1) * getRewardByOrder(0);
-        observation.addObservation(observer, observed, null, null, reward);
+        float score = (isInTarget ? 1 : -1) * getScoreByOrder(0);
+        observation.addObservation(observer, observed, null, null, score);
         observations.add(observation);
 
         return true;
