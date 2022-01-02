@@ -132,6 +132,9 @@ public class Globals {
         public static Color $curve_3 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? magenta : darkMagenta;
         public static Color $curve_4 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
         public static Color $curve_5 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
+
+        public static Color $trustHonest = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen2;
+        public static Color $trustAdversary = red;
     }
 
     public static Random RANDOM = new Random(new Date().getTime());

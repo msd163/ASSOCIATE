@@ -176,7 +176,7 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
                     trusteeData[col][0]++;
                     if (agentInCol.getBehavior().getHasAdversaryState()) {
                         trusteeData[col][2]++;
-                        g.setColor(Color.RED);
+                        g.setColor(Globals.Color$.$trustAdversary);
                         g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
                     } else if (agentInCol.getBehavior().getHasMischief()) {
                         trusteeData[col][2]++;
@@ -187,16 +187,16 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
                         g.setColor(Color.MAGENTA);
                         g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
                     }
-                    g.setColor(Color.GREEN);
+                    g.setColor(Globals.Color$.$trustHonest);
 
                 } else if (trVal < 0) {
                     trusteeData[col][0]++;
                     if (agentInCol.getBehavior().getHasHonestState()) {
                         trusteeData[col][1]++;
-                        g.setColor(Color.GREEN);
+                        g.setColor(Globals.Color$.$trustHonest);
                         g.drawOval(col * 5 - 2, row * 5 - 2, 9, 9);
                     }
-                    g.setColor(Color.RED);
+                    g.setColor(Globals.Color$.$trustAdversary);
                 } else {
                     g.setColor(Color.DARK_GRAY);
                 }
