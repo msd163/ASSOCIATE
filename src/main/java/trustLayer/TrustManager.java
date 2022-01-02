@@ -57,7 +57,7 @@ public class TrustManager {
     }
     //============================//============================//============================
 
-    private float getForgottenValue(int time) {
+    private float getForgottenFactor(int time) {
         if (simulationConfigItem.getTrustForgottenCoeff() == 0) {
             return 1.0f;
         }
@@ -137,7 +137,7 @@ public class TrustManager {
                             innerTrustValue = calculatedTrustValueFromRecom;
                         }
                     }
-                    //-- If dont use safe mode recommendation
+                    //-- If don't use safe mode recommendation
                     else {
                         innerTrustValue =
                                 (simulationConfigItem.getRecommendationCoeff() * calculatedTrustValueFromRecom)
@@ -230,6 +230,10 @@ public class TrustManager {
             case Formula_1:
                 return ((t) / ((index + 2) * (index + 2)));
             case Formula_2_Maclaurin:
+                /* //todo: poison
+                * برای این مورد باید اثر آخرین امتیازات کسب شده متضاد را کمتر کنیم.
+                *  برای این منظور می توانیم از توزیع هایی مثل پواسون در فرمولهایی که زمان در آنها دخیل است، مثل ضریب فراموشی، استفاده کرد.
+                * */
                 float alpha = simulationConfigItem.getTrustFormula2MaclaurinAlpha();
                 return (1 - alpha) * t * Math.pow(alpha, index);
                 //return 0.5f * t * Math.pow(0.5, index);
@@ -306,15 +310,15 @@ public class TrustManager {
         );
 
 
-        float trustValue = 0;
+        float recommValue = 0;
         int index = 0;
         for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
-            trustValue += formulateTrustValue(index, sntrs.get(i));
+            recommValue += formulateTrustValue(index, sntrs.get(i));
             // System.out.println(i + ": index: " + index + " | " + t + "  > " + xxxxx);
             index++;
         }
 
-        return trustValue;
+        return recommValue;
     }
 
     //============================
@@ -323,7 +327,7 @@ public class TrustManager {
         List<Float> norList = new ArrayList<>();
 
         for (TrustDataItem item : items) {
-            norList.add(item.getScore() * getForgottenValue(item.getTime()));
+            norList.add(item.getScore() * getForgottenFactor(item.getTime()));
         }
         return norList;
     }
@@ -337,7 +341,7 @@ public class TrustManager {
             //-- Calculating trust value of requester to recommender
             float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
             if (trustValue > 0) {
-                norList.add(trustValue * item.getScore() * getForgottenValue(item.getTime()));
+                norList.add(trustValue * item.getScore() * getForgottenFactor(item.getTime()));
             }
         }
         return norList;

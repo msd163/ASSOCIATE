@@ -1,6 +1,7 @@
 package utils;
 
 import _type.TtBehaviorState;
+import _type.TtDiagramThemeMode;
 import simulateLayer.statistics.StatsEnvGenerator;
 import simulateLayer.statistics.StatsTrustGenerator;
 
@@ -33,13 +34,13 @@ public class Globals {
         public static Color white = new Color(255, 255, 255);
         public static Color green = new Color(113, 253, 14);
         public static Color red = new Color(238, 38, 21);
-        public static Color gray = new Color(250, 250, 250);
+        public static Color gray = new Color(190, 190, 190);
         public static Color magenta = new Color(252, 72, 248);
         public static Color yellow = new Color(247, 255, 68);
 
         public static Color lightGreen = new Color(187, 255, 141);
         public static Color lightRed = new Color(236, 168, 162);
-        public static Color lightGray = new Color(206, 206, 206);
+        public static Color lightGray = new Color(220, 220, 220);
         public static Color lightMagenta = new Color(224, 186, 223);
         public static Color lightYellow = new Color(232, 223, 168);
 
@@ -49,40 +50,88 @@ public class Globals {
         public static Color darkGreen2 = new Color(5, 102, 5);
         public static Color darkGray = new Color(56, 56, 56);
         public static Color darkGray2 = new Color(33, 33, 33);
+        public static Color darkMagenta = new Color(175, 24, 171);
+        public static Color darkMagenta2 = new Color(105, 6, 102);
 
-        public static Color orange= new Color(255, 127, 30);
-        public static Color lightOrange= new Color(255, 173, 108);
+        public static Color orange = new Color(255, 127, 30);
+        public static Color lightOrange = new Color(255, 173, 108);
 
         public static Color getLight(TtBehaviorState state) {
-            switch (state) {
-                case Honest:
-                    return lightGreen;
-                case Adversary:
-                    return lightRed;
-                case Mischief:
-                    return lightGray;
-                case Hypocrite:
-                    return lightMagenta;
-                default:
-                    return lightYellow;
-            }
+           if(Config.THEME_MODE==TtDiagramThemeMode.Dark){
+               switch (state) {
+                   case Honest:
+                       return lightGreen;
+                   case Adversary:
+                       return lightRed;
+                   case Mischief:
+                       return lightGray;
+                   case Hypocrite:
+                       return lightMagenta;
+                   default:
+                       return lightYellow;
+               }
+           }else{
+               switch (state) {
+                   case Honest:
+                       return green;
+                   case Adversary:
+                       return red;
+                   case Mischief:
+                       return gray;
+                   case Hypocrite:
+                       return magenta;
+                   default:
+                       return Color.orange;
+               }
+           }
         }
 
         public static Color getNormal(TtBehaviorState state) {
-            switch (state) {
-                case Honest:
-                    return green;
-                case Adversary:
-                    return red;
-                case Mischief:
-                    return gray;
-                case Hypocrite:
-                    return magenta;
-                default:
-                    return yellow;
+            if(Config.THEME_MODE==TtDiagramThemeMode.Dark){
+                switch (state) {
+                    case Honest:
+                        return green;
+                    case Adversary:
+                        return red;
+                    case Mischief:
+                        return gray;
+                    case Hypocrite:
+                        return magenta;
+                    default:
+                        return yellow;
+                }
+            }else{
+                switch (state) {
+                    case Honest:
+                        return darkGreen;
+                    case Adversary:
+                        return darkRed;
+                    case Mischief:
+                        return darkGray;
+                    case Hypocrite:
+                        return darkMagenta;
+                    default:
+                        return orange;
+                }
             }
         }
 
+        public static Color $pause = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen;
+        public static Color $background = Config.THEME_MODE == TtDiagramThemeMode.Dark ? black : white;
+        public static Color $mainTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : darkGray;
+        public static Color $subTitle = gray;
+        public static Color $simTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : black;
+        public static Color $configTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGray : darkGray;
+        public static Color $axis = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : black;
+        public static Color $axisSplit = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : gray;
+        public static Color $axisSplit2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray : lightGray;
+        public static Color $mousePlus = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
+        public static Color $drawingTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? Color.cyan : darkRed;
+        public static Color $curve_1 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen2;
+        public static Color $curve_2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? red : darkRed;
+        public static Color $curve_3 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? magenta : darkMagenta;
+        public static Color $curve_4 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
+        public static Color $curve_5 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
     }
 
     public static Random RANDOM = new Random(new Date().getTime());

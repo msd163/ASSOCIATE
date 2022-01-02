@@ -41,64 +41,66 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         }
 
         int ittAgentsInTarget = worlds[simulationTimer].getWdStatistics()[worldTimer].getIttAgentsInTarget();
-        printStatsInfo(1, "Agents In Targets", ittAgentsInTarget, "%" + 100 * (float) ittAgentsInTarget / worlds[simulationTimer].getAgentsCount(), Color.GREEN);
+        printStatsInfo(1, "Agents In Targets", ittAgentsInTarget, "%" + 100 * (float) ittAgentsInTarget / worlds[simulationTimer].getAgentsCount(), Globals.Color$.$curve_1);
 
         int ittAgentsInPitfall = worlds[simulationTimer].getWdStatistics()[worldTimer].getIttAgentsInPitfall();
-        printStatsInfo(2, "Agents In Pitfall", ittAgentsInPitfall, "%" + 100 * (float) ittAgentsInPitfall / worlds[simulationTimer].getAgentsCount(), Color.RED);
+        printStatsInfo(2, "Agents In Pitfall", ittAgentsInPitfall, "%" + 100 * (float) ittAgentsInPitfall / worlds[simulationTimer].getAgentsCount(), Globals.Color$.$curve_2);
 
         int ittRandom = worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors();
-        printStatsInfo(3, "Random Travel", ittRandom, "%" + 100 * (float) ittRandom / worlds[simulationTimer].getAgentsCount(), Color.MAGENTA);
+        printStatsInfo(3, "Random Travel", ittRandom, "%" + 100 * (float) ittRandom / worlds[simulationTimer].getAgentsCount(), Globals.Color$.$curve_3);
 
 
-        printStatsInfo(4, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Agents In Targets", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentTarget(), Color.GREEN);
-        printStatsInfo(5, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentInPitfall(), Color.RED);
-        printStatsInfo(6, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Random Travel", worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors(), Color.MAGENTA);
+        printStatsInfo(4, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Agents In Targets", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentTarget(), Globals.Color$.$curve_1);
+        printStatsInfo(5, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Agents In Pitfall", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimedAvgAgentInPitfall(), Globals.Color$.$curve_2);
+        printStatsInfo(6, "Avg(" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Random Travel", worlds[simulationTimer].getWdStatistics()[worldTimer].getIttRandomTravelToNeighbors(), Globals.Color$.$curve_3);
 
         //============================//============================ INFO
         dynamicHeight = 20 + dynamicHeight;
-        for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+        if (isShowSimInfo) {
+            for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
-            World world = worlds[j];
+                World world = worlds[j];
 
-            if (j > Globals.SIMULATION_TIMER || world == null) {
-                break;
-            }
-
-            //============================
-            dynamicHeight += 40;
-            g.setColor(Color.YELLOW);
-            g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
-
-            if (showWorldsFlag[j]) {
-                if (showLineChartsFlag[0]) {
-                    //============================
-                    drawCurve(200, dynamicHeight, Color.GREEN, j, 20, -1);
-                    g.drawString("AgentsInTarget", 220, dynamicHeight);
+                if (j > Globals.SIMULATION_TIMER || world == null) {
+                    break;
                 }
-                if (showLineChartsFlag[1]) {
-                    //============================
-                    drawCurve(500, dynamicHeight, Color.RED, j, 20, -1);
-                    g.drawString("AgentsInPitfall", 520, dynamicHeight);
+
+                //============================
+                dynamicHeight += 40;
+                g.setColor(Globals.Color$.$simTitle);
+                g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
+
+                if (showWorldsFlag[j]) {
+                    if (showLineChartsFlag[0]) {
+                        //============================
+                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
+                        g.drawString("AgentsInTarget", 220, dynamicHeight);
+                    }
+                    if (showLineChartsFlag[1]) {
+                        //============================
+                        drawCurve(500, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
+                        g.drawString("AgentsInPitfall", 520, dynamicHeight);
+                    }
+                    if (showLineChartsFlag[2]) {
+                        //============================
+                        drawCurve(800, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
+                        g.drawString("RandomTravel", 820, dynamicHeight);
+                    }
                 }
-                if (showLineChartsFlag[2]) {
-                    //============================
-                    drawCurve(800, dynamicHeight, Color.MAGENTA, j, 20, -1);
-                    g.drawString("RandomTravel", 820, dynamicHeight);
+                //============================
+                g.setColor(Globals.Color$.$configTitle);
+                g.drawString("|>  " + worlds[j].getSimulationConfigInfo(1), 1100, dynamicHeight);
+                TtTrustMethodology ttMethod = worlds[j].getSimulationConfig().getTtMethod();
+                if (ttMethod == TtTrustMethodology.TrustMode_ShortPath || ttMethod == TtTrustMethodology.TrustMode_RandomPath) {
+                    dynamicHeight += 40;
+                    g.drawString("    > " + worlds[j].getSimulationConfigInfo(2), 1100, dynamicHeight);
+                    dynamicHeight += 40;
+                    g.drawString("    > " + worlds[j].getSimulationConfigInfo(3), 1100, dynamicHeight);
+                    dynamicHeight += 40;
+                    g.drawString("    > " + worlds[j].getSimulationConfigInfo(4), 1100, dynamicHeight);
                 }
+                //============================
             }
-            //============================
-            g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(1), 1100, dynamicHeight);
-            TtTrustMethodology ttMethod = worlds[j].getSimulationConfig().getTtMethod();
-            if (ttMethod == TtTrustMethodology.TrustMode_ShortPath || ttMethod == TtTrustMethodology.TrustMode_RandomPath) {
-                dynamicHeight += 40;
-                g.drawString("    > " + worlds[j].getSimulationConfigInfo(2), 1100, dynamicHeight);
-                dynamicHeight += 40;
-                g.drawString("    > " + worlds[j].getSimulationConfigInfo(3), 1100, dynamicHeight);
-                dynamicHeight += 40;
-                g.drawString("    > " + worlds[j].getSimulationConfigInfo(4), 1100, dynamicHeight);
-            }
-            //============================
         }
 
         //drawInfoSplitterLine();
@@ -157,15 +159,15 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, _vs * stat.getIttAgentsInTarget(), Color.GREEN, j, i);
+                        drawCurve(loAxisX, _vs * stat.getIttAgentsInTarget(), Globals.Color$.$curve_1, j, i);
                         g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getIttAgentsInTarget());
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, _vs * stat.getIttAgentsInPitfall(), Color.RED, j, i);
+                        drawCurve(loAxisX, _vs * stat.getIttAgentsInPitfall(), Globals.Color$.$curve_2, j, i);
                         g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getIttAgentsInPitfall());
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, _vs * stat.getIttRandomTravelToNeighbors(), Color.MAGENTA, j, i);
+                        drawCurve(loAxisX, _vs * stat.getIttRandomTravelToNeighbors(), Globals.Color$.$curve_3, j, i);
                         g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getIttRandomTravelToNeighbors());
                     }
                     if (axisX < loAxisX) {
@@ -178,7 +180,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================ Timed Average Chart
 
-        if (showChartsFlag[1] && maxAxisY.length>1 ) {
+        if (showChartsFlag[1] && maxAxisY.length > 1) {
             g.translate(0, _vs * -maxAxisY[1] - 50);
             loAxisX = 0;
 
@@ -227,17 +229,17 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentTarget(), Color.GREEN, j, i);
+                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentTarget(), Globals.Color$.$curve_1, j, i);
                         g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getTimedAvgAgentTarget());
                     }
 
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentInPitfall(), Color.RED, j, i);
+                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentInPitfall(), Globals.Color$.$curve_2, j, i);
                         g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getTimedAvgAgentInPitfall());
                     }
 
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, _vs * stat.getTimedAvgRandomTravel(), Color.MAGENTA, j, i);
+                        drawCurve(loAxisX, _vs * stat.getTimedAvgRandomTravel(), Globals.Color$.$curve_3, j, i);
                         g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getTimedAvgRandomTravel());
                     }
 
@@ -292,10 +294,10 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                             prevPoints[1].y = _vs * stat.getMidAgentsInPitfall();
                         }
 
-                        drawCurve(loAxisX, _vs * stat.getMidAgentsInTarget(), Color.GREEN, j, 20, i);
+                        drawCurve(loAxisX, _vs * stat.getMidAgentsInTarget(), Globals.Color$.$curve_1, j, 20, i);
                         g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getMidAgentsInTarget());
 
-                        drawCurve(loAxisX, _vs * stat.getMidAgentsInPitfall(), Color.RED, j, 20, i);
+                        drawCurve(loAxisX, _vs * stat.getMidAgentsInPitfall(), Globals.Color$.$curve_2, j, 20, i);
                         g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getMidAgentsInPitfall());
 
                     }

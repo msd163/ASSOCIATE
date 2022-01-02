@@ -51,6 +51,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private float translateInRevCoord_Y = 100;
 
     private boolean showMousePlus = true;
+    private boolean isShowDrawingTitle = true;
+    private boolean isShowStatsInfo = true;
+    protected boolean isShowSimInfo = true;
 
     public int getWorldId() {
         return world == null ? -1 : world.getId();
@@ -174,6 +177,14 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         if (index < showChartsFlag.length) {
                             showChartsFlag[index] = !showChartsFlag[index];
                         }
+                    } else {
+                        if (keyCode == (int) 'q' || keyCode == (int) 'Q') {
+                            isShowDrawingTitle = !isShowDrawingTitle;
+                        } else if (keyCode == (int) 'w' || keyCode == (int) 'W') {
+                            isShowStatsInfo = !isShowStatsInfo;
+                        } else if (keyCode == (int) 'e' || keyCode == (int) 'E') {
+                            isShowSimInfo = !isShowSimInfo;
+                        }
                     }
                 }
 
@@ -191,16 +202,20 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     public void printDrawingTitle(String title, String subTitle) {
 
+        if (!isShowDrawingTitle) {
+            return;
+        }
+
         java.awt.Point mousePoint = getMousePosition();
         if (showMousePlus && mousePoint != null) {
-            g.setColor(Color.WHITE);
+            g.setColor(Globals.Color$.$mousePlus);
             //-- (TOP-DOWN) Drawing vertical line for mouse pointer
             g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
             //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
             g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
         }
 
-        g.setColor(Color.cyan);
+        g.setColor(Globals.Color$.$drawingTitle);
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
         g.drawString(title, 100, 50);
         if (subTitle != null) {
@@ -219,12 +234,20 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void printStatsInfo(int index, String title, Color color) {
+
+        if (!isShowStatsInfo) {
+            return;
+        }
+
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         dynamicHeight = Math.max(index * 50, dynamicHeight);
     }
 
     public void printStatsInfo(int index, String title, int value, Color color) {
+        if (!isShowStatsInfo) {
+            return;
+        }
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
@@ -232,6 +255,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void printStatsInfo(int index, String title, float value, Color color) {
+        if (!isShowStatsInfo) {
+            return;
+        }
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
@@ -239,6 +265,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void printStatsInfo(int index, String title, int value1, String value2, Color color) {
+        if (!isShowStatsInfo) {
+            return;
+        }
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value1, 600, index * 50);
@@ -271,58 +300,60 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
 
         g = (Graphics2D) gr;
-        g.setBackground(Color.BLACK);
+        g.setBackground(Globals.Color$.$background);
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
 
         printDrawingTitle(title, subTitle);
 
-        g.setColor(Color.YELLOW);
+        g.setColor(Globals.Color$.$mainTitle);
 
         //============================//============================ Translate for panning and scaling
-
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        if (world != null) {
-            g.drawString("World Id", 1100, 50);
-            g.drawString(": " + world.getId(), 1300, 50);
-        } else {
-            g.drawString("Simulation Time", 1100, 50);
-            g.drawString(": " + simulationTimer, 1300, 50);
+        if(isShowDrawingTitle) {
+
+            if (world != null) {
+                g.drawString("World Id", 1100, 50);
+                g.drawString(": " + world.getId(), 1300, 50);
+            } else {
+                g.drawString("Simulation Time", 1100, 50);
+                g.drawString(": " + simulationTimer, 1300, 50);
+            }
+            g.drawString("World Time", 1100, 90);
+            g.drawString(": " + worldTimer, 1300, 90);
+            g.drawString("Episode", 1100, 130);
+            g.drawString(": " + Globals.EPISODE, 1300, 130);
+
+            g.setColor(Globals.Color$.$subTitle);
+
+            g.drawString("Vertical   : X " + _vs, 1500, 50);
+            g.drawString("Horizontal: X " + _hs, 1500, 90);
+            g.drawString("Zoom: X " + scale, 1500, 130);
         }
-        g.drawString("World Time", 1100, 90);
-        g.drawString(": " + worldTimer, 1300, 90);
-        g.drawString("Episode", 1100, 130);
-        g.drawString(": " + Globals.EPISODE, 1300, 130);
-
-        g.setColor(Color.GRAY);
-        g.drawString("Vertical   : X " + _vs, 1500, 50);
-        g.drawString("Horizontal: X " + _hs, 1500, 90);
-        g.drawString("Zoom: X " + scale, 1500, 130);
-
         return true;
     }
 
     protected void drawAxisX(int index) {
         int realWith = getRealWith();
-        g.setColor(Color.WHITE);
+        g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
         for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
-            g.setColor(Color.WHITE);
+            g.setColor(Globals.Color$.$axis);
             if (i > 0) {
                 if (i % (10 * _hs) == 0) {
                     if (_hs > 5 || i % (20 * _hs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", i - 5, 20);
+                        g.drawString(x + "", i - 5, 40);
                         g.scale(1, -1);
                     }
                     g.drawLine(i, -5, i, 5);
-                    g.setColor(Globals.Color$.darkGray);
+                    g.setColor(Globals.Color$.$axisSplit);
                     g.drawLine(i, 5, i, maxAxisY[index] * _vs);
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
-                    g.setColor(Globals.Color$.darkGray2);
+                    g.setColor(Globals.Color$.$axisSplit2);
                     g.drawLine(i, 5, i, maxAxisY[index] * _vs);
                 } else if (_hs > 1) {
                     g.drawLine(i, 0, i, 1);
@@ -333,26 +364,26 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected void drawAxisY(int index) {
         int realWith = (maxAxisY[index] + 10) * _vs;
-        g.setColor(Color.WHITE);
+        g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, 0, realWith);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
         for (int i = 0, x = 0; i < realWith; i += _vs, x++) {
-            g.setColor(Color.WHITE);
+            g.setColor(Globals.Color$.$axis);
             if (i > 0) {
                 if (i % (10 * _vs) == 0) {
                     if (_vs > 5 || i % (20 * _vs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", -40, -i + 5);
+                        g.drawString(x + "", -60, -i + 5);
                         g.scale(1, -1);
                         g.drawLine(-8, i, 5, i);
                     } else {
                         g.drawLine(-4, i, 5, i);
                     }
-                    g.setColor(Globals.Color$.darkGray);
+                    g.setColor(Globals.Color$.$axisSplit);
                     g.drawLine(5, i, getRealWith(), i);
                 } else if (_vs > 1 && i % (5 * _vs) == 0) {
                     g.drawLine(-3, i, 1, i);
-                    g.setColor(Globals.Color$.darkGray2);
+                    g.setColor(Globals.Color$.$axisSplit2);
                     g.drawLine(5, i, getRealWith(), i);
                 } else if (_vs > 3) {
                     g.drawLine(0, i, 1, i);
@@ -435,12 +466,12 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     //============================//============================
 
     public void drawCurve(int x, int y, Color color, int index, int xIndex) {
-        drawCurve(x, y, color, index, 18, xIndex);
+        drawCurve(x, y, color, index, 25, xIndex);
     }
 
     public void drawCurve(int x, int y, Color color, int index, int size, int xIndex) {
         if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
-            size = (_hs / 2);
+            size = (_hs);
             size = Math.min(size, 4);
         }
         int sizeHf = size / 2;
@@ -525,7 +556,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected void pauseNotice(Graphics2D g) {
         if (Globals.PAUSE) {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
-            g.setColor(Color.GREEN);
+            g.setColor(Globals.Color$.$pause);
             g.drawString("PAUSED ", 400, 100);
         }
     }

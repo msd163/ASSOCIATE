@@ -37,54 +37,55 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToMischief(), Color.WHITE);
-        printStatsInfo(2, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Honest", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHonest(), Color.GREEN);
-        printStatsInfo(3, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Hypocrite", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHypocrite(), Color.MAGENTA);
-        printStatsInfo(4, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Adversary", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToAdversary(), Color.RED);
+        printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToMischief(), Globals.Color$.$curve_3);
+        printStatsInfo(2, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Honest", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHonest(), Globals.Color$.$curve_1);
+        printStatsInfo(3, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Hypocrite", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHypocrite(), Globals.Color$.$curve_3);
+        printStatsInfo(4, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Adversary", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToAdversary(), Globals.Color$.$curve_2);
 
         //============================//============================ INFO
         dynamicHeight += 20;
-        for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
+        if(isShowSimInfo) {
+            for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
-            World world = worlds[j];
+                World world = worlds[j];
 
-            if (j > Globals.SIMULATION_TIMER || world == null) {
-                break;
+                if (j > Globals.SIMULATION_TIMER || world == null) {
+                    break;
+                }
+
+                //============================
+                dynamicHeight += 40;
+                g.setColor(Globals.Color$.$simTitle);
+                g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
+                //============================
+
+                if (showWorldsFlag[j]) {
+                    if (showLineChartsFlag[0]) {
+                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
+                        g.drawString("Mischief", 220, dynamicHeight);
+                        //============================
+                    }
+                    if (showLineChartsFlag[1]) {
+                        drawCurve(450, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
+                        g.drawString("Honest", 470, dynamicHeight);
+                        //============================
+                    }
+                    if (showLineChartsFlag[2]) {
+                        drawCurve(700, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
+                        g.drawString("Hypocrite", 720, dynamicHeight);
+                        //============================
+                    }
+                    if (showLineChartsFlag[3]) {
+                        drawCurve(950, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
+                        g.drawString("Adversary", 970, dynamicHeight);
+                    }
+                }
+                //============================
+                g.setColor(Globals.Color$.$configTitle);
+                g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, dynamicHeight);
+                //============================
             }
-
-            //============================
-            dynamicHeight += 40;
-            g.setColor(Color.white);
-            g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
-            //============================
-
-            if (showWorldsFlag[j]) {
-                if (showLineChartsFlag[0]) {
-                    drawCurve(200, dynamicHeight, Color.WHITE, j, 20, -1);
-                    g.drawString("Mischief", 220, dynamicHeight);
-                    //============================
-                }
-                if (showLineChartsFlag[1]) {
-                    drawCurve(450, dynamicHeight, Color.GREEN, j, 20, -1);
-                    g.drawString("Honest", 470, dynamicHeight);
-                    //============================
-                }
-                if (showLineChartsFlag[2]) {
-                    drawCurve(700, dynamicHeight, Color.MAGENTA, j, 20, -1);
-                    g.drawString("Hypocrite", 720, dynamicHeight);
-                    //============================
-                }
-                if (showLineChartsFlag[3]) {
-                    drawCurve(950, dynamicHeight, Color.RED, j, 20, -1);
-                    g.drawString("Adversary", 970, dynamicHeight);
-                }
-            }
-            //============================
-            g.setColor(Globals.Color$.lightGray);
-            g.drawString("|>  " + worlds[j].getSimulationConfigInfo(), 1100, dynamicHeight);
-            //============================
         }
-
         //============================//============================//============================ Diagram drawing
 
         reverseNormalizeCoordination();
@@ -140,28 +141,28 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToMischief(), Color.WHITE, j, i);
+                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToMischief(), Globals.Color$.$curve_3, j, i);
                         if (prevPoints[0].y >= 0) {
                             g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getTimeAvgTrustToMischief());
                         }
                     }
 
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHonest(), Color.GREEN, j, i);
+                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHonest(), Globals.Color$.$curve_1, j, i);
                         if (prevPoints[1].y >= 0) {
                             g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getTimeAvgTrustToHonest());
                         }
                     }
 
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHypocrite(), Color.MAGENTA, j, i);
+                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHypocrite(), Globals.Color$.$curve_3, j, i);
                         if (prevPoints[2].y >= 0) {
                             g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getTimeAvgTrustToHypocrite());
                         }
                     }
 
                     if (showLineChartsFlag[3]) {
-                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToAdversary(), Color.RED, j, i);
+                        drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToAdversary(), Globals.Color$.$curve_2, j, i);
                         if (prevPoints[2].y >= 0) {
                             g.drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, _vs * stat.getTimeAvgTrustToAdversary());
                         }
