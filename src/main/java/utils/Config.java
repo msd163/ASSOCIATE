@@ -74,5 +74,6 @@ public class Config {
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = false;
     public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = false;
+    public static final boolean TRUST_MATRIX_IS_ON /*               */ = TRUST_MATRIX_IS_GENERATE || DRAWING_SHOW_trustMatrixDrawingWindow;
 
 }

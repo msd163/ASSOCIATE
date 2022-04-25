@@ -234,7 +234,9 @@ public class World {
     }
 
     private void initTrustMatrix() {
-        matrixGenerator.init(agents);
+        if (Config.TRUST_MATRIX_IS_ON) {
+            matrixGenerator.init(agents);
+        }
     }
 
     private boolean isTraceable(int i) {
@@ -371,8 +373,9 @@ public class World {
                 }
             }
 
-            matrixGenerator.update(wdStats);
-
+            if (Config.TRUST_MATRIX_IS_ON) {
+                matrixGenerator.update(wdStats);
+            }
             if (Config.STATISTICS_IS_GENERATE) {
                 Globals.statsEnvGenerator.addStat(wdStats);
                 Globals.statsTrustGenerator.addStat(wdStats);
