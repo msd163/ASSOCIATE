@@ -91,7 +91,9 @@ public class World {
         agents = new ArrayList<>();
         int i;
         for (StateX state : states) {
+            System.out.println(">>    State: " + state.getId());
             for (Agent agent : state.getAgents()) {
+                System.out.println("                    Agent: " + agent.getId());
                 agent.setState(state);
                 agent.setWorld(this);
                 agent.initVars();
@@ -109,12 +111,13 @@ public class World {
                     agent.setAsTraceable();
                 }
 
-                System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
+                //System.out.println("Full world:::init::agent: " + agent.getId() + " state: " + agent.getState().getId() + " target: " + (agent.getCurrentTarget() != null ? agent.getCurrentTarget().getId() : "NULL"));
 
                 agents.add(agent);
             }
         }
 
+        System.out.println("> Sorting is stated...");
         agents.sort((Agent a1, Agent a2) -> {
             if (a1.getCapacity().getCapPower() > a2.getCapacity().getCapPower()) {
                 return -1;
@@ -125,6 +128,7 @@ public class World {
             return 0;
         });
 
+        System.out.println("Indexing is started...");
         //-- Setting index of agent in sorted list
         int indexInSortedList = 0;
         for (Agent agent : agents) {
@@ -132,8 +136,10 @@ public class World {
             agent.getTrust().postInit();
         }
 
+        System.out.println("Updating agent count...");
         environment.updateAgentsCount();
 
+        System.out.println("Reassigning state location...");
         environment.reassigningStateLocationAndTransPath();
 
         // Resetting the timer of the world.
@@ -161,9 +167,11 @@ public class World {
         }
 
         //============================//============================ Init trust matrix
+        System.out.println("Initializing TrustMatrix...");
         initTrustMatrix();
 
         //============================//============================ Init DaGra
+        System.out.println("Initializing DaGra...");
         initDaGra();
 
     }
@@ -203,6 +211,7 @@ public class World {
 
     private ObservationBarDrawingWindow observationBarDrawingWindow;
     private IndirectObservationBarDrawingWindow indirectObservationBarDrawingWindow;
+
 
     private RecommendationBarDrawingWindow recommendationBarDrawingWindow;
 
@@ -316,7 +325,7 @@ public class World {
             /* Creating a list for agents that have register request, and sent a certain request to the DaGra randomly*/
             /* If the request period has arrived */
             if ((Globals.WORLD_TIMER + 1) % simulationConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
-               /* If the maximum allowed number of requests is not consumed */
+                /* If the maximum allowed number of requests is not consumed */
                 if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
 
                     /* Creating register request list */

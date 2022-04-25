@@ -41,7 +41,7 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE = TtDiagramThemeMode.Light;
+    public static final TtDiagramThemeMode THEME_MODE = TtDiagramThemeMode.Dark;
     public static int DRAWING_CURVE_LINE_LENGTH = 1;
     public static int DRAWING_AXIS_LINE_LENGTH = 1;
 
@@ -52,7 +52,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
@@ -72,7 +72,7 @@ public class Config {
     public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
 
     //============================ Statistics
-    public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
-    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
+    public static final boolean STATISTICS_IS_GENERATE /*           */ = false;
+    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = false;
 
 }

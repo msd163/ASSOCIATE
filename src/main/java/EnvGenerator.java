@@ -122,6 +122,7 @@ public class EnvGenerator {
         int id = 0;
         int thisBunchFinished = profiler.getCurrentBunch().getBunchCount();
         for (int i = 0; i < agentsCount; i++) {
+            System.out.println(">> agent index: " + i + " ------------------------------");
             if (i >= thisBunchFinished) {
                 profiler.NextBunch();
                 thisBunchFinished = thisBunchFinished + profiler.getCurrentBunch().getBunchCount();
@@ -155,9 +156,11 @@ public class EnvGenerator {
                 StateX prevState = agents[i].getState();
                 for (int tc = 0; tc < targetCounts; tc++) {
                     tryCount = 0;
+                    //System.out.println("  > Current target index: " + tc);
                     boolean isValidToAddAsTarget;
                     //============================ Adding target state to agents
                     do {
+                        //System.out.println("  - Adding target state to agent. try count: " + tryCount);
                         if (tryCount > agentsCount * 0.8 && prevState.hasTarget()) {
                             int i1 = Globals.RANDOM.nextInt(prevState.getTargets().size());
                             randomState = prevState.getTargets().get(i1);
@@ -187,9 +190,9 @@ public class EnvGenerator {
                     }
                 }
 
-                System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getCurrentTarget() != null ? agents[i].getCurrentTarget().getId() : "NULL"));
+                //System.out.println("world:::init::agent: " + agents[i].getId() + " state: " + agents[i].getState().getId() + " target: " + (agents[i].getCurrentTarget() != null ? agents[i].getCurrentTarget().getId() : "NULL"));
 
-                System.out.println(Arrays.toString(agents[i].getTargetStateIds()));
+                //System.out.println(Arrays.toString(agents[i].getTargetStateIds()));
             }
         }
     }
