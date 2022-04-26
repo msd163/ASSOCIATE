@@ -132,11 +132,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             }
                             break;
                         case 38:        // top
-                            if (_vs < 1) {
-                                _vs += 0.1;
-                            } else {
-                                _vs++;
-                            }
+                            _vs++;
                             break;
                         case 39:        // right
                             _hs++;
@@ -144,8 +140,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         case 40:        // bottom
                             if (_vs > 1) {
                                 _vs--;
-                            } else if (_vs > 0.2) {
-                                _vs -= 0.1;
                             }
                             break;
                         case 90:        // z
