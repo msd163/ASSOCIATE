@@ -18,11 +18,17 @@ public class Internet {
         updateTime = -1;
         this.world = world;
         intAgents = new ArrayList<>();
+
+        for (Agent agent : world.getAgents()) {
+            if (agent.getCapacity().isHasInternet()) {
+                intAgents.add(agent);
+            }
+        }
     }
 
     public List<Agent> getAgentList() {
 
-        if (updateTime == Globals.WORLD_TIMER) {
+   /*     if (updateTime == Globals.WORLD_TIMER) {
             return intAgents;
         }
 
@@ -32,7 +38,7 @@ public class Internet {
                 intAgents.add(agent);
             }
         }
-        updateTime = Globals.WORLD_TIMER;
+        updateTime = Globals.WORLD_TIMER;*/
         return intAgents;
     }
 
