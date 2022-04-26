@@ -185,8 +185,13 @@ public class World {
         Agent genesisAgent = new Agent(this, -99);
         genesisAgent.setIndex(-99);
         genesis.setRequester(genesisAgent);
-        for (Agent agent : agents) {
+        for (int i = 0, j = 0, agentsSize = agents.size(); i < agentsSize; i++) {
+            Agent agent = agents.get(i);
             if (agent.getTrust().isHasCandidateForCertification()) {
+                System.out.println("| " + j++ + "  " + i);
+                if (j % 20 == 0) {
+                    System.out.println();
+                }
                 agent.setDaGra(new DaGra(agent));
                 agent.getDaGra().setGenesis(genesis.clone());
                 //agent.getDaGra().assignMyContract();
