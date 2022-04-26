@@ -41,7 +41,7 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE = TtDiagramThemeMode.Dark;
+    public static final TtDiagramThemeMode THEME_MODE = TtDiagramThemeMode.Light;
     public static int DRAWING_CURVE_LINE_LENGTH = 1;
     public static int DRAWING_AXIS_LINE_LENGTH = 1;
 
