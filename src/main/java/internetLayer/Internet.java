@@ -3,6 +3,7 @@ package internetLayer;
 import systemLayer.Agent;
 import systemLayer.World;
 import utils.Globals;
+import utils.OutLog____;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +18,21 @@ public class Internet {
     public Internet(World world) {
         updateTime = -1;
         this.world = world;
-        intAgents = new ArrayList<>();
+        intAgents = null;
 
-        for (Agent agent : world.getAgents()) {
-            if (agent.getCapacity().isHasInternet()) {
-                intAgents.add(agent);
-            }
-        }
     }
 
     public List<Agent> getAgentList() {
+
+        if (intAgents == null) {
+            intAgents = new ArrayList<>();
+            for (Agent agent : world.getAgents()) {
+                if (agent.getCapacity().isHasInternet()) {
+                    intAgents.add(agent);
+                }
+            }
+            System.out.println("intAgents.size() " + intAgents.size());
+        }
 
    /*     if (updateTime == Globals.WORLD_TIMER) {
             return intAgents;
