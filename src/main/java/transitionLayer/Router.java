@@ -226,7 +226,7 @@ public class Router {
         }
 
         RoutingHelp routingHelp;
-
+        //System.out.print(" *k*");
         //-- Asking from watched list and filling routingHelps. all watchedAgents than know where is the goal state
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
@@ -238,13 +238,23 @@ public class Router {
                     OutLog____.pl(TtOutLogMethodSection.Router, TtOutLogStatus.ERROR, "Requester agent is equals to helper: " + agent.getId());
                     continue;
                 }
-                routingHelp.setStepFromAgentToHelper(wa.getPathSize());
-                //============================//============================ _Calculating _Trust
 
-                routingHelp.setTrustValue(trustManager.getTrustValue(agent, wa.getAgent()));
+                // The SafeMode method needs only one helper. All helper are honest
+                // After finding the first helper, we exit form the loop
+                if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
+                    routingHelps.add(routingHelp);
+                    break;
 
-                //============================//============================
-                routingHelps.add(routingHelp);
+                } else {
+
+                    routingHelp.setStepFromAgentToHelper(wa.getPathSize());
+                    //============================//============================ _Calculating _Trust
+
+                    routingHelp.setTrustValue(trustManager.getTrustValue(agent, wa.getAgent()));
+
+                    //============================//============================
+                    routingHelps.add(routingHelp);
+                }
             }
         }
 
@@ -259,6 +269,7 @@ public class Router {
         switch (simulationConfigItem.getTtMethod()) {
 
             case TrustMode_ShortPath:
+                //System.out.print(" *ts*");
                 sortedRoutingHelps = sortByTrustMechanism(agent, goalState, routingHelps);
                 if (sortedRoutingHelps == null) return;
 
@@ -269,8 +280,10 @@ public class Router {
                 break;
 
             case NoTrust_ShortPath:
+                //System.out.print(" *ns*");
                 sortRoutingByShortestPath(sortedRoutingHelps);
                 break;
+            case TrustMode_SafeMode:
             case NoTrust_RandomPath:
             default:
                 break;
@@ -286,6 +299,7 @@ public class Router {
         agent.clearNextSteps();
         RoutingHelp help = sortedRoutingHelps.get(0);
         // Adding path from agent state to helper (agent) state
+        //System.out.print(" *aw*");
         for (WatchedAgent wa : watchedAgents) {
             if (wa.getAgent().getId() == help.getHelperAgent().getId()) {
                 agent.getNextSteps().addAll(wa.getPath());
@@ -301,49 +315,54 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
-        float trustValueOfHelperToAgent = trustManager.getTrustValue(help.getHelperAgent(), agent);
-        if (simulationConfigItem.isIsUseIndirectExperience()) {
+        if (
+                simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
+                        simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
+        ) {
+            float trustValueOfHelperToAgent = trustManager.getTrustValue(help.getHelperAgent(), agent);
+            if (simulationConfigItem.isIsUseIndirectExperience()) {
             /* If receiver of experiences (the helper or truster in routing procedure) trusts to the sender (the trustee in routing procedure),
             the helper accepts experiences of the agent
             * */
-            if (trustValueOfHelperToAgent > 0) {
-                trustManager.shareExperiences(agent, help.getHelperAgent());
+                if (trustValueOfHelperToAgent > 0) {
+                    trustManager.shareExperiences(agent, help.getHelperAgent());
+                }
+                if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
+                    /* The agent trusts to helper, thus he accepts experiences of helper  */
+                    trustManager.shareExperiences(help.getHelperAgent(), agent);
+                }
             }
-            if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
-                /* The agent trusts to helper, thus he accepts experiences of helper  */
-                trustManager.shareExperiences(help.getHelperAgent(), agent);
+            /*
+             * */
+            if (simulationConfigItem.isIsUseIndirectObservation()) {
+                if (trustValueOfHelperToAgent > 0) {
+                    trustManager.shareObservations(agent, help.getHelperAgent());
+                }
+                if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
+                    trustManager.shareObservations(help.getHelperAgent(), agent);
+                }
             }
-        }
-        /*
-         * */
-        if (simulationConfigItem.isIsUseIndirectObservation()) {
-            if (trustValueOfHelperToAgent > 0) {
-                trustManager.shareObservations(agent, help.getHelperAgent());
-            }
-            if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
-                trustManager.shareObservations(help.getHelperAgent(), agent);
-            }
-        }
 
-        if (simulationConfigItem.isUseRecommendation()) {
-            if (trustValueOfHelperToAgent > 0) {
-                trustManager.sendRecommendations(agent, help.getHelperAgent());
+            if (simulationConfigItem.isUseRecommendation()) {
+                if (trustValueOfHelperToAgent > 0) {
+                    trustManager.sendRecommendations(agent, help.getHelperAgent());
+                }
+                if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
+                    trustManager.sendRecommendations(help.getHelperAgent(), agent);
+                }
             }
-            if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
-                trustManager.sendRecommendations(help.getHelperAgent(), agent);
-            }
-        }
 
-        if (help.getHelperAgent().getBehavior().getHasHonestState()) {
-            statistics___.add_Itt_TrustToHonest();
-        } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
-            statistics___.add_Itt_TrustToAdversary();
-        } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
-            statistics___.add_Itt_TrustToHypocrite();
-        } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
-            statistics___.add_Itt_TrustToMischief();
+            if (help.getHelperAgent().getBehavior().getHasHonestState()) {
+                statistics___.add_Itt_TrustToHonest();
+            } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
+                statistics___.add_Itt_TrustToAdversary();
+            } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
+                statistics___.add_Itt_TrustToHypocrite();
+            } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
+                statistics___.add_Itt_TrustToMischief();
+            }
         }
-//        }
+//       }
     }
 
     /*  private List<RoutingHelp> refineByObservation(Agent requester, List<RoutingHelp> srh) {

@@ -298,11 +298,11 @@ public class WorldStatistics {
     }
 
     public int getAllAgentsInTarget() {
-        return allAgentsInTarget;
+        return allAgentsInTarget * 4;
     }
 
     public int getIttAgentsInTarget() {
-        return ittAgentsInTarget;
+        return ittAgentsInTarget * 4;
     }
 
     public int getFullStateCount() {
@@ -310,23 +310,23 @@ public class WorldStatistics {
     }
 
     public int getIttSuccessTravelToNeighbor() {
-        return ittSuccessTravelToNeighbor;
+        return ittSuccessTravelToNeighbor * 4;
     }
 
     public int getIttFailedTravelToNeighbor() {
-        return ittFailedTravelToNeighbor;
+        return ittFailedTravelToNeighbor * 4;
     }
 
     public int getAgentsWithNoTargetState() {
-        return agentsWithNoTargetState;
+        return agentsWithNoTargetState * 4;
     }
 
     public int getIttUpdatedNextStep() {
-        return ittUpdatedNextStep;
+        return ittUpdatedNextStep * 4;
     }
 
     public int getIttRandomTravelToNeighbors() {
-        return ittRandomTravelToNeighbors;
+        return ittRandomTravelToNeighbors * 4;
     }
 
     public int getStatesWithNoTarget() {
@@ -334,19 +334,19 @@ public class WorldStatistics {
     }
 
     public int getAllAgentsInPitfall() {
-        return allAgentsInPitfall;
+        return allAgentsInPitfall * 4;
     }
 
     public int getIttAgentsInPitfall() {
-        return ittAgentsInPitfall;
+        return ittAgentsInPitfall * 4;
     }
 
     public int getIttTrustToAdversary() {
-        return ittTrustToAdversary;
+        return ittTrustToAdversary * 4;
     }
 
     public int getIttTrustToHonest() {
-        return ittTrustToHonest;
+        return ittTrustToHonest * 4;
     }
 
     public int getEpisode() {
@@ -354,27 +354,27 @@ public class WorldStatistics {
     }
 
     public int getAllTrustToAdversary() {
-        return allTrustToAdversary;
+        return allTrustToAdversary * 4;
     }
 
     public int getAllTrustToHonest() {
-        return allTrustToHonest;
+        return allTrustToHonest * 4;
     }
 
     public int getIttFalsePositiveTrust() {
-        return ittFalsePositiveTrust;
+        return ittFalsePositiveTrust * 4;
     }
 
     public int getIttFalseNegativeTrust() {
-        return ittFalseNegativeTrust;
+        return ittFalseNegativeTrust * 4;
     }
 
     public int getIttTruePositiveTrust() {
-        return ittTruePositiveTrust;
+        return ittTruePositiveTrust * 4;
     }
 
     public int getIttTrueNegativeTrust() {
-        return ittTrueNegativeTrust;
+        return ittTrueNegativeTrust * 4;
     }
 
     public float getTrustAccuracy() {
@@ -426,35 +426,35 @@ public class WorldStatistics {
     }
 
     public int getAllTrustToMischief() {
-        return allTrustToMischief;
+        return allTrustToMischief * 4;
     }
 
     public int getAllTrustToHypocrite() {
-        return allTrustToHypocrite;
+        return allTrustToHypocrite * 4;
     }
 
     public int getIttTrustToHypocrite() {
-        return ittTrustToHypocrite;
+        return ittTrustToHypocrite * 4;
     }
 
     public int getIttTrustToMischief() {
-        return ittTrustToMischief;
+        return ittTrustToMischief * 4;
     }
 
     public int getAllFalsePositiveTrust() {
-        return allFalsePositiveTrust;
+        return allFalsePositiveTrust * 4;
     }
 
     public int getAllFalseNegativeTrust() {
-        return allFalseNegativeTrust;
+        return allFalseNegativeTrust * 4;
     }
 
     public int getAllTruePositiveTrust() {
-        return allTruePositiveTrust;
+        return allTruePositiveTrust * 4;
     }
 
     public int getAllTrueNegativeTrust() {
-        return allTrueNegativeTrust;
+        return allTrueNegativeTrust * 4;
     }
 
     public WorldStatistics getxPrevStats() {
@@ -471,7 +471,7 @@ public class WorldStatistics {
             timedAverageTarget = (allAgentsInTarget - xPrevStats.allAgentsInTarget) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
         }
 
-        return timedAverageTarget;
+        return timedAverageTarget * 4;
     }
 
     public int getTimedAvgAgentInPitfall() {
@@ -481,81 +481,84 @@ public class WorldStatistics {
             timedAveragePitfall = (allAgentsInPitfall - xPrevStats.allAgentsInPitfall) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
         }
 
-        return timedAveragePitfall;
+        return timedAveragePitfall * 4;
     }
 
     public int getTimedAvgRandomTravel() {
         if (xPrevStats == null) {
-            return allRandomTravelToNeighbor / (worldTime == 0 ? 1 : worldTime);
+            return (allRandomTravelToNeighbor / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return (allRandomTravelToNeighbor - xPrevStats.allRandomTravelToNeighbor) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            return ((allRandomTravelToNeighbor - xPrevStats.allRandomTravelToNeighbor) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
         }
 
     }
 
     public int getTimedAvgTruePositive() {
         if (xPrevStats == null) {
-             return  allTruePositiveTrust / (worldTime == 0 ? 1 : worldTime);
+            return (allTruePositiveTrust / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allTruePositiveTrust - xPrevStats.allTruePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            return ((allTruePositiveTrust - xPrevStats.allTruePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
         }
     }
 
     public int getTimedAvgTrueNegative() {
         if (xPrevStats == null) {
-             return  allTrueNegativeTrust / (worldTime == 0 ? 1 : worldTime);
+            return (allTrueNegativeTrust / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allTrueNegativeTrust - xPrevStats.allTrueNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            return ((allTrueNegativeTrust - xPrevStats.allTrueNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
         }
     }
 
     public int getTimedAvgFalsePositive() {
         if (xPrevStats == null) {
-             return  allFalsePositiveTrust / (worldTime == 0 ? 1 : worldTime);
+            return (allFalsePositiveTrust / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allFalsePositiveTrust - xPrevStats.allFalsePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            return ((allFalsePositiveTrust - xPrevStats.allFalsePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
         }
     }
 
     public int getTimedAvgFalseNegative() {
         if (xPrevStats == null) {
-            return  allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime);
+            return (allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            return ((allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
         }
     }
 
     public int getTimeAvgTrustToAdversary() {
         if (xPrevStats == null) {
-            return  allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime);
+            return (allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-        }    }
+            return ((allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
+        }
+    }
 
     public int getTimeAvgTrustToHonest() {
         if (xPrevStats == null) {
-            return  allTrustToHonest / (worldTime == 0 ? 1 : worldTime);
+            return (allTrustToHonest / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allTrustToHonest - xPrevStats.allTrustToHonest) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-        }    }
+            return ((allTrustToHonest - xPrevStats.allTrustToHonest) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
+        }
+    }
 
     public int getTimeAvgTrustToMischief() {
         if (xPrevStats == null) {
-            return  allTrustToMischief / (worldTime == 0 ? 1 : worldTime);
+            return (allTrustToMischief / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allTrustToMischief - xPrevStats.allTrustToMischief) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-        }    }
+            return ((allTrustToMischief - xPrevStats.allTrustToMischief) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
+        }
+    }
 
     public int getTimeAvgTrustToHypocrite() {
         if (xPrevStats == null) {
-            return  allTrustToHypocrite / (worldTime == 0 ? 1 : worldTime);
+            return (allTrustToHypocrite / (worldTime == 0 ? 1 : worldTime)) * 4;
         } else {
-            return  (allTrustToHypocrite - xPrevStats.allTrustToHypocrite) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            return ((allTrustToHypocrite - xPrevStats.allTrustToHypocrite) / Config.STATISTICS_AVERAGE_TIME_WINDOW) * 4;
         }
 
     }
 
     public int getAllRandomTravelToNeighbor() {
-        return allRandomTravelToNeighbor;
+        return allRandomTravelToNeighbor * 4;
     }
 }

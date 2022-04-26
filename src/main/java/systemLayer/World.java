@@ -289,11 +289,17 @@ public class World {
 
             //============================//============================  Updating agents statuses
             System.out.println("> updating agents' profile, watched list, and next steps...");
-            for (Agent agent : agents) {
+            for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
+                Agent agent = agents.get(i);
+                //System.out.print("  | " + i + " (" + agent.getId() + ")");
                 //todo: adding doing service capacity to agents as capacity param
                 agent.updateProfile();
+                //System.out.print(" p");
                 agent.updateWatchList();
+                //System.out.print(" w");
                 router.updateNextSteps(agent);
+                //System.out.print(" s");
+
             }
 
             System.out.println("> go to next step...");
@@ -314,7 +320,12 @@ public class World {
 
             //============================//============================ Sharing With Internet
 
-            if (simulationConfigItem.isIsUseSharingRecommendationWithInternet()) {
+            if (
+                    (
+                            simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
+                                    simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
+                    )
+                            && simulationConfigItem.isIsUseSharingRecommendationWithInternet()) {
                 System.out.println("> sending recommendation through Internet...");
                 trustManager.sendRecommendationsWithInternet(internet.getAgentList());
             }
@@ -322,54 +333,61 @@ public class World {
 
             //============================//============================ DaGra processes
             /* Updating all contracts status and filling toBeSignedContracts and toBeVerifiedContracts lists  */
-            System.out.println("> DaGra: updating status and list...");
-            for (Agent agent : agents) {
-                if (agent.getTrust().isHasCandidateForCertification()) {
-                    agent.getDaGra().updatingStatusAndList();
+            if (
+                    (
+                            simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
+                                    simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
+                    )
+                            && simulationConfigItem.getCert().isIsUseCertification()
+                            && simulationConfigItem.getCert().isIsUseDaGra()) {
+                System.out.println("> DaGra: updating status and list...");
+                for (Agent agent : agents) {
+                    if (agent.getTrust().isHasCandidateForCertification()) {
+                        agent.getDaGra().updatingStatusAndList();
+                    }
                 }
-            }
 
-            /* Creating a list for agents that have register request, and sent a certain request to the DaGra randomly*/
-            /* If the request period has arrived */
-            if ((Globals.WORLD_TIMER + 1) % simulationConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
-                System.out.println("> DaGra: sending new requests...");
-                /* If the maximum allowed number of requests is not consumed */
-                if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
+                /* Creating a list for agents that have register request, and sent a certain request to the DaGra randomly*/
+                /* If the request period has arrived */
+                if ((Globals.WORLD_TIMER + 1) % simulationConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
+                    System.out.println("> DaGra: sending new requests...");
+                    /* If the maximum allowed number of requests is not consumed */
+                    if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
 
-                    /* Creating register request list */
-                    List<Agent> registerRequestList = new ArrayList<>();
-                    for (Agent agent : agents) {
-                        if (agent.getTrust().isHasCandidateForCertification()) {
-                            if (agent.getDaGra().isHasRegisterRequest()) {
-                                registerRequestList.add(agent);
+                        /* Creating register request list */
+                        List<Agent> registerRequestList = new ArrayList<>();
+                        for (Agent agent : agents) {
+                            if (agent.getTrust().isHasCandidateForCertification()) {
+                                if (agent.getDaGra().isHasRegisterRequest()) {
+                                    registerRequestList.add(agent);
+                                }
                             }
                         }
+
+                        /* As long as there is a request, and the capacity of request registration is not full. */
+                        while (registerRequestList.size() > 0 &&
+                                Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD
+                                        <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
+
+                            /* Selecting a requester randomly */
+                            int nextInt = Globals.RANDOM.nextInt(registerRequestList.size());
+                            Agent selectedAgent = registerRequestList.remove(nextInt);
+                            /* Sending a request to DaGra */
+                            selectedAgent.getDaGra().sendRegisterRequest();
+                            Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD++;
+                        }
                     }
+                }
 
-                    /* As long as there is a request, and the capacity of request registration is not full. */
-                    while (registerRequestList.size() > 0 &&
-                            Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD
-                                    <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
-
-                        /* Selecting a requester randomly */
-                        int nextInt = Globals.RANDOM.nextInt(registerRequestList.size());
-                        Agent selectedAgent = registerRequestList.remove(nextInt);
-                        /* Sending a request to DaGra */
-                        selectedAgent.getDaGra().sendRegisterRequest();
-                        Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD++;
+                /* Processing DaGra for all statues EXCEPT 'NoContract' and 'Expired' statuses */
+                System.out.println("> DaGra: processing...");
+                for (Agent agent : agents) {
+                    if (agent.getTrust().isHasCandidateForCertification()) {
+                        OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, ">> Agents with certification Cap. agentId: " + agent.getId());
+                        agent.getDaGra().process();
                     }
                 }
             }
-
-            /* Processing DaGra for all statues EXCEPT 'NoContract' and 'Expired' statuses */
-            System.out.println("> DaGra: processing...");
-            for (Agent agent : agents) {
-                if (agent.getTrust().isHasCandidateForCertification()) {
-                    OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, ">> Agents with certification Cap. agentId: " + agent.getId());
-                    agent.getDaGra().process();
-                }
-            }
-
             //============================//============================  updating full state statistics
             System.out.println("> updating statistics");
             for (StateX state : environment.getStates()) {

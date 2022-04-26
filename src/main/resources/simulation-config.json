@@ -10,19 +10,19 @@
       "ignoringThresholdOfTrustValue": 0.0001,
       "maximumConsideredRoutingHelpInTrustMechanism": 4,
       "_EXP": "-----------------------------------",
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
+      "isUseExperience": false,
+      "isUseIndirectExperience": false,
+      "isBidirectionalExperienceSharing": false,
       "experienceDepthInScoring": 4,
       "_OBS": "-----------------------------------",
-      "isUseObservation": true,
+      "isUseObservation": false,
       "isUseIndirectObservation": true,
-      "isBidirectionalObservationSharing": true,
+      "isBidirectionalObservationSharing": false,
       "_RCM": "-----------------------------------",
       "recommendationCoeff": 0,
-      "isBidirectionalRecommendationSharing": true,
-      "isSafeUseRecommendation": true,
-      "isUseNegativeRecommendationEffect": true,
+      "isBidirectionalRecommendationSharing": false,
+      "isSafeUseRecommendation": false,
+      "isUseNegativeRecommendationEffect": false,
       "_CRT": "-----------------------------------",
       "cert": {
         "isUseCertification": false,
@@ -36,7 +36,7 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": true
+      "isUseSharingRecommendationWithInternet": false
     },
     {
       "_METHOD": "=================================  FullyRandomly: 0",
@@ -73,7 +73,7 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": true
+      "isUseSharingRecommendationWithInternet": false
     },
     {
       "_METHOD": "=================================  NoTrust_ShortPath: 2",
@@ -84,19 +84,19 @@
       "ignoringThresholdOfTrustValue": 0.0001,
       "maximumConsideredRoutingHelpInTrustMechanism": 4,
       "_EXP": "-----------------------------------",
-      "isUseExperience": true,
-      "isUseIndirectExperience": true,
-      "isBidirectionalExperienceSharing": true,
+      "isUseExperience": false,
+      "isUseIndirectExperience": false,
+      "isBidirectionalExperienceSharing": false,
       "experienceDepthInScoring": 4,
       "_OBS": "-----------------------------------",
-      "isUseObservation": true,
-      "isUseIndirectObservation": true,
-      "isBidirectionalObservationSharing": true,
+      "isUseObservation": false,
+      "isUseIndirectObservation": false,
+      "isBidirectionalObservationSharing": false,
       "_RCM": "-----------------------------------",
       "recommendationCoeff": 0,
-      "isBidirectionalRecommendationSharing": true,
-      "isSafeUseRecommendation": true,
-      "isUseNegativeRecommendationEffect": true,
+      "isBidirectionalRecommendationSharing": false,
+      "isSafeUseRecommendation": false,
+      "isUseNegativeRecommendationEffect": false,
       "_CRT": "-----------------------------------",
       "cert": {
         "isUseCertification": false,
@@ -110,7 +110,7 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": true
+      "isUseSharingRecommendationWithInternet": false
     },
     {
       "_METHOD": "=================================  TrustMode_ShortPath: 4",
