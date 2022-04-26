@@ -371,7 +371,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
             g.setColor(Globals.Color$.$axis);
             if (i > 0) {
                 if (i % (10 * _vs) == 0) {
-                    if (_vs > 5 || i % (20 * _vs) == 0) {
+                    if (_vs > 10 || (_vs > 5 && i % (20 * _vs) == 0) || (_vs > 2 && _vs <= 5 && i % (25 * _vs) == 0) || (_vs > 0 && _vs <= 2 && i % (50 * _vs) == 0)) {
                         g.scale(1, -1);
                         g.drawString(x + "", -60, -i + 5);
                         g.scale(1, -1);
