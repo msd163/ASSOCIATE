@@ -132,7 +132,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             }
                             break;
                         case 38:        // top
-                            _vs++;
+                            if (_vs < 1) {
+                                _vs += 0.1;
+                            } else {
+                                _vs++;
+                            }
                             break;
                         case 39:        // right
                             _hs++;
@@ -140,6 +144,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         case 40:        // bottom
                             if (_vs > 1) {
                                 _vs--;
+                            } else if (_vs > 0.2) {
+                                _vs -= 0.1;
                             }
                             break;
                         case 90:        // z
@@ -311,7 +317,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         //============================//============================ Translate for panning and scaling
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        if(isShowDrawingTitle) {
+        if (isShowDrawingTitle) {
 
             if (world != null) {
                 g.drawString("World Id", 1100, 50);
