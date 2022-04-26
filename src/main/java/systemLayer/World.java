@@ -288,6 +288,7 @@ public class World {
             System.out.println("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + " > run ------------------------------- ");
 
             //============================//============================  Updating agents statuses
+            System.out.println("> updating agents' profile, watched list, and next steps...");
             for (Agent agent : agents) {
                 //todo: adding doing service capacity to agents as capacity param
                 agent.updateProfile();
@@ -295,6 +296,7 @@ public class World {
                 router.updateNextSteps(agent);
             }
 
+            System.out.println("> go to next step...");
             //============================//============================ Traveling
             for (Agent agent : agents) {
                 router.takeAStepTowardTheTarget(agent);
@@ -302,6 +304,7 @@ public class World {
 
             //============================//============================ Observation
             if (simulationConfigItem.isIsUseObservation() || simulationConfigItem.isIsUseIndirectObservation()) {
+                System.out.println("> observing...");
                 for (Agent agent : agents) {
                     if (agent.getCapacity().getObservationCap() > 0) {
                         trustManager.observe(agent);
@@ -312,12 +315,14 @@ public class World {
             //============================//============================ Sharing With Internet
 
             if (simulationConfigItem.isIsUseSharingRecommendationWithInternet()) {
+                System.out.println("> sending recommendation through Internet...");
                 trustManager.sendRecommendationsWithInternet(internet.getAgentList());
             }
 
 
             //============================//============================ DaGra processes
             /* Updating all contracts status and filling toBeSignedContracts and toBeVerifiedContracts lists  */
+            System.out.println("> DaGra: updating status and list...");
             for (Agent agent : agents) {
                 if (agent.getTrust().isHasCandidateForCertification()) {
                     agent.getDaGra().updatingStatusAndList();
@@ -327,6 +332,7 @@ public class World {
             /* Creating a list for agents that have register request, and sent a certain request to the DaGra randomly*/
             /* If the request period has arrived */
             if ((Globals.WORLD_TIMER + 1) % simulationConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
+                System.out.println("> DaGra: sending new requests...");
                 /* If the maximum allowed number of requests is not consumed */
                 if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
 
@@ -356,6 +362,7 @@ public class World {
             }
 
             /* Processing DaGra for all statues EXCEPT 'NoContract' and 'Expired' statuses */
+            System.out.println("> DaGra: processing...");
             for (Agent agent : agents) {
                 if (agent.getTrust().isHasCandidateForCertification()) {
                     OutLog____.pl(TtOutLogMethodSection.Main, TtOutLogStatus.SUCCESS, ">> Agents with certification Cap. agentId: " + agent.getId());
@@ -364,6 +371,7 @@ public class World {
             }
 
             //============================//============================  updating full state statistics
+            System.out.println("> updating statistics");
             for (StateX state : environment.getStates()) {
                 if (state.isFullCapability()) {
                     wdStats.addFullStateCount();
@@ -374,9 +382,11 @@ public class World {
             }
 
             if (Config.TRUST_MATRIX_IS_ON) {
+                System.out.println("> updating trust matrix");
                 matrixGenerator.update(wdStats);
             }
             if (Config.STATISTICS_IS_GENERATE) {
+                System.out.println("> adding statistics to generator");
                 Globals.statsEnvGenerator.addStat(wdStats);
                 Globals.statsTrustGenerator.addStat(wdStats);
             }
