@@ -110,7 +110,7 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": false
+      "isUseSharingRecommendationWithInternet": true
     },
     {
       "_METHOD": "=================================  TrustMode_ShortPath: 4",
@@ -184,7 +184,7 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": true
+      "isUseSharingRecommendationWithInternet": false
     }
   ]
 }
