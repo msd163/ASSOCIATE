@@ -147,7 +147,7 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": true
+      "isUseSharingRecommendationWithInternet": false
     },
     {
       "_METHOD": "=================================  TrustMode_ShortPath: 4",
@@ -170,7 +170,7 @@
       "recommendationCoeff": 0.5,
       "isBidirectionalRecommendationSharing": true,
       "isSafeUseRecommendation": true,
-      "isUseNegativeRecommendationEffect": true,
+      "isUseNegativeRecommendationEffect": false,
       "_CRT": "-----------------------------------",
       "cert": {
         "isUseCertification": true,

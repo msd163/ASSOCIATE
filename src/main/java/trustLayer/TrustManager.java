@@ -869,7 +869,7 @@ public class TrustManager {
             //-- It is not necessary to save recommendation of itself by self.
             //todo: use recommendation values about us by other for analysing environment sight about us (as receiver of recommendation)
             if (trustAbstract.getResponder().getId() == receiver.getId()) {
-
+                continue;
             }
             if (trustAbstract.getTrustValue() > 0) {
                 addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
