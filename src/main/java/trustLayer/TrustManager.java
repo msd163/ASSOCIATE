@@ -231,12 +231,12 @@ public class TrustManager {
                 return ((t) / ((index + 2) * (index + 2)));
             case Formula_2_Maclaurin:
                 /* //todo: poison
-                * برای این مورد باید اثر آخرین امتیازات کسب شده متضاد را کمتر کنیم.
-                *  برای این منظور می توانیم از توزیع هایی مثل پواسون در فرمولهایی که زمان در آنها دخیل است، مثل ضریب فراموشی، استفاده کرد.
-                * */
+                 * برای این مورد باید اثر آخرین امتیازات کسب شده متضاد را کمتر کنیم.
+                 *  برای این منظور می توانیم از توزیع هایی مثل پواسون در فرمولهایی که زمان در آنها دخیل است، مثل ضریب فراموشی، استفاده کرد.
+                 * */
                 float alpha = simulationConfigItem.getTrustFormula2MaclaurinAlpha();
                 return (1 - alpha) * t * Math.pow(alpha, index);
-                //return 0.5f * t * Math.pow(0.5, index);
+            //return 0.5f * t * Math.pow(0.5, index);
         }
         return t;
     }
@@ -872,9 +872,15 @@ public class TrustManager {
                 continue;
             }
             if (trustAbstract.getTrustValue() > 0) {
-                addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
+                if (!trustAbstract.isSendThisTrustValueToReceiverAgent(receiver.getId())) {
+                    addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
+                    trustAbstract.addInfoOfSentValueToReceiver(receiver.getId());
+                }
             } else if (trustAbstract.getTrustValue() < 0 && simulationConfigItem.isIsUseNegativeRecommendationEffect()) {
-                addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
+                if (!trustAbstract.isSendThisTrustValueToReceiverAgent(receiver.getId())) {
+                    addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
+                    trustAbstract.addInfoOfSentValueToReceiver(receiver.getId());
+                }
             }
         }
 

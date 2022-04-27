@@ -23,6 +23,7 @@ public class SimulationConfigItem {
     private float ignoringThresholdOfTrustValue;
     private float maximumConsideredRoutingHelpInTrustMechanism;
     private boolean isUseSharingRecommendationWithInternet;
+    private int sharingRecommendationWithInternetPeriod;
     private SimulationConfigItemCertification cert;
 
     //============================//============================//============================
@@ -50,7 +51,7 @@ public class SimulationConfigItem {
                     " - sfm: " + isSafeUseRecommendation +
                     " - ngEff: " + isUseNegativeRecommendationEffect +
                     " @CERT is: " + cert.isIsUseCertification() +
-                    " @INT is: " + isUseSharingRecommendationWithInternet +
+                    " @INT is: " + isUseSharingRecommendationWithInternet + "[" + sharingRecommendationWithInternetPeriod + "]" +
                     " - cnt: " + certificationCount
                     ;
 
@@ -102,7 +103,7 @@ public class SimulationConfigItem {
                             " - bid: " + isBidirectionalRecommendationSharing +
                             " - sfm: " + isSafeUseRecommendation +
                             " - ngEff: " + isUseNegativeRecommendationEffect +
-                            "  @INT is: " + isUseSharingRecommendationWithInternet +
+                            "  @INT is: " + isUseSharingRecommendationWithInternet  + "[" + sharingRecommendationWithInternetPeriod + "]" +
                             " - cnt: " + certificationCount
                     ;
         }
@@ -197,6 +198,10 @@ public class SimulationConfigItem {
 
     public boolean isIsUseSharingRecommendationWithInternet() {
         return isUseSharingRecommendationWithInternet;
+    }
+
+    public int getSharingRecommendationWithInternetPeriod() {
+        return sharingRecommendationWithInternetPeriod;
     }
 
     public SimulationConfigItemCertification getCert() {

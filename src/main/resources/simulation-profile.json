@@ -33,13 +33,13 @@
       "trustRecommendationItemCap": "25",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 50,
-        "adversaryPercent": 25,
-        "mischiefPercent": 15,
+        "honestPercent": 90,
+        "adversaryPercent": 5,
+        "mischiefPercent": 5,
         "hypocriteBehavior": {
-          "honestPercent": 50,
-          "adversaryPercent": 40,
-          "mischiefPercent": 10
+          "honestPercent": 0,
+          "adversaryPercent": 0,
+          "mischiefPercent": 0
         }
       }
     },
@@ -51,7 +51,7 @@
       "watchListCap": "#90..180",
       "travelHistoryCap": "#200..400",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -69,8 +69,8 @@
       "trustRecommendationItemCap": "25",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 50,
-        "adversaryPercent": 25,
+        "honestPercent": 30,
+        "adversaryPercent": 40,
         "mischiefPercent": 15,
         "hypocriteBehavior": {
           "honestPercent": 50,
@@ -87,7 +87,7 @@
       "watchListCap": "#84..169",
       "travelHistoryCap": "#187..375",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -123,7 +123,7 @@
       "watchListCap": "#76..157",
       "travelHistoryCap": "#175..350",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -141,9 +141,9 @@
       "trustRecommendationItemCap": "25",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 50,
-        "adversaryPercent": 25,
-        "mischiefPercent": 15,
+        "honestPercent": 80,
+        "adversaryPercent": 5,
+        "mischiefPercent": 5,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -177,9 +177,9 @@
       "trustRecommendationItemCap": "25",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 50,
-        "adversaryPercent": 25,
-        "mischiefPercent": 15,
+        "honestPercent": 1,
+        "adversaryPercent": 50,
+        "mischiefPercent": 30,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -195,7 +195,7 @@
       "watchListCap": "#36..78",
       "travelHistoryCap": "#87..175",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -213,9 +213,9 @@
       "trustRecommendationItemCap": "25",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 50,
-        "adversaryPercent": 25,
-        "mischiefPercent": 15,
+        "honestPercent": 70,
+        "adversaryPercent": 10,
+        "mischiefPercent": 10,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -231,7 +231,7 @@
       "watchListCap": "#33..67",
       "travelHistoryCap": "#75..150",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -267,7 +267,7 @@
       "watchListCap": "#26..56",
       "travelHistoryCap": "#62..124",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -303,7 +303,7 @@
       "watchListCap": "#22..45",
       "travelHistoryCap": "#50..100",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -321,9 +321,9 @@
       "trustRecommendationItemCap": "25",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 50,
-        "adversaryPercent": 25,
-        "mischiefPercent": 15,
+        "honestPercent": 10,
+        "adversaryPercent": 5,
+        "mischiefPercent": 80,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,
@@ -339,7 +339,7 @@
       "watchListCap": "22",
       "travelHistoryCap": "#25..50",
       "_0": "-----------------------------------",
-      "withInternetCapPowerThreshold": 70,
+      "withInternetCapPowerThreshold": 90,
       "_1": "-----------------------------------",
       "trustReplaceHistoryMethod": 1,
       "_2": "-----------------------------------",
@@ -357,9 +357,9 @@
       "trustRecommendationItemCap": "25",
       "_5": "-----------------------------------",
       "behavior": {
-        "honestPercent": 50,
-        "adversaryPercent": 25,
-        "mischiefPercent": 15,
+        "honestPercent": 70,
+        "adversaryPercent": 10,
+        "mischiefPercent": 20,
         "hypocriteBehavior": {
           "honestPercent": 50,
           "adversaryPercent": 40,

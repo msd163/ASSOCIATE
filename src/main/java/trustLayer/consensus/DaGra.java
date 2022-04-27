@@ -135,6 +135,13 @@ public class DaGra {
 
     //============================//============================//============================
 
+    public void updatingStatusAndList(DaGra daGra) {
+        toBeSignedContracts.clear();
+        toBeVerifiedContracts.clear();
+        toBeSignedContracts.addAll(daGra.getToBeSignedContracts());
+        toBeVerifiedContracts.addAll(daGra.getToBeVerifiedContracts());
+    }
+
     public void updatingStatusAndList() {
         // Updating the status of all contracts in this DaGra and list
         toBeSignedContracts.clear();

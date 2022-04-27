@@ -36,7 +36,8 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": false
+      "isUseSharingRecommendationWithInternet": false,
+      "sharingRecommendationWithInternetPeriod": 10
     },
     {
       "_METHOD": "=================================  FullyRandomly: 0",
@@ -73,7 +74,8 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": false
+      "isUseSharingRecommendationWithInternet": false,
+      "sharingRecommendationWithInternetPeriod": 10
     },
     {
       "_METHOD": "=================================  NoTrust_ShortPath: 2",
@@ -110,7 +112,8 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": true
+      "isUseSharingRecommendationWithInternet": true,
+      "sharingRecommendationWithInternetPeriod": 10
     },
     {
       "_METHOD": "=================================  TrustMode_ShortPath: 4",
@@ -147,7 +150,8 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": false
+      "isUseSharingRecommendationWithInternet": false,
+      "sharingRecommendationWithInternetPeriod": 10
     },
     {
       "_METHOD": "=================================  TrustMode_ShortPath: 4",
@@ -170,7 +174,7 @@
       "recommendationCoeff": 0.5,
       "isBidirectionalRecommendationSharing": true,
       "isSafeUseRecommendation": true,
-      "isUseNegativeRecommendationEffect": false,
+      "isUseNegativeRecommendationEffect": true,
       "_CRT": "-----------------------------------",
       "cert": {
         "isUseCertification": true,
@@ -184,7 +188,8 @@
         "numberOfNeededVerify_DaGra": 2
       },
       "_INT": "-----------------------------------",
-      "isUseSharingRecommendationWithInternet": false
+      "isUseSharingRecommendationWithInternet": true,
+      "sharingRecommendationWithInternetPeriod": 5
     }
   ]
 }

@@ -3,8 +3,6 @@ package utils;
 import _type.TtDiagramThemeMode;
 import _type.TtSimulationMode;
 
-import java.security.PublicKey;
-
 public class Config {
 
     //============================//============================
@@ -21,7 +19,7 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 313;          // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 313;       // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 200;
@@ -31,19 +29,23 @@ public class Config {
     public static int STATISTICS_AVERAGE_TIME_WINDOW = 50;
 
 
-    public static final int ROUTING_STAY_IN_TARGET_TIME = 1;
-    public static final int ROUTING_STAY_IN_PITFALL_TIME = 1;
+    public static final int ROUTING_STAY_IN_TARGET_TIME /*      */ = 1;
+    public static final int ROUTING_STAY_IN_PITFALL_TIME /*     */ = 1;
 
     //============================ Trust
-    public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD = 60;
-    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_SIGN_TRY = 20;
-    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_VERIFICATION_TRY = 20;
+    public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD  /*           */ = 80;
+    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_SIGN_TRY  /*              */ = 20;
+    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_VERIFICATION_TRY  /*      */ = 20;
+
+
+    //============================ TURBO
+    public static boolean TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE /* */ = true;    // For fast processing- processing DaGra network for the first time and copying it to other networks
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE = TtDiagramThemeMode.Light;
-    public static int DRAWING_CURVE_LINE_LENGTH = 1;
-    public static int DRAWING_AXIS_LINE_LENGTH = 1;
+    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Light;
+    public static int DRAWING_CURVE_LINE_LENGTH /*                  */ = 1;
+    public static int DRAWING_AXIS_LINE_LENGTH /*                   */ = 1;
 
 
     //============================ Drawing Windows

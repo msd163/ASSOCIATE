@@ -83,7 +83,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         showWorldsFlag = new boolean[worldCount];
         Arrays.fill(showWorldsFlag, true);
 
-        maxAxisY = new int[worldCount];
+        maxAxisY = new int[worldCount+1];
         Arrays.fill(maxAxisY, 0);
 
         //============================//============================
@@ -373,14 +373,14 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 if (i % (10 * _vs) == 0) {
                     if (_vs > 10 || (_vs > 5 && i % (20 * _vs) == 0) || (_vs > 2 && _vs <= 5 && i % (25 * _vs) == 0) || (_vs > 0 && _vs <= 2 && i % (50 * _vs) == 0)) {
                         g.scale(1, -1);
-                        g.drawString(x + "", -60, -i + 5);
+                        g.drawString((x * 4) + "", (x * 4 >= 10000 ? -105 : x * 4 >= 1000 ? -90 : -70), -i + 5);
                         g.scale(1, -1);
                         g.drawLine(-8, i, 5, i);
+                        g.setColor(Globals.Color$.$axisSplit);
+                        g.drawLine(5, i, getRealWith(), i);
                     } else {
                         g.drawLine(-4, i, 5, i);
                     }
-                    g.setColor(Globals.Color$.$axisSplit);
-                    g.drawLine(5, i, getRealWith(), i);
                 } else if (_vs > 1 && i % (5 * _vs) == 0) {
                     g.drawLine(-3, i, 1, i);
                     g.setColor(Globals.Color$.$axisSplit2);

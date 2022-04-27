@@ -17,7 +17,7 @@ public class TrustAbstract {
     private Agent responder;                // trustee
     private float trustValue;               // final trust value
     private int updateTime;                 // last update time of trust value
-
+    private String recommendedToId = "|";      // The ID of agents that received a recommendation for this trust value
 
     public Agent getResponder() {
         return responder;
@@ -30,4 +30,31 @@ public class TrustAbstract {
     public int getUpdateTime() {
         return updateTime;
     }
+
+    /**
+     * If this trust value is sent to specific receiver agent at 'updateTime'
+     * @param receiverAgentId
+     * @return
+     */
+    public boolean isSendThisTrustValueToReceiverAgent(int receiverAgentId) {
+        // System.out.println("isContains:  " + recommendedToId.contains("|" + recommendedId + "-" + updateTime + "|") + " " + responder.getId() + "  " + recommendedToId);
+        return recommendedToId.contains("|" + receiverAgentId + "-" + updateTime + "|");
+    }
+
+    /**
+     *
+     * @param recommendedId
+     */
+    public void addInfoOfSentValueToReceiver(int recommendedId) {
+
+        if (recommendedToId.length() > 2) {
+            recommendedToId = recommendedToId.replaceAll("\\d*-(?:(?!" + updateTime + ").)*\\|", "");
+        }
+        recommendedToId += (recommendedId + "-" + updateTime + "|");
+        //System.out.println("addRecommended:  " + responder.getId() + "  " + recommendedToId);
+
+    }
+
+
+
 }

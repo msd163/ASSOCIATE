@@ -330,7 +330,9 @@ public class World {
                             simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
                                     simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
                     )
-                            && simulationConfigItem.isIsUseSharingRecommendationWithInternet()) {
+                            && simulationConfigItem.isIsUseSharingRecommendationWithInternet()
+                            && (Globals.WORLD_TIMER % simulationConfigItem.getSharingRecommendationWithInternetPeriod() == 0)
+            ) {
                 System.out.println("> sending recommendation through Internet...");
                 trustManager.sendRecommendationsWithInternet(internet.getAgentList());
             }
@@ -346,9 +348,19 @@ public class World {
                             && simulationConfigItem.getCert().isIsUseCertification()
                             && simulationConfigItem.getCert().isIsUseDaGra()) {
                 System.out.println("> DaGra: updating status and list...");
-                for (Agent agent : agents) {
+
+                for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
+                    Agent agent = agents.get(i);
                     if (agent.getTrust().isHasCandidateForCertification()) {
-                        agent.getDaGra().updatingStatusAndList();
+                        if (Config.TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE) {
+                            if (i == 0) {
+                                agent.getDaGra().updatingStatusAndList();
+                            } else {
+                                agent.getDaGra().updatingStatusAndList(agent.getDaGra());
+                            }
+                        } else {
+                            agent.getDaGra().updatingStatusAndList();
+                        }
                     }
                 }
 
@@ -415,6 +427,7 @@ public class World {
             }
             //============================//============================ Repainting
             updateWindows();
+
 
             //============================//============================//============================ Adding Episode of environment
             // and exiting the agents from pitfalls
