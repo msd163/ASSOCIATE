@@ -67,13 +67,13 @@ public class DefParameter {
     public int nextValue() {
         switch (paramType) {
             case Rand:
-                value = RANDOM.nextInt(randRange+1);
+                value = RANDOM.nextInt(randRange + 1);
                 break;
             case Const:
                 value = value;
                 break;
             case Range:
-                value = lowerBound + RANDOM.nextInt(upperBound - lowerBound+1);
+                value = lowerBound + RANDOM.nextInt(upperBound - lowerBound + 1);
                 break;
             case Percent:
                 value = (percentRefValue * percentDesired) / 100;
@@ -88,7 +88,7 @@ public class DefParameter {
     public int getMaxValue() {
         switch (paramType) {
             case Rand:
-               return randRange;
+                return randRange;
             case Const:
                 return value;
             case Range:

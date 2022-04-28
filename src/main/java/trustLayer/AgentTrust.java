@@ -17,7 +17,8 @@ public class AgentTrust {
             int indirectExperienceCap, int indirectExperienceItemCap,
             int observationCap, int observationItemCap,
             int indirectObservationCap, int indirectObservationItemCap,
-            int recommendationCap, int recommendationItemCap
+            int recommendationCap, int recommendationItemCap,
+            int certificationCandidateCapPowerThreshold, boolean isUseCertificationForDishonestAgents
     ) {
         this.trustReplaceMethod = replaceHistoryMethod;
         this.experienceCap = experienceCap;
@@ -30,6 +31,8 @@ public class AgentTrust {
         this.indirectObservationItemCap = indirectObservationItemCap;
         this.recommendationCap = recommendationCap;
         this.recommendationItemCap = recommendationItemCap;
+        this.certificationCandidateCapPowerThreshold = certificationCandidateCapPowerThreshold;
+        this.isUseCertificationForDishonestAgents = isUseCertificationForDishonestAgents;
     }
 
     public void setTrustParams(
@@ -65,8 +68,11 @@ public class AgentTrust {
         indirectObservations = new ArrayList<>();
 
         /* Selecting candidate for getting certification from the network */
-        this.hasCandidateForCertification = agent.getCapacity().getCapPower() > Config.TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD
-                /*&& agent.getBehavior().getHasHonestState()*/;
+            this.hasCandidateForCertification =
+                    agent.getCapacity().getCapPower() > certificationCandidateCapPowerThreshold &&
+                            (agent.getBehavior().getHasHonestState() ||
+                                    isUseCertificationForDishonestAgents)
+                    /*&& agent.getBehavior().getHasHonestState()*/;
 
     }
 
@@ -93,6 +99,8 @@ public class AgentTrust {
     private List<TrustRecommendation> recommendations;
     private int recommendationCap;
     private int recommendationItemCap;
+    private int certificationCandidateCapPowerThreshold;
+    private boolean isUseCertificationForDishonestAgents;
 
     //============================//============================//============================ Direct Experience
     //-- All experience tuples that calculated across world run

@@ -27,7 +27,10 @@ public class PopulationBunch {
     private String targetCount;
     private String trustReplaceHistoryMethod;
     private String withInternetCapPowerThreshold;      // Minimum capPower of agents that have internet.
+    //private String withInternetCapPowerThreshold;      // Minimum capPower of agents that have internet.
     private PopulationBunchBehaviorParam behavior;
+
+    private PopulationBunchCertification cert;
 
     //============================
     private DefParameter bunchCountD;
@@ -54,6 +57,7 @@ public class PopulationBunch {
     private DefParameter trustReplaceHistoryMethodD;
 
     private DefParameter withInternetCapPowerThresholdD;
+    private DefParameter isCandidateForCertificationD;
 
     //============================//============================
 
@@ -74,6 +78,7 @@ public class PopulationBunch {
         targetCountD = new DefParameter(targetCount);
         trustReplaceHistoryMethodD = new DefParameter(trustReplaceHistoryMethod);
         withInternetCapPowerThresholdD = new DefParameter(withInternetCapPowerThreshold);
+        //isCandidateForCertificationD = new DefParameter(isCandidateForCertification);
 
         observationCapD = new DefParameter(observationCap);
         observationItemCapD = new DefParameter(observationItemCap);
@@ -196,5 +201,9 @@ public class PopulationBunch {
     @Override
     public String toString() {
         return toString(0);
+    }
+
+    public PopulationBunchCertification getCert() {
+        return cert;
     }
 }

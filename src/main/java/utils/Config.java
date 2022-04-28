@@ -33,9 +33,9 @@ public class Config {
     public static final int ROUTING_STAY_IN_PITFALL_TIME /*     */ = 1;
 
     //============================ Trust
-    public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD  /*           */ = 80;
-    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_SIGN_TRY  /*              */ = 20;
-    public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_VERIFICATION_TRY  /*      */ = 20;
+    //public static int TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD  /*           */ = 85;
+    //public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_SIGN_TRY  /*              */ = 20;
+    //public static int TRUST_CERTIFIED_DAGRA_NUMBER_OF_VERIFICATION_TRY  /*      */ = 20;
 
 
     //============================ TURBO
@@ -54,7 +54,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;

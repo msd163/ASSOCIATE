@@ -33,6 +33,7 @@ public class TrustAbstract {
 
     /**
      * If this trust value is sent to specific receiver agent at 'updateTime'
+     *
      * @param receiverAgentId
      * @return
      */
@@ -42,19 +43,21 @@ public class TrustAbstract {
     }
 
     /**
-     *
      * @param recommendedId
      */
     public void addInfoOfSentValueToReceiver(int recommendedId) {
 
         if (recommendedToId.length() > 2) {
-            recommendedToId = recommendedToId.replaceAll("\\d*-(?:(?!" + updateTime + ").)*\\|", "");
+            try {
+                recommendedToId = recommendedToId.replaceAll("\\d*-(?:(?!" + updateTime + ").)*\\|", "");
+            } catch (Exception e) {
+                recommendedToId = "";
+            }
         }
         recommendedToId += (recommendedId + "-" + updateTime + "|");
         //System.out.println("addRecommended:  " + responder.getId() + "  " + recommendedToId);
 
     }
-
 
 
 }

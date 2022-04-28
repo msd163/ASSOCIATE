@@ -11,6 +11,8 @@ public class SimulationConfigItemCertification {
     private int numberOfCertToBeVerified_DaGra;                   // The number of certifications which any candidate agent has to verify in order to go to 'Accept_New' stage
     private int numberOfNeededSing_DaGra;                         // The number of signs which any candidate agent has to gain in order to go to 'Accept_Verifying' stage
     private int numberOfNeededVerify_DaGra;                       // The number of verification which any candidate agent has to gain in order to go to 'Accept_Accept' stage
+    private int numberOfSignTry_DaGra;                            //
+    private int numberOfVerificationTry_DaGra;                    //
 
     //============================//============================//============================
 
@@ -26,7 +28,9 @@ public class SimulationConfigItemCertification {
                                 "  - sig: " + numberOfCertToBeSigned_DaGra +
                                 "  - ver: " + numberOfCertToBeVerified_DaGra +
                                 "  - nSi: " + numberOfNeededSing_DaGra +
-                                "  - nVe: " + numberOfNeededVerify_DaGra
+                                "  - nVe: " + numberOfNeededVerify_DaGra +
+                                "  - str: " + numberOfSignTry_DaGra +
+                                "  - vtr: " + numberOfVerificationTry_DaGra
                         ;
             } else {
                 return
@@ -75,5 +79,13 @@ public class SimulationConfigItemCertification {
 
     public boolean isIsUseDaGra() {
         return isUseDaGra;
+    }
+
+    public int getNumberOfSignTry_DaGra() {
+        return numberOfSignTry_DaGra;
+    }
+
+    public int getNumberOfVerificationTry_DaGra() {
+        return numberOfVerificationTry_DaGra;
     }
 }

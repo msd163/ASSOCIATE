@@ -360,7 +360,7 @@ public class DaGra {
 
         boolean isSignedPreviously;
 
-        for (int i = 0; i < Config.TRUST_CERTIFIED_DAGRA_NUMBER_OF_SIGN_TRY; i++) {
+        for (int i = 0; i < world.getSimulationConfig().getCert().getNumberOfSignTry_DaGra(); i++) {
 
             /* Selecting a contract randomly */
             int selectedIndex = Globals.RANDOM.nextInt(toBeSignedContracts.size());
@@ -443,7 +443,7 @@ public class DaGra {
 
         boolean isVerifiedPreviously;
 
-        for (int i = 0; i < Config.TRUST_CERTIFIED_DAGRA_NUMBER_OF_VERIFICATION_TRY; i++) {
+        for (int i = 0; i < world.getSimulationConfig().getCert().getNumberOfVerificationTry_DaGra(); i++) {
 
             /* Selecting a contract randomly */
             int selectedIndex = Globals.RANDOM.nextInt(toBeVerifiedContracts.size());

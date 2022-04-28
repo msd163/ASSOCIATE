@@ -296,12 +296,12 @@ public class World {
             System.out.println("> updating agents' profile, watched list, and next steps...");
             for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
                 Agent agent = agents.get(i);
-                //System.out.print("  | " + i + " (" + agent.getId() + ")");
+               // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
                 //todo: adding doing service capacity to agents as capacity param
                 agent.updateProfile();
                 //System.out.print(" p");
                 agent.updateWatchList();
-                //System.out.print(" w");
+                //System.out.println(" w");
                 router.updateNextSteps(agent);
                 //System.out.print(" s");
 

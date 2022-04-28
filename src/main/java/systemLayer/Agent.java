@@ -116,7 +116,9 @@ public class Agent {
                 capacity.getIndirectObservationCap(),
                 capacity.getIndirectObservationItemCap(),
                 capacity.getTrustRecommendationCap(),
-                capacity.getTrustRecommendationItemCap()
+                capacity.getTrustRecommendationItemCap(),
+                profiler.getCurrentBunch().getCert().getCandidateCapPowerThreshold(),
+                profiler.getCurrentBunch().getCert().getIsUseCertificationForDishonestAgents()
         );
 
         int targetCount = profiler.getCurrentBunch().getTargetCountD().nextValue();
