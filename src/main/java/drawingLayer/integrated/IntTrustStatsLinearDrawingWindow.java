@@ -143,28 +143,28 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                     if (showLineChartsFlag[0]) {
                         drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToMischief(), Globals.Color$.$curve_3, j, i);
                         if (prevPoints[0].y >= 0) {
-                            g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getTimeAvgTrustToMischief());
+                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimeAvgTrustToMischief());
                         }
                     }
 
                     if (showLineChartsFlag[1]) {
                         drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHonest(), Globals.Color$.$curve_1, j, i);
                         if (prevPoints[1].y >= 0) {
-                            g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getTimeAvgTrustToHonest());
+                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimeAvgTrustToHonest());
                         }
                     }
 
                     if (showLineChartsFlag[2]) {
                         drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToHypocrite(), Globals.Color$.$curve_3, j, i);
                         if (prevPoints[2].y >= 0) {
-                            g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getTimeAvgTrustToHypocrite());
+                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimeAvgTrustToHypocrite());
                         }
                     }
 
                     if (showLineChartsFlag[3]) {
                         drawCurve(loAxisX, _vs * stat.getTimeAvgTrustToAdversary(), Globals.Color$.$curve_2, j, i);
                         if (prevPoints[2].y >= 0) {
-                            g.drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, _vs * stat.getTimeAvgTrustToAdversary());
+                            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimeAvgTrustToAdversary());
                         }
                     }
 

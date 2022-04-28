@@ -72,16 +72,16 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             drawCurve(loAxisX, _vs * stat.getIttAgentsInTarget(), Color.GREEN, 0, i);
-            g.drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, _vs * stat.getIttAgentsInTarget());
+            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttAgentsInTarget());
 
             drawCurve(loAxisX, _vs * stat.getIttAgentsInPitfall(), Color.RED, 1, i);
-            g.drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, _vs * stat.getIttAgentsInPitfall());
+            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall());
 
             drawCurve(loAxisX, _vs * stat.getIttSuccessTravelToNeighbor(), Color.WHITE, 4, i);
-            g.drawLine(prevPoints[4].x, prevPoints[4].y, loAxisX, _vs * stat.getIttSuccessTravelToNeighbor());
+            drawLine(prevPoints[4].x, prevPoints[4].y, loAxisX, stat.getIttSuccessTravelToNeighbor());
 
             drawCurve(loAxisX, _vs * stat.getIttRandomTravelToNeighbors(), Color.MAGENTA, 5, i);
-            g.drawLine(prevPoints[5].x, prevPoints[5].y, loAxisX, _vs * stat.getIttRandomTravelToNeighbors());
+            drawLine(prevPoints[5].x, prevPoints[5].y, loAxisX, stat.getIttRandomTravelToNeighbors());
 
             if (axisX < loAxisX) {
                 axisX = loAxisX;
@@ -115,10 +115,10 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             drawCurve(loAxisX, _vs * stat.getTimedAvgAgentTarget(), Color.YELLOW, 2, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, _vs * stat.getTimedAvgAgentTarget());
+            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimedAvgAgentTarget());
 
             drawCurve(loAxisX, _vs * stat.getTimedAvgAgentInPitfall(), Color.pink, 3, i);
-            g.drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, _vs * stat.getTimedAvgAgentInPitfall());
+            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimedAvgAgentInPitfall());
 
             if (axisX < loAxisX) {
                 axisX = loAxisX;

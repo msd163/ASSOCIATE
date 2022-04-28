@@ -66,16 +66,16 @@ public class TrustRecogniseLinearDrawingWindow extends DrawingWindow {
             }
 
             drawCurve(axisX, _vs * stat.getIttFalsePositiveTrust(), Color.PINK, 1, i);
-            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, _vs * stat.getIttFalsePositiveTrust());
+            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getIttFalsePositiveTrust());
 
             drawCurve(axisX, _vs * stat.getIttFalseNegativeTrust(), Color.RED, 2, i);
-            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, _vs * stat.getIttFalseNegativeTrust());
+            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getIttFalseNegativeTrust());
 
             drawCurve(axisX, _vs * stat.getIttTruePositiveTrust(), Color.YELLOW, 3, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, _vs * stat.getIttTruePositiveTrust());
+            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getIttTruePositiveTrust());
 
             drawCurve(axisX, _vs * stat.getIttTrueNegativeTrust(), Color.GREEN, 4, i);
-            g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, _vs * stat.getIttTrueNegativeTrust());
+            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getIttTrueNegativeTrust());
 
         }
         //============================//============================ Draw X-axis line
@@ -108,16 +108,16 @@ public class TrustRecogniseLinearDrawingWindow extends DrawingWindow {
             }
 
             drawCurve(axisX, _vs * stat.getTimedAvgFalsePositive(), Color.PINK, 1, i);
-            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, _vs * stat.getTimedAvgFalsePositive());
+            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTimedAvgFalsePositive());
 
             drawCurve(axisX, _vs * stat.getTimedAvgFalseNegative(), Color.RED, 2, i);
-            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, _vs * stat.getTimedAvgFalseNegative());
+            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTimedAvgFalseNegative());
 
             drawCurve(axisX, _vs * stat.getTimedAvgTruePositive(), Color.YELLOW, 3, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, _vs * stat.getTimedAvgTruePositive());
+            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTimedAvgTruePositive());
 
             drawCurve(axisX, _vs * stat.getTimedAvgTrueNegative(), Color.GREEN, 4, i);
-            g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, _vs * stat.getTimedAvgTrueNegative());
+            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getTimedAvgTrueNegative());
 
         }
         //============================//============================ Draw X-axis line

@@ -67,15 +67,15 @@ public class TrustAnalysisLinearDrawingWindow extends DrawingWindow {
 
             drawCurve(axisX, _vs * stat.getTrustAccuracyI100(), Color.GREEN, 1, i);
             if (prevPoints[0].y >= 0) {
-                g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, _vs * stat.getTrustAccuracyI100());
+                drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI100());
             }
             drawCurve(axisX, _vs * stat.getTrustSensitivityI100(), Color.YELLOW, 2, i);
             if (prevPoints[1].y >= 0) {
-                g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, _vs * stat.getTrustSensitivityI100());
+                drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI100());
             }
             drawCurve(axisX, _vs * stat.getTrustSpecificityI100(), Color.PINK, 3, i);
             if (prevPoints[2].y >= 0) {
-                g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, _vs * stat.getTrustSpecificityI100());
+                drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI100());
             }
         }
 

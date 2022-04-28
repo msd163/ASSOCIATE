@@ -73,16 +73,16 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             drawCurve(axisX, _vs * stat.getIttTrustToMischief(), Color.WHITE, 1, i);
-            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, _vs * stat.getIttTrustToMischief());
+            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getIttTrustToMischief());
 
             drawCurve(axisX, _vs * stat.getIttTrustToHonest(), Color.GREEN, 2, i);
-            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, _vs * stat.getIttTrustToHonest());
+            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getIttTrustToHonest());
 
             drawCurve(axisX, _vs * stat.getIttTrustToHypocrite(), Color.MAGENTA, 3, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, _vs * stat.getIttTrustToHypocrite());
+            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getIttTrustToHypocrite());
 
             drawCurve(axisX, _vs * stat.getIttTrustToAdversary(), Color.RED, 4, i);
-            g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, _vs * stat.getIttTrustToAdversary());
+            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getIttTrustToAdversary());
 
         }
 
@@ -114,16 +114,16 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
             }
 
             drawCurve(axisX, _vs * stat.getTimeAvgTrustToMischief(), Color.WHITE, 1, i);
-            g.drawLine(prevPoints[0].x, prevPoints[0].y, axisX, _vs * stat.getTimeAvgTrustToMischief());
+            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTimeAvgTrustToMischief());
 
             drawCurve(axisX, _vs * stat.getTimeAvgTrustToHonest(), Color.GREEN, 2, i);
-            g.drawLine(prevPoints[1].x, prevPoints[1].y, axisX, _vs * stat.getTimeAvgTrustToHonest());
+            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTimeAvgTrustToHonest());
 
             drawCurve(axisX, _vs * stat.getTimeAvgTrustToHypocrite(), Color.MAGENTA, 3, i);
-            g.drawLine(prevPoints[2].x, prevPoints[2].y, axisX, _vs * stat.getTimeAvgTrustToHypocrite());
+            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTimeAvgTrustToHypocrite());
 
             drawCurve(axisX, _vs * stat.getTimeAvgTrustToAdversary(), Color.RED, 4, i);
-            g.drawLine(prevPoints[3].x, prevPoints[3].y, axisX, _vs * stat.getTimeAvgTrustToAdversary());
+            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getTimeAvgTrustToAdversary());
 
         }
 

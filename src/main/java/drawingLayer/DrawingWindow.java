@@ -22,6 +22,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected utils.Point pnStartPoint = new utils.Point(0, 0);
     protected utils.Point mousePosition = new utils.Point(0, 0);
 
+    protected int lineThickness = 1;
+
     protected int axisX = 0;
     protected int axisY = 0;
     protected int dynamicHeight = 0;
@@ -83,7 +85,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         showWorldsFlag = new boolean[worldCount];
         Arrays.fill(showWorldsFlag, true);
 
-        maxAxisY = new int[worldCount+1];
+        maxAxisY = new int[worldCount + 1];
         Arrays.fill(maxAxisY, 0);
 
         //============================//============================
@@ -145,6 +147,19 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         case 90:        // z
                             _hs = 8;
                             _vs = 1;
+                            break;
+
+                        //  Changing Line Thickness of chart lines
+                        case 33:        // page_up
+                            lineThickness++;
+                            lineThicknessObj_x = new BasicStroke(lineThickness);
+                            break;
+
+                        case 34:        // page_down
+                            if (lineThickness > 1) {
+                                lineThickness--;
+                                lineThicknessObj_x = new BasicStroke(lineThickness);
+                            }
                             break;
                     }
                     //-- for showing or hiding Simulation charts
@@ -330,6 +345,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
             g.drawString("Vertical   : X " + _vs, 1500, 50);
             g.drawString("Horizontal: X " + _hs, 1500, 90);
             g.drawString("Zoom: X " + scale, 1500, 130);
+            g.drawString("LineThick: " + lineThickness, 1500, 170);
         }
         return true;
     }
@@ -510,6 +526,16 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 g.setColor(color);
                 g.drawLine(x, y, x, y + size * 3);
         }
+    }
+
+    BasicStroke lineThicknessObj_1 = new BasicStroke(1);
+    BasicStroke lineThicknessObj_x = new BasicStroke(lineThickness);
+
+    public void drawLine(int fromX, int fromY, int toX, int toY) {
+        g.setStroke(lineThicknessObj_x);
+        g.drawLine(fromX, fromY, toX, _vs * toY);
+        g.setStroke(lineThicknessObj_1);
+
     }
 
     //============================//============================
