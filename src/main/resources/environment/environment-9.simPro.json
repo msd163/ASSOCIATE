@@ -1,0 +1,133 @@
+{
+  "--------------------------------------------------2": "STATE",
+  "stateCount": 200,
+  "stateCapacity": "80",
+  "stateTargetCount": "#4..20",
+  "pitfallCount": "40",
+  "--------------------------------------------------3": "AGENT",
+  "agentsCount": "2000",
+  "bunches": [
+    {
+      "_..................................................": "1",
+      "bunchCount": "%10@2000",
+      "targetCount": "200",
+      "watchDepth": "#2..4",
+      "watchListCap": "#1000..2000",
+      "travelHistoryCap": "#100..200",
+      "_0": "-----------------------------------",
+      "withInternetCapPowerThreshold": 60,
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#1500..2000",
+      "experienceItemCap": "#150..200",
+      "indirectExperienceCap": "#1500..2000",
+      "indirectExperienceItemCap": "#150..200",
+      "_3": "-----------------------------------",
+      "observationCap": "#1500..2000",
+      "observationItemCap": "#150..200",
+      "indirectObservationCap": "#1500..2000",
+      "indirectObservationItemCap": "#150..200",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#500..1000",
+      "trustRecommendationItemCap": "#100..200",
+      "_5": "-----------------------------------",
+      "cert": {
+        "candidateCapPowerThreshold": 50,
+        "isUsedForDishonestAgents": false
+      },
+      "_6": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 50,
+        "adversaryPercent": 20,
+        "mischiefPercent": 10,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    },
+    {
+      "_..................................................": "2",
+      "bunchCount": "%20@2000",
+      "targetCount": "200",
+      "watchDepth": "1",
+      "watchListCap": "#100..800",
+      "travelHistoryCap": "#100..800",
+      "_0": "-----------------------------------",
+      "withInternetCapPowerThreshold": 100,
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#500..1000",
+      "experienceItemCap": "#50..100",
+      "indirectExperienceCap": "#100..500",
+      "indirectExperienceItemCap": "#50..100",
+      "_3": "-----------------------------------",
+      "observationCap": "#100..1000",
+      "observationItemCap": "#50..100",
+      "indirectObservationCap": "#100..1000",
+      "indirectObservationItemCap": "#50..100",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#500..1600",
+      "trustRecommendationItemCap": "#50..160",
+      "cert": {
+        "candidateCapPowerThreshold": 90,
+        "isUsedForDishonestAgents": false
+      },
+      "_6": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 40,
+        "adversaryPercent": 30,
+        "mischiefPercent": 10,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    },
+    {
+      "_..................................................": "3",
+      "bunchCount": "%70@2000",
+      "targetCount": "200",
+      "watchDepth": "0",
+      "watchListCap": "#50..100",
+      "travelHistoryCap": "#50..100",
+      "_0": "-----------------------------------",
+      "withInternetCapPowerThreshold": 100,
+      "_1": "-----------------------------------",
+      "trustReplaceHistoryMethod": 1,
+      "_2": "-----------------------------------",
+      "experienceCap": "#50..200",
+      "experienceItemCap": "#10..40",
+      "indirectExperienceCap": "#50..200",
+      "indirectExperienceItemCap": "#10..40",
+      "_3": "-----------------------------------",
+      "observationCap": "0",
+      "observationItemCap": "0",
+      "indirectObservationCap": "0",
+      "indirectObservationItemCap": "0",
+      "_4": "-----------------------------------",
+      "trustRecommendationCap": "#100..1800",
+      "trustRecommendationItemCap": "#25..80",
+      "_5": "-----------------------------------",
+      "cert": {
+        "candidateCapPowerThreshold": 85,
+        "isUsedForDishonestAgents": false
+      },
+      "_6": "-----------------------------------",
+      "behavior": {
+        "honestPercent": 30,
+        "adversaryPercent": 40,
+        "mischiefPercent": 20,
+        "hypocriteBehavior": {
+          "honestPercent": 50,
+          "adversaryPercent": 40,
+          "mischiefPercent": 10
+        }
+      }
+    }
+  ]
+}
