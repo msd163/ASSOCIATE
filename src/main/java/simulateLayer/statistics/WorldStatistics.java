@@ -527,9 +527,9 @@ public class WorldStatistics {
 
     public int getTimeAvgTrustToAdversary() {
         if (xPrevStats == null) {
-            return (allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime));
+            return (allTrustToAdversary / (worldTime == 0 ? 1 : worldTime));
         } else {
-            return ((allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
+            return ((allTrustToAdversary - xPrevStats.allTrustToAdversary) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
         }
     }
 

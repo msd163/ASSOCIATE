@@ -29,6 +29,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         }
         headerTitle = "Integrated Travel Statistics Linear Chart [#Worlds: " + worlds.length + "]";
         setName("i_tvl_stt");
+        axisYScale = 1;
     }
 
     int loAxisX = 0;
@@ -112,7 +113,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
-            g.translate(0, _vs * -maxAxisY[0] - 50);
+            g.translate(0, (int)(0.1 * _vs * -maxAxisY[0] - 50));
 
             drawAxisX(0);
             drawAxisY(0);
@@ -144,30 +145,30 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                     if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                         loAxisX += _hs;
-                        prevPoints[0].y = _vs * stat.getIttAgentsInTarget();
-                        prevPoints[1].y = _vs * stat.getIttAgentsInPitfall();
-                        prevPoints[2].y = _vs * stat.getIttRandomTravelToNeighbors();
+                        prevPoints[0].y = (int)(0.1 * _vs * stat.getIttAgentsInTarget());
+                        prevPoints[1].y = (int)(0.1 * _vs * stat.getIttAgentsInPitfall());
+                        prevPoints[2].y = (int)(0.1 * _vs * stat.getIttRandomTravelToNeighbors());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
 
                     } else {
 
-                        prevPoints[0].y = _vs * statistics[i - 1].getIttAgentsInTarget();
-                        prevPoints[1].y = _vs * statistics[i - 1].getIttAgentsInPitfall();
-                        prevPoints[2].y = _vs * statistics[i - 1].getIttRandomTravelToNeighbors();
+                        prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getIttAgentsInTarget());
+                        prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getIttAgentsInPitfall());
+                        prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getIttRandomTravelToNeighbors());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, _vs * stat.getIttAgentsInTarget(), Globals.Color$.$curve_1, j, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttAgentsInTarget()), Globals.Color$.$curve_1, j, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttAgentsInTarget());
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, _vs * stat.getIttAgentsInPitfall(), Globals.Color$.$curve_2, j, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttAgentsInPitfall()), Globals.Color$.$curve_2, j, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall());
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, _vs * stat.getIttRandomTravelToNeighbors(), Globals.Color$.$curve_3, j, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttRandomTravelToNeighbors()), Globals.Color$.$curve_3, j, i);
                         drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getIttRandomTravelToNeighbors());
                     }
                     if (axisX < loAxisX) {
@@ -181,7 +182,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         //============================//============================//============================ Timed Average Chart
 
         if (showChartsFlag[1] && maxAxisY.length > 1) {
-            g.translate(0, _vs * -maxAxisY[1] - 50);
+            g.translate(0, (int)(0.1 * _vs * -maxAxisY[1] - 50));
             loAxisX = 0;
 
             drawAxisX(1);
@@ -214,32 +215,32 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                     if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                         loAxisX += _hs;
-                        prevPoints[0].y = _vs * stat.getTimedAvgAgentTarget();
-                        prevPoints[1].y = _vs * stat.getTimedAvgAgentInPitfall();
-                        prevPoints[2].y = _vs * stat.getTimedAvgRandomTravel();
+                        prevPoints[0].y = (int)(0.1 * _vs * stat.getTimedAvgAgentTarget());
+                        prevPoints[1].y = (int)(0.1 * _vs * stat.getTimedAvgAgentInPitfall());
+                        prevPoints[2].y = (int)(0.1 * _vs * stat.getTimedAvgRandomTravel());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
 
                     } else {
 
-                        prevPoints[0].y = _vs * statistics[i - 1].getTimedAvgAgentTarget();
-                        prevPoints[1].y = _vs * statistics[i - 1].getTimedAvgAgentInPitfall();
-                        prevPoints[2].y = _vs * statistics[i - 1].getTimedAvgRandomTravel();
+                        prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgAgentTarget());
+                        prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgAgentInPitfall());
+                        prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgRandomTravel());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentTarget(), Globals.Color$.$curve_1, j, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgAgentTarget()), Globals.Color$.$curve_1, j, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimedAvgAgentTarget());
                     }
 
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, _vs * stat.getTimedAvgAgentInPitfall(), Globals.Color$.$curve_2, j, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgAgentInPitfall()), Globals.Color$.$curve_2, j, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimedAvgAgentInPitfall());
                     }
 
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, _vs * stat.getTimedAvgRandomTravel(), Globals.Color$.$curve_3, j, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgRandomTravel()), Globals.Color$.$curve_3, j, i);
                         drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimedAvgRandomTravel());
                     }
 
@@ -283,21 +284,21 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
                         if (i > 0) {
                             prevPoints[0].x = prevPoints[1].x = loAxisX;
-                            prevPoints[0].y = _vs * statistics[i - 1].getMidAgentsInTarget();
-                            prevPoints[1].y = _vs * statistics[i - 1].getMidAgentsInPitfall();
+                            prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getMidAgentsInTarget());
+                            prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getMidAgentsInPitfall());
                             loAxisX += 100;
 
                         } else {
                             loAxisX += 100;
                             prevPoints[0].x = prevPoints[1].x = loAxisX;
-                            prevPoints[0].y = _vs * stat.getMidAgentsInTarget();
-                            prevPoints[1].y = _vs * stat.getMidAgentsInPitfall();
+                            prevPoints[0].y = (int)(0.1 * _vs * stat.getMidAgentsInTarget());
+                            prevPoints[1].y = (int)(0.1 * _vs * stat.getMidAgentsInPitfall());
                         }
 
-                        drawCurve(loAxisX, _vs * stat.getMidAgentsInTarget(), Globals.Color$.$curve_1, j, 20, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getMidAgentsInTarget()), Globals.Color$.$curve_1, j, 20, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getMidAgentsInTarget());
 
-                        drawCurve(loAxisX, _vs * stat.getMidAgentsInPitfall(), Globals.Color$.$curve_2, j, 20, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getMidAgentsInPitfall()), Globals.Color$.$curve_2, j, 20, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getMidAgentsInPitfall());
 
                     }

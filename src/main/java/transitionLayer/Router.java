@@ -315,53 +315,50 @@ public class Router {
             agent.setHelper(help.getHelperAgent());
         }
 
-        if (
-                simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
-                        simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
-        ) {
-            float trustValueOfHelperToAgent = trustManager.getTrustValue(help.getHelperAgent(), agent);
-            if (simulationConfigItem.isIsUseIndirectExperience()) {
+
+        float trustValueOfHelperToAgent = trustManager.getTrustValue(help.getHelperAgent(), agent);
+        if (simulationConfigItem.isIsUseIndirectExperience()) {
             /* If receiver of experiences (the helper or truster in routing procedure) trusts to the sender (the trustee in routing procedure),
             the helper accepts experiences of the agent
             * */
-                if (trustValueOfHelperToAgent > 0) {
-                    trustManager.shareExperiences(agent, help.getHelperAgent());
-                }
-                if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
-                    /* The agent trusts to helper, thus he accepts experiences of helper  */
-                    trustManager.shareExperiences(help.getHelperAgent(), agent);
-                }
+            if (trustValueOfHelperToAgent > 0) {
+                trustManager.shareExperiences(agent, help.getHelperAgent());
             }
-            /*
-             * */
-            if (simulationConfigItem.isIsUseIndirectObservation()) {
-                if (trustValueOfHelperToAgent > 0) {
-                    trustManager.shareObservations(agent, help.getHelperAgent());
-                }
-                if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
-                    trustManager.shareObservations(help.getHelperAgent(), agent);
-                }
-            }
-
-            if (simulationConfigItem.isUseRecommendation()) {
-                if (trustValueOfHelperToAgent > 0) {
-                    trustManager.sendRecommendations(agent, help.getHelperAgent());
-                }
-                if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
-                    trustManager.sendRecommendations(help.getHelperAgent(), agent);
-                }
-            }
-
-            if (help.getHelperAgent().getBehavior().getHasHonestState()) {
-                statistics___.add_Itt_TrustToHonest();
-            } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
-                statistics___.add_Itt_TrustToAdversary();
-            } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
-                statistics___.add_Itt_TrustToHypocrite();
-            } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
-                statistics___.add_Itt_TrustToMischief();
+            if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
+                /* The agent trusts to helper, thus he accepts experiences of helper  */
+                trustManager.shareExperiences(help.getHelperAgent(), agent);
             }
         }
+        /*
+         * */
+        if (simulationConfigItem.isIsUseIndirectObservation()) {
+            if (trustValueOfHelperToAgent > 0) {
+                trustManager.shareObservations(agent, help.getHelperAgent());
+            }
+            if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
+                trustManager.shareObservations(help.getHelperAgent(), agent);
+            }
+        }
+
+        if (simulationConfigItem.isUseRecommendation()) {
+            if (trustValueOfHelperToAgent > 0) {
+                trustManager.sendRecommendations(agent, help.getHelperAgent());
+            }
+            if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
+                trustManager.sendRecommendations(help.getHelperAgent(), agent);
+            }
+        }
+
+        if (help.getHelperAgent().getBehavior().getHasHonestState()) {
+            statistics___.add_Itt_TrustToHonest();
+        } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
+            statistics___.add_Itt_TrustToAdversary();
+        } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
+            statistics___.add_Itt_TrustToHypocrite();
+        } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
+            statistics___.add_Itt_TrustToMischief();
+        }
+
 //       }
     }
 

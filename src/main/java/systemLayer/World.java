@@ -296,7 +296,7 @@ public class World {
             System.out.println("> updating agents' profile, watched list, and next steps...");
             for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
                 Agent agent = agents.get(i);
-               // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
+                // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
                 //todo: adding doing service capacity to agents as capacity param
                 agent.updateProfile();
                 //System.out.print(" p");
@@ -754,5 +754,20 @@ public class World {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void destroy() {
+        for (int i = 0; i < agents.size(); i++) {
+            agents.get(i).destroy();
+            agents.set(i, null);
+        }
+        if (this.matrixGenerator != null) {
+            this.matrixGenerator.destroy();
+            this.matrixGenerator = null;
+        }
+
+        if(environment!=null){
+            environment.destroy();
+        }
     }
 }

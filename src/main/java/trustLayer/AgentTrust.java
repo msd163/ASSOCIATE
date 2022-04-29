@@ -311,4 +311,13 @@ public class AgentTrust {
     public boolean isHasCandidateForCertification() {
         return hasCandidateForCertification;
     }
+
+    public void destroy() {
+        this.trustAbstracts = null;
+        this.recommendations = null;
+        this.experiences = null;
+        this.indirectExperiences = null;
+        this.indirectObservations = null;
+        this.observations = null;
+    }
 }

@@ -54,7 +54,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
@@ -74,8 +74,8 @@ public class Config {
     public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
 
     //============================ Statistics
-    public static final boolean STATISTICS_IS_GENERATE /*           */ = false;
-    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = false;
-    public static final boolean TRUST_MATRIX_IS_ON /*               */ = TRUST_MATRIX_IS_GENERATE || DRAWING_SHOW_trustMatrixDrawingWindow;
+    public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
+    public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
+    public static final boolean TRUST_MATRIX_IS_ON /*               */ = true;
 
 }

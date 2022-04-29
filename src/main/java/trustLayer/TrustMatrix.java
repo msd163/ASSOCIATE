@@ -112,4 +112,17 @@ public class TrustMatrix {
     public List<Agent> getsAgents() {
         return sAgents;
     }
+
+    public void destroy() {
+
+        if (trustMatrix != null) {
+            for (int i = 0; i < agentCount; i++) {
+                for (int j = 0; j < agentCount; j++) {
+                    trustMatrix[i][j] = null;
+                }
+            }
+        }
+        this.trustMatrix = null;
+
+    }
 }

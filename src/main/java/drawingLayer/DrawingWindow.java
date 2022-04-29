@@ -10,6 +10,7 @@ import utils.Point;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected utils.Point mousePosition = new utils.Point(0, 0);
 
     protected int lineThickness = 1;
+    protected int axisNumberFontSize = 35;
 
     protected int axisX = 0;
     protected int axisY = 0;
@@ -31,7 +33,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected int maxAxisY[];       // For holding maximum Y value of each chart
 
     protected int _hs = 8; // For adding space to charts horizontally
-    protected int _vs = 1; // For adding space to charts vertically
+    protected int _vs = 10; // For adding space to charts vertically
 
     protected float scale = 1f;
 
@@ -56,6 +58,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private boolean isShowDrawingTitle = true;
     private boolean isShowStatsInfo = true;
     protected boolean isShowSimInfo = true;
+
+    protected double axisYScale = 1.0;
 
     public int getWorldId() {
         return world == null ? -1 : world.getId();
@@ -134,19 +138,19 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             }
                             break;
                         case 38:        // top
-                            _vs++;
+                            _vs += 1;
                             break;
                         case 39:        // right
                             _hs++;
                             break;
                         case 40:        // bottom
                             if (_vs > 1) {
-                                _vs--;
+                                _vs -= 1;
                             }
                             break;
                         case 90:        // z
                             _hs = 8;
-                            _vs = 1;
+                            _vs = 10;
                             break;
 
                         //  Changing Line Thickness of chart lines
@@ -159,6 +163,18 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             if (lineThickness > 1) {
                                 lineThickness--;
                                 lineThicknessObj_x = new BasicStroke(lineThickness);
+                            }
+                            break;
+
+
+                        //  Changing font size of axis X and axis Y
+                        case 36:        // HOME
+                            axisNumberFontSize++;
+                            break;
+
+                        case 35:        // END
+                            if (axisNumberFontSize > 1) {
+                                axisNumberFontSize--;
                             }
                             break;
                     }
@@ -354,23 +370,23 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         int realWith = getRealWith();
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
         for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
             g.setColor(Globals.Color$.$axis);
             if (i > 0) {
                 if (i % (10 * _hs) == 0) {
-                    if (_hs > 5 || i % (20 * _hs) == 0) {
+                    if (_hs > 10 || (_hs > 5 && i % (20 * _hs) == 0) || (_hs > 1 && i % (40 * _hs) == 0) || i % (80 * _hs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", i - 5, 40);
+                        g.drawString(x + "", i - (axisNumberFontSize / 2), axisNumberFontSize);
                         g.scale(1, -1);
                     }
                     g.drawLine(i, -5, i, 5);
                     g.setColor(Globals.Color$.$axisSplit);
-                    g.drawLine(i, 5, i, maxAxisY[index] * _vs);
+                    g.drawLine(i, 5, i, (int) (maxAxisY[index] * 0.1 * _vs));
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
                     g.setColor(Globals.Color$.$axisSplit2);
-                    g.drawLine(i, 5, i, maxAxisY[index] * _vs);
+                    g.drawLine(i, 5, i, (int) (maxAxisY[index] * 0.1 * _vs));
                 } else if (_hs > 1) {
                     g.drawLine(i, 0, i, 1);
                 }
@@ -378,18 +394,27 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
     }
 
+    private static final DecimalFormat decimalFormat = new DecimalFormat();
+
     protected void drawAxisY(int index) {
-        int realWith = (maxAxisY[index] + 10) * _vs;
+        int realWith = (int) ((maxAxisY[index] + 10) * 0.1 * _vs);
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, 0, realWith);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
-        for (int i = 0, x = 0; i < realWith; i += _vs, x++) {
+        g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
+        for (int i = 0, x = 0,z=0; i < realWith; i += _vs, x++,z+=10) {
             g.setColor(Globals.Color$.$axis);
-            if (i > 0) {
-                if (i % (10 * _vs) == 0) {
-                    if (_vs > 10 || (_vs > 5 && i % (20 * _vs) == 0) || (_vs > 2 && _vs <= 5 && i % (25 * _vs) == 0) || (_vs > 0 && _vs <= 2 && i % (50 * _vs) == 0)) {
+            if (x > 0) {
+                if (i % 5 == 0) {
+                    if (_vs > 60
+                            || (_vs > 40 && x % 2 == 0)
+                            || (_vs > 15 && _vs <= 40 && x % (5) == 0)
+                            || (_vs > 5 && _vs <= 15 && x % (10) == 0)
+                            || (_vs > 2 && _vs <= 5 && x % (20) == 0)
+                            || (_vs > 0 && _vs <= 2 && x % (50) == 0)
+                    ) {
                         g.scale(1, -1);
-                        g.drawString((x * 4) + "", (x * 4 >= 10000 ? -105 : x * 4 >= 1000 ? -90 : -70), -i + 5);
+                        g.drawString((z * axisYScale) > 1 ? ((int) (z * axisYScale) + "") : (decimalFormat.format(z * axisYScale)),
+                                (z * axisYScale >= 10000 ? -3 * axisNumberFontSize : z * axisYScale >= 1000 ? (int) (-2.5 * axisNumberFontSize) : -2 * axisNumberFontSize), -i + (axisNumberFontSize / 7));
                         g.scale(1, -1);
                         g.drawLine(-8, i, 5, i);
                         g.setColor(Globals.Color$.$axisSplit);
@@ -486,45 +511,73 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void drawCurve(int x, int y, Color color, int index, int size, int xIndex) {
-        if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
-            size = (_hs);
-            size = Math.min(size, 4);
-        }
-        int sizeHf = size / 2;
+
+
+        g.setColor(color);
+
+        int sizeHf = 0;
         switch (index) {
             case 0:
-                g.setColor(color);
+            case 2:
+                if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
+                    size = (_hs);
+                    size = Math.min(size, 4);
+                }
+                sizeHf = size / 2;
+                break;
+            case 1:
+            case 3:
+            case 4:
+            case 6:
+            default:
+                if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
+                    size = (_hs);
+                    size = Math.min(size, 4);
+                    sizeHf = size / 2;
+                    if (lineThickness > 1) {
+                        sizeHf += 1;
+                    }
+                } else {
+                    sizeHf = size / 2;
+                }
+                g.setStroke(lineThicknessObj_x);
+
+                break;
+
+        }
+        switch (index) {
+            case 0:
                 g.fillOval(x - sizeHf, y - sizeHf, size, size);
                 break;
             case 1:
-                g.setColor(color);
                 g.drawLine(x - sizeHf, y, x + sizeHf, y);
                 g.drawLine(x, y - sizeHf, x, y + sizeHf);
+                g.setStroke(lineThicknessObj_1);
+
                 break;
             case 2:
-                g.setColor(color);
                 g.fillRect(x - sizeHf, y - sizeHf, size, size);
                 break;
             case 3:
-                g.setColor(color);
                 g.drawLine(x - sizeHf, y - sizeHf, x + sizeHf, y + sizeHf);
                 g.drawLine(x - sizeHf, y + sizeHf, x + sizeHf, y - sizeHf);
+                g.setStroke(lineThicknessObj_1);
                 break;
             case 4:
-                g.setColor(color);
                 g.drawRect(x - sizeHf, y - sizeHf, size, size);
+                g.setStroke(lineThicknessObj_1);
                 break;
             case 5:
-                g.setColor(color);
                 g.drawOval(x - sizeHf, y - sizeHf, size, size);
                 break;
             case 6:
-                g.setColor(color);
+
                 g.drawLine(x - sizeHf, y, x + sizeHf, y);
+                g.setStroke(lineThicknessObj_1);
                 break;
             default:
-                g.setColor(color);
                 g.drawLine(x, y, x, y + size * 3);
+                g.setStroke(lineThicknessObj_1);
         }
     }
 
@@ -533,7 +586,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     public void drawLine(int fromX, int fromY, int toX, int toY) {
         g.setStroke(lineThicknessObj_x);
-        g.drawLine(fromX, fromY, toX, _vs * toY);
+        g.drawLine(fromX, fromY, toX, (int) (0.1 * _vs * toY));
         g.setStroke(lineThicknessObj_1);
 
     }
@@ -547,7 +600,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         pnOffsetOld.y = pnOffset.y;
         scaleOffset = new Point(0, 0);
         _hs = 8;
-        _vs = 1;
+        _vs = 10;
         scale = 1f;
 
 

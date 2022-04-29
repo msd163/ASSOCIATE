@@ -48,7 +48,8 @@ public class Globals {
         public static Color darkRed2 = new Color(135, 16, 5);
         public static Color darkGreen = new Color(0, 158, 0);
         public static Color darkGreen2 = new Color(5, 102, 5);
-        public static Color darkGray = new Color(56, 56, 56);
+        public static Color darkGray = new Color(100, 100, 100);
+        public static Color darkGray1 = new Color(56, 56, 56);
         public static Color darkGray2 = new Color(33, 33, 33);
         public static Color darkMagenta = new Color(175, 24, 171);
         public static Color darkMagenta2 = new Color(105, 6, 102);
@@ -107,7 +108,7 @@ public class Globals {
                     case Adversary:
                         return darkRed;
                     case Mischief:
-                        return darkGray;
+                        return darkGray1;
                     case Hypocrite:
                         return darkMagenta;
                     default:
@@ -118,13 +119,13 @@ public class Globals {
 
         public static Color $pause = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen;
         public static Color $background = Config.THEME_MODE == TtDiagramThemeMode.Dark ? black : white;
-        public static Color $mainTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : darkGray;
+        public static Color $mainTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : darkGray1;
         public static Color $subTitle = gray;
         public static Color $simTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : black;
-        public static Color $configTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGray : darkGray;
+        public static Color $configTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGray : darkGray1;
         public static Color $axis = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : black;
-        public static Color $axisSplit = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : gray;
-        public static Color $axisSplit2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray : lightGray;
+        public static Color $axisSplit = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : darkGray;
+        public static Color $axisSplit2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray1 : lightGray;
         public static Color $mousePlus = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
         public static Color $drawingTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? Color.cyan : darkRed;
         public static Color $curve_1 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen2;

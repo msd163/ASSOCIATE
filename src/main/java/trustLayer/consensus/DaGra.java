@@ -594,4 +594,18 @@ public class DaGra {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void destroy() {
+
+        if (this.contracts != null) {
+            for (int i = 0; i < this.contracts.size(); i++) {
+                this.contracts.get(i).destroy();
+                this.contracts.set(i, null);
+            }
+            this.contracts.clear();
+            this.contracts = null;
+        }
+
+
+    }
 }

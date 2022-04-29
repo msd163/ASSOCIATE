@@ -444,4 +444,11 @@ public class Environment {
     public void addCertifiedCount() {
         certifiedCount++;
     }
+
+    public void destroy() {
+        transitions = null;
+        for (int i = 0; i < this.states.size(); i++) {
+            states.set(i, null);
+        }
+    }
 }

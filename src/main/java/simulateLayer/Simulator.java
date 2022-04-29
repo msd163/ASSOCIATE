@@ -6,11 +6,9 @@ import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
 import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
 import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
 import environmentLayer.Environment;
+import systemLayer.Agent;
 import systemLayer.World;
-import utils.Config;
-import utils.Globals;
-import utils.ImageBuilder;
-import utils.ProjectPath;
+import utils.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +17,7 @@ import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class Simulator {
 
@@ -73,7 +72,7 @@ public class Simulator {
         worlds = new World[Globals.SIMULATION_ROUND];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
-            worlds[i] = new World(i,this, simulationConfig.getNextConfig());
+            worlds[i] = new World(i, this, simulationConfig.getNextConfig());
         }
 
         //============================//============================ Initializing statistics report file
@@ -124,7 +123,7 @@ public class Simulator {
         if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
             intTrustAnalysisLinearDrawingWindow.repaint();
         }
-        if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow){
+        if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
             intTrustStatsLinearDrawingWindow.repaint();
         }
     }
@@ -169,6 +168,8 @@ public class Simulator {
             if (Globals.SIMULATION_ROUND <= Globals.SIMULATION_TIMER) {
                 break;
             }
+            world.destroy();
+            OutLog____.pl("s");
         }
 
         Globals.SIMULATION_TIMER--;

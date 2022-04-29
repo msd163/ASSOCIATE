@@ -277,4 +277,39 @@ public class CertContract {
     public void setFinalTrustValue(float finalTrustValue) {
         this.finalTrustValue = finalTrustValue;
     }
+
+    public void destroy() {
+
+        if (this.signedContracts != null) {
+            List<CertSign> contracts = this.signedContracts;
+            for (int i = 0; i < contracts.size(); i++) {
+                contracts.set(i, null);
+            }
+            this.signedContracts.clear();
+            this.signedContracts = null;
+        }
+        if (this.verifiedContracts != null) {
+            for (int i = 0; i < this.verifiedContracts.size(); i++) {
+                this.verifiedContracts.set(i, null);
+            }
+            this.verifiedContracts.clear();
+            this.verifiedContracts = null;
+        }
+
+        if (this.signs != null) {
+            for (int i = 0; i < this.signs.size(); i++) {
+                this.signs.set(i, null);
+            }
+            this.signs.clear();
+            this.signs = null;
+        }
+
+        if (this.verifies != null) {
+            for (int i = 0; i < this.verifies.size(); i++) {
+                this.verifies.set(i, null);
+            }
+            this.verifies.clear();
+            this.verifies = null;
+        }
+    }
 }

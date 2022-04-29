@@ -507,4 +507,20 @@ public class Agent {
     public void setDaGra(DaGra daGra) {
         this.daGra = daGra;
     }
+
+    public void destroy() {
+        if (this.trust != null) {
+            this.trust.destroy();
+        }
+        if (this.daGra != null) {
+            this.daGra.destroy();
+        }
+
+        this.daGra = null;
+        this.trust = null;
+        this.watchedAgents = null;
+        this.travelHistories = null;
+        this.watchedStates = null;
+
+    }
 }
