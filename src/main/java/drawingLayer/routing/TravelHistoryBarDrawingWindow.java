@@ -36,6 +36,11 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
         List<Agent> agents = world.getAgents();
         for (int i = 0, jj = agents.size() - 1, agentsLength = agents.size(); i < agentsLength; jj--, i++) {
             Agent agent = agents.get(jj);
+
+            if (agent == null || agent.getTravelHistories() == null) {
+                continue;
+            }
+
             int size = agent.getTravelHistories().size();
 
             g.setColor(Globals.Color$.getNormal(agent.getBehavior().getBehaviorState()));

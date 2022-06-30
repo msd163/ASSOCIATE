@@ -62,7 +62,9 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
             for (int row = 0; row < matCount; row++) {
                 agentInRow = sAgents.get(row);
-
+                if (agentInRow == null || agentInRow.getBehavior() == null || agentInRow.getBehavior().getBehaviorState() == null) {
+                    continue;
+                }
                 g.setColor(Globals.Color$.getNormal(agentInRow.getBehavior().getBehaviorState()));
 
                 //============================ axisX
@@ -219,8 +221,12 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
             //-- Drawing trust count info in bottom of axis X
             for (int i = 0, trusteeDataLength = trusteeData.length; i < trusteeDataLength; i++) {
+                Agent agent = sAgents.get(i);
+                if(agent == null || agent.getBehavior() == null || agent.getBehavior().getBehaviorState()== null){
+                    continue;
+                }
                 int[] td = trusteeData[i];
-                g.setColor(Globals.Color$.getLight(sAgents.get(i).getBehavior().getCurrentBehaviorState()));
+                g.setColor(Globals.Color$.getLight(agent.getBehavior().getCurrentBehaviorState()));
                 g.fillRect(i * 5, pnY - td[0] - 10, 5, td[0]);
                 g.setColor(Color.CYAN);
                 g.fillRect(i * 5, pnY - td[1] - 10, 5, td[1]);

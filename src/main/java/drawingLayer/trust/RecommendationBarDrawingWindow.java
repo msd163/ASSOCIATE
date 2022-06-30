@@ -35,6 +35,13 @@ public class RecommendationBarDrawingWindow extends DrawingWindow {
         for (int jj = agents.size() - 1, i = 0; jj > -1; i++, jj--) {
             Agent agent = agents.get(jj);
 
+            if (agent == null
+                    || agent.getBehavior() == null || agent.getBehavior().getBehaviorState() == null
+                    || agent.getCapacity() == null || agent.getTrust() == null
+            ) {
+                continue;
+            }
+
             drawBar(agent,
                     agent.getBehavior().getBehaviorState(),
                     i,

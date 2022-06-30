@@ -1,10 +1,10 @@
 package drawingLayer.routing;
 
 import drawingLayer.DrawingWindow;
+import societyLayer.agentSubLayer.*;
 import societyLayer.environmentSubLayer.Environment;
 import societyLayer.environmentSubLayer.StateX;
 import societyLayer.environmentSubLayer.TransitionX;
-import societyLayer.agentSubLayer.*;
 import utils.Point;
 import utils.RectangleX;
 
@@ -51,6 +51,10 @@ public class StateMachineDrawingWindow extends DrawingWindow {
     @Override
     public void paint(Graphics gr) {
         //============================//============================ Preparing
+        if (environment == null || environment.getTransitions() == null) {
+            return;
+        }
+
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
         g.clearRect(0, 0, getWidth(), getHeight());
@@ -68,6 +72,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
 
         //============================//============================ Drawing Transition
         _colorIndex = 0;
+
         for (TransitionX trans : environment.getTransitions()) {
 
             _colorIndex++;

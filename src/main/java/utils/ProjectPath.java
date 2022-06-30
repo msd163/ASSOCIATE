@@ -21,23 +21,23 @@ public class ProjectPath {
     }
 
 
-    public String environmentDir() {
-        return root() + "/src/main/resources/environment";
+    public String societyDir() {
+        return root() + "/src/main/resources/society";
     }
 
-    public String environmentData(int i) {
-        return environmentDir() + "/environment-" + i + ".json";
+    public String societyData(int i) {
+        return societyDir() + "/society-" + i + ".json";
     }
 
-    public String environmentData() {
+    public String societyData() {
         int i = 100;
         for (; i > 0; i--) {
-            if (new File(environmentDir() + "/environment-" + i + ".json").exists()) {
+            if (new File(societyDir() + "/society-" + i + ".json").exists()) {
                 break;
             }
         }
-        System.out.println("|>  Selected FullEnvironment file: " + environmentDir() + "/environment-" + i + ".json");
-        return environmentDir() + "/environment-" + i + ".json";
+        System.out.println("|>  Selected FullSociety file: " + societyDir() + "/society-" + i + ".json");
+        return societyDir() + "/society-" + i + ".json";
     }
 
     public String simulationSocietyConfigFile() {

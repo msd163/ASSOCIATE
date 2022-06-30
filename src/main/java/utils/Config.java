@@ -12,7 +12,7 @@ public class Config {
     public static final String TrustConfigFilePath = ProjectPath.instance().simulationTrustConfigFile();
     public static final String TrustConfigFileName = TrustConfigFilePath.substring(TrustConfigFilePath.lastIndexOf("/"));
 
-    public static final String EnvironmentDataFilePath = ProjectPath.instance().environmentData();
+    public static final String EnvironmentDataFilePath = ProjectPath.instance().societyData();
     public static final String EnvironmentDataFileName = EnvironmentDataFilePath.substring(EnvironmentDataFilePath.lastIndexOf("/"));
 
 

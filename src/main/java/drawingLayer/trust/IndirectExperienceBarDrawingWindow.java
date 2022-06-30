@@ -38,6 +38,12 @@ public class IndirectExperienceBarDrawingWindow extends DrawingWindow {
         for (int i = 0, jj = agents.size() - 1, agentsLength = agents.size(); i < agentsLength; i++, jj--) {
             agent = agents.get(jj);
 
+            if (agent == null
+                    || agent.getBehavior() == null || agent.getBehavior().getBehaviorState() == null
+                    || agent.getCapacity() == null || agent.getTrust() == null
+            ) {
+                continue;
+            }
             drawBar(agent,
                     agent.getBehavior().getBehaviorState(),
                     i,

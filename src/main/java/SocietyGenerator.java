@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-public class EnvGenerator {
+public class SocietyGenerator {
 
     private static SimulationProfiler profiler = new SimulationProfiler();
 
@@ -69,8 +69,8 @@ public class EnvGenerator {
         String envJson = gson.toJson(environment);
 
         int envFileCounter = 0;
-        String envFileName = "environment";
-        String envFilePath = ProjectPath.instance().environmentDir() + "/" + envFileName;
+        String envFileName = "society";
+        String envFilePath = ProjectPath.instance().societyDir() + "/" + envFileName;
 
         File file;
 

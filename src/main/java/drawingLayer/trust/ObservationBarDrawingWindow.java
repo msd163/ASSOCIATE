@@ -37,6 +37,13 @@ public class ObservationBarDrawingWindow extends DrawingWindow {
         for (int i = 0, jj = agents.size() - 1; jj > -1; jj--, i++) {
             Agent agent = agents.get(jj);
 
+            if (agent == null
+                    || agent.getBehavior() == null || agent.getBehavior().getBehaviorState() == null
+                    || agent.getCapacity() == null || agent.getTrust() == null
+            ) {
+                continue;
+            }
+
             drawBar(agent,
                     agent.getBehavior().getBehaviorState(),
                     i,
