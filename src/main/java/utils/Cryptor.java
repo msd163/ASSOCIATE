@@ -1,7 +1,7 @@
 package utils;
 
 import org.apache.commons.codec.binary.Base64;
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;

@@ -5,9 +5,8 @@ import drawingLayer.DrawingWindow;
 import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
 import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
 import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
-import environmentLayer.Environment;
-import systemLayer.Agent;
-import systemLayer.World;
+import societyLayer.environmentSubLayer.Environment;
+import societyLayer.agentSubLayer.World;
 import utils.*;
 
 import javax.swing.*;
@@ -17,7 +16,6 @@ import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 public class Simulator {
 
@@ -56,7 +54,7 @@ public class Simulator {
         System.out.println("> Environment loaded from file.");
 
         //============================//============================ Loading Simulation Config file from file
-        envReader = new FileReader(Config.SimulationConfigFilePath);
+        envReader = new FileReader(Config.TrustConfigFilePath);
         simulationConfig = gson.fromJson(envReader, SimulationConfig.class);
 
         if (simulationConfig == null) {
@@ -89,14 +87,14 @@ public class Simulator {
             Path targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.EnvironmentDataFileName);
             Files.copy(sourcePath, targetPath);
 
-            //-- Copying simulation-profile-x.json to statistics directory
-            sourcePath = Paths.get(Config.SimulatingFilePath);
-            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.SimulatingFileName);
+            //-- Copying society-config-x.json to statistics directory
+            sourcePath = Paths.get(Config.SocietyConfigFilePath);
+            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.SocietyConfigFileName);
             Files.copy(sourcePath, targetPath);
 
-            //-- Copying simulation-config-x.json to statistics directory
-            sourcePath = Paths.get(Config.SimulationConfigFilePath);
-            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.SimulationConfigFileName);
+            //-- Copying trust-config-x.json to statistics directory
+            sourcePath = Paths.get(Config.TrustConfigFilePath);
+            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.TrustConfigFileName);
             Files.copy(sourcePath, targetPath);
 
         }

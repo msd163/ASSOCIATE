@@ -6,7 +6,7 @@ import drawingLayer.DrawingWindow;
 import simulateLayer.SimulationConfig;
 import simulateLayer.statistics.EpisodeStatistics;
 import simulateLayer.statistics.WorldStatistics;
-import systemLayer.World;
+import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
@@ -29,7 +29,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         }
         headerTitle = "Integrated Travel Statistics Linear Chart [#Worlds: " + worlds.length + "]";
         setName("i_tvl_stt");
-        axisYScale = 1;
+        axisYScale = 4;
     }
 
     int loAxisX = 0;

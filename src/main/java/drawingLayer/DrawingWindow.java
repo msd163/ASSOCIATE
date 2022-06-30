@@ -1,8 +1,8 @@
 package drawingLayer;
 
 import _type.TtBehaviorState;
-import systemLayer.Agent;
-import systemLayer.World;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 import trustLayer.data.TrustData;
 import utils.Globals;
 import utils.Point;

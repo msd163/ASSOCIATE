@@ -1,8 +1,8 @@
 package transitionLayer;
 
 import _type.TtIsValidatedInObservations;
-import environmentLayer.StateX;
-import systemLayer.Agent;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.agentSubLayer.Agent;
 
 public class RoutingHelp {
 

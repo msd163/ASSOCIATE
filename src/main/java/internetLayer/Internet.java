@@ -1,9 +1,7 @@
 package internetLayer;
 
-import systemLayer.Agent;
-import systemLayer.World;
-import utils.Globals;
-import utils.OutLog____;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 
 import java.util.ArrayList;
 import java.util.List;

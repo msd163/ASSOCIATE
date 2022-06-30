@@ -1,6 +1,6 @@
 package trustLayer.data;
 
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 import utils.Globals;
 
 public class TrustAbstract {

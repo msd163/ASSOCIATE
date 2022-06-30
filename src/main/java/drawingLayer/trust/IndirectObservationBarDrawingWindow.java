@@ -1,8 +1,8 @@
 package drawingLayer.trust;
 
 import drawingLayer.DrawingWindow;
-import systemLayer.Agent;
-import systemLayer.World;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 
 import java.awt.*;
 import java.util.List;
@@ -36,16 +36,16 @@ public class IndirectObservationBarDrawingWindow extends DrawingWindow {
         List<Agent> agents = world.getAgents();
         for (int i = 0, jj = agents.size() - 1; jj > -1; jj--, i++) {
             Agent agent = agents.get(jj);
-
-            drawBar(agent,
-                    agent.getBehavior().getBehaviorState(),
-                    i,
-                    agent.getCapacity().getIndirectObservationCap(),
-                    agent.getCapacity().getIndirectObservationItemCap(),
-                    agent.getTrust().getIndirectObservationRewardsCount(),
-                    agent.getTrust().getIndirectObservations()
-            );
-
+            if(agent!=null && agent.getBehavior()!=null && agent.getCapacity()!=null && agent.getTrust()!=null) {
+                drawBar(agent,
+                        agent.getBehavior().getBehaviorState(),
+                        i,
+                        agent.getCapacity().getIndirectObservationCap(),
+                        agent.getCapacity().getIndirectObservationItemCap(),
+                        agent.getTrust().getIndirectObservationRewardsCount(),
+                        agent.getTrust().getIndirectObservations()
+                );
+            }
         }
 
     }

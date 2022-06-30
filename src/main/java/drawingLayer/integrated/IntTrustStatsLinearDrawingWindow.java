@@ -2,7 +2,7 @@ package drawingLayer.integrated;
 
 import drawingLayer.DrawingWindow;
 import simulateLayer.SimulationConfig;
-import systemLayer.World;
+import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
@@ -27,7 +27,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
         headerTitle = "Integrated Trust Statistics Params [#Worlds: " + worlds.length + "]";
         setName("i_tut_stt");
 
-        axisYScale = 1;
+        axisYScale = 4;
     }
 
     int loAxisX;

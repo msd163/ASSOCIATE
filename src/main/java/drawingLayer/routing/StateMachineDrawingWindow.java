@@ -1,10 +1,10 @@
 package drawingLayer.routing;
 
 import drawingLayer.DrawingWindow;
-import environmentLayer.Environment;
-import environmentLayer.StateX;
-import environmentLayer.TransitionX;
-import systemLayer.*;
+import societyLayer.environmentSubLayer.Environment;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.environmentSubLayer.TransitionX;
+import societyLayer.agentSubLayer.*;
 import utils.Point;
 import utils.RectangleX;
 

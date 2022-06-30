@@ -2,9 +2,8 @@ package trustLayer;
 
 import _type.TtTrustReplaceMethod;
 import com.google.gson.annotations.Expose;
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 import trustLayer.data.*;
-import utils.Config;
 
 import java.util.ArrayList;
 import java.util.List;

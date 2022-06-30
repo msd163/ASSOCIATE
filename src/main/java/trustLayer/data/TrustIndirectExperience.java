@@ -1,6 +1,6 @@
 package trustLayer.data;
 
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 
 public class TrustIndirectExperience extends TrustData {
 

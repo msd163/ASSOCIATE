@@ -2,9 +2,9 @@ import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import environmentLayer.Environment;
-import environmentLayer.StateX;
-import systemLayer.Agent;
+import societyLayer.environmentSubLayer.Environment;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.agentSubLayer.Agent;
 import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class EnvGenerator {
@@ -31,7 +30,7 @@ public class EnvGenerator {
         Gson gson = new Gson();
 
         //============================//============================  Loading Profiler from file
-        FileReader prfReader = new FileReader(Config.SimulatingFilePath);
+        FileReader prfReader = new FileReader(Config.SocietyConfigFilePath);
         profiler = gson.fromJson(prfReader, SimulationProfiler.class);
 
         if (profiler == null) {
@@ -90,7 +89,7 @@ public class EnvGenerator {
         //============================//============================ Saving simulation-profiler.json as archived source of environment.json
         try {
 
-            String simProf = readFile(Config.SimulatingFilePath);
+            String simProf = readFile(Config.SocietyConfigFilePath);
 
             file = new File(envFilePath + "-" + envFileCounter + ".simPro.json");
             FileWriter writer = new FileWriter(file);

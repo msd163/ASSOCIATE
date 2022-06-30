@@ -1,6 +1,6 @@
 package trustLayer;
 
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 import trustLayer.data.TrustAbstract;
 import utils.Globals;
 import simulateLayer.statistics.WorldStatistics;

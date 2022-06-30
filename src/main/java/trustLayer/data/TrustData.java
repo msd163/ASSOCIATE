@@ -2,8 +2,8 @@ package trustLayer.data;
 
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
-import environmentLayer.StateX;
-import systemLayer.Agent;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.agentSubLayer.Agent;
 import utils.Globals;
 import utils.OutLog____;
 

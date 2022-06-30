@@ -40,13 +40,13 @@ public class ProjectPath {
         return environmentDir() + "/environment-" + i + ".json";
     }
 
-    public String simulationProfileFile() {
-        return resourcesDir() + "/simulation-profile.json";
+    public String simulationSocietyConfigFile() {
+        return resourcesDir() + "/society-config.json";
     }
 
 
-    public String simulationConfigFile() {
-        return resourcesDir() + "/simulation-config.json";
+    public String simulationTrustConfigFile() {
+        return resourcesDir() + "/trust-config.json";
     }
 
     //============================//============================

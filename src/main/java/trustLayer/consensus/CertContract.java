@@ -2,7 +2,7 @@ package trustLayer.consensus;
 
 import _type.TtDaGraContractStatus;
 import simulateLayer.SimulationConfigItem;
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 import utils.Globals;
 
 import java.util.ArrayList;

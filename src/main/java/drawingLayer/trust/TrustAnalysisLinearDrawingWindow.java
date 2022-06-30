@@ -1,7 +1,7 @@
 package drawingLayer.trust;
 
 import drawingLayer.DrawingWindow;
-import systemLayer.World;
+import societyLayer.agentSubLayer.World;
 import utils.Globals;
 import utils.Point;
 import simulateLayer.statistics.WorldStatistics;

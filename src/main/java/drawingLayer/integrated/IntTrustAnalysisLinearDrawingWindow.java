@@ -3,7 +3,7 @@ package drawingLayer.integrated;
 import _type.TtSimulationMode;
 import drawingLayer.DrawingWindow;
 import simulateLayer.SimulationConfig;
-import systemLayer.World;
+import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;

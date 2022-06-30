@@ -4,9 +4,8 @@ import _type.TtBehaviorState;
 import _type.TtDaGraContractStatus;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
-import systemLayer.Agent;
-import systemLayer.World;
-import utils.Config;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 import utils.Globals;
 import utils.OutLog____;
 

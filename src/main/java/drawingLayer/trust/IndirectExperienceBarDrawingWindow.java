@@ -1,8 +1,8 @@
 package drawingLayer.trust;
 
 import drawingLayer.DrawingWindow;
-import systemLayer.Agent;
-import systemLayer.World;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 
 import java.awt.*;
 import java.util.List;

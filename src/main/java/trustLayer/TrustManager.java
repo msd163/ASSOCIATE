@@ -2,11 +2,11 @@ package trustLayer;
 
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
-import environmentLayer.StateX;
-import environmentLayer.TravelHistory;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.environmentSubLayer.TravelHistory;
 import simulateLayer.SimulationConfigItem;
-import systemLayer.Agent;
-import systemLayer.WatchedAgent;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.WatchedAgent;
 import trustLayer.data.*;
 import utils.Globals;
 import utils.OutLog____;
