@@ -206,7 +206,7 @@ public class Agent {
         }
 
         // If travelHistory if full, remove old (first) state in map
-        if (size >= capacity.getTravelHistoryCap()) {
+        if (size >= capacity.getTravelHistoryCap() && !travelHistories.isEmpty()) {
             travelHistories.remove(0);
         }
 

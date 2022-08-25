@@ -452,7 +452,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
 
         //-- Drawing filled number rectangle
-        g.setColor(Globals.Color$.lightGray);
+        g.setColor(Globals.Color$.lightGray1);
         g.fillRect(5, i * 21, dataSize, 20);
 
         //-- Printing data_number/data_cap
@@ -467,7 +467,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
             //-- Drawing positive and negative reward bars
             g.setColor(Globals.Color$.lightGreen);
             g.fillRect(5, i * 21, rewardCountArray[0], 20);
-            g.setColor(Globals.Color$.lightRed);
+            g.setColor(Globals.Color$.lightRed1);
             g.fillRect(5 + rewardCountArray[0], i * 21, rewardCountArray[1], 20);
 
             //-- Drawing percentage of items size: itemSize/itemCap
@@ -478,7 +478,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen2 : Globals.Color$.darkRed);
                         io.setIsUpdated(false);
                     } else {
-                        g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen : Globals.Color$.red);
+                        g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen1 : Globals.Color$.red);
                     }
                     g.drawLine(5 + j, i * 21 + 3, 5 + j, i * 21 + 3 + 16 * io.getItems().size() / io.getItemCap());
                 }
@@ -623,7 +623,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public int getRealHeight() {
-        return axisY > 0 ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
+        return (axisY > 0 || g.getTransform() == null)  ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
 
     }
 

@@ -1,5 +1,5 @@
 {
-  "simulationRound": 5,
+  "simulationRound": 1,
   "configs": [
     {
       "_METHOD": "=================================  TrustMode_ShortPath: 4",
@@ -25,8 +25,8 @@
       "isUseNegativeRecommendationEffect": true,
       "_CRT": "-----------------------------------",
       "cert": {
-        "isUseCertification": true,
-        "isUseDaGra": true,
+        "isUseCertification": false,
+        "isUseDaGra": false,
         "certRequestPeriodTime_DaGra": 10,
         "numberOfCertRequestInEachPeriod_DaGra": 10,
         "expiredTimeOfCert_DaGra": 120,

@@ -19,8 +19,8 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 90;       // Time of execution in each world
-    public static int WORLD_SLEEP_MILLISECOND = 1;      // Sleep time in each run of world
+    public static int WORLD_LIFE_TIME = 4000;       // Time of execution in each world
+    public static int WORLD_SLEEP_MILLISECOND = 10;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 50;
 
@@ -43,7 +43,7 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Dark;
+    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Light;
     public static int DRAWING_CURVE_LINE_LENGTH /*                  */ = 1;
     public static int DRAWING_AXIS_LINE_LENGTH /*                   */ = 1;
 

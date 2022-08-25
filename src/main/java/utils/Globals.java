@@ -39,18 +39,23 @@ public class Globals {
         public static Color yellow = new Color(247, 255, 68);
 
         public static Color lightGreen = new Color(187, 255, 141);
-        public static Color lightRed = new Color(236, 168, 162);
-        public static Color lightGray = new Color(220, 220, 220);
+        public static Color lightRed = new Color(255, 108, 108);
+        public static Color lightRed1 = new Color(236, 168, 162);
+        public static Color lightGray = new Color(200, 200, 200);
+        public static Color lightGray1 = new Color(220, 220, 220);
+        public static Color lightGray2 = new Color(235, 235, 235);
         public static Color lightMagenta = new Color(224, 186, 223);
         public static Color lightYellow = new Color(232, 223, 168);
 
         public static Color darkRed = new Color(170, 24, 10);
         public static Color darkRed2 = new Color(135, 16, 5);
-        public static Color darkGreen = new Color(0, 158, 0);
+        public static Color darkGreen = new Color(0, 200, 0);
+        public static Color darkGreen1 = new Color(0, 158, 0);
         public static Color darkGreen2 = new Color(5, 102, 5);
-        public static Color darkGray = new Color(100, 100, 100);
-        public static Color darkGray1 = new Color(56, 56, 56);
-        public static Color darkGray2 = new Color(33, 33, 33);
+        public static Color darkGray = new Color(150, 150, 150);
+        public static Color darkGray1 = new Color(100, 100, 100);
+        public static Color darkGray2 = new Color(56, 56, 56);
+        public static Color darkGray3 = new Color(33, 33, 33);
         public static Color darkMagenta = new Color(175, 24, 171);
         public static Color darkMagenta2 = new Color(105, 6, 102);
 
@@ -63,9 +68,9 @@ public class Globals {
                    case Honest:
                        return lightGreen;
                    case Adversary:
-                       return lightRed;
+                       return lightRed1;
                    case Mischief:
-                       return lightGray;
+                       return lightGray1;
                    case Hypocrite:
                        return lightMagenta;
                    default:
@@ -106,26 +111,57 @@ public class Globals {
                     case Honest:
                         return darkGreen;
                     case Adversary:
-                        return darkRed;
+                        return red;
                     case Mischief:
-                        return darkGray1;
+                        return darkGray;
                     case Hypocrite:
-                        return darkMagenta;
+                        return magenta;
                     default:
                         return orange;
                 }
             }
         }
 
-        public static Color $pause = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen;
+
+        public static Color getDark(TtBehaviorState state) {
+            if(Config.THEME_MODE==TtDiagramThemeMode.Dark){
+                switch (state) {
+                    case Honest:
+                        return green;
+                    case Adversary:
+                        return red;
+                    case Mischief:
+                        return gray;
+                    case Hypocrite:
+                        return magenta;
+                    default:
+                        return yellow;
+                }
+            }else{
+                switch (state) {
+                    case Honest:
+                        return darkGreen2;
+                    case Adversary:
+                        return darkRed2;
+                    case Mischief:
+                        return darkGray2;
+                    case Hypocrite:
+                        return darkMagenta;
+                    default:
+                        return black;
+                }
+            }
+        }
+
+        public static Color $pause = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen1;
         public static Color $background = Config.THEME_MODE == TtDiagramThemeMode.Dark ? black : white;
-        public static Color $mainTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : darkGray1;
+        public static Color $mainTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : darkGray2;
         public static Color $subTitle = gray;
         public static Color $simTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : black;
-        public static Color $configTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGray : darkGray1;
+        public static Color $configTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGray1 : darkGray2;
         public static Color $axis = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : black;
-        public static Color $axisSplit = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : darkGray;
-        public static Color $axisSplit2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray1 : lightGray;
+        public static Color $axisSplit = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : darkGray1;
+        public static Color $axisSplit2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray2 : lightGray1;
         public static Color $mousePlus = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
         public static Color $drawingTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? Color.cyan : darkRed;
         public static Color $curve_1 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen2;
@@ -134,8 +170,9 @@ public class Globals {
         public static Color $curve_4 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
         public static Color $curve_5 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
 
-        public static Color $trustHonest = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen2;
+        public static Color $trustHonest = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen1;
         public static Color $trustAdversary = red;
+        public static Color $trustMischief = Config.THEME_MODE == TtDiagramThemeMode.Dark ? Color.white : gray;
     }
 
     public static Random RANDOM = new Random(new Date().getTime());
