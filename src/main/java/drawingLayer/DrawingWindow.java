@@ -1,9 +1,11 @@
 package drawingLayer;
 
 import _type.TtBehaviorState;
+import _type.TtDiagramThemeMode;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.World;
 import trustLayer.data.TrustData;
+import utils.Config;
 import utils.Globals;
 import utils.Point;
 
@@ -58,6 +60,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private boolean isShowDrawingTitle = true;
     private boolean isShowStatsInfo = true;
     protected boolean isShowSimInfo = true;
+    protected boolean isShowAgentId = true;
+    protected boolean isShowBarChartCapInfo = true;
 
     protected double axisYScale = 1.0;
 
@@ -215,6 +219,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             isShowStatsInfo = !isShowStatsInfo;
                         } else if (keyCode == (int) 'e' || keyCode == (int) 'E') {
                             isShowSimInfo = !isShowSimInfo;
+                        } else if (keyCode == (int) 'r' || keyCode == (int) 'R') {
+                            isShowAgentId = !isShowAgentId;
+                        } else if (keyCode == (int) 't' || keyCode == (int) 'T') {
+                            isShowBarChartCapInfo = !isShowBarChartCapInfo;
                         }
                     }
                 }
@@ -401,7 +409,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, 0, realWith);
         g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
-        for (int i = 0, x = 0,z=0; i < realWith; i += _vs, x++,z+=10) {
+        for (int i = 0, x = 0, z = 0; i < realWith; i += _vs, x++, z += 10) {
             g.setColor(Globals.Color$.$axis);
             if (x > 0) {
                 if (i % 5 == 0) {
@@ -437,38 +445,42 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected void drawBar(Agent agent, TtBehaviorState behaviorState, int i, int dataCap, int dataItemCap, int[] rewardCountArray, List<?> data) {
 
         int dataSize = data.size();
-
+        int yIndex = i * (21 + _vs - 1);
         //-- Drawing agent cap power rectangle
         g.setColor(Globals.Color$.getNormal(behaviorState));
-        g.fillRect(-agent.getCapacity().getCapPower(), i * 21, agent.getCapacity().getCapPower(), 20);
+        g.fillRect(-agent.getCapacity().getCapPower(), yIndex, agent.getCapacity().getCapPower(), 20);
 
         //-- Printing agent ID
-        g.setColor(Color.BLACK);
-        g.drawString(agent.getId() + "", -30, i * 21 + 15);
-
+        if (isShowAgentId) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 7));
+            g.setColor(Color.BLACK);
+            g.drawString("A" + agent.getId(), -50, yIndex + 15);
+        }
         //-- Drawing total number rectangle
-        g.setColor(Color.GRAY);
-        g.fillRect(5, i * 21, dataCap, 20);
-
+        g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.darkGray1 : Globals.Color$.lightGray1);
+        g.fillRect(5, yIndex, dataCap * _hs, 20);
 
         //-- Drawing filled number rectangle
-        g.setColor(Globals.Color$.lightGray1);
-        g.fillRect(5, i * 21, dataSize, 20);
+        g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.gray : Globals.Color$.lightGray);
+        g.fillRect(5, yIndex, dataSize * _hs, 20);
 
         //-- Printing data_number/data_cap
-        g.setColor(Color.LIGHT_GRAY);
-        g.drawString(dataSize + " / " + dataCap,
-                dataSize + 20, i * 21 + 15);
-        //-- Printing dataItemCap
-        g.drawString("I.C: " + dataItemCap,
-                dataSize + 150, i * 21 + 15);
+        if (isShowBarChartCapInfo) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 9));
 
+            g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.lightGray2 : Globals.Color$.gray);
+            g.drawString(dataSize + " / " + dataCap,
+                    dataCap * _hs + 20, yIndex + 15);
+            //-- Printing dataItemCap
+            g.drawString("I.C: " + dataItemCap,
+                    dataCap * _hs + 80, yIndex + 15);
+        }
         if (dataSize > 0) {
             //-- Drawing positive and negative reward bars
-            g.setColor(Globals.Color$.lightGreen);
-            g.fillRect(5, i * 21, rewardCountArray[0], 20);
-            g.setColor(Globals.Color$.lightRed1);
-            g.fillRect(5 + rewardCountArray[0], i * 21, rewardCountArray[1], 20);
+            g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.lightGreen : Globals.Color$.darkGreen);
+            g.fillRect(5, yIndex, rewardCountArray[0] * _hs, 20);
+            g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.lightRed1 : Globals.Color$.lightRed);
+            g.fillRect(5 + rewardCountArray[0] * _hs, yIndex, rewardCountArray[1] * _hs, 20);
 
             //-- Drawing percentage of items size: itemSize/itemCap
             for (int j = 0, dSize = data.size(); j < dSize; j++) {
@@ -480,7 +492,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                     } else {
                         g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen1 : Globals.Color$.red);
                     }
-                    g.drawLine(5 + j, i * 21 + 3, 5 + j, i * 21 + 3 + 16 * io.getItems().size() / io.getItemCap());
+                    int d = 1 + _hs;
+                    g.fillRect(6 + j * _hs, yIndex + 3, d > 5 ? d - 4 : d > 3 ? d - 2 : 1, 16 * io.getItems().size() / io.getItemCap());
                 }
             }
         }
@@ -623,7 +636,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public int getRealHeight() {
-        return (axisY > 0 || g.getTransform() == null)  ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
+        return (axisY > 0 || g.getTransform() == null) ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
 
     }
 

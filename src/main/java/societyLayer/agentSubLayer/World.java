@@ -1,18 +1,14 @@
 package societyLayer.agentSubLayer;
 
 import _type.*;
-import drawingLayer.DrawingWindow;
-import drawingLayer.routing.StateMachineDrawingWindow;
-import drawingLayer.routing.TravelHistoryBarDrawingWindow;
-import drawingLayer.routing.TravelStatsLinearDrawingWindow;
-import drawingLayer.trust.*;
-import societyLayer.environmentSubLayer.Environment;
-import societyLayer.environmentSubLayer.StateX;
+import drawingLayer.DrawingWindowRunner;
 import internetLayer.Internet;
 import simulateLayer.SimulationConfigItem;
 import simulateLayer.Simulator;
 import simulateLayer.statistics.EpisodeStatistics;
 import simulateLayer.statistics.WorldStatistics;
+import societyLayer.environmentSubLayer.Environment;
+import societyLayer.environmentSubLayer.StateX;
 import transitionLayer.Router;
 import trustLayer.TrustManager;
 import trustLayer.TrustMatrix;
@@ -20,8 +16,6 @@ import trustLayer.consensus.CertContract;
 import trustLayer.consensus.DaGra;
 import utils.*;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +25,11 @@ public class World {
         this.id = id;
         this.simulator = simulator;
         this.simulationConfigItem = simulationConfigItem;
+        this.drawingWindowRunner = new DrawingWindowRunner(this);
     }
 
     private int id;
+    private DrawingWindowRunner drawingWindowRunner;
 
     private Simulator simulator;
 
@@ -51,7 +47,7 @@ public class World {
 
     private Router router;
 
-    TrustMatrix matrixGenerator = new TrustMatrix();
+    public TrustMatrix matrixGenerator = new TrustMatrix();
 
     private SimulationConfigItem simulationConfigItem;
 
@@ -201,24 +197,6 @@ public class World {
     }
 
     //============================//============================//============================
-    private StateMachineDrawingWindow stateMachineDrawingWindow;
-    private TravelStatsLinearDrawingWindow travelStatsLinearDrawingWindow;
-    private TravelHistoryBarDrawingWindow travelHistoryBarDrawingWindow;
-
-    private TrustMatrixDrawingWindow trustMatrixDrawingWindow;
-
-    private TrustStatsLinearDrawingWindow trustStatsLinearDrawingWindow;
-    private TrustRecogniseLinearDrawingWindow trustRecogniseLinearDrawingWindow;
-    private TrustAnalysisLinearDrawingWindow trustAnalysisLinearDrawingWindow;
-
-    private ExperienceBarDrawingWindow experienceBarDrawingWindow;
-    private IndirectExperienceBarDrawingWindow indirectExperienceBarDrawingWindow;
-
-    private ObservationBarDrawingWindow observationBarDrawingWindow;
-    private IndirectObservationBarDrawingWindow indirectObservationBarDrawingWindow;
-
-
-    private RecommendationBarDrawingWindow recommendationBarDrawingWindow;
 
 
     private void initStatistics() {
@@ -262,10 +240,10 @@ public class World {
      * RUN
      * ==============================
      **/
-    public void run() {
+    public void run() throws InterruptedException {
 
-        initDrawingWindows();
-
+        drawingWindowRunner.initDrawingWindows(matrixGenerator);
+        drawingWindowRunner.start();
         /* ****************************
          *            MAIN LOOP      *
          * ****************************/
@@ -426,7 +404,6 @@ public class World {
                 Globals.statsTrustGenerator.addStat(wdStats);
             }
             //============================//============================ Repainting
-            updateWindows();
 
 
             //============================//============================//============================ Adding Episode of environment
@@ -462,7 +439,15 @@ public class World {
             }*/
 
             while (Globals.PAUSE) {
-                updateWindows();
+                Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
+            }
+
+            if (Config.WORLD_SLEEP_MILLISECOND > 0) {
+                try {
+                    Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -485,18 +470,18 @@ public class World {
 
         if (Config.STATISTICS_IS_GENERATE) {
             new ImageBuilder().generateStatisticsImages(
-                    stateMachineDrawingWindow,
-                    travelStatsLinearDrawingWindow,
-                    trustMatrixDrawingWindow,
-                    trustStatsLinearDrawingWindow,
-                    trustRecogniseLinearDrawingWindow,
-                    trustAnalysisLinearDrawingWindow,
-                    observationBarDrawingWindow,
-                    recommendationBarDrawingWindow,
-                    travelHistoryBarDrawingWindow,
-                    experienceBarDrawingWindow,
-                    indirectExperienceBarDrawingWindow,
-                    indirectObservationBarDrawingWindow
+                    drawingWindowRunner.getStateMachineDrawingWindow(),
+                    drawingWindowRunner.getTravelStatsLinearDrawingWindow(),
+                    drawingWindowRunner.getTrustMatrixDrawingWindow(),
+                    drawingWindowRunner.getTrustStatsLinearDrawingWindow(),
+                    drawingWindowRunner.getTrustRecogniseLinearDrawingWindow(),
+                    drawingWindowRunner.getTrustAnalysisLinearDrawingWindow(),
+                    drawingWindowRunner.getObservationBarDrawingWindow(),
+                    drawingWindowRunner.getRecommendationBarDrawingWindow(),
+                    drawingWindowRunner.getTravelHistoryBarDrawingWindow(),
+                    drawingWindowRunner.getExperienceBarDrawingWindow(),
+                    drawingWindowRunner.getIndirectExperienceBarDrawingWindow(),
+                    drawingWindowRunner.getIndirectObservationBarDrawingWindow()
             );
         }
         System.out.println("Finished");
@@ -511,158 +496,6 @@ public class World {
         }*/
     }  //  End of running
 
-    private void initDrawingWindows() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int widthHalf = (int) screenSize.getWidth() / 2;
-        int heightHalf = (int) screenSize.getHeight() / 2;
-        //============================ Initializing Main Drawing Windows
-        stateMachineDrawingWindow = new StateMachineDrawingWindow(this);
-        if (Config.DRAWING_SHOW_stateMachineWindow) {
-            initDrawingWindow(widthHalf, heightHalf, stateMachineDrawingWindow, TtDrawingWindowLocation.TopLeft, true);
-        }
-        //============================ Initializing Diagram Drawing Windows
-        travelStatsLinearDrawingWindow = new TravelStatsLinearDrawingWindow(this);
-        if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, travelStatsLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        trustMatrixDrawingWindow = new TrustMatrixDrawingWindow(matrixGenerator, this);
-        if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustMatrixDrawingWindow, TtDrawingWindowLocation.TopLeft);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        trustStatsLinearDrawingWindow = new TrustStatsLinearDrawingWindow(this);
-        if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustStatsLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        trustRecogniseLinearDrawingWindow = new TrustRecogniseLinearDrawingWindow(this);
-        if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustRecogniseLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        trustAnalysisLinearDrawingWindow = new TrustAnalysisLinearDrawingWindow(this);
-        if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, trustAnalysisLinearDrawingWindow, TtDrawingWindowLocation.TopRight);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        travelHistoryBarDrawingWindow = new TravelHistoryBarDrawingWindow(this);
-        if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, travelHistoryBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        experienceBarDrawingWindow = new ExperienceBarDrawingWindow(this);
-        if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, experienceBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
-        }
-
-        //============================ Initializing Diagram Drawing Windows
-        indirectExperienceBarDrawingWindow = new IndirectExperienceBarDrawingWindow(this);
-        if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, indirectExperienceBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
-        }
-
-        //============================ Initializing Recommendation Drawing Windows
-        recommendationBarDrawingWindow = new RecommendationBarDrawingWindow(this);
-        if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, recommendationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
-        }
-
-        //============================ Initializing Observation Drawing Windows
-        observationBarDrawingWindow = new ObservationBarDrawingWindow(this);
-        if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, observationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
-        }
-        //============================ Initializing Observation Drawing Windows
-        indirectObservationBarDrawingWindow = new IndirectObservationBarDrawingWindow(this);
-        if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
-            initDrawingWindow(widthHalf, heightHalf, indirectObservationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
-        }
-    }
-
-    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow stateMachineDW, TtDrawingWindowLocation location) {
-        initDrawingWindow(widthHalf, heightHalf, stateMachineDW, location, false);
-    }
-
-    private void initDrawingWindow(int widthHalf, int heightHalf, DrawingWindow drawingWindow, TtDrawingWindowLocation location, boolean exitAppOnCLose) {
-        drawingWindow.setDoubleBuffered(true);
-        JFrame mainFrame = new JFrame();
-        mainFrame.getContentPane().add(drawingWindow);
-        mainFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
-        mainFrame.setVisible(true);
-        if (exitAppOnCLose) {
-            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        }
-        mainFrame.setTitle(drawingWindow.getHeaderTitle());
-        switch (location) {
-            case TopRight:
-                mainFrame.setLocation(widthHalf, 0);
-                break;
-            case BottomLeft:
-                mainFrame.setLocation(0, heightHalf);
-                break;
-            case BottomRight:
-                mainFrame.setLocation(widthHalf, heightHalf);
-                break;
-            case TopLeft:
-            default:
-                mainFrame.setLocation(0, 0);
-                break;
-        }
-    }
-
-
-    public void updateWindows() {
-        try {
-            Thread.sleep(Config.WORLD_SLEEP_MILLISECOND);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (Config.DRAWING_SHOW_stateMachineWindow) {
-            stateMachineDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_travelStatsLinearDrawingWindow) {
-            travelStatsLinearDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_trustMatrixDrawingWindow) {
-            trustMatrixDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_trustStatsLinearDrawingWindow) {
-            trustStatsLinearDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow) {
-            trustRecogniseLinearDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow) {
-            trustAnalysisLinearDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_travelHistoryBarDrawingWindow) {
-            travelHistoryBarDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_experienceBarDrawingWindow) {
-            experienceBarDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow) {
-            indirectExperienceBarDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_recommendationBarDrawingWindow) {
-            recommendationBarDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
-            observationBarDrawingWindow.repaint();
-        }
-        if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
-            indirectObservationBarDrawingWindow.repaint();
-        }
-
-        simulator.updateWindows();
-    }
 
     //============================//============================//============================
 
@@ -757,17 +590,19 @@ public class World {
     }
 
     public void destroy() {
-        for (int i = 0; i < agents.size(); i++) {
-            agents.get(i).destroy();
-            agents.set(i, null);
-        }
-        if (this.matrixGenerator != null) {
-            this.matrixGenerator.destroy();
-            this.matrixGenerator = null;
-        }
+        if (Config.OPTIMIZE_MEMORY) {
+            for (int i = 0; i < agents.size(); i++) {
+                agents.get(i).destroy();
+                agents.set(i, null);
+            }
+            if (this.matrixGenerator != null) {
+                this.matrixGenerator.destroy();
+                this.matrixGenerator = null;
+            }
 
-        if(environment!=null){
-            environment.destroy();
+            if (environment != null) {
+                environment.destroy();
+            }
         }
     }
 }

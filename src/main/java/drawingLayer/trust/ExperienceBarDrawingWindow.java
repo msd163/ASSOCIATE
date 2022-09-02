@@ -18,6 +18,8 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
         axisY = world.getAgentsCount() * 21;
         headerTitle = "Trust Experience Bar Chart";
         setName("tut_exp");
+        _hs = 1;
+        _vs = 1;
     }
 
     Agent agent;

@@ -1,16 +1,11 @@
 package simulateLayer;
 
 import com.google.gson.Gson;
-import drawingLayer.DrawingWindow;
-import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
-import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
-import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
-import societyLayer.environmentSubLayer.Environment;
+import drawingLayer.IntDrawingWindowRunner;
 import societyLayer.agentSubLayer.World;
+import societyLayer.environmentSubLayer.Environment;
 import utils.*;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Files;
@@ -22,6 +17,7 @@ public class Simulator {
     private World[] worlds;
     private Environment loadedEnvironmentFromJson;
     private SimulationConfig simulationConfig;
+    private IntDrawingWindowRunner intDrawingWindowRunner;
 
     public SimulationConfig getSimulationConfigBunch() {
         return simulationConfig;
@@ -32,15 +28,8 @@ public class Simulator {
     private FileReader envReader;
     private Gson gson = new Gson();
 
-    //============================//============================ Drawing Windows
-
-    private IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow;
-    private IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow;
-    private IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow;
-
     //============================//============================//============================
     private void init() throws Exception {
-
         //============================//============================ Loading Environment from file
         envReader = new FileReader(Config.EnvironmentDataFilePath);
         loadedEnvironmentFromJson = gson.fromJson(envReader, Environment.class);
@@ -98,6 +87,9 @@ public class Simulator {
             Files.copy(sourcePath, targetPath);
 
         }
+
+        intDrawingWindowRunner = new IntDrawingWindowRunner(worlds, simulationConfig);
+
     }
 
     private void reloadEnvironmentFromFile() throws FileNotFoundException {
@@ -114,17 +106,6 @@ public class Simulator {
         System.out.println("> Environment reloaded from file. simulationTimer");
     }
 
-    public void updateWindows() {
-        if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
-            intTravelStatsLinearDrawingWindow.repaint();
-        }
-        if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
-            intTrustAnalysisLinearDrawingWindow.repaint();
-        }
-        if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
-            intTrustStatsLinearDrawingWindow.repaint();
-        }
-    }
 
     public void simulate() throws Exception {
 
@@ -135,25 +116,6 @@ public class Simulator {
             return;
         }
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int widthHalf = (int) screenSize.getWidth() / 2;
-        int heightHalf = (int) screenSize.getHeight() / 2;
-
-        //============================ Initializing Diagram Drawing Windows
-        if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
-            intTravelStatsLinearDrawingWindow = new IntTravelStatsLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intTravelStatsLinearDrawingWindow, widthHalf, heightHalf);
-        }
-
-        if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
-            intTrustAnalysisLinearDrawingWindow = new IntTrustAnalysisLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intTrustAnalysisLinearDrawingWindow, widthHalf, heightHalf);
-        }
-
-        if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
-            intTrustStatsLinearDrawingWindow = new IntTrustStatsLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intTrustStatsLinearDrawingWindow, widthHalf, heightHalf);
-        }
 
         for (World world : worlds) {
             if (Globals.SIMULATION_TIMER > 0) {
@@ -173,9 +135,9 @@ public class Simulator {
         Globals.SIMULATION_TIMER--;
         if (Config.STATISTICS_IS_GENERATE) {
             new ImageBuilder().generateSimulationImages(
-                    intTravelStatsLinearDrawingWindow,
-                    intTrustAnalysisLinearDrawingWindow,
-                    intTrustStatsLinearDrawingWindow
+                    intDrawingWindowRunner.getIntTravelStatsLinearDrawingWindow(),
+                    intDrawingWindowRunner.getIntTrustAnalysisLinearDrawingWindow(),
+                    intDrawingWindowRunner.getIntTrustStatsLinearDrawingWindow()
             );
         }
         //============================//============================ Closing statistics file
@@ -184,21 +146,6 @@ public class Simulator {
             Globals.statsTrustGenerator.close();
         }
 
-        while (true) {
-            for (World world : worlds) {
-                world.updateWindows();
-            }
-        }
     }
 
-    private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf) {
-        drawingWindow.setDoubleBuffered(true);
-        JFrame statsFrame = new JFrame();
-
-        statsFrame.getContentPane().add(drawingWindow);
-        statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
-        statsFrame.setVisible(true);
-        statsFrame.setLocation(0, heightHalf);
-        statsFrame.setTitle(drawingWindow.getHeaderTitle());
-    }
 }

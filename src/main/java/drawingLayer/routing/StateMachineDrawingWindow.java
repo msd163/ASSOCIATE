@@ -1,10 +1,14 @@
 package drawingLayer.routing;
 
+import _type.TtDiagramThemeMode;
 import drawingLayer.DrawingWindow;
+import jdk.nashorn.internal.objects.Global;
 import societyLayer.agentSubLayer.*;
 import societyLayer.environmentSubLayer.Environment;
 import societyLayer.environmentSubLayer.StateX;
 import societyLayer.environmentSubLayer.TransitionX;
+import utils.Config;
+import utils.Globals;
 import utils.Point;
 import utils.RectangleX;
 
@@ -60,88 +64,95 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseNotice(g);
 
-        g.setColor(Color.YELLOW);
-
-        //============================ Title
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-
-        //============================//============================ Translate for panning and scaling
-
-        g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
-        g.scale(scale, scale);
-
-        //============================//============================ Drawing Transition
-        _colorIndex = 0;
-
-        for (TransitionX trans : environment.getTransitions()) {
-
-            _colorIndex++;
-            if (_colorIndex >= colors.length) {
-                _colorIndex = 0;
-            }
-
-            if (trans.isDrawIsActive()) {
-                g.setColor(colors[_colorIndex]);
-                g.setStroke(new BasicStroke(10));
-                trans.setDrawIsActive(false);
-            } else {
-                g.setColor(Color.DARK_GRAY);
-                g.setStroke(new BasicStroke(2));
-            }
-
-            g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
-                    trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
-                    trans.getDrawAngStart(), trans.getDrawAngExtend(),                          // angle start, extent
-                    Arc2D.OPEN));
-
-            g.setStroke(new BasicStroke(6));
-            g.setColor(colors[_colorIndex]);
-
-            g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
-                    trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
-                    trans.getDrawAngStart(), trans.getDrawAngExtend() > 0 ? trans.getDrawSourceArrowSize() : -trans.getDrawSourceArrowSize(),                          // angle start, extent
-                    Arc2D.OPEN));
-//            g.drawRoundRect((int) trans.getDrawX(), (int) trans.getDrawY(), 20, 20, 4, 4);
-            g.setStroke(new BasicStroke(1));
-
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+            return;
         }
 
-        //============================//============================ Drawing states and their agents
-        try {
-            for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
-                StateX stateX = environment.getState(stateIndex);
+        if (showChartsFlag[0]) {
 
-                if (stateX.isIsPitfall()) {
-                    g.setColor(Color.RED);
-                } else {
-                    g.setColor(Color.GREEN);
+            g.setColor(Color.YELLOW);
+
+            //============================ Title
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+
+            //============================//============================ Translate for panning and scaling
+
+            g.translate(pnOffset.x + scaleOffset.x, pnOffset.y + scaleOffset.y);
+            g.scale(scale, scale);
+
+            //============================//============================ Drawing Transition
+            _colorIndex = 0;
+
+            for (TransitionX trans : environment.getTransitions()) {
+
+                _colorIndex++;
+                if (_colorIndex >= colors.length) {
+                    _colorIndex = 0;
                 }
-                RectangleX rec = stateX.getBoundedRectangle();
 
-                //-- Drawing state and its ID
-                g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
-                g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
+                if (trans.isDrawIsActive()) {
+                    g.setColor(colors[_colorIndex]);
+                    g.setStroke(new BasicStroke(10));
+                    trans.setDrawIsActive(false);
+                } else {
+                    g.setColor(Config.THEME_MODE== TtDiagramThemeMode.Dark ? Globals.Color$.darkGray2: Globals.Color$.darkGray);
+                    g.setStroke(new BasicStroke(2));
+                }
 
-                //-- Drawing agents of state
-                if (!stateX.getAgents().isEmpty()) {
-                    index = 0;
-                    for (Agent agent : stateX.getAgents()) {
-                        drawAgent(agent, g, index++);
+                g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
+                        trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
+                        trans.getDrawAngStart(), trans.getDrawAngExtend(),                          // angle start, extent
+                        Arc2D.OPEN));
+
+                g.setStroke(new BasicStroke(6));
+                g.setColor(colors[_colorIndex]);
+
+                g.draw(new Arc2D.Float(trans.getDrawX(), trans.getDrawY(),                          // box upper left
+                        trans.getDrawWidthAndHeight(), trans.getDrawWidthAndHeight(),               // box width and height
+                        trans.getDrawAngStart(), trans.getDrawAngExtend() > 0 ? trans.getDrawSourceArrowSize() : -trans.getDrawSourceArrowSize(),                          // angle start, extent
+                        Arc2D.OPEN));
+//            g.drawRoundRect((int) trans.getDrawX(), (int) trans.getDrawY(), 20, 20, 4, 4);
+                g.setStroke(new BasicStroke(1));
+
+            }
+
+            //============================//============================ Drawing states and their agents
+            try {
+                for (int stateIndex = 0, cnt = environment.getStateCount(); stateIndex < cnt; stateIndex++) {
+                    StateX stateX = environment.getState(stateIndex);
+
+                    if (stateX.isIsPitfall()) {
+                        g.setColor(Color.RED);
+                    } else {
+                        g.setColor(Color.GREEN);
+                    }
+                    RectangleX rec = stateX.getBoundedRectangle();
+
+                    //-- Drawing state and its ID
+                    g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
+                    g.drawString("(" + stateX.getId() + ")", rec.x, rec.y - 20);
+
+                    //-- Drawing agents of state
+                    if (!stateX.getAgents().isEmpty()) {
+                        index = 0;
+                        for (Agent agent : stateX.getAgents()) {
+                            drawAgent(agent, g, index++);
+                        }
                     }
                 }
-            }
-        } catch (Exception e) {
-        }
-
-        //============================//============================ Creating Blue state for the state of agent that are traceable.
-        for (Agent agent : world.getAgents()) {
-
-            if (agent.isSimConfigShowTargetState()) {
-                RectangleX rec = agent.getCurrentTarget().getBoundedRectangle();
-                g.setColor(Color.BLUE);
-                g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
+            } catch (Exception e) {
             }
 
+            //============================//============================ Creating Blue state for the state of agent that are traceable.
+            for (Agent agent : world.getAgents()) {
+
+                if (agent.isSimConfigShowTargetState()) {
+                    RectangleX rec = agent.getCurrentTarget().getBoundedRectangle();
+                    g.setColor(Color.BLUE);
+                    g.draw(new Rectangle.Float(rec.x, rec.y, rec.with, rec.height));
+                }
+
+            }
         }
     }
 

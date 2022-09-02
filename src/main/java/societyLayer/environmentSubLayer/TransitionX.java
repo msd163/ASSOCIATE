@@ -90,7 +90,7 @@ public class TransitionX {
                 _arcCenX = (fromX + toX) / 2;
                 _arcCenY = fromY + ((fromX > toX ? -1 : 1) * 100);
             } else {
-                // moving edges from center of stages to borders : Y axis
+                // moving edges from center of stages to border : Y axis
                 if (fromY > toY) {
                     fromY -= from.getWidth() / 2;
                     toY += to.getWidth() / 2;
@@ -98,7 +98,7 @@ public class TransitionX {
                     fromY += from.getWidth() / 2;
                     toY -= to.getWidth() / 2;
                 }
-                // moving edges from center of stages to borders : Y axis
+                // moving edges from center of stages to border : Y axis
                 if (fromX > toX) {
                     fromX -= from.getWidth() / 2;
                     toX += to.getWidth() / 2;
