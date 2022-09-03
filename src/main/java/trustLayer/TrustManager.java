@@ -2,11 +2,11 @@ package trustLayer;
 
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
-import societyLayer.environmentSubLayer.StateX;
-import societyLayer.environmentSubLayer.TravelHistory;
 import simulateLayer.SimulationConfigItem;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.WatchedAgent;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.environmentSubLayer.TravelHistory;
 import trustLayer.data.*;
 import utils.Globals;
 import utils.OutLog____;
@@ -180,13 +180,23 @@ public class TrustManager {
         float trustValue = 0.0f;
         // if (1 == 1) {
         int index = 0;
+        if (sntrs.size() > 4) {
+            System.out.println("\n| " + requester.getId() + " > " + responder.getId() + " |------------------------------------");
+        }
         for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
             Float t = sntrs.get(i);
             if (t == 0.0f) {
                 break;
             }
-            trustValue += formulateTrustValue(index, t);
-            // System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
+            double v = formulateTrustValue(index, t);
+            trustValue += v;
+            if (tsSize > 4) {
+                System.out.print("\n[" + (int) (v * 100) + "|" + (int) (trustValue * 100) + "]");
+                if ((v >= 0) ^ (trustValue < 0)) {
+                } else {
+                    System.out.print("***");
+                }
+            }
             index++;
         }
         //} else {

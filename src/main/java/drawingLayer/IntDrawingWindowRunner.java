@@ -64,7 +64,7 @@ public class IntDrawingWindowRunner extends Thread {
         statsFrame.setTitle(drawingWindow.getHeaderTitle());
     }
 
-    public void initDrawingWindows(TrustMatrix matrixGenerator) {
+    public void initDrawingWindows() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int widthHalf = (int) screenSize.getWidth() / 2;
         int heightHalf = (int) screenSize.getHeight() / 2;

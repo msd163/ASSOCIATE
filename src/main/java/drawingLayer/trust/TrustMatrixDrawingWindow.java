@@ -28,9 +28,9 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
         pnOffsetOld.x = pnOffset.x;
         pnOffsetOld.y = pnOffset.y;
         scaleOffset = new Point(0, 0);
-        _hs = 2;
+       /* _hs = 2;
         _vs = 2;
-        scale = 7f;
+        scale = 7f;*/
     }
 
     public TrustMatrixDrawingWindow(TrustMatrix matrixGenerator, World world) {

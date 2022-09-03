@@ -63,7 +63,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_4, j, 20, -1);
                         g.drawString("Mischief", 220, dynamicHeight);
                         //============================
                     }
@@ -143,7 +143,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimeAvgTrustToMischief()), Globals.Color$.$curve_3, j, i);
+                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimeAvgTrustToMischief()), Globals.Color$.$curve_4, j, i);
                         if (prevPoints[0].y >= 0) {
                             drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimeAvgTrustToMischief());
                         }

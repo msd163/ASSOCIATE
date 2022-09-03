@@ -12,14 +12,14 @@ public class Config {
     public static final String TrustConfigFilePath = ProjectPath.instance().simulationTrustConfigFile();
     public static final String TrustConfigFileName = TrustConfigFilePath.substring(TrustConfigFilePath.lastIndexOf("/"));
 
-    public static final String EnvironmentDataFilePath = ProjectPath.instance().societyData();
+    public static final String EnvironmentDataFilePath = ProjectPath.instance().societyData(30);
     public static final String EnvironmentDataFileName = EnvironmentDataFilePath.substring(EnvironmentDataFilePath.lastIndexOf("/"));
 
 
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 4000;       // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 400;       // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 0;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 50;
@@ -34,7 +34,7 @@ public class Config {
 
 
     //============================ OPTIMIZATION
-    public static boolean OPTIMIZE_MEMORY /*                 */ = true;      // destroying old data (for finished worlds) such as TrustMatrix
+    public static boolean OPTIMIZE_MEMORY /*                 */ = false;      // destroying old data (for finished worlds) such as TrustMatrix
 
     //============================ TURBO
     public static boolean TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE /* */ = true;    // For fast processing- processing DaGra network for the first time and copying it to other networks
@@ -49,24 +49,24 @@ public class Config {
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
 
-    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = true;
-    public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = true;
+    public static final boolean DRAWING_SHOW_experienceBarDrawingWindow /*          */ = false;
+    public static final boolean DRAWING_SHOW_indirectExperienceBarDrawingWindow /*  */ = false;
 
-    public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = true;
-    public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = true;
+    public static final boolean DRAWING_SHOW_observationBarDrawingWindow /*         */ = false;
+    public static final boolean DRAWING_SHOW_indirectObservationBarDrawingWindow /* */ = false;
 
-    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = true;
+    public static final boolean DRAWING_SHOW_recommendationBarDrawingWindow /*      */ = false;
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 
-    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = false;
-    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = false;
-    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = false;
+    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
+    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;

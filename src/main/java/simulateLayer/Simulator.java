@@ -89,6 +89,8 @@ public class Simulator {
         }
 
         intDrawingWindowRunner = new IntDrawingWindowRunner(worlds, simulationConfig);
+        intDrawingWindowRunner.initDrawingWindows();
+        intDrawingWindowRunner.start();
 
     }
 
