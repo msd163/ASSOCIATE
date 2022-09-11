@@ -15,7 +15,7 @@ public class TrustStatsLinearDrawingWindow extends DrawingWindow {
     public TrustStatsLinearDrawingWindow(World world) {
         super();
         this.world = world;
-        this.prevPoints = new utils.Point[4];
+        this.prevPoints = new Point[4];
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }

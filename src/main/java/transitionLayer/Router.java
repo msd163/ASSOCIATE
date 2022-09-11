@@ -207,8 +207,7 @@ public class Router {
         //============================
         agent.clearNextSteps();
         //============================ (1) If the agent can watch the goalState in its target.
-       //todo: have to be uncommented
-        /* if (watchedStates != null) {
+        if (watchedStates != null) {
             for (WatchedState ws : watchedStates) {
                 if (ws.getStateX().getId() == goalState.getId()) {
                     agent.getNextSteps().addAll(ws.getPath());
@@ -216,7 +215,7 @@ public class Router {
                     return;
                 }
             }
-        }*/
+        }
 
         //============================//============================ WatchedAgents
         List<WatchedAgent> watchedAgents = agent.getWatchedAgents();
@@ -238,6 +237,10 @@ public class Router {
                 if (agent.getId() == routingHelp.getHelperAgent().getId()) {
                     OutLog____.pl(TtOutLogMethodSection.Router, TtOutLogStatus.ERROR, "Requester agent is equals to helper: " + agent.getId());
                     continue;
+                }
+
+                if (routingHelp.getHelperAgent().getBehavior().getHasHonestState()) {
+                    world.getWdStatistics()[Globals.WORLD_TIMER].add_HonestCollaboration();
                 }
 
                 // The SafeMode method needs only one helper. All helper are honest

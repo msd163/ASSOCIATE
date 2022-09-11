@@ -1,11 +1,8 @@
 package drawingLayer;
 
-import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
-import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
-import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
+import drawingLayer.integrated.*;
 import simulateLayer.SimulationConfig;
 import societyLayer.agentSubLayer.World;
-import trustLayer.TrustMatrix;
 import utils.Config;
 
 import javax.swing.*;
@@ -20,6 +17,9 @@ public class IntDrawingWindowRunner extends Thread {
     private IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow;
     private IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow;
     private IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow;
+    private IntEffectiveFlucStatsLinearDrawingWindow intEffectiveFlucStatsLinearDrawingWindow;
+    private IntRocPointDrawingWindow intRocPointDrawingWindow;
+    private IntCollaborationRateLineDrawingWindow intCollaborationRateLineDrawingWindow;
 
 
     public IntDrawingWindowRunner(World[] worlds, SimulationConfig simulationConfig) {
@@ -39,6 +39,15 @@ public class IntDrawingWindowRunner extends Thread {
             }
             if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
                 intTrustStatsLinearDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_IntEffectiveFlucLinearDrawingWindow) {
+                intEffectiveFlucStatsLinearDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
+                intRocPointDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_CollaborationLinearDrawingWindow) {
+                intCollaborationRateLineDrawingWindow.repaint();
             }
 
            /* try {
@@ -85,6 +94,21 @@ public class IntDrawingWindowRunner extends Thread {
             initDrawingWindow(intTrustStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
+        if (Config.INT_DRAWING_SHOW_IntEffectiveFlucLinearDrawingWindow) {
+            intEffectiveFlucStatsLinearDrawingWindow = new IntEffectiveFlucStatsLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intEffectiveFlucStatsLinearDrawingWindow, widthHalf, heightHalf);
+        }
+
+        if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
+            intRocPointDrawingWindow = new IntRocPointDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intRocPointDrawingWindow, widthHalf, heightHalf);
+        }
+
+        if (Config.INT_DRAWING_SHOW_CollaborationLinearDrawingWindow) {
+            intCollaborationRateLineDrawingWindow = new IntCollaborationRateLineDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intCollaborationRateLineDrawingWindow, widthHalf, heightHalf);
+        }
+
     }
 
 
@@ -101,5 +125,13 @@ public class IntDrawingWindowRunner extends Thread {
 
     public IntTrustStatsLinearDrawingWindow getIntTrustStatsLinearDrawingWindow() {
         return intTrustStatsLinearDrawingWindow;
+    }
+
+    public IntEffectiveFlucStatsLinearDrawingWindow getIntEffectiveFlucStatsLinearDrawingWindow() {
+        return intEffectiveFlucStatsLinearDrawingWindow;
+    }
+
+    public IntRocPointDrawingWindow getIntRocPointDrawingWindow() {
+        return intRocPointDrawingWindow;
     }
 }

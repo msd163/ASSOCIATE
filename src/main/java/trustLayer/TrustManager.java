@@ -3,6 +3,7 @@ package trustLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import simulateLayer.SimulationConfigItem;
+import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.WatchedAgent;
 import societyLayer.environmentSubLayer.StateX;
@@ -18,9 +19,11 @@ public class TrustManager {
 
 
     private SimulationConfigItem simulationConfigItem;
+    private WorldStatistics[] wdStatistics;
 
-    public TrustManager(SimulationConfigItem simConfig) {
+    public TrustManager(SimulationConfigItem simConfig, WorldStatistics[] wdStatistics) {
         this.simulationConfigItem = simConfig;
+        this.wdStatistics = wdStatistics;
     }
 
     //============================//============================//============================ Certification Verifier
@@ -178,26 +181,45 @@ public class TrustManager {
          * */
 
         float trustValue = 0.0f;
-        // if (1 == 1) {
-        int index = 0;
-        if (sntrs.size() > 4) {
-            System.out.println("\n| " + requester.getId() + " > " + responder.getId() + " |------------------------------------");
-        }
+
+        double oldTrustValue = 0;
+        double oldScore = 0;
+        long fluctuationCount = 0;
+        boolean isOccurs = false;
         for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
             Float t = sntrs.get(i);
             if (t == 0.0f) {
                 break;
             }
-            double v = formulateTrustValue(index, t);
+
+            double v = formulateTrustValue(i, t);
+            oldTrustValue = trustValue;
             trustValue += v;
-            if (tsSize > 4) {
-                System.out.print("\n[" + t + " | " + (int) (v * 100000) + " | " + (int) (trustValue * 100000) + "]");
-                if ((v >= 0) ^ (trustValue < 0)) {
-                } else {
-                    System.out.print("***");
+
+
+            if (tsSize > 1) {
+
+                if (oldScore * t < 0) {
+                    fluctuationCount++;
+                    wdStatistics[Globals.WORLD_TIMER].add_AllFluctuation();
+
                 }
+
+
+                if ((oldTrustValue * trustValue < 0)) {
+                    if (!isOccurs) {
+                        wdStatistics[Globals.WORLD_TIMER].add_EffectiveFluctuationResistanceNumber(i);
+                        isOccurs = true;
+                    }
+                }
+
             }
-            index++;
+            oldScore = t;
+
+
+            if (fluctuationCount > 3) {
+                wdStatistics[Globals.WORLD_TIMER].add_AllFluctuationRound();
+            }
         }
         //} else {
            /* float tempT = 0;

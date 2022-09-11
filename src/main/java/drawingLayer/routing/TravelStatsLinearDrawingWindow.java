@@ -15,7 +15,7 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
     public TravelStatsLinearDrawingWindow(World world) {
         super();
         this.world = world;
-        this.prevPoints = new utils.Point[6];
+        this.prevPoints = new Point[6];
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }

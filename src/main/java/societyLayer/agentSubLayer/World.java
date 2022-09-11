@@ -67,7 +67,9 @@ public class World {
         traceAgentIds = new int[]{};
 
         //============================//============================
-        trustManager = new TrustManager(simulationConfigItem);
+        wdStatistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
+
+        trustManager = new TrustManager(simulationConfigItem, wdStatistics);
 
         router = new Router(this);
         //============================ Setting agents count
@@ -141,15 +143,14 @@ public class World {
         // Resetting the timer of the world.
         Globals.WORLD_TIMER = 0;
 
-        wdStatistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
         for (i = 0; i < wdStatistics.length; i++) {
             if (i == 0) {
-                wdStatistics[i] = new WorldStatistics(null, agentsCount, null);
+                wdStatistics[i] = new WorldStatistics(null, agentsCount, null, environment);
             } else {
                 if (i >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
-                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i - Config.STATISTICS_AVERAGE_TIME_WINDOW]);
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i - Config.STATISTICS_AVERAGE_TIME_WINDOW], environment);
                 } else {
-                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, null);
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, null, environment);
                 }
             }
         }

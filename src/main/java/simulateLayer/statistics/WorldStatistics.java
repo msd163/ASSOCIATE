@@ -1,15 +1,25 @@
 package simulateLayer.statistics;
 
+import societyLayer.environmentSubLayer.Environment;
 import utils.Config;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class WorldStatistics {
 
+    private int[] honestCollaboration;
+    private int currentHonestCollaboration;
+
+    private int negativePop;
+
+    private int positivePop;
+
 
     private WorldStatistics prevStats;      // previous statistics for calculating 'allTrustToHonest' and 'allTrustToDishonest'
 
+    private Environment environment;
     private int worldTime;                  // time of world in this statistics
     private int episode;                    // episode of world in this statistics
     //============================
@@ -51,6 +61,11 @@ public class WorldStatistics {
     private int allTrueNegativeTrust;
 
     //============================
+    private long allFluctuation;
+
+    private long allFluctuationRound;
+    private int[] allEffectiveFluctuationResistanceNumber;
+    //============================
     private Map<Integer, AgentStatistics> agentStatistics;
 
 
@@ -62,6 +77,10 @@ public class WorldStatistics {
     //--  (Number of true positive assessment)/(Number of all positive assessment)
     //--  True Positive rate
     private float trustSensitivity;
+    private float trustTpRate;
+    private float trustTnRate;
+    private float trustFpRate;
+    private float trustFnRate;
     private float allTrustSensitivity;
 
     //--  Specificity relates to the test's ability to correctly reject healthy patients without a condition. Specificity of a test is the proportion of who truly do not have the condition who test negative for the condition.
@@ -80,7 +99,8 @@ public class WorldStatistics {
     //============================//============================
 
 
-    public WorldStatistics(WorldStatistics prevStats, int agentCount, WorldStatistics xPrevStats) {
+    public WorldStatistics(WorldStatistics prevStats, int agentCount, WorldStatistics xPrevStats, Environment environment) {
+        this.environment = environment;
         this.prevStats = prevStats;
         this.xPrevStats = xPrevStats;
         worldTime
@@ -103,7 +123,19 @@ public class WorldStatistics {
                 = ittTrueNegativeTrust
                 = 0;
 
+        allFluctuation
+                = allFluctuationRound
+                = 0;
+
+        allEffectiveFluctuationResistanceNumber = new int[20];
+        Arrays.fill(allEffectiveFluctuationResistanceNumber, 0);
+
         agentStatistics = new HashMap<>(agentCount);
+        honestCollaboration = new int[Config.STATISTICS_AVERAGE_TIME_WINDOW];
+        for (int i = 0; i < honestCollaboration.length; i++) {
+            honestCollaboration[i] = 0;
+        }
+        currentHonestCollaboration = 0;
 
     }
 
@@ -122,7 +154,16 @@ public class WorldStatistics {
             allFalseNegativeTrust = prevStats.getAllFalseNegativeTrust();
             allTruePositiveTrust = prevStats.getAllTruePositiveTrust();
             allTrueNegativeTrust = prevStats.getAllTrueNegativeTrust();
-
+            allFluctuation = prevStats.getAllFluctuation();
+            allFluctuationRound = prevStats.getAllFluctuationRound();
+            for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
+                allEffectiveFluctuationResistanceNumber[i] = prevStats.getAllEffectiveFluctuationResistanceNumber()[i];
+            }
+            for (int i = 0; i < Config.STATISTICS_AVERAGE_TIME_WINDOW; i++) {
+                honestCollaboration[i] = prevStats.getHonestCollaboration(i);
+            }
+            currentHonestCollaboration = prevStats.getCurrentHonestCollaboration();
+            resetCollaboration();
         } else {
 
             allTrustToAdversary
@@ -138,7 +179,17 @@ public class WorldStatistics {
                     = allTrueNegativeTrust
                     = 0;
 
+            allFluctuation
+                    = allFluctuationRound
+                    = 0;
+            allEffectiveFluctuationResistanceNumber = new int[20];
+            Arrays.fill(allEffectiveFluctuationResistanceNumber, 0);
+
         }
+    }
+
+    private int getHonestCollaboration(int i) {
+        return honestCollaboration[i];
     }
 
     public void add_All_AgentsInTarget() {
@@ -235,10 +286,32 @@ public class WorldStatistics {
         allTrueNegativeTrust++;
     }
 
+
+    public void add_AllFluctuation() {
+        allFluctuation++;
+    }
+
+    public void add_AllFluctuationRound() {
+        allFluctuationRound++;
+    }
+
+    public void add_EffectiveFluctuationResistanceNumber(int N) {
+        if (N < 20) {
+            allEffectiveFluctuationResistanceNumber[N]++;
+        }
+    }
+
     public void calcTrustParams() {
+
+        int pAll = positivePop;
+
+        int nAll = negativePop;
+
+
         int tp_fn = ittTruePositiveTrust + ittFalseNegativeTrust;
         int tn_fp = ittTrueNegativeTrust + ittFalsePositiveTrust;
-        int all_ = ittTruePositiveTrust + ittTrueNegativeTrust + ittFalsePositiveTrust + ittFalseNegativeTrust;
+        int all_1 = ittTruePositiveTrust + ittTrueNegativeTrust + ittFalsePositiveTrust + ittFalseNegativeTrust;
+        int all_ = nAll + pAll;//ittTruePositiveTrust + ittTrueNegativeTrust + ittFalsePositiveTrust + ittFalseNegativeTrust;
         trustSensitivity = tp_fn == 0 ? -1 : (float) ittTruePositiveTrust / tp_fn;
         trustSpecificity = tn_fp == 0 ? -1 : (float) ittTrueNegativeTrust / tn_fp;
         trustAccuracy = all_ == 0 ? -1 : (float) (ittTruePositiveTrust + ittTrueNegativeTrust) / all_;
@@ -250,6 +323,13 @@ public class WorldStatistics {
         allTrustSpecificity = tn_fp == 0 ? -1 : (float) allTrueNegativeTrust / tn_fp;
         allTrustAccuracy = all_ == 0 ? -1 : (float) (allTruePositiveTrust + allTrueNegativeTrust) / all_;
 
+        //double tpRate = (double) ittTruePositiveTrust / pAll;
+        //double tnRate = (double) ittTrueNegativeTrust / nAll;
+
+        trustTpRate = pAll == 0 ? -1 : (float) ittTruePositiveTrust / pAll;
+        trustTnRate = nAll == 0 ? -1 : (float) ittTrueNegativeTrust / nAll;
+        trustFpRate = pAll == 0 ? -1 : (float) ittFalsePositiveTrust / pAll;
+        trustFnRate = nAll == 0 ? -1 : (float) ittFalseNegativeTrust / nAll;
 
     }
 
@@ -461,6 +541,38 @@ public class WorldStatistics {
         return xPrevStats;
     }
 
+    public float getTrustTpRate() {
+        return trustTpRate;
+    }
+
+    public float getTrustTnRate() {
+        return trustTnRate;
+    }
+
+    public int getTrustTpRate100I() {
+        return (int) (trustTpRate * 100);
+    }
+
+    public int getTrustTnRate100I() {
+        return (int) (trustTnRate * 100);
+    }
+
+    public float getTrustFpRate() {
+        return trustFpRate;
+    }
+
+    public float getTrustFnRate() {
+        return trustFnRate;
+    }
+
+    public int getTrustFpRate100I() {
+        return (int) (trustFpRate * 100);
+    }
+
+    public int getTrustFnRate100I() {
+        return (int) (trustFnRate * 100);
+    }
+
     //============================//============================//============================ Timed Average
 
     public int getTimedAvgAgentTarget() {
@@ -560,5 +672,114 @@ public class WorldStatistics {
 
     public int getAllRandomTravelToNeighbor() {
         return allRandomTravelToNeighbor;
+    }
+
+    public long getAllFluctuation() {
+        return allFluctuation;
+    }
+
+    public long getAllFluctuationRound() {
+        return allFluctuationRound;
+    }
+
+
+    public int[] getAllEffectiveFluctuationResistanceNumber() {
+        return allEffectiveFluctuationResistanceNumber;
+    }
+
+    int[] currentEffectiveFluctuationResistanceNumber;
+    int[] currentAvgEffectiveFluctuationResistanceNumber;
+
+    public int[] getEffectiveFluctuationResistanceNumber() {
+
+        if (prevStats == null) {
+            return allEffectiveFluctuationResistanceNumber;
+        }
+
+        if (currentEffectiveFluctuationResistanceNumber == null ||
+                currentEffectiveFluctuationResistanceNumber.length != allEffectiveFluctuationResistanceNumber.length) {
+            currentEffectiveFluctuationResistanceNumber = new int[allEffectiveFluctuationResistanceNumber.length];
+        }
+
+
+        for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
+            currentEffectiveFluctuationResistanceNumber[i] = allEffectiveFluctuationResistanceNumber[i] - prevStats.getAllEffectiveFluctuationResistanceNumber()[i];
+        }
+        return currentEffectiveFluctuationResistanceNumber;
+    }
+
+
+    public int[] getAvgEffectiveFluctuationResistanceNumber() {
+
+        if (currentAvgEffectiveFluctuationResistanceNumber == null ||
+                currentAvgEffectiveFluctuationResistanceNumber.length != allEffectiveFluctuationResistanceNumber.length) {
+            currentAvgEffectiveFluctuationResistanceNumber = new int[allEffectiveFluctuationResistanceNumber.length];
+        }
+
+        if (xPrevStats == null) {
+            for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
+                currentAvgEffectiveFluctuationResistanceNumber[i] = allEffectiveFluctuationResistanceNumber[i] /
+                        (worldTime == 0 ? 1 : worldTime);
+            }
+        } else {
+            for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
+                currentAvgEffectiveFluctuationResistanceNumber[i] =
+                        (allEffectiveFluctuationResistanceNumber[i] - xPrevStats.allEffectiveFluctuationResistanceNumber[i])
+                                / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            }
+        }
+        return currentAvgEffectiveFluctuationResistanceNumber;
+    }
+
+    public void setAllEffectiveFluctuationResistanceNumber(int[] allEffectiveFluctuationResistanceNumber) {
+        this.allEffectiveFluctuationResistanceNumber = allEffectiveFluctuationResistanceNumber;
+    }
+
+    public void add_NegativePop() {
+        positivePop++;
+    }
+
+    public void add_HonestCollaboration() {
+        honestCollaboration[currentHonestCollaboration]++;
+    }
+
+    public void add_PositivePop() {
+        positivePop++;
+    }
+
+    public void resetPopulation() {
+        negativePop = 0;
+        positivePop = 0;
+
+    }
+
+    public void resetCollaboration() {
+        currentHonestCollaboration++;
+        if(currentHonestCollaboration>=Config.STATISTICS_AVERAGE_TIME_WINDOW)
+        {
+            currentHonestCollaboration=0;
+        }
+        honestCollaboration[currentHonestCollaboration] = 0;
+    }
+
+    public int getHonestCollaboration() {
+        return honestCollaboration[currentHonestCollaboration];
+    }
+
+    public int getAvgHonestCollaboration() {
+
+        if (worldTime < Config.STATISTICS_AVERAGE_TIME_WINDOW) {
+            return 0;
+        }
+        int sum = 0;
+        for (int i = 0; i < Config.STATISTICS_AVERAGE_TIME_WINDOW; i++) {
+            sum += honestCollaboration[i];
+        }
+
+        return sum / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+    }
+
+    public int getCurrentHonestCollaboration() {
+        return currentHonestCollaboration;
     }
 }

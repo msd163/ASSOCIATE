@@ -12,21 +12,21 @@ public class Config {
     public static final String TrustConfigFilePath = ProjectPath.instance().simulationTrustConfigFile();
     public static final String TrustConfigFileName = TrustConfigFilePath.substring(TrustConfigFilePath.lastIndexOf("/"));
 
-    public static final String EnvironmentDataFilePath = ProjectPath.instance().societyData(30);
+    public static final String EnvironmentDataFilePath = ProjectPath.instance().societyData();
     public static final String EnvironmentDataFileName = EnvironmentDataFilePath.substring(EnvironmentDataFilePath.lastIndexOf("/"));
 
 
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 400;       // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 100;       // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 0;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 50;
 
     public static int STATE_TILE_WIDTH = 30;
 
-    public static int STATISTICS_AVERAGE_TIME_WINDOW = 50;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW = 15;
 
 
     public static final int ROUTING_STAY_IN_TARGET_TIME /*      */ = 1;
@@ -41,7 +41,7 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Light;
+    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Dark;
 
     //============================ Drawing Windows
 
@@ -49,7 +49,7 @@ public class Config {
     public static final boolean DRAWING_SHOW_travelStatsLinearDrawingWindow /*      */ = false;
     public static final boolean DRAWING_SHOW_travelHistoryBarDrawingWindow /*       */ = false;
 
-    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = true;
+    public static final boolean DRAWING_SHOW_trustMatrixDrawingWindow /*            */ = false;
     public static final boolean DRAWING_SHOW_trustStatsLinearDrawingWindow/*        */ = false;
     public static final boolean DRAWING_SHOW_trustRecogniseLinearDrawingWindow /*   */ = false;
     public static final boolean DRAWING_SHOW_trustAnalysisLinearDrawingWindow/*     */ = false;
@@ -64,9 +64,12 @@ public class Config {
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 
-    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
-    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
-    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = false;
+    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = false;
+    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = false;
+    public static final boolean INT_DRAWING_SHOW_IntEffectiveFlucLinearDrawingWindow /*         */ = true;
+    public static final boolean INT_DRAWING_SHOW_RocPointDrawingWindow /*                       */ = true;
+    public static final boolean INT_DRAWING_SHOW_CollaborationLinearDrawingWindow /*             */ = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;

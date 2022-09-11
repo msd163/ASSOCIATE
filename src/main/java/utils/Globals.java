@@ -38,9 +38,11 @@ public class Globals {
         public static Color magenta = new Color(252, 72, 248);
         public static Color yellow = new Color(247, 255, 68);
 
+
         public static Color lightGreen = new Color(187, 255, 141);
         public static Color lightRed = new Color(255, 108, 108);
         public static Color lightRed1 = new Color(236, 168, 162);
+        public static Color lightBlue = new Color(132, 237, 255);
         public static Color lightGray = new Color(200, 200, 200);
         public static Color lightGray1 = new Color(220, 220, 220);
         public static Color lightGray2 = new Color(235, 235, 235);
@@ -61,39 +63,41 @@ public class Globals {
 
         public static Color orange = new Color(255, 127, 30);
         public static Color lightOrange = new Color(255, 173, 108);
+        public static Color[] arr = {green, white, gray, red, lightBlue, magenta, yellow, lightGreen, lightRed1, orange,
+                lightMagenta, darkGreen, darkGray, darkGreen, darkRed, darkMagenta, lightYellow, lightGray1, lightRed, lightOrange};
 
         public static Color getLight(TtBehaviorState state) {
-           if(Config.THEME_MODE==TtDiagramThemeMode.Dark){
-               switch (state) {
-                   case Honest:
-                       return lightGreen;
-                   case Adversary:
-                       return lightRed1;
-                   case Mischief:
-                       return lightGray1;
-                   case Hypocrite:
-                       return lightMagenta;
-                   default:
-                       return lightYellow;
-               }
-           }else{
-               switch (state) {
-                   case Honest:
-                       return green;
-                   case Adversary:
-                       return red;
-                   case Mischief:
-                       return gray;
-                   case Hypocrite:
-                       return magenta;
-                   default:
-                       return Color.orange;
-               }
-           }
+            if (Config.THEME_MODE == TtDiagramThemeMode.Dark) {
+                switch (state) {
+                    case Honest:
+                        return lightGreen;
+                    case Adversary:
+                        return lightRed1;
+                    case Mischief:
+                        return lightGray1;
+                    case Hypocrite:
+                        return lightMagenta;
+                    default:
+                        return lightYellow;
+                }
+            } else {
+                switch (state) {
+                    case Honest:
+                        return green;
+                    case Adversary:
+                        return red;
+                    case Mischief:
+                        return gray;
+                    case Hypocrite:
+                        return magenta;
+                    default:
+                        return Color.orange;
+                }
+            }
         }
 
         public static Color getNormal(TtBehaviorState state) {
-            if(Config.THEME_MODE==TtDiagramThemeMode.Dark){
+            if (Config.THEME_MODE == TtDiagramThemeMode.Dark) {
                 switch (state) {
                     case Honest:
                         return green;
@@ -106,7 +110,7 @@ public class Globals {
                     default:
                         return yellow;
                 }
-            }else{
+            } else {
                 switch (state) {
                     case Honest:
                         return darkGreen;
@@ -124,7 +128,7 @@ public class Globals {
 
 
         public static Color getDark(TtBehaviorState state) {
-            if(Config.THEME_MODE==TtDiagramThemeMode.Dark){
+            if (Config.THEME_MODE == TtDiagramThemeMode.Dark) {
                 switch (state) {
                     case Honest:
                         return green;
@@ -137,7 +141,7 @@ public class Globals {
                     default:
                         return yellow;
                 }
-            }else{
+            } else {
                 switch (state) {
                     case Honest:
                         return darkGreen2;

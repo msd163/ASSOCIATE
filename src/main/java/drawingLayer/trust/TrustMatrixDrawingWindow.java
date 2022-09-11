@@ -22,15 +22,15 @@ public class TrustMatrixDrawingWindow extends DrawingWindow {
 
     @Override
     public void resetParams() {
-        pnOffset = new utils.Point(0, 0);
-        pnOffsetOld = new utils.Point(0, 0);
-        pnStartPoint = new utils.Point(0, 0);
+        pnOffset = new Point(0, 0);
+        pnOffsetOld = new Point(0, 0);
+        pnStartPoint = new Point(0, 0);
         pnOffsetOld.x = pnOffset.x;
         pnOffsetOld.y = pnOffset.y;
         scaleOffset = new Point(0, 0);
-       /* _hs = 2;
-        _vs = 2;
-        scale = 7f;*/
+//        _hs = 2;
+//        _vs = 2;
+//        scale = 7f;
     }
 
     public TrustMatrixDrawingWindow(TrustMatrix matrixGenerator, World world) {
