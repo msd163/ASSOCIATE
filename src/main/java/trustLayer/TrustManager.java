@@ -191,7 +191,7 @@ public class TrustManager {
             double v = formulateTrustValue(index, t);
             trustValue += v;
             if (tsSize > 4) {
-                System.out.print("\n[" + (int) (v * 100) + "|" + (int) (trustValue * 100) + "]");
+                System.out.print("\n[" + t + " | " + (int) (v * 100000) + " | " + (int) (trustValue * 100000) + "]");
                 if ((v >= 0) ^ (trustValue < 0)) {
                 } else {
                     System.out.print("***");

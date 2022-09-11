@@ -207,7 +207,8 @@ public class Router {
         //============================
         agent.clearNextSteps();
         //============================ (1) If the agent can watch the goalState in its target.
-        if (watchedStates != null) {
+       //todo: have to be uncommented
+        /* if (watchedStates != null) {
             for (WatchedState ws : watchedStates) {
                 if (ws.getStateX().getId() == goalState.getId()) {
                     agent.getNextSteps().addAll(ws.getPath());
@@ -215,7 +216,7 @@ public class Router {
                     return;
                 }
             }
-        }
+        }*/
 
         //============================//============================ WatchedAgents
         List<WatchedAgent> watchedAgents = agent.getWatchedAgents();

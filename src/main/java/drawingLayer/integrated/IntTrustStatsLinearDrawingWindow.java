@@ -2,11 +2,11 @@ package drawingLayer.integrated;
 
 import drawingLayer.DrawingWindow;
 import simulateLayer.SimulationConfig;
+import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
-import simulateLayer.statistics.WorldStatistics;
 
 import java.awt.*;
 
@@ -39,14 +39,14 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToMischief(), Globals.Color$.$curve_3);
+        printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToMischief(), Globals.Color$.$curve_4);
         printStatsInfo(2, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Honest", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHonest(), Globals.Color$.$curve_1);
         printStatsInfo(3, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Hypocrite", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHypocrite(), Globals.Color$.$curve_3);
         printStatsInfo(4, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Adversary", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToAdversary(), Globals.Color$.$curve_2);
 
         //============================//============================ INFO
         dynamicHeight += 20;
-        if(isShowSimInfo) {
+        if (isShowSimInfo) {
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
 
                 World world = worlds[j];
@@ -95,7 +95,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
-            g.translate(0, (int)(0.1 * _vs * -maxAxisY[0] - 50));
+            g.translate(0, (int) (0.1 * _vs * -maxAxisY[0] - 50));
             drawAxisX(0);
             drawAxisY(0);
 
@@ -126,45 +126,45 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
 
                     if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
                         loAxisX += _hs;
-                        prevPoints[0].y = (int)(0.1 * _vs * stat.getTimeAvgTrustToMischief());
-                        prevPoints[1].y = (int)(0.1 * _vs * stat.getTimeAvgTrustToHonest());
-                        prevPoints[2].y = (int)(0.1 * _vs * stat.getTimeAvgTrustToHypocrite());
-                        prevPoints[3].y = (int)(0.1 * _vs * stat.getTimeAvgTrustToAdversary());
+                        prevPoints[0].y = (int) (0.1 * _vs * stat.getTimeAvgTrustToMischief());
+                        prevPoints[1].y = (int) (0.1 * _vs * stat.getTimeAvgTrustToHonest());
+                        prevPoints[2].y = (int) (0.1 * _vs * stat.getTimeAvgTrustToHypocrite());
+                        prevPoints[3].y = (int) (0.1 * _vs * stat.getTimeAvgTrustToAdversary());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = loAxisX;
 
                     } else {
 
-                        prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getTimeAvgTrustToMischief());
-                        prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getTimeAvgTrustToHonest());
-                        prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getTimeAvgTrustToHypocrite());
-                        prevPoints[3].y = (int)(0.1 * _vs * statistics[i - 1].getTimeAvgTrustToAdversary());
+                        prevPoints[0].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToMischief());
+                        prevPoints[1].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToHonest());
+                        prevPoints[2].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToHypocrite());
+                        prevPoints[3].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToAdversary());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimeAvgTrustToMischief()), Globals.Color$.$curve_4, j, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToMischief()), Globals.Color$.$curve_4, j, i);
                         if (prevPoints[0].y >= 0) {
                             drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimeAvgTrustToMischief());
                         }
                     }
 
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimeAvgTrustToHonest()), Globals.Color$.$curve_1, j, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToHonest()), Globals.Color$.$curve_1, j, i);
                         if (prevPoints[1].y >= 0) {
                             drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimeAvgTrustToHonest());
                         }
                     }
 
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimeAvgTrustToHypocrite()), Globals.Color$.$curve_3, j, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToHypocrite()), Globals.Color$.$curve_3, j, i);
                         if (prevPoints[2].y >= 0) {
                             drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimeAvgTrustToHypocrite());
                         }
                     }
 
                     if (showLineChartsFlag[3]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimeAvgTrustToAdversary()), Globals.Color$.$curve_2, j, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToAdversary()), Globals.Color$.$curve_2, j, i);
                         if (prevPoints[2].y >= 0) {
                             drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimeAvgTrustToAdversary());
                         }
