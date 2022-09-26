@@ -19,14 +19,19 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 100;       // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 313+110;       // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 0;      // Sleep time in each run of world
+    public static int WORLD_SLEEP_MILLISECOND_IN_PAUSE = 1000;      // Sleep time in each run of world
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 2000;      // Sleep time in each run of world
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 200;      // Sleep time in each run of world
 
     public final static int EPISODE_TIMOUT = 50;
 
     public static int STATE_TILE_WIDTH = 30;
 
-    public static int STATISTICS_AVERAGE_TIME_WINDOW = 15;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW = 25;
+
+    public static double STATISTICS_SCALE_UP_Y_AXIS_NUMBER = 4.0; // This is for scaling up result. i.e. 1 is presented in scale of this value
 
 
     public static final int ROUTING_STAY_IN_TARGET_TIME /*      */ = 1;
@@ -34,14 +39,14 @@ public class Config {
 
 
     //============================ OPTIMIZATION
-    public static boolean OPTIMIZE_MEMORY /*                 */ = false;      // destroying old data (for finished worlds) such as TrustMatrix
+    public static boolean OPTIMIZE_MEMORY /*                 */ = true;      // destroying old data (for finished worlds) such as TrustMatrix
 
     //============================ TURBO
     public static boolean TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE /* */ = true;    // For fast processing- processing DaGra network for the first time and copying it to other networks
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Dark;
+    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Light;
 
     //============================ Drawing Windows
 
@@ -64,15 +69,16 @@ public class Config {
 
     //============================ Integrated Drawing Windows in Simulation Rounds
 
-    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = false;
-    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = false;
-    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = false;
+    public static final boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow /*           */ = true;
+    public static final boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow /*         */ = true;
+    public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
     public static final boolean INT_DRAWING_SHOW_IntEffectiveFlucLinearDrawingWindow /*         */ = true;
-    public static final boolean INT_DRAWING_SHOW_RocPointDrawingWindow /*                       */ = true;
+    public static final boolean INT_DRAWING_SHOW_RocPointDrawingWindow /*                       */ = false;
     public static final boolean INT_DRAWING_SHOW_CollaborationLinearDrawingWindow /*             */ = true;
 
     //============================ Statistics
     public static final boolean STATISTICS_IS_GENERATE /*           */ = true;
+    public static final boolean STATISTICS_IS_SAVE_IMAGE /*         */ = false;
     public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
     public static final boolean TRUST_MATRIX_IS_ON /*               */ = true;
 

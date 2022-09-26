@@ -135,7 +135,7 @@ public class Simulator {
         }
 
         Globals.SIMULATION_TIMER--;
-        if (Config.STATISTICS_IS_GENERATE) {
+        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE) {
             new ImageBuilder().generateSimulationImages(
                     intDrawingWindowRunner.getIntTravelStatsLinearDrawingWindow(),
                     intDrawingWindowRunner.getIntTrustAnalysisLinearDrawingWindow(),

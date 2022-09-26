@@ -63,7 +63,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected boolean isShowAgentId = true;
     protected boolean isShowBarChartCapInfo = true;
 
-    protected double axisYScale = 1.0;
+    protected double axisYScale = Config.STATISTICS_SCALE_UP_Y_AXIS_NUMBER;
 
     public int getWorldId() {
         return world == null ? -1 : world.getId();
@@ -384,6 +384,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected void drawAxisX(int index) {
         int realWith = getRealWith();
+        int realHeight = (int) ((maxAxisY[index] + 10) * 0.1 * _vs);
 
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
@@ -399,11 +400,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                     }
                     g.drawLine(i, -5, i, 5);
                     g.setColor(Globals.Color$.$axisSplit);
-                    g.drawLine(i, 5, i, (int) (maxAxisY[index] * 0.1 * _vs));
+                    g.drawLine(i, 5, i, realHeight);
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
                     g.setColor(Globals.Color$.$axisSplit2);
-                    g.drawLine(i, 5, i, (int) (maxAxisY[index] * 0.1 * _vs));
+                    g.drawLine(i, 5, i, realHeight);
                 } else if (_hs > 1) {
                     g.drawLine(i, 0, i, 1);
                 }

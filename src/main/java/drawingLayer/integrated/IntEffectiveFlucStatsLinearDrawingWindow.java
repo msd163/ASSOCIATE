@@ -28,7 +28,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
         headerTitle = "Integrated Effective FluctuationParams [#Worlds: " + worlds.length + "]";
         setName("i_eff_fluc_stt");
 
-        axisYScale = 1;
+//        axisYScale = 1;
         _vs = 280;
     }
 
@@ -36,7 +36,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
     public void resetParams() {
         super.resetParams();
 
-        axisYScale = 1;
+        //axisYScale = 1;
         _vs = 280;
         _hs = 8;
     }
@@ -51,7 +51,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
         }
 
         for (int i = 1; i < 7; i++) {
-            printStatsInfo(i + 1, "# of Eff Fluc (" + i + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getAvgEffectiveFluctuationResistanceNumber()[i], Globals.Color$.arr[i]);
+            printStatsInfo(i + 1, "# of Eff Fluc (" + i + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getAvgEffectiveFluctuationResistanceNumber()[i], Globals.Color$.arr()[i]);
         }
 
         //============================//============================ INFO
@@ -73,7 +73,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.arr[0], j, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.arr()[0], j, 20, -1);
                         g.drawString("DATA", 220, dynamicHeight);
                         //============================
                     }
@@ -126,7 +126,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
                     int[] number = statistics[i].getAvgEffectiveFluctuationResistanceNumber();
                     for (int idx = 1; idx < 7; idx++) {
                         if (showLineChartsFlag[idx]) {
-                            drawCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.arr[idx], j, i);
+                            drawCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.arr()[idx], j, i);
                             if (prevPoints[idx].y >= 0) {
                                 drawLine(prevPoints[idx].x, prevPoints[idx].y, loAxisX, number[idx]);
                             }

@@ -2,11 +2,11 @@ package drawingLayer.integrated;
 
 import drawingLayer.DrawingWindow;
 import simulateLayer.SimulationConfig;
+import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
-import simulateLayer.statistics.WorldStatistics;
 
 import java.awt.*;
 
@@ -27,7 +27,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
         headerTitle = "Integrated Trust Statistics Params [#Worlds: " + worlds.length + "]";
         setName("i_tut_stt");
 
-        axisYScale = 1;
+//        axisYScale = 1;
         _vs = 100;
     }
 
@@ -40,11 +40,12 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer -1].getTimeAvgTrustToMischief(), Globals.Color$.$curve_3);
-        printStatsInfo(2, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Honest", worlds[simulationTimer].getWdStatistics()[worldTimer -1].getTimeAvgTrustToHonest(), Globals.Color$.$curve_1);
-        printStatsInfo(3, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Hypocrite", worlds[simulationTimer].getWdStatistics()[worldTimer -1].getTimeAvgTrustToHypocrite(), Globals.Color$.$curve_3);
-        printStatsInfo(4, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Adversary", worlds[simulationTimer].getWdStatistics()[worldTimer -1].getTimeAvgTrustToAdversary(), Globals.Color$.$curve_2);
-
+        if (worlds[simulationTimer] != null) {
+            printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer - 1].getTimeAvgTrustToMischief(), Globals.Color$.$curve_3);
+            printStatsInfo(2, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Honest", worlds[simulationTimer].getWdStatistics()[worldTimer - 1].getTimeAvgTrustToHonest(), Globals.Color$.$curve_1);
+            printStatsInfo(3, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Hypocrite", worlds[simulationTimer].getWdStatistics()[worldTimer - 1].getTimeAvgTrustToHypocrite(), Globals.Color$.$curve_3);
+            printStatsInfo(4, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Adversary", worlds[simulationTimer].getWdStatistics()[worldTimer - 1].getTimeAvgTrustToAdversary(), Globals.Color$.$curve_2);
+        }
         //============================//============================ INFO
         dynamicHeight += 20;
         if (isShowSimInfo) {

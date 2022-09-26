@@ -27,7 +27,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
         headerTitle = "Integrated ROC [#Worlds: " + worlds.length + "]";
         setName("i_roc_stt");
 
-        axisYScale = 1;
+        //axisYScale = 1;
         _vs = 60;
         _hs = 8;
     }
@@ -36,7 +36,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
     public void resetParams() {
         super.resetParams();
 
-        axisYScale = 1;
+        //axisYScale = 1;
         _vs = 60;
         _hs = 8;
     }
@@ -75,7 +75,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.arr[0], j, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.arr()[0], j, 20, -1);
                         g.drawString("DATA", 220, dynamicHeight);
                         //============================
                     }
@@ -137,7 +137,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
                         fpr /= 0.03;
                         tpr /= 0.03;
 
-                        drawCurve((int) fpr, (int) tpr, Globals.Color$.arr[worldIdx], worldIdx, -11);
+                        drawCurve((int) fpr, (int) tpr, Globals.Color$.arr()[worldIdx], worldIdx, -11);
                         /*if (prevPoints[0].y >= 0) {
                             drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, acc);
                         }*/

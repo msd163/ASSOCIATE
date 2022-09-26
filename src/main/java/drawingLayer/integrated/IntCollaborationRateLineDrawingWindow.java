@@ -27,7 +27,7 @@ public class IntCollaborationRateLineDrawingWindow extends DrawingWindow {
         headerTitle = "Integrated COLLAB [#Worlds: " + worlds.length + "]";
         setName("i_coll_stt");
 
-        axisYScale = 1;
+        //axisYScale = 1;
         _vs = 60;
         _hs = 8;
     }
@@ -36,7 +36,7 @@ public class IntCollaborationRateLineDrawingWindow extends DrawingWindow {
     public void resetParams() {
         super.resetParams();
 
-        axisYScale = 1;
+        //axisYScale = 1;
         _vs = 60;
         _hs = 8;
     }
@@ -72,7 +72,7 @@ public class IntCollaborationRateLineDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[worldIdx]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.arr[worldIdx], worldIdx, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.arr()[worldIdx], worldIdx, 20, -1);
                         g.drawString("Honest", 220, dynamicHeight);
                         //============================
                     }
@@ -124,7 +124,7 @@ public class IntCollaborationRateLineDrawingWindow extends DrawingWindow {
 
                     int number = statistics[sttIdx].getAvgHonestCollaboration();
                         if (showLineChartsFlag[0]) {
-                            drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.arr[worldIdx], worldIdx, sttIdx);
+                            drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.arr()[worldIdx], worldIdx, sttIdx);
                             if (prevPoints[0].y >= 0) {
                                 drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, number);
                             }

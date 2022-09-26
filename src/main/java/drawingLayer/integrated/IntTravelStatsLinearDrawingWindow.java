@@ -29,7 +29,7 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
         }
         headerTitle = "Integrated Travel Statistics Linear Chart [#Worlds: " + worlds.length + "]";
         setName("i_tvl_stt");
-        axisYScale = 1;
+        //axisYScale = 1;
     }
 
     int loAxisX = 0;

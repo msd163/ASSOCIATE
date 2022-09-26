@@ -4,6 +4,7 @@ import drawingLayer.integrated.*;
 import simulateLayer.SimulationConfig;
 import societyLayer.agentSubLayer.World;
 import utils.Config;
+import utils.Globals;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,11 +51,11 @@ public class IntDrawingWindowRunner extends Thread {
                 intCollaborationRateLineDrawingWindow.repaint();
             }
 
-           /* try {
-                Thread.sleep(100);
+            try {
+                Thread.sleep(Globals.PAUSE ? Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE :  Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
     }
 
