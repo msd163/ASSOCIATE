@@ -145,23 +145,23 @@ public class World {
 
         for (i = 0; i < wdStatistics.length; i++) {
             if (i == 0) {
-                wdStatistics[i] = new WorldStatistics(null, agentsCount, null, environment);
+                wdStatistics[i] = new WorldStatistics(null, null, environment);
             } else {
                 if (i >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
-                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, wdStatistics[i - Config.STATISTICS_AVERAGE_TIME_WINDOW], environment);
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], wdStatistics[i - Config.STATISTICS_AVERAGE_TIME_WINDOW], environment);
                 } else {
-                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], agentsCount, null, environment);
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1],  null, environment);
                 }
             }
         }
 
-        if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
+   /*     if (Config.SIMULATION_MODE == TtSimulationMode.Episodic) {
             int maxEpisodeCount = Math.max(environment.getProMax().getMaxAgentTargetCount(), Config.WORLD_LIFE_TIME / Config.EPISODE_TIMOUT);
             epStatistics = new EpisodeStatistics[maxEpisodeCount];
             for (i = 0; i < maxEpisodeCount; i++) {
                 epStatistics[i] = new EpisodeStatistics();
             }
-        }
+        }*/
 
         //============================//============================ Init trust matrix
         System.out.println("Initializing TrustMatrix...");

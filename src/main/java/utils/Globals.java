@@ -204,11 +204,13 @@ public class Globals {
         public static Color $axisSplit2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray2 : lightGray1;
         public static Color $mousePlus = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
         public static Color $drawingTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? Color.cyan : darkRed;
+
         public static Color $curve_1 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen2;
         public static Color $curve_2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? red : darkRed;
         public static Color $curve_3 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? magenta : darkMagenta;
         public static Color $curve_4 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
-        public static Color $curve_5 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
+        public static Color $curve_5 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : Color.darkGray;
+        public static Color $curve_6 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightOrange : darkOrange1;
 
         public static Color $trustHonest = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen1;
         public static Color $trustAdversary = red;

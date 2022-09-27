@@ -9,6 +9,7 @@ import societyLayer.agentSubLayer.WatchedAgent;
 import societyLayer.environmentSubLayer.StateX;
 import societyLayer.environmentSubLayer.TravelHistory;
 import trustLayer.data.*;
+import utils.Config;
 import utils.Globals;
 import utils.OutLog____;
 
@@ -182,76 +183,73 @@ public class TrustManager {
 
         float trustValue = 0.0f;
 
+        if (sntrs.size() == 0) {
+            return trustValue;
+        }
+
         double oldTrustValue = 0;
         double oldScore = 0;
         long fluctuationCount = 0;
+
         boolean isOccurs = false;
         for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
-            Float t = sntrs.get(i);
-            if (t == 0.0f) {
+
+            Float currentScore = sntrs.get(i);
+            if (currentScore == 0.0f) {
                 break;
             }
 
-            double v = formulateTrustValue(i, t);
+            double valueInSeriesTerm = formulateTrustValue(i, currentScore);
             oldTrustValue = trustValue;
-            trustValue += v;
+            trustValue += valueInSeriesTerm;
 
 
             if (tsSize > 1) {
 
-                if (oldScore * t < 0) {
+                if (oldScore * currentScore < 0) {
+                    //- The
                     fluctuationCount++;
-                    wdStatistics[Globals.WORLD_TIMER].add_AllFluctuation();
-
+                    if (oldScore > 0) {
+                        wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoFluctPosToNeg();
+                    } else {
+                        wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoFluctNegToPos();
+                    }
                 }
-
 
                 if ((oldTrustValue * trustValue < 0)) {
                     if (!isOccurs) {
-                        wdStatistics[Globals.WORLD_TIMER].add_EffectiveFluctuationResistanceNumber(i);
+                        if (oldTrustValue > 0) {
+                            wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoResistanceByNumberAgainstPos(i);
+                        } else {
+                            wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoResistanceByNumberAgainstNeg(i);
+                        }
                         isOccurs = true;
                     }
                 }
 
             }
-            oldScore = t;
+            oldScore = currentScore;
 
 
-            if (fluctuationCount > 3) {
-                wdStatistics[Globals.WORLD_TIMER].add_AllFluctuationRound();
+            if (fluctuationCount > Config.STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD) {
+                wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoSuspectDiagnosis();
             }
         }
-        //} else {
-           /* float tempT = 0;
-            float prev = -1111;
-            float sum = 0;
-            float count = 0;
-            int index = 0;
-            for (int i = 0, tsSize = sntrs.size(); i < tsSize; i++) {
-                Float t = sntrs.get(i);
-                if (t == 0.0f) {
-                    break;
-                }
 
-                if (prev != t) {
-                    sum += tempT;
-                    tempT = 0;
-                    index = 0;
-                    count++;
+        Float scoreAtTopOfList = sntrs.get(0);
+        if (scoreAtTopOfList * trustValue < 0) {
+            if (scoreAtTopOfList > 0) {
+                wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoIgnoredPos();
+                if (!responder.getBehavior().getHasHonestState()) {
+                    wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoIgnoredPosTP();
                 }
-
-                tempT += ((t) / ((index + 2) * (index + 2)));
-                prev = t;
-                //System.out.println("req: " + requester.getId() + " resp: " + responder.getId() + " | i: " + i + " > index: " + index + " | " + t + "  > " + trustValue);
-                index++;
+            } else {
+                wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoIgnoredNeg();
+                if (responder.getBehavior().getHasHonestState()) {
+                    wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoIgnoredNegTP();
+                }
             }
-
-            sum += tempT;
-
-            if (count > 0) {
-                trustValue = sum / count;
-            }*/
-        // }
+        }
 
         return trustValue;
     }
@@ -303,6 +301,10 @@ public class TrustManager {
             if (indirectObservation != null) {
                 normList.addAll(normalizeWithForgottenFactorAndTrustValue(requester, indirectObservation.getItems()));
             }
+        }
+
+        if (normList.size() == 0) {
+            return normList;
         }
 
         normList.sort((Float f1, Float f2) -> {

@@ -18,9 +18,11 @@ public class IntDrawingWindowRunner extends Thread {
     private IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow;
     private IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow;
     private IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow;
-    private IntEffectiveFlucStatsLinearDrawingWindow intEffectiveFlucStatsLinearDrawingWindow;
+    private IntResistancePerNumberStatsLinearDrawingWindow intResistancePerNumberStatsLinearDrawingWindow;
     private IntRocPointDrawingWindow intRocPointDrawingWindow;
     private IntCollaborationRateLineDrawingWindow intCollaborationRateLineDrawingWindow;
+    private IntResistanceStatsLinearDrawingWindow intResistanceStatsLinearDrawingWindow;
+    private IntFluctuationStatsLinearDrawingWindow intFluctuationStatsLinearDrawingWindow;
 
 
     public IntDrawingWindowRunner(World[] worlds, SimulationConfig simulationConfig) {
@@ -41,14 +43,20 @@ public class IntDrawingWindowRunner extends Thread {
             if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
                 intTrustStatsLinearDrawingWindow.repaint();
             }
-            if (Config.INT_DRAWING_SHOW_IntEffectiveFlucLinearDrawingWindow) {
-                intEffectiveFlucStatsLinearDrawingWindow.repaint();
+            if (Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow) {
+                intResistancePerNumberStatsLinearDrawingWindow.repaint();
             }
             if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
                 intRocPointDrawingWindow.repaint();
             }
             if (Config.INT_DRAWING_SHOW_CollaborationLinearDrawingWindow) {
                 intCollaborationRateLineDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow) {
+                intResistanceStatsLinearDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_FluctuationLinearDrawingWindow) {
+                intFluctuationStatsLinearDrawingWindow.repaint();
             }
 
             if (Globals.PAUSE) {
@@ -66,7 +74,6 @@ public class IntDrawingWindowRunner extends Thread {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         }
@@ -108,9 +115,9 @@ public class IntDrawingWindowRunner extends Thread {
             initDrawingWindow(intTrustStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
-        if (Config.INT_DRAWING_SHOW_IntEffectiveFlucLinearDrawingWindow) {
-            intEffectiveFlucStatsLinearDrawingWindow = new IntEffectiveFlucStatsLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intEffectiveFlucStatsLinearDrawingWindow, widthHalf, heightHalf);
+        if (Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow) {
+            intResistancePerNumberStatsLinearDrawingWindow = new IntResistancePerNumberStatsLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intResistancePerNumberStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
@@ -121,6 +128,17 @@ public class IntDrawingWindowRunner extends Thread {
         if (Config.INT_DRAWING_SHOW_CollaborationLinearDrawingWindow) {
             intCollaborationRateLineDrawingWindow = new IntCollaborationRateLineDrawingWindow(worlds, simulationConfig);
             initDrawingWindow(intCollaborationRateLineDrawingWindow, widthHalf, heightHalf);
+        }
+
+        if (Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow) {
+            intResistanceStatsLinearDrawingWindow = new IntResistanceStatsLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intResistanceStatsLinearDrawingWindow, widthHalf, heightHalf);
+        }
+
+
+        if (Config.INT_DRAWING_SHOW_FluctuationLinearDrawingWindow) {
+            intFluctuationStatsLinearDrawingWindow = new IntFluctuationStatsLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intFluctuationStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
     }
@@ -141,8 +159,8 @@ public class IntDrawingWindowRunner extends Thread {
         return intTrustStatsLinearDrawingWindow;
     }
 
-    public IntEffectiveFlucStatsLinearDrawingWindow getIntEffectiveFlucStatsLinearDrawingWindow() {
-        return intEffectiveFlucStatsLinearDrawingWindow;
+    public IntResistancePerNumberStatsLinearDrawingWindow getIntEffectiveFlucStatsLinearDrawingWindow() {
+        return intResistancePerNumberStatsLinearDrawingWindow;
     }
 
     public IntRocPointDrawingWindow getIntRocPointDrawingWindow() {

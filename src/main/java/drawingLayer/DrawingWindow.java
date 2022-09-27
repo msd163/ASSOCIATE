@@ -371,6 +371,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
             g.drawString(": " + worldTimer, 1300, 90);
             g.drawString("Episode", 1100, 130);
             g.drawString(": " + Globals.EPISODE, 1300, 130);
+            g.drawString("Average", 1100, 170);
+            g.drawString(": " + Config.STATISTICS_AVERAGE_TIME_WINDOW, 1300, 170);
 
             g.setColor(Globals.Color$.$subTitle);
 

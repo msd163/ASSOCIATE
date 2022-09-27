@@ -4,8 +4,6 @@ import societyLayer.environmentSubLayer.Environment;
 import utils.Config;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WorldStatistics {
 
@@ -63,12 +61,10 @@ public class WorldStatistics {
     private int allTrueNegativeTrust;
 
     //============================
-    private long allFluctuation;
 
-    private long allFluctuationRound;
-    private int[] allEffectiveFluctuationResistanceNumber;
+    private WorldStatisticsHypo statisticsHypo;
+
     //============================
-    private Map<Integer, AgentStatistics> agentStatistics;
 
 
     //--  (Number of correct assessments)/Number of all assessments)
@@ -95,13 +91,15 @@ public class WorldStatistics {
 
     private WorldStatistics xPrevStats;
 
-    private int timedAverageTarget;
-    private int timedAveragePitfall;
-
     //============================//============================
 
 
-    public WorldStatistics(WorldStatistics prevStats, int agentCount, WorldStatistics xPrevStats, Environment environment) {
+    public WorldStatistics(WorldStatistics prevStats, WorldStatistics xPrevStats, Environment environment) {
+
+        this.statisticsHypo = new WorldStatisticsHypo(
+                xPrevStats == null ? null : xPrevStats.getStatisticsHypo(),
+                prevStats == null ? null : prevStats.getStatisticsHypo()
+        );
         this.environment = environment;
         this.prevStats = prevStats;
         this.xPrevStats = xPrevStats;
@@ -125,18 +123,8 @@ public class WorldStatistics {
                 = ittTrueNegativeTrust
                 = 0;
 
-        allFluctuation
-                = allFluctuationRound
-                = 0;
-
-        allEffectiveFluctuationResistanceNumber = new int[20];
-        Arrays.fill(allEffectiveFluctuationResistanceNumber, 0);
-
-        agentStatistics = new HashMap<>(agentCount);
         honestCollaboration = new int[Config.STATISTICS_AVERAGE_TIME_WINDOW];
-        for (int i = 0; i < honestCollaboration.length; i++) {
-            honestCollaboration[i] = 0;
-        }
+        Arrays.fill(honestCollaboration, 0);
         currentHonestCollaboration = 0;
         honestCollaborationInRound = 0;
 
@@ -157,11 +145,9 @@ public class WorldStatistics {
             allFalseNegativeTrust = prevStats.getAllFalseNegativeTrust();
             allTruePositiveTrust = prevStats.getAllTruePositiveTrust();
             allTrueNegativeTrust = prevStats.getAllTrueNegativeTrust();
-            allFluctuation = prevStats.getAllFluctuation();
-            allFluctuationRound = prevStats.getAllFluctuationRound();
-            for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
-                allEffectiveFluctuationResistanceNumber[i] = prevStats.getAllEffectiveFluctuationResistanceNumber()[i];
-            }
+
+            statisticsHypo.init(prevStats.getStatisticsHypo());
+
             for (int i = 0; i < Config.STATISTICS_AVERAGE_TIME_WINDOW; i++) {
                 honestCollaboration[i] = prevStats.getHonestCollaboration(i);
             }
@@ -182,11 +168,10 @@ public class WorldStatistics {
                     = allTrueNegativeTrust
                     = 0;
 
-            allFluctuation
-                    = allFluctuationRound
-                    = 0;
-            allEffectiveFluctuationResistanceNumber = new int[20];
-            Arrays.fill(allEffectiveFluctuationResistanceNumber, 0);
+            statisticsHypo = new WorldStatisticsHypo(
+                    xPrevStats == null ? null : xPrevStats.getStatisticsHypo(),
+                    prevStats == null ? null : prevStats.getStatisticsHypo()
+            );
 
         }
     }
@@ -290,20 +275,6 @@ public class WorldStatistics {
     }
 
 
-    public void add_AllFluctuation() {
-        allFluctuation++;
-    }
-
-    public void add_AllFluctuationRound() {
-        allFluctuationRound++;
-    }
-
-    public void add_EffectiveFluctuationResistanceNumber(int N) {
-        if (N < 20) {
-            allEffectiveFluctuationResistanceNumber[N]++;
-        }
-    }
-
     public void calcTrustParams() {
 
         int pAll = positivePop;
@@ -372,12 +343,23 @@ public class WorldStatistics {
     }
 
     //============================//============================
+    private int calcAverage(int currentVal, Integer xPrevVal) {
+
+        if (xPrevVal == null) {
+            return (int) ((float) currentVal / (worldTime == 0 ? 1 : worldTime));
+        } else {
+            return (int) ((float) (currentVal - xPrevVal) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
+        }
+    }
+
+    //============================//============================
     public int getWorldTime() {
         return worldTime;
     }
 
     public void setWorldTime(int worldTime) {
         this.worldTime = worldTime;
+        statisticsHypo.setWorldTime(worldTime);
     }
 
     public int getAllAgentsInTarget() {
@@ -580,162 +562,61 @@ public class WorldStatistics {
 
     public int getTimedAvgAgentTarget() {
 
-        if (xPrevStats == null) {
-            timedAverageTarget = allAgentsInTarget / (worldTime == 0 ? 1 : worldTime);
-        } else {
-            timedAverageTarget = (allAgentsInTarget - xPrevStats.allAgentsInTarget) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-        }
-
-        return timedAverageTarget;
+        return calcAverage(allAgentsInTarget, xPrevStats == null ? null : xPrevStats.allAgentsInTarget);
     }
 
     public int getTimedAvgAgentInPitfall() {
-        if (xPrevStats == null) {
-            timedAveragePitfall = allAgentsInPitfall / (worldTime == 0 ? 1 : worldTime);
-        } else {
-            timedAveragePitfall = (allAgentsInPitfall - xPrevStats.allAgentsInPitfall) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-        }
 
-        return timedAveragePitfall;
+        return calcAverage(allAgentsInPitfall, xPrevStats == null ? null : xPrevStats.allAgentsInPitfall);
     }
 
     public int getTimedAvgRandomTravel() {
-        if (xPrevStats == null) {
-            return (allRandomTravelToNeighbor / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allRandomTravelToNeighbor - xPrevStats.allRandomTravelToNeighbor) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
 
+        return calcAverage(allRandomTravelToNeighbor, xPrevStats == null ? null : xPrevStats.allRandomTravelToNeighbor);
     }
 
     public int getTimedAvgTruePositive() {
-        if (xPrevStats == null) {
-            return (allTruePositiveTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTruePositiveTrust - xPrevStats.allTruePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+        return calcAverage(allTruePositiveTrust, xPrevStats == null ? null : xPrevStats.allTruePositiveTrust);
+
     }
 
     public int getTimedAvgTrueNegative() {
-        if (xPrevStats == null) {
-            return (allTrueNegativeTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrueNegativeTrust - xPrevStats.allTrueNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrueNegativeTrust, xPrevStats == null ? null : xPrevStats.allTrueNegativeTrust);
     }
 
     public int getTimedAvgFalsePositive() {
-        if (xPrevStats == null) {
-            return (allFalsePositiveTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allFalsePositiveTrust - xPrevStats.allFalsePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allFalsePositiveTrust, xPrevStats == null ? null : xPrevStats.allFalsePositiveTrust);
     }
 
     public int getTimedAvgFalseNegative() {
-        if (xPrevStats == null) {
-            return (allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allFalseNegativeTrust, xPrevStats == null ? null : xPrevStats.allFalseNegativeTrust);
     }
 
     public int getTimeAvgTrustToAdversary() {
-        if (xPrevStats == null) {
-            return (allTrustToAdversary / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToAdversary - xPrevStats.allTrustToAdversary) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrustToAdversary, xPrevStats == null ? null : xPrevStats.allTrustToAdversary);
     }
 
     public int getTimeAvgTrustToHonest() {
-        if (xPrevStats == null) {
-            return (allTrustToHonest / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToHonest - xPrevStats.allTrustToHonest) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrustToHonest, xPrevStats == null ? null : xPrevStats.allTrustToHonest);
     }
 
     public int getTimeAvgTrustToMischief() {
-        if (xPrevStats == null) {
-            return (allTrustToMischief / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToMischief - xPrevStats.allTrustToMischief) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrustToMischief, xPrevStats == null ? null : xPrevStats.allTrustToMischief);
     }
 
     public int getTimeAvgTrustToHypocrite() {
-        if (xPrevStats == null) {
-            return (allTrustToHypocrite / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToHypocrite - xPrevStats.allTrustToHypocrite) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
 
+        return calcAverage(allTrustToHypocrite, xPrevStats == null ? null : xPrevStats.allTrustToHypocrite);
     }
 
     public int getAllRandomTravelToNeighbor() {
         return allRandomTravelToNeighbor;
-    }
-
-    public long getAllFluctuation() {
-        return allFluctuation;
-    }
-
-    public long getAllFluctuationRound() {
-        return allFluctuationRound;
-    }
-
-
-    public int[] getAllEffectiveFluctuationResistanceNumber() {
-        return allEffectiveFluctuationResistanceNumber;
-    }
-
-    int[] currentEffectiveFluctuationResistanceNumber;
-    int[] currentAvgEffectiveFluctuationResistanceNumber;
-
-    public int[] getIttFluctuationResistanceNumber() {
-
-        if (prevStats == null) {
-            return allEffectiveFluctuationResistanceNumber;
-        }
-
-        if (currentEffectiveFluctuationResistanceNumber == null ||
-                currentEffectiveFluctuationResistanceNumber.length != allEffectiveFluctuationResistanceNumber.length) {
-            currentEffectiveFluctuationResistanceNumber = new int[allEffectiveFluctuationResistanceNumber.length];
-        }
-
-
-        for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
-            currentEffectiveFluctuationResistanceNumber[i] = allEffectiveFluctuationResistanceNumber[i] - prevStats.getAllEffectiveFluctuationResistanceNumber()[i];
-        }
-        return currentEffectiveFluctuationResistanceNumber;
-    }
-
-
-    public int[] getAvgEffectiveFluctuationResistanceNumber() {
-
-        if (currentAvgEffectiveFluctuationResistanceNumber == null ||
-                currentAvgEffectiveFluctuationResistanceNumber.length != allEffectiveFluctuationResistanceNumber.length) {
-            currentAvgEffectiveFluctuationResistanceNumber = new int[allEffectiveFluctuationResistanceNumber.length];
-        }
-
-        if (xPrevStats == null) {
-            for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
-                currentAvgEffectiveFluctuationResistanceNumber[i] = allEffectiveFluctuationResistanceNumber[i] /
-                        (worldTime == 0 ? 1 : worldTime);
-            }
-        } else {
-            for (int i = 0; i < allEffectiveFluctuationResistanceNumber.length; i++) {
-                currentAvgEffectiveFluctuationResistanceNumber[i] =
-                        (allEffectiveFluctuationResistanceNumber[i] - xPrevStats.allEffectiveFluctuationResistanceNumber[i])
-                                / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-            }
-        }
-        return currentAvgEffectiveFluctuationResistanceNumber;
-    }
-
-    public void setAllEffectiveFluctuationResistanceNumber(int[] allEffectiveFluctuationResistanceNumber) {
-        this.allEffectiveFluctuationResistanceNumber = allEffectiveFluctuationResistanceNumber;
     }
 
     public void add_NegativePop() {
@@ -793,52 +674,6 @@ public class WorldStatistics {
         return (int) (100 * (float) ittTrustToHonest / honestCollaborationInRound);
     }
 
-    public int getHypocriteFluctuationRate() {
-
-        int sum = 0;
-        int[] ittFluctuationResistanceNumber = getIttFluctuationResistanceNumber();
-        for (int i = 0, len = ittFluctuationResistanceNumber.length; i < len; i++) {
-            sum += ittFluctuationResistanceNumber[i];
-        }
-
-        return (int) (100 * (float) sum / ittTrustToHypocrite);
-    }
-
-    public int getAllHypocriteFluctuation() {
-
-        int sum = 0;
-        int[] ittFluctuationResistanceNumber = getAllEffectiveFluctuationResistanceNumber();
-        for (int i = 0, len = ittFluctuationResistanceNumber.length; i < len; i++) {
-            sum += ittFluctuationResistanceNumber[i];
-        }
-
-        return sum;
-    }
-
-    public int getAvgHypocriteFluctuation() {
-
-        if (xPrevStats == null) {
-            return (int) ((float) getAllHypocriteFluctuation() / (worldTime == 0 ? 1 : worldTime));
-
-        } else {
-            return (int) ((float) (getAllHypocriteFluctuation() - xPrevStats.getAllHypocriteFluctuation()) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
-
-    }
-
-    public int getAvgHypocriteFluctuationRate() {
-
-        if (xPrevStats == null) {
-            float v = (float) (100 * getAllHypocriteFluctuation()) / ((worldTime == 0) ? 1 : worldTime);
-            return (int) (v / getTimeAvgTrustToHypocrite());
-
-        } else {
-
-            float v = (float) (100 * (getAllHypocriteFluctuation() - xPrevStats.getAllHypocriteFluctuation())) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-            return (int) (v / getTimeAvgTrustToHypocrite());
-        }
-
-    }
 
     public int getHonestCollaborationInRound() {
         return honestCollaborationInRound;
@@ -846,5 +681,9 @@ public class WorldStatistics {
 
     public void setHonestCollaborationInRound(int honestCollaborationInRound) {
         this.honestCollaborationInRound = honestCollaborationInRound;
+    }
+
+    public WorldStatisticsHypo getStatisticsHypo() {
+        return statisticsHypo;
     }
 }
