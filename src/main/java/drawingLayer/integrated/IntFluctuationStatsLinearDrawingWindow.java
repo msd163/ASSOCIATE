@@ -43,7 +43,6 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
     }
 
     int loAxisX;
-    int coeff = 1000;
 
     @Override
     public void paint(Graphics gr) {
@@ -58,6 +57,8 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
         printStatsInfo(4, "# of Ignored Neg", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredNeg(), Globals.Color$.arr()[3]);
         printStatsInfo(5, "# of Ignored Pos TP", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredPosTruePositive(), Globals.Color$.arr()[4]);
         printStatsInfo(6, "# of Ignored Neg TP", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredNegTruePositive(), Globals.Color$.arr()[5]);
+        printStatsInfo(8, "(Avg Ignored Pos) / (Avg Fluct)", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgIgnoredPosProportionToFluct1000(), Globals.Color$.arr()[6]);
+        printStatsInfo(9, "(Avg Ignored Neg) / (Avg Fluct)", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgIgnoredNegProportionToFluct1000(), Globals.Color$.arr()[7]);
 
 
         //============================//============================ INFO
@@ -73,7 +74,7 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
 
                 //============================
                 dynamicHeight += 40;
-                g.setColor(Globals.Color$. yellow);
+                g.setColor(Globals.Color$.yellow);
                 g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
                 //============================
 
@@ -233,29 +234,14 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
                 worldTimer = worldIdx < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
                 WorldStatistics[] statistics = world.getWdStatistics();
-                int propPos;
-                int propNeg;
-                int avgHypoFluct = statistics[worldTimer - 1].getStatisticsHypo().getAvgHypoFluct();
-                if (avgHypoFluct != 0) {
-                    propPos = coeff * statistics[worldTimer - 1].getStatisticsHypo().getAvgHypoIgnoredPos() / avgHypoFluct;
-                    propNeg = coeff * statistics[worldTimer - 1].getStatisticsHypo().getAvgHypoIgnoredNeg() / avgHypoFluct;
-                } else {
-                    propPos = 0;
-                    propNeg = 0;
-                }
+                int propPos = statistics[worldTimer - 1].getStatisticsHypo().getAvgIgnoredPosProportionToFluct1000();
+                int propNeg = statistics[worldTimer - 1].getStatisticsHypo().getAvgIgnoredNegProportionToFluct1000();
 
                 maxAxisY[1] = Math.max(maxAxisY[1], propPos);
                 maxAxisY[1] = Math.max(maxAxisY[1], propNeg);
 
-                avgHypoFluct = statistics[0].getStatisticsHypo().getAvgHypoFluct();
-                if (avgHypoFluct != 0) {
-                    propPos = coeff * statistics[0].getStatisticsHypo().getAvgHypoIgnoredPos() / avgHypoFluct;
-                    propNeg = coeff * statistics[0].getStatisticsHypo().getAvgHypoIgnoredNeg() / avgHypoFluct;
-                } else {
-                    propPos = 0;
-                    propNeg = 0;
-                }
-
+                propPos = statistics[0].getStatisticsHypo().getAvgIgnoredPosProportionToFluct1000();
+                propNeg = statistics[0].getStatisticsHypo().getAvgIgnoredNegProportionToFluct1000();
 
                 prevPoints[0].y = (int) (0.1 * _vs * propPos);
                 prevPoints[1].y = (int) (0.1 * _vs * propNeg);
@@ -266,23 +252,15 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
 
                     WorldStatisticsHypo stat = statistics[i].getStatisticsHypo();
 
-                    avgHypoFluct = stat.getAvgHypoFluct();
 
                     if (showLineChartsFlag[0]) {
-                        if (avgHypoFluct != 0) {
-                            propPos = coeff * stat.getAvgHypoIgnoredPos() / avgHypoFluct;
-                        } else {
-                            propPos = 0;
-                        }
+                        propPos = stat.getAvgIgnoredPosProportionToFluct1000();
+
                         drawCurve(loAxisX, (int) (0.1 * _vs * propPos), Globals.Color$.arr()[6], worldIdx, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, propPos);
                     }
                     if (showLineChartsFlag[1]) {
-                        if (avgHypoFluct != 0) {
-                            propNeg = coeff * stat.getAvgHypoIgnoredNeg() / avgHypoFluct;
-                        } else {
-                            propNeg = 0;
-                        }
+                        propNeg = stat.getAvgIgnoredNegProportionToFluct1000();
                         drawCurve(loAxisX, (int) (0.1 * _vs * propNeg), Globals.Color$.arr()[7], worldIdx, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, propNeg);
                     }

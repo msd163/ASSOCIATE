@@ -225,12 +225,12 @@ public class WorldStatisticsHypo {
                 return 0;
             }
 
-            return ((1000 * sum) / allHypoSuspectDiagnosis)/1000;
+            return ((1000 * sum) / allHypoSuspectDiagnosis) / 1000;
         } else {
             if (allHypoSuspectDiagnosis - prevStatHypo.allHypoSuspectDiagnosis == 0) {
                 return 0;
             }
-            return ((1000 * sum) / (allHypoSuspectDiagnosis - prevStatHypo.allHypoSuspectDiagnosis))/1000;
+            return ((1000 * sum) / (allHypoSuspectDiagnosis - prevStatHypo.allHypoSuspectDiagnosis)) / 1000;
         }
     }
 
@@ -320,6 +320,21 @@ public class WorldStatisticsHypo {
 
     public int getAvgHypoIgnoredPos() {
         return calcAverage(allHypoIgnoredPos, xPrevStatHypo == null ? null : xPrevStatHypo.allHypoIgnoredPos);
+    }
+
+    public int getAvgIgnoredPosProportionToFluct1000() {
+        int avgHypoFluct = getAvgHypoFluct();
+        if (avgHypoFluct == 0) {
+            return 0;
+        }
+        return 1000 * getAvgHypoIgnoredPos() / avgHypoFluct;
+    }
+    public int getAvgIgnoredNegProportionToFluct1000() {
+        int avgHypoFluct = getAvgHypoFluct();
+        if (avgHypoFluct == 0) {
+            return 0;
+        }
+        return 1000 * getAvgHypoIgnoredNeg() / avgHypoFluct;
     }
 
     public int getIttHypoIgnoredNeg() {
