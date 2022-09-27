@@ -51,10 +51,23 @@ public class IntDrawingWindowRunner extends Thread {
                 intCollaborationRateLineDrawingWindow.repaint();
             }
 
-            try {
-                Thread.sleep(Globals.PAUSE ? Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE :  Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (Globals.PAUSE) {
+                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE > 0) {
+                    try {
+                        Thread.sleep(Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING > 0) {
+                    try {
+                        Thread.sleep(Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
         }
     }

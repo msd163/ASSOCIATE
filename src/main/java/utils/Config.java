@@ -19,19 +19,20 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 313+110;       // Time of execution in each world
-    public static int WORLD_SLEEP_MILLISECOND = 0;      // Sleep time in each run of world
-    public static int WORLD_SLEEP_MILLISECOND_IN_PAUSE = 1000;      // Sleep time in each run of world
-    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 2000;      // Sleep time in each run of world
-    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 200;      // Sleep time in each run of world
+    public static int WORLD_LIFE_TIME = 313+110;                            // Time of execution in each world
+    public static int WORLD_SLEEP_MILLISECOND = 0;                          // Sleep time in each run of world
+    public static int WORLD_SLEEP_MILLISECOND_IN_PAUSE = 1000;              // Sleep time in each run of world when the world execution is PAUSED
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 400;            // Sleep time of drawing thread
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 200;   // Sleep time of drawing thread when it is PAUSED.
 
-    public final static int EPISODE_TIMOUT = 50;
 
-    public static int STATE_TILE_WIDTH = 30;
+
+    public static int STATE_TILE_WIDTH = 30;                            // used in state machine diagram
 
     public static int STATISTICS_AVERAGE_TIME_WINDOW = 25;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC = 10;
 
-    public static double STATISTICS_SCALE_UP_Y_AXIS_NUMBER = 4.0; // This is for scaling up result. i.e. 1 is presented in scale of this value
+    public static double STATISTICS_SCALE_UP_Y_AXIS_NUMBER = 1.0; // This is for scaling up result. i.e. 1 is presented in scale of this value
 
 
     public static final int ROUTING_STAY_IN_TARGET_TIME /*      */ = 1;
@@ -46,7 +47,7 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Light;
+    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Dark;
 
     //============================ Drawing Windows
 

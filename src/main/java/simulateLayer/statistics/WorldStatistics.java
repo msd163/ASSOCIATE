@@ -10,6 +10,8 @@ import java.util.Map;
 public class WorldStatistics {
 
     private int[] honestCollaboration;
+
+    private int honestCollaborationInRound;
     private int currentHonestCollaboration;
 
     private int negativePop;
@@ -136,6 +138,7 @@ public class WorldStatistics {
             honestCollaboration[i] = 0;
         }
         currentHonestCollaboration = 0;
+        honestCollaborationInRound = 0;
 
     }
 
@@ -690,7 +693,7 @@ public class WorldStatistics {
     int[] currentEffectiveFluctuationResistanceNumber;
     int[] currentAvgEffectiveFluctuationResistanceNumber;
 
-    public int[] getEffectiveFluctuationResistanceNumber() {
+    public int[] getIttFluctuationResistanceNumber() {
 
         if (prevStats == null) {
             return allEffectiveFluctuationResistanceNumber;
@@ -736,7 +739,11 @@ public class WorldStatistics {
     }
 
     public void add_NegativePop() {
-        positivePop++;
+        negativePop++;
+    }
+
+    public void add_HonestCollaborationInRound() {
+        honestCollaborationInRound++;
     }
 
     public void add_HonestCollaboration() {
@@ -755,9 +762,8 @@ public class WorldStatistics {
 
     public void resetCollaboration() {
         currentHonestCollaboration++;
-        if(currentHonestCollaboration>=Config.STATISTICS_AVERAGE_TIME_WINDOW)
-        {
-            currentHonestCollaboration=0;
+        if (currentHonestCollaboration >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
+            currentHonestCollaboration = 0;
         }
         honestCollaboration[currentHonestCollaboration] = 0;
     }
@@ -781,5 +787,64 @@ public class WorldStatistics {
 
     public int getCurrentHonestCollaboration() {
         return currentHonestCollaboration;
+    }
+
+    public int getHonestCollaborationRate() {
+        return (int) (100 * (float) ittTrustToHonest / honestCollaborationInRound);
+    }
+
+    public int getHypocriteFluctuationRate() {
+
+        int sum = 0;
+        int[] ittFluctuationResistanceNumber = getIttFluctuationResistanceNumber();
+        for (int i = 0, len = ittFluctuationResistanceNumber.length; i < len; i++) {
+            sum += ittFluctuationResistanceNumber[i];
+        }
+
+        return (int) (100 * (float) sum / ittTrustToHypocrite);
+    }
+
+    public int getAllHypocriteFluctuation() {
+
+        int sum = 0;
+        int[] ittFluctuationResistanceNumber = getAllEffectiveFluctuationResistanceNumber();
+        for (int i = 0, len = ittFluctuationResistanceNumber.length; i < len; i++) {
+            sum += ittFluctuationResistanceNumber[i];
+        }
+
+        return sum;
+    }
+
+    public int getAvgHypocriteFluctuation() {
+
+        if (xPrevStats == null) {
+            return (int) ((float) getAllHypocriteFluctuation() / (worldTime == 0 ? 1 : worldTime));
+
+        } else {
+            return (int) ((float) (getAllHypocriteFluctuation() - xPrevStats.getAllHypocriteFluctuation()) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
+        }
+
+    }
+
+    public int getAvgHypocriteFluctuationRate() {
+
+        if (xPrevStats == null) {
+            float v = (float) (100 * getAllHypocriteFluctuation()) / ((worldTime == 0) ? 1 : worldTime);
+            return (int) (v / getTimeAvgTrustToHypocrite());
+
+        } else {
+
+            float v = (float) (100 * (getAllHypocriteFluctuation() - xPrevStats.getAllHypocriteFluctuation())) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
+            return (int) (v / getTimeAvgTrustToHypocrite());
+        }
+
+    }
+
+    public int getHonestCollaborationInRound() {
+        return honestCollaborationInRound;
+    }
+
+    public void setHonestCollaborationInRound(int honestCollaborationInRound) {
+        this.honestCollaborationInRound = honestCollaborationInRound;
     }
 }

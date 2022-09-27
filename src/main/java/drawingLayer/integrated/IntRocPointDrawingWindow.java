@@ -93,7 +93,9 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
-            g.translate(0, (int) (0.1 * _vs * -maxAxisY[0] - 50));
+            g.translate(0, (int) (0.1 * _vs * (-maxAxisY[1] - maxAxisY[0]) - 50));
+            loAxisX = 0;
+
             drawAxisX(0);
             drawAxisY(0);
             drawDiameter();
@@ -124,25 +126,24 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
 
                 if (showLineChartsFlag[0]) {
 
-//                    if (worldTimer == Config.WORLD_LIFE_TIME - 1) {
-
+                    if (worldTimer > Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC) {
 
                         float fpr = 0;
                         float tpr = 0;
 
-                        for (int i = worldTimer - 1; i > worldTimer - 4; i--) {
+                        for (int i = worldTimer - 1; i > worldTimer - Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC; i--) {
                             fpr += statistics[i].getTrustFnRate();
                             tpr += statistics[i].getTrustTnRate();
                         }
-                        fpr /= 0.03;
-                        tpr /= 0.03;
+                        fpr /= (0.01 * Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC);
+                        tpr /= (0.01 * Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC);
 
                         drawCurve((int) fpr, (int) tpr, Globals.Color$.arr()[worldIdx], worldIdx, -11);
                         /*if (prevPoints[0].y >= 0) {
                             drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, acc);
                         }*/
                     }
-//                }
+                }
                 loAxisX += _hs;
 
                 if (axisX < loAxisX) {

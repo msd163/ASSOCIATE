@@ -50,7 +50,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        for (int i = 1; i < 7; i++) {
+        for (int i = 1; i < 10; i++) {
             printStatsInfo(i + 1, "# of Eff Fluc (" + i + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getAvgEffectiveFluctuationResistanceNumber()[i], Globals.Color$.arr()[i]);
         }
 
@@ -67,7 +67,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
 
                 //============================
                 dynamicHeight += 40;
-                g.setColor(Globals.Color$.$simTitle);
+                g.setColor(Globals.Color$.arr()[j]);
                 g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
                 //============================
 
@@ -95,20 +95,20 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
             drawAxisX(0);
             drawAxisY(0);
 
-            for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
-                if (!showWorldsFlag[j]) {
+            for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
+                if (!showWorldsFlag[worldIdx]) {
                     continue;
                 }
 
-                World world = worlds[j];
+                World world = worlds[worldIdx];
 
-                if (j > Globals.SIMULATION_TIMER || world == null) {
+                if (worldIdx > Globals.SIMULATION_TIMER || world == null) {
                     break;
                 }
 
-                loAxisX = j;
+                loAxisX = worldIdx;
 
-                worldTimer = j < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
+                worldTimer = worldIdx < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
 
                 WorldStatistics[] statistics = world.getWdStatistics();
 
@@ -126,7 +126,7 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
                     int[] number = statistics[i].getAvgEffectiveFluctuationResistanceNumber();
                     for (int idx = 1; idx < 7; idx++) {
                         if (showLineChartsFlag[idx]) {
-                            drawCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.arr()[idx], j, i);
+                            drawCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.arr()[idx], worldIdx, i);
                             if (prevPoints[idx].y >= 0) {
                                 drawLine(prevPoints[idx].x, prevPoints[idx].y, loAxisX, number[idx]);
                             }
@@ -145,6 +145,122 @@ public class IntEffectiveFlucStatsLinearDrawingWindow extends DrawingWindow {
                     }
                 }
             }
+        }
+
+        //============================//============================//============================ /
+
+        if (showChartsFlag[1]) {
+            g.translate(0, (int) (0.1 * _vs * (-maxAxisY[1] - maxAxisY[0]) - 50));
+            loAxisX = 0;
+
+            drawAxisX(0);
+            drawAxisY(0);
+
+
+            for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
+                if (!showWorldsFlag[worldIdx]) {
+                    continue;
+                }
+
+                World world = worlds[worldIdx];
+
+                if (worldIdx > Globals.SIMULATION_TIMER || world == null) {
+                    break;
+                }
+
+                loAxisX = worldIdx;
+
+                worldTimer = worldIdx < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
+
+                WorldStatistics[] statistics = world.getWdStatistics();
+
+
+                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getAvgHypocriteFluctuation());
+
+
+                prevPoints[1].y = (int) (0.1 * _vs * statistics[0].getAvgHypocriteFluctuation());
+                prevPoints[1].x = loAxisX;
+
+
+                for (int sttIdx = 1, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+
+                    int number = statistics[sttIdx].getAvgHypocriteFluctuation();
+                    if (showLineChartsFlag[1]) {
+                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.arr()[worldIdx], worldIdx, sttIdx);
+                        if (prevPoints[1].y >= 0) {
+                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, number);
+                        }
+                    }
+
+                    prevPoints[1].y = (int) (0.1 * _vs * number);
+                    prevPoints[1].x = loAxisX;
+
+                    loAxisX += _hs;
+
+                    if (axisX < loAxisX) {
+                        axisX = loAxisX;
+                    }
+                }
+            }
+
+        }
+
+        //============================//============================//============================
+
+        if (showChartsFlag[2]) {
+            g.translate(0, (int) (0.1 * _vs * (-maxAxisY[2] - maxAxisY[1]) - 50));
+            loAxisX = 0;
+
+            drawAxisX(0);
+            drawAxisY(0);
+
+
+            for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
+                if (!showWorldsFlag[worldIdx]) {
+                    continue;
+                }
+
+                World world = worlds[worldIdx];
+
+                if (worldIdx > Globals.SIMULATION_TIMER || world == null) {
+                    break;
+                }
+
+                loAxisX = worldIdx;
+
+                worldTimer = worldIdx < Globals.SIMULATION_TIMER ? Config.WORLD_LIFE_TIME : Globals.WORLD_TIMER;
+
+                WorldStatistics[] statistics = world.getWdStatistics();
+
+
+                maxAxisY[2] = Math.max(maxAxisY[2], statistics[worldTimer - 1].getAvgHypocriteFluctuationRate());
+
+
+                prevPoints[2].y = (int) (0.1 * _vs * statistics[0].getAvgHypocriteFluctuationRate());
+                prevPoints[2].x = loAxisX;
+
+
+                for (int sttIdx = 1, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+
+                    int number = statistics[sttIdx].getAvgHypocriteFluctuationRate();
+                    if (showLineChartsFlag[2]) {
+                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.arr()[worldIdx], worldIdx, sttIdx);
+                        if (prevPoints[2].y >= 0) {
+                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, number);
+                        }
+                    }
+
+                    prevPoints[2].y = (int) (0.1 * _vs * number);
+                    prevPoints[2].x = loAxisX;
+
+                    loAxisX += _hs;
+
+                    if (axisX < loAxisX) {
+                        axisX = loAxisX;
+                    }
+                }
+            }
+
         }
     }
 }

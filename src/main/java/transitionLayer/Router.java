@@ -229,6 +229,7 @@ public class Router {
         //System.out.print(" *k*");
         //-- Asking from watched list and filling routingHelps. all watchedAgents than know where is the goal state
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
+        boolean isHonestCollaboration = false;
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent wa = watchedAgents.get(i);
             routingHelp = doYouKnowWhereIs(wa.getAgent(), goalState);
@@ -240,6 +241,7 @@ public class Router {
                 }
 
                 if (routingHelp.getHelperAgent().getBehavior().getHasHonestState()) {
+                    isHonestCollaboration = true;
                     world.getWdStatistics()[Globals.WORLD_TIMER].add_HonestCollaboration();
                 }
 
@@ -260,6 +262,10 @@ public class Router {
                     routingHelps.add(routingHelp);
                 }
             }
+        }
+
+        if(isHonestCollaboration){
+            world.getWdStatistics()[Globals.WORLD_TIMER].add_HonestCollaborationInRound();
         }
 
         // If there is no routerHelper...
