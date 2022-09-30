@@ -23,8 +23,6 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
         setName("tvl_stt");
     }
 
-    int loAxisX = 0;
-
     @Override
     public void paint(Graphics gr) {
 
@@ -42,6 +40,7 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
         printStatsInfo(7, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") In Pitfall", world.getWdStatistics()[worldTimer].getTimedAvgAgentInPitfall(), Color.PINK);
 
         if (showChartsFlag[0]) {
+            prepareChartPosition(0);
 
             reverseNormalizeCoordination();
 
@@ -49,7 +48,6 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
 
             g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
-            loAxisX = 0;
 
             WorldStatistics[] statistics = world.getWdStatistics();
             for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {

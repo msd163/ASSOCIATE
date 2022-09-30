@@ -3,15 +3,15 @@ package transitionLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
-import societyLayer.environmentSubLayer.StateX;
-import societyLayer.environmentSubLayer.TransitionX;
-import societyLayer.environmentSubLayer.TravelHistory;
 import simulateLayer.SimulationConfigItem;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.WatchedAgent;
 import societyLayer.agentSubLayer.WatchedState;
 import societyLayer.agentSubLayer.World;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.environmentSubLayer.TransitionX;
+import societyLayer.environmentSubLayer.TravelHistory;
 import trustLayer.TrustManager;
 import utils.Config;
 import utils.Globals;
@@ -230,6 +230,7 @@ public class Router {
         //-- Asking from watched list and filling routingHelps. all watchedAgents than know where is the goal state
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
         boolean isHonestCollaboration = false;
+        boolean isHypocriteCollaboration = false;
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent wa = watchedAgents.get(i);
             routingHelp = doYouKnowWhereIs(wa.getAgent(), goalState);
@@ -242,7 +243,10 @@ public class Router {
 
                 if (routingHelp.getHelperAgent().getBehavior().getHasHonestState()) {
                     isHonestCollaboration = true;
-                    world.getWdStatistics()[Globals.WORLD_TIMER].add_HonestCollaboration();
+                    statistics___.getStatisticsCollab().add_allHonestCollaboration();
+                } else if (routingHelp.getHelperAgent().getBehavior().getHasHypocriteState()) {
+                    isHypocriteCollaboration = true;
+                    statistics___.getStatisticsCollab().add_allHypocriteCollaboration();
                 }
 
                 // The SafeMode method needs only one helper. All helper are honest
@@ -264,8 +268,11 @@ public class Router {
             }
         }
 
-        if(isHonestCollaboration){
-            world.getWdStatistics()[Globals.WORLD_TIMER].add_HonestCollaborationInRound();
+        if (isHonestCollaboration) {
+            statistics___.getStatisticsCollab().add_allHonestCollaborationInRound();
+        }
+        if (isHypocriteCollaboration) {
+            statistics___.getStatisticsCollab().add_allHypocriteCollaborationInRound();
         }
 
         // If there is no routerHelper...
@@ -361,10 +368,13 @@ public class Router {
 
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {
             statistics___.add_Itt_TrustToHonest();
+            statistics___.getStatisticsCollab().add_allTrustToHonestInRound();
         } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
             statistics___.add_Itt_TrustToAdversary();
         } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
             statistics___.add_Itt_TrustToHypocrite();
+            statistics___.getStatisticsCollab().add_allTrustToHypocriteInRound();
+
         } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
             statistics___.add_Itt_TrustToMischief();
         }

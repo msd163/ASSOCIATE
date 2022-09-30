@@ -41,7 +41,6 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
         _hs = 8;
     }
 
-    int loAxisX;
 
     @Override
     public void paint(Graphics gr) {
@@ -75,7 +74,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.arr()[0], j, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
                         g.drawString("DATA", 220, dynamicHeight);
                         //============================
                     }
@@ -93,12 +92,9 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
-            g.translate(0, (int) (0.1 * _vs * (-maxAxisY[1] - maxAxisY[0]) - 50));
-            loAxisX = 0;
+            prepareChartPosition(0);
 
-            drawAxisX(0);
-            drawAxisY(0);
-            drawDiameter();
+            drawDiameter(0);
 
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
@@ -138,7 +134,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
                         fpr /= (0.01 * Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC);
                         tpr /= (0.01 * Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC);
 
-                        drawCurve((int) fpr, (int) tpr, Globals.Color$.arr()[worldIdx], worldIdx, -11);
+                        drawCurve((int) fpr, (int) tpr, Globals.Color$.color(worldIdx), worldIdx, -11);
                         /*if (prevPoints[0].y >= 0) {
                             drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, acc);
                         }*/

@@ -28,6 +28,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected int lineThickness = 1;
     protected int axisNumberFontSize = 35;
 
+    protected int loAxisX;      // a temp variable for saving previous X value in drawing curves
     protected int axisX = 0;
     protected int axisY = 0;
     protected int dynamicHeight = 0;
@@ -93,7 +94,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         showWorldsFlag = new boolean[worldCount];
         Arrays.fill(showWorldsFlag, true);
 
-        maxAxisY = new int[worldCount + 1];
+        maxAxisY = new int[3];
         Arrays.fill(maxAxisY, 0);
 
         //============================//============================
@@ -112,9 +113,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             resetParams();
                         }
 
-                        if (e.isControlDown()) {
-                            Globals.PAUSE = !Globals.PAUSE;
-                        }
                     }
                 });
 
@@ -231,8 +229,29 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             isShowAgentId = !isShowAgentId;
                         } else if (keyCode == (int) 't' || keyCode == (int) 'T') {
                             isShowBarChartCapInfo = !isShowBarChartCapInfo;
+
+                        } else if (keyCode == (int) 'a' || keyCode == (int) 'A') {
+                            pnOffset.y = -getRealHeight(0);
+                            pnOffset.x = 0;
+
+                        } else if (keyCode == (int) 'h' || keyCode == (int) 'H') {
+                            Arrays.fill(showChartsFlag, false);
+                            isShowStatsInfo = false;
+                            isShowBarChartCapInfo = false;
+                            isShowDrawingTitle = false;
+                            isShowSimInfo = false;
+                        } else if (keyCode == (int) 's' || keyCode == (int) 'S') {
+                            Arrays.fill(showChartsFlag, true);
+                            isShowStatsInfo = true;
+                            isShowDrawingTitle = true;
+                            isShowBarChartCapInfo = true;
+                            isShowSimInfo = true;
                         }
                     }
+                }
+                //- Pausing and UnPausing
+                if (keyCode == (int) ' ') {
+                    Globals.PAUSE = !e.isControlDown();
                 }
 
             }
@@ -386,7 +405,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected void drawAxisX(int index) {
         int realWith = getRealWith();
-        int realHeight = (int) ((maxAxisY[index] + 10) * 0.1 * _vs);
+        int realHeight = getRealHeight(index);
 
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
@@ -416,15 +435,32 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     private static final DecimalFormat decimalFormat = new DecimalFormat();
 
-    protected void drawDiameter() {
-        int realHeight = (int) ((maxAxisY[0] + 10) * 0.1 * _vs);
-        int realWith = (int) ((maxAxisY[0] + 10) * _hs);
+    protected void drawDiameter(int index) {
+        int realHeight = getRealHeight(index);
+        int realWith = (maxAxisY[0] + 10) * _hs;
         g.drawLine(0, 0, realWith, realHeight);
 
     }
 
+    protected int getRealHeight(int diagramIndex) {
+        return (int) ((maxAxisY[diagramIndex] + 10) * 0.1 * _vs);
+    }
+
+    /**
+     * This function is used in begin of drawing chart
+     *
+     * @param chartIndex indicated the index of chart in the one drawing windows
+     */
+    protected void prepareChartPosition(int chartIndex) {
+        g.translate(0, -getRealHeight(chartIndex) - 100);
+        loAxisX = 0;
+
+        drawAxisX(chartIndex);
+        drawAxisY(chartIndex);
+    }
+
     protected void drawAxisY(int index) {
-        int realHeight = (int) ((maxAxisY[index] + 10) * 0.1 * _vs);
+        int realHeight = getRealHeight(index);
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, 0, realHeight);
         g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
@@ -660,6 +696,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return axisX + 400;
     }
 
+    @Deprecated
     public int getRealHeight() {
         return (axisY > 0 || g.getTransform() == null) ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
 
@@ -688,14 +725,15 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     @Override
     public void mouseMoved(MouseEvent e) {
 //        mousePosition.x = e.getX();
-        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + (int) (getHeight() / scale) - 100;
-        mousePosition.x = (int) ((e.getX() - pnOffset.x - scaleOffset.x) / scale) - 100;
+//        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + (int) (getHeight() / scale) - 100;
+//        mousePosition.x = (int) ((e.getX() - pnOffset.x - scaleOffset.x) / scale) - 100;
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
 
         float sc = scale;
+
 
         if (sc > 1) {
             sc += -0.5 * e.getWheelRotation();

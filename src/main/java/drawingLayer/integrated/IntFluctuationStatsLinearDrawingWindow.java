@@ -42,7 +42,6 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
         _hs = 8;
     }
 
-    int loAxisX;
 
     @Override
     public void paint(Graphics gr) {
@@ -51,14 +50,14 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        printStatsInfo(1, "# of Fluctuation", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoFluct(), Globals.Color$.arr()[0]);
-        printStatsInfo(2, "# of Diagnosis", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoSuspectDiagnosis(), Globals.Color$.arr()[1]);
-        printStatsInfo(3, "# of Ignored Pos", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredPos(), Globals.Color$.arr()[2]);
-        printStatsInfo(4, "# of Ignored Neg", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredNeg(), Globals.Color$.arr()[3]);
-        printStatsInfo(5, "# of Ignored Pos TP", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredPosTruePositive(), Globals.Color$.arr()[4]);
-        printStatsInfo(6, "# of Ignored Neg TP", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredNegTruePositive(), Globals.Color$.arr()[5]);
-        printStatsInfo(8, "(Avg Ignored Pos) / (Avg Fluct)", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgIgnoredPosProportionToFluct1000(), Globals.Color$.arr()[6]);
-        printStatsInfo(9, "(Avg Ignored Neg) / (Avg Fluct)", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgIgnoredNegProportionToFluct1000(), Globals.Color$.arr()[7]);
+        printStatsInfo(1, "# of Fluctuation", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoFluct(), Globals.Color$.color(0));
+        printStatsInfo(2, "# of Diagnosis", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoSuspectDiagnosis(), Globals.Color$.color(1));
+        printStatsInfo(3, "# of Ignored Pos", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredPos(), Globals.Color$.color(2));
+        printStatsInfo(4, "# of Ignored Neg", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredNeg(), Globals.Color$.color(3));
+        printStatsInfo(5, "# of Ignored Pos TP", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredPosTruePositive(), Globals.Color$.color(4));
+        printStatsInfo(6, "# of Ignored Neg TP", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoIgnoredNegTruePositive(), Globals.Color$.color(5));
+        printStatsInfo(8, "(Avg Ignored Pos) / (Avg Fluct)", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgIgnoredPosProportionToFluct1000(), Globals.Color$.color(6));
+        printStatsInfo(9, "(Avg Ignored Neg) / (Avg Fluct)", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgIgnoredNegProportionToFluct1000(), Globals.Color$.color(7));
 
 
         //============================//============================ INFO
@@ -80,32 +79,32 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.arr()[0], j, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
                         g.drawString("Flc", 220, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(320, dynamicHeight, Globals.Color$.arr()[1], j, 20, -1);
+                        drawCurve(320, dynamicHeight, Globals.Color$.color(1), j, 20, -1);
                         g.drawString("Dgn", 340, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(440, dynamicHeight, Globals.Color$.arr()[2], j, 20, -1);
+                        drawCurve(440, dynamicHeight, Globals.Color$.color(2), j, 20, -1);
                         g.drawString("IgPs", 460, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[3]) {
-                        drawCurve(560, dynamicHeight, Globals.Color$.arr()[3], j, 20, -1);
+                        drawCurve(560, dynamicHeight, Globals.Color$.color(3), j, 20, -1);
                         g.drawString("IgNg", 580, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[4]) {
-                        drawCurve(680, dynamicHeight, Globals.Color$.arr()[4], j, 20, -1);
+                        drawCurve(680, dynamicHeight, Globals.Color$.color(4), j, 20, -1);
                         g.drawString("IgPsTP", 700, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[5]) {
-                        drawCurve(800, dynamicHeight, Globals.Color$.arr()[5], j, 20, -1);
+                        drawCurve(800, dynamicHeight, Globals.Color$.color(5), j, 20, -1);
                         g.drawString("IgPsNg", 820, dynamicHeight);
                         //============================
                     }
@@ -123,9 +122,7 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
-            g.translate(0, (int) (0.1 * _vs * -maxAxisY[0] - 50));
-            drawAxisX(0);
-            drawAxisY(0);
+            prepareChartPosition(0);
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
                 if (!showWorldsFlag[worldIdx]) {
@@ -166,30 +163,30 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
                     WorldStatisticsHypo stat = statistics[i].getStatisticsHypo();
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoFluct()), Globals.Color$.arr()[0], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoFluct()), Globals.Color$.color(0), worldIdx, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAvgHypoFluct());
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoSuspectDiagnosis()), Globals.Color$.arr()[1], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoSuspectDiagnosis()), Globals.Color$.color(1), worldIdx, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAvgHypoSuspectDiagnosis());
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPos()), Globals.Color$.arr()[2], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPos()), Globals.Color$.color(2), worldIdx, i);
                         drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getAvgHypoIgnoredPos());
                     }
 
                     if (showLineChartsFlag[3]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNeg()), Globals.Color$.arr()[3], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNeg()), Globals.Color$.color(3), worldIdx, i);
                         drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getAvgHypoIgnoredNeg());
                     }
 
                     if (showLineChartsFlag[4]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPosTruePositive()), Globals.Color$.arr()[4], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPosTruePositive()), Globals.Color$.color(4), worldIdx, i);
                         drawLine(prevPoints[4].x, prevPoints[4].y, loAxisX, stat.getAvgHypoIgnoredPosTruePositive());
                     }
 
                     if (showLineChartsFlag[5]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNegTruePositive()), Globals.Color$.arr()[5], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNegTruePositive()), Globals.Color$.color(5), worldIdx, i);
                         drawLine(prevPoints[5].x, prevPoints[5].y, loAxisX, stat.getAvgHypoIgnoredNegTruePositive());
                     }
 
@@ -212,11 +209,7 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
         }
 
         if (showChartsFlag[1]) {
-            g.translate(0, (int) (0.1 * _vs * (-maxAxisY[1] - maxAxisY[0]) - 50));
-            loAxisX = 0;
-
-            drawAxisX(1);
-            drawAxisY(1);
+            prepareChartPosition(1);
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
                 if (!showWorldsFlag[worldIdx]) {
@@ -256,12 +249,12 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
                     if (showLineChartsFlag[0]) {
                         propPos = stat.getAvgIgnoredPosProportionToFluct1000();
 
-                        drawCurve(loAxisX, (int) (0.1 * _vs * propPos), Globals.Color$.arr()[6], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * propPos), Globals.Color$.color(6), worldIdx, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, propPos);
                     }
                     if (showLineChartsFlag[1]) {
                         propNeg = stat.getAvgIgnoredNegProportionToFluct1000();
-                        drawCurve(loAxisX, (int) (0.1 * _vs * propNeg), Globals.Color$.arr()[7], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * propNeg), Globals.Color$.color(7), worldIdx, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, propNeg);
                     }
 

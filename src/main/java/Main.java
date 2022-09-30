@@ -21,6 +21,10 @@ public class Main {
           Simulator simulator = new Simulator();
         simulator.simulate();
 
+        System.out.print("\n");
+        System.out.print("\n");
+        System.out.print("Main function finished.");
+
     }
 
    /* private static void trt() {

@@ -20,7 +20,8 @@ public class IntDrawingWindowRunner extends Thread {
     private IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow;
     private IntResistancePerNumberStatsLinearDrawingWindow intResistancePerNumberStatsLinearDrawingWindow;
     private IntRocPointDrawingWindow intRocPointDrawingWindow;
-    private IntCollaborationRateLineDrawingWindow intCollaborationRateLineDrawingWindow;
+    private IntHonestCollaborationLineDrawingWindow intHonestCollaborationLineDrawingWindow;
+    private IntHypocriteCollaborationLineDrawingWindow intHypocriteCollaborationLineDrawingWindow;
     private IntResistanceStatsLinearDrawingWindow intResistanceStatsLinearDrawingWindow;
     private IntFluctuationStatsLinearDrawingWindow intFluctuationStatsLinearDrawingWindow;
 
@@ -49,8 +50,11 @@ public class IntDrawingWindowRunner extends Thread {
             if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
                 intRocPointDrawingWindow.repaint();
             }
-            if (Config.INT_DRAWING_SHOW_CollaborationLinearDrawingWindow) {
-                intCollaborationRateLineDrawingWindow.repaint();
+            if (Config.INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow) {
+                intHonestCollaborationLineDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow) {
+                intHypocriteCollaborationLineDrawingWindow.repaint();
             }
             if (Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow) {
                 intResistanceStatsLinearDrawingWindow.repaint();
@@ -125,9 +129,14 @@ public class IntDrawingWindowRunner extends Thread {
             initDrawingWindow(intRocPointDrawingWindow, widthHalf, heightHalf);
         }
 
-        if (Config.INT_DRAWING_SHOW_CollaborationLinearDrawingWindow) {
-            intCollaborationRateLineDrawingWindow = new IntCollaborationRateLineDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intCollaborationRateLineDrawingWindow, widthHalf, heightHalf);
+        if (Config.INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow) {
+            intHonestCollaborationLineDrawingWindow = new IntHonestCollaborationLineDrawingWindow(worlds);
+            initDrawingWindow(intHonestCollaborationLineDrawingWindow, widthHalf, heightHalf);
+        }
+
+        if (Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow) {
+            intHypocriteCollaborationLineDrawingWindow = new IntHypocriteCollaborationLineDrawingWindow(worlds);
+            initDrawingWindow(intHypocriteCollaborationLineDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow) {

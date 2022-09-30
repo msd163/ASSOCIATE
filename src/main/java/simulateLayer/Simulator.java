@@ -136,17 +136,22 @@ public class Simulator {
 
         Globals.SIMULATION_TIMER--;
         if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE) {
+            System.out.print("Simulator images are generating...");
             new ImageBuilder().generateSimulationImages(
                     intDrawingWindowRunner.getIntTravelStatsLinearDrawingWindow(),
                     intDrawingWindowRunner.getIntTrustAnalysisLinearDrawingWindow(),
                     intDrawingWindowRunner.getIntTrustStatsLinearDrawingWindow()
             );
+            System.out.print("Simulator images are generated.");
         }
         //============================//============================ Closing statistics file
         if (Config.STATISTICS_IS_GENERATE) {
             Globals.statsEnvGenerator.close();
             Globals.statsTrustGenerator.close();
         }
+
+        System.out.print("\n");
+        System.out.print("Simulator run is finished.");
 
     }
 

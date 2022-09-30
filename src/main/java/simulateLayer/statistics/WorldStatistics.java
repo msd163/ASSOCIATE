@@ -7,10 +7,6 @@ import java.util.Arrays;
 
 public class WorldStatistics {
 
-    private int[] honestCollaboration;
-
-    private int honestCollaborationInRound;
-    private int currentHonestCollaboration;
 
     private int negativePop;
 
@@ -19,7 +15,6 @@ public class WorldStatistics {
 
     private WorldStatistics prevStats;      // previous statistics for calculating 'allTrustToHonest' and 'allTrustToDishonest'
 
-    private Environment environment;
     private int worldTime;                  // time of world in this statistics
     private int episode;                    // episode of world in this statistics
     //============================
@@ -62,6 +57,7 @@ public class WorldStatistics {
 
     //============================
 
+    private WorldStatisticsCollaboration statisticsCollab;
     private WorldStatisticsHypo statisticsHypo;
 
     //============================
@@ -100,7 +96,11 @@ public class WorldStatistics {
                 xPrevStats == null ? null : xPrevStats.getStatisticsHypo(),
                 prevStats == null ? null : prevStats.getStatisticsHypo()
         );
-        this.environment = environment;
+        this.statisticsCollab = new WorldStatisticsCollaboration(
+                xPrevStats == null ? null : xPrevStats.getStatisticsCollab(),
+                prevStats == null ? null : prevStats.getStatisticsCollab()
+        );
+
         this.prevStats = prevStats;
         this.xPrevStats = xPrevStats;
         worldTime
@@ -123,10 +123,7 @@ public class WorldStatistics {
                 = ittTrueNegativeTrust
                 = 0;
 
-        honestCollaboration = new int[Config.STATISTICS_AVERAGE_TIME_WINDOW];
-        Arrays.fill(honestCollaboration, 0);
-        currentHonestCollaboration = 0;
-        honestCollaborationInRound = 0;
+
 
     }
 
@@ -147,12 +144,8 @@ public class WorldStatistics {
             allTrueNegativeTrust = prevStats.getAllTrueNegativeTrust();
 
             statisticsHypo.init(prevStats.getStatisticsHypo());
+            statisticsCollab.init(prevStats.getStatisticsCollab());
 
-            for (int i = 0; i < Config.STATISTICS_AVERAGE_TIME_WINDOW; i++) {
-                honestCollaboration[i] = prevStats.getHonestCollaboration(i);
-            }
-            currentHonestCollaboration = prevStats.getCurrentHonestCollaboration();
-            resetCollaboration();
         } else {
 
             allTrustToAdversary
@@ -173,11 +166,12 @@ public class WorldStatistics {
                     prevStats == null ? null : prevStats.getStatisticsHypo()
             );
 
-        }
-    }
+            statisticsCollab = new WorldStatisticsCollaboration(
+                    xPrevStats == null ? null : xPrevStats.getStatisticsCollab(),
+                    prevStats == null ? null : prevStats.getStatisticsCollab()
+            );
 
-    private int getHonestCollaboration(int i) {
-        return honestCollaboration[i];
+        }
     }
 
     public void add_All_AgentsInTarget() {
@@ -360,6 +354,7 @@ public class WorldStatistics {
     public void setWorldTime(int worldTime) {
         this.worldTime = worldTime;
         statisticsHypo.setWorldTime(worldTime);
+        statisticsCollab.setWorldTime(worldTime);
     }
 
     public int getAllAgentsInTarget() {
@@ -623,14 +618,6 @@ public class WorldStatistics {
         negativePop++;
     }
 
-    public void add_HonestCollaborationInRound() {
-        honestCollaborationInRound++;
-    }
-
-    public void add_HonestCollaboration() {
-        honestCollaboration[currentHonestCollaboration]++;
-    }
-
     public void add_PositivePop() {
         positivePop++;
     }
@@ -638,52 +625,13 @@ public class WorldStatistics {
     public void resetPopulation() {
         negativePop = 0;
         positivePop = 0;
-
-    }
-
-    public void resetCollaboration() {
-        currentHonestCollaboration++;
-        if (currentHonestCollaboration >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
-            currentHonestCollaboration = 0;
-        }
-        honestCollaboration[currentHonestCollaboration] = 0;
-    }
-
-    public int getHonestCollaboration() {
-        return honestCollaboration[currentHonestCollaboration];
-    }
-
-    public int getAvgHonestCollaboration() {
-
-        if (worldTime < Config.STATISTICS_AVERAGE_TIME_WINDOW) {
-            return 0;
-        }
-        int sum = 0;
-        for (int i = 0; i < Config.STATISTICS_AVERAGE_TIME_WINDOW; i++) {
-            sum += honestCollaboration[i];
-        }
-
-        return sum / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-    }
-
-    public int getCurrentHonestCollaboration() {
-        return currentHonestCollaboration;
-    }
-
-    public int getHonestCollaborationRate() {
-        return (int) (100 * (float) ittTrustToHonest / honestCollaborationInRound);
-    }
-
-
-    public int getHonestCollaborationInRound() {
-        return honestCollaborationInRound;
-    }
-
-    public void setHonestCollaborationInRound(int honestCollaborationInRound) {
-        this.honestCollaborationInRound = honestCollaborationInRound;
     }
 
     public WorldStatisticsHypo getStatisticsHypo() {
         return statisticsHypo;
+    }
+
+    public WorldStatisticsCollaboration getStatisticsCollab() {
+        return statisticsCollab;
     }
 }

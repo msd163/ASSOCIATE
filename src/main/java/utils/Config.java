@@ -19,11 +19,11 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 100;                            // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 255;                                 // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 0;                          // Sleep time in each run of world
     public static int WORLD_SLEEP_MILLISECOND_IN_PAUSE = 200;              // Sleep time in each run of world when the world execution is PAUSED
-    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 100;            // Sleep time of drawing thread
-    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 200;   // Sleep time of drawing thread when it is PAUSED.
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 500;            // Sleep time of drawing thread
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 0;   // Sleep time of drawing thread when it is PAUSED.
 
 
 
@@ -31,11 +31,12 @@ public class Config {
 
     public static int STATISTICS_AVERAGE_TIME_WINDOW = 10;
     public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE = 5;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION = 10;
     public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC = 10;
     public static int STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD = 3;   // After a number of fluctuation (this threshold) in scores (saved in descending normalized list: [L'']), the agent labeled as Hypocrite
     public static int STATISTICS_HYPOCRITE_RESISTANCE_COUNT = 9;     // the resistance_number count that will be saved in statistics and traced
 
-    public static double STATISTICS_SCALE_UP_Y_AXIS_NUMBER = 1.0; // This is for scaling up result. i.e. 1 is presented in scale of this value
+    public static double STATISTICS_SCALE_UP_Y_AXIS_NUMBER = 4.0; // This is for scaling up result. i.e. 1 is presented in scale of this value
 
 
     public static final int ROUTING_STAY_IN_TARGET_TIME /*      */ = 1;
@@ -50,7 +51,7 @@ public class Config {
 
     //============================ Drawing Windows
 
-    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Dark;
+    public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Light;
 
     //============================ Drawing Windows
 
@@ -78,7 +79,8 @@ public class Config {
     public static final boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow /*            */ = true;
     public static final boolean INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow /*   */ = true;
     public static final boolean INT_DRAWING_SHOW_RocPointDrawingWindow /*                       */ = false;
-    public static final boolean INT_DRAWING_SHOW_CollaborationLinearDrawingWindow /*            */ = true;
+    public static final boolean INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow /*      */ = true;
+    public static final boolean INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow /*   */ = true;
     public static final boolean INT_DRAWING_SHOW_ResistanceLinearDrawingWindow /*               */ = true;
     public static final boolean INT_DRAWING_SHOW_FluctuationLinearDrawingWindow /*              */ = true;
 

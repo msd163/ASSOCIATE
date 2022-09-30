@@ -41,7 +41,6 @@ public class IntResistancePerNumberStatsLinearDrawingWindow extends DrawingWindo
         _hs = 8;
     }
 
-    int loAxisX;
 
     @Override
     public void paint(Graphics gr) {
@@ -50,8 +49,8 @@ public class IntResistancePerNumberStatsLinearDrawingWindow extends DrawingWindo
             return;
         }
 
-        for (int i = 1; i < Config.STATISTICS_HYPOCRITE_RESISTANCE_COUNT; i++) {
-            printStatsInfo(i + 1, "# of Resist Per Number All [" + i + "] (Avg: " + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoResistanceByNumberAgainstAll()[i], Globals.Color$.arr()[i]);
+        for (int i = 0; i < Config.STATISTICS_HYPOCRITE_RESISTANCE_COUNT; i++) {
+            printStatsInfo(i + 1, "# of Resist Per Number All [" + i + "] (Avg: " + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getAvgHypoResistanceByNumberAgainstAll()[i], Globals.Color$.color(i));
         }
 
         //============================//============================ INFO
@@ -67,13 +66,13 @@ public class IntResistancePerNumberStatsLinearDrawingWindow extends DrawingWindo
 
                 //============================
                 dynamicHeight += 40;
-                g.setColor(Globals.Color$.arr()[j]);
+                g.setColor(Globals.Color$.color(j));
                 g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
                 //============================
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.arr()[0], j, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
                         g.drawString("DATA", 220, dynamicHeight);
                         //============================
                     }
@@ -91,9 +90,8 @@ public class IntResistancePerNumberStatsLinearDrawingWindow extends DrawingWindo
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
-            g.translate(0, (int) (0.1 * _vs * -maxAxisY[0] - 50));
-            drawAxisX(0);
-            drawAxisY(0);
+            prepareChartPosition(0);
+
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
                 if (!showWorldsFlag[worldIdx]) {
@@ -124,9 +122,9 @@ public class IntResistancePerNumberStatsLinearDrawingWindow extends DrawingWindo
                 for (int i = 1, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
 
                     int[] number = statistics[i].getStatisticsHypo().getAvgHypoResistanceByNumberAgainstAll();
-                    for (int idx = 1; idx < Config.STATISTICS_HYPOCRITE_RESISTANCE_COUNT; idx++) {
+                    for (int idx = 0; idx < Config.STATISTICS_HYPOCRITE_RESISTANCE_COUNT; idx++) {
                         if (showLineChartsFlag[idx]) {
-                            drawCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.arr()[idx], worldIdx, i);
+                            drawCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.color(idx), worldIdx, i);
                             if (prevPoints[idx].y >= 0) {
                                 drawLine(prevPoints[idx].x, prevPoints[idx].y, loAxisX, number[idx]);
                             }

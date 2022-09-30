@@ -32,7 +32,6 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
         _vs = 100;
     }
 
-    int loAxisX;
 
     @Override
     public void paint(Graphics gr) {
@@ -93,9 +92,9 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
         if (showChartsFlag[0]) {
-            g.translate(0, (int) (0.1 * _vs * -maxAxisY[0] - 50));
-            drawAxisX(0);
-            drawAxisY(0);
+            prepareChartPosition(0);
+
+
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
                 if (!showWorldsFlag[j]) {
                     continue;
@@ -164,11 +163,7 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
         //============================//============================//============================ Average Chart
 
         if (showChartsFlag[1] && maxAxisY.length > 1) {
-            g.translate(0, (int) (0.1 * _vs * (-maxAxisY[1] - maxAxisY[0]) - 50));
-            loAxisX = 0;
-
-            drawAxisX(1);
-            drawAxisY(1);
+            prepareChartPosition(0);
 
             for (int j = 0, worldsLength = worlds.length; j < worldsLength; j++) {
                 if (!showWorldsFlag[j]) {

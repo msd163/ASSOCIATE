@@ -42,7 +42,6 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
         _hs = 8;
     }
 
-    int loAxisX;
 
     @Override
     public void paint(Graphics gr) {
@@ -51,15 +50,15 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        printStatsInfo(1, "# of Resist against Pos", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstPos(), Globals.Color$.arr()[0]);
-        printStatsInfo(2, "# of Resist against Neg", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstNeg(), Globals.Color$.arr()[1]);
-        printStatsInfo(3, "# of Resist against All", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstAll(), Globals.Color$.arr()[2]);
+        printStatsInfo(1, "# of Resist against Pos", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstPos(), Globals.Color$.color(0));
+        printStatsInfo(2, "# of Resist against Neg", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstNeg(), Globals.Color$.color(1));
+        printStatsInfo(3, "# of Resist against All", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstAll(), Globals.Color$.color(2));
 
-        printStatsInfo(5, "# of Resist against Pos (Avg:" + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstPos(), Globals.Color$.arr()[0]);
-        printStatsInfo(6, "# of Resist against Neg (Avg:" + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstNeg(), Globals.Color$.arr()[1]);
-        printStatsInfo(7, "# of Resist against All (Avg:" + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstAll(), Globals.Color$.arr()[2]);
+        printStatsInfo(5, "# of Resist against Pos (Avg:" + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstPos(), Globals.Color$.color(0));
+        printStatsInfo(6, "# of Resist against Neg (Avg:" + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstNeg(), Globals.Color$.color(1));
+        printStatsInfo(7, "# of Resist against All (Avg:" + Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE + ")", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistanceOfAllNumberAgainstAll(), Globals.Color$.color(2));
 
-        printStatsInfo(9, "# of Resist/Suspected ", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistancePerSuspected(), Globals.Color$.arr()[3]);
+        printStatsInfo(9, "# of Resist/Suspected ", worlds[simulationTimer].getWdStatistics()[worldTimer].getStatisticsHypo().getIttHypoResistancePerSuspected(), Globals.Color$.color(3));
 
 
         //============================//============================ INFO
@@ -75,23 +74,23 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
 
                 //============================
                 dynamicHeight += 40;
-                g.setColor(Globals.Color$.arr()[j]);
+                g.setColor(Globals.Color$.color(j));
                 g.drawString("Sim " + (j + 1) + " |", 80, dynamicHeight);
                 //============================
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.arr()[0], j, 20, -1);
+                        drawCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
                         g.drawString("Pos", 220, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(300, dynamicHeight, Globals.Color$.arr()[1], j, 20, -1);
+                        drawCurve(300, dynamicHeight, Globals.Color$.color(1), j, 20, -1);
                         g.drawString("Neg", 320, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(400, dynamicHeight, Globals.Color$.arr()[2], j, 20, -1);
+                        drawCurve(400, dynamicHeight, Globals.Color$.color(2), j, 20, -1);
                         g.drawString("All", 420, dynamicHeight);
                         //============================
                     }
@@ -110,9 +109,8 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================
         if (showChartsFlag[0]) {
-            g.translate(0, (int) (0.1 * _vs * -maxAxisY[0] - 50));
-            drawAxisX(0);
-            drawAxisY(0);
+            prepareChartPosition(0);
+
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
                 if (!showWorldsFlag[worldIdx]) {
@@ -150,15 +148,15 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
                     WorldStatisticsHypo stat = statistics[i].getStatisticsHypo();
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistanceOfAllNumberAgainstPos()), Globals.Color$.arr()[0], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistanceOfAllNumberAgainstPos()), Globals.Color$.color(0), worldIdx, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttHypoResistanceOfAllNumberAgainstPos());
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistanceOfAllNumberAgainstNeg()), Globals.Color$.arr()[1], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistanceOfAllNumberAgainstNeg()), Globals.Color$.color(1), worldIdx, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttHypoResistanceOfAllNumberAgainstNeg());
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistanceOfAllNumberAgainstAll()), Globals.Color$.arr()[2], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistanceOfAllNumberAgainstAll()), Globals.Color$.color(2), worldIdx, i);
                         drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getIttHypoResistanceOfAllNumberAgainstAll());
                     }
 
@@ -182,11 +180,7 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================
         if (showChartsFlag[1]) {
-            g.translate(0, (int) (0.1 * _vs * (-maxAxisY[1] - maxAxisY[0]) - 50));
-            loAxisX = 0;
-
-            drawAxisX(1);
-            drawAxisY(1);
+            prepareChartPosition(0);
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
                 if (!showWorldsFlag[worldIdx]) {
@@ -224,15 +218,15 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
                     WorldStatisticsHypo stat = statistics[i].getStatisticsHypo();
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoResistanceOfAllNumberAgainstPos()), Globals.Color$.arr()[0], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoResistanceOfAllNumberAgainstPos()), Globals.Color$.color(0), worldIdx, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAvgHypoResistanceOfAllNumberAgainstPos());
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoResistanceOfAllNumberAgainstNeg()), Globals.Color$.arr()[1], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoResistanceOfAllNumberAgainstNeg()), Globals.Color$.color(1), worldIdx, i);
                         drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAvgHypoResistanceOfAllNumberAgainstNeg());
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoResistanceOfAllNumberAgainstAll()), Globals.Color$.arr()[2], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoResistanceOfAllNumberAgainstAll()), Globals.Color$.color(2), worldIdx, i);
                         drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getAvgHypoResistanceOfAllNumberAgainstAll());
                     }
 
@@ -291,7 +285,7 @@ public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
                     WorldStatisticsHypo stat = statistics[i].getStatisticsHypo();
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistancePerSuspected()), Globals.Color$.arr()[3], worldIdx, i);
+                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getIttHypoResistancePerSuspected()), Globals.Color$.color(3), worldIdx, i);
                         drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttHypoResistancePerSuspected());
                     }
 
