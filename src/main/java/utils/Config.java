@@ -22,7 +22,7 @@ public class Config {
     public static int WORLD_LIFE_TIME = 200;                                 // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 0;                          // Sleep time in each run of world
     public static int WORLD_SLEEP_MILLISECOND_IN_PAUSE = 500;              // Sleep time in each run of world when the world execution is PAUSED
-    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 500;            // Sleep time of drawing thread
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 2000;            // Sleep time of drawing thread
     public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 200;   // Sleep time of drawing thread when it is PAUSED.
 
 

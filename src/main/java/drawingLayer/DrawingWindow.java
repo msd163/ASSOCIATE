@@ -265,47 +265,47 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         //============================//============================ PAUSE SETTING
                         switch (keyCode) {
                             case 116:
-                                if (Config.WORLD_SLEEP_MILLISECOND > 100) {
-                                    Config.WORLD_SLEEP_MILLISECOND -= 100;
+                                if (Config.WORLD_SLEEP_MILLISECOND > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND -= 200;
                                 } else {
                                     Config.WORLD_SLEEP_MILLISECOND = 0;
                                 }
                                 break;
                             case 117:
-                                Config.WORLD_SLEEP_MILLISECOND += 100;
+                                Config.WORLD_SLEEP_MILLISECOND += 200;
                                 break;
 
                             case 118:
-                                if (Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE > 100) {
-                                    Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE -= 100;
+                                if (Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE -= 200;
                                 } else {
                                     Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE = 0;
                                 }
                                 break;
                             case 119:
-                                Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE += 100;
+                                Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE += 200;
                                 break;
 
                             case 120:
-                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING > 100) {
-                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING -= 100;
+                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING -= 200;
                                 } else {
                                     Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 0;
                                 }
                                 break;
                             case 121:
-                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING += 100;
+                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING += 200;
                                 break;
 
                             case 122:
-                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE > 100) {
-                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE -= 100;
+                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE -= 200;
                                 } else {
                                     Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 0;
                                 }
                                 break;
                             case 123:
-                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE += 100;
+                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE += 200;
                                 break;
 
                         }
@@ -791,7 +791,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         if (Globals.FINISHED) {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
             g.setColor(Globals.Color$.$finished);
-            g.drawString("FINISHED ", 800, 20);
+            g.drawString("FINISHED ", 1200, 80);
         }
     }
     //============================//============================//============================ Mouse events

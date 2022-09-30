@@ -125,11 +125,6 @@ public class IntDrawingWindowRunner extends Thread {
             initDrawingWindow(intTrustStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
-        if (Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow) {
-            intResistancePerNumberStatsLinearDrawingWindow = new IntResistancePerNumberStatsLinearDrawingWindow(worlds, simulationConfig);
-            initDrawingWindow(intResistancePerNumberStatsLinearDrawingWindow, widthHalf, heightHalf);
-        }
-
         if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
             intRocPointDrawingWindow = new IntRocPointDrawingWindow(worlds, simulationConfig);
             initDrawingWindow(intRocPointDrawingWindow, widthHalf, heightHalf);
@@ -143,6 +138,11 @@ public class IntDrawingWindowRunner extends Thread {
         if (Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow) {
             intHypocriteCollaborationLineDrawingWindow = new IntHypocriteCollaborationLineDrawingWindow(worlds);
             initDrawingWindow(intHypocriteCollaborationLineDrawingWindow, widthHalf, heightHalf);
+        }
+
+        if (Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow) {
+            intResistancePerNumberStatsLinearDrawingWindow = new IntResistancePerNumberStatsLinearDrawingWindow(worlds, simulationConfig);
+            initDrawingWindow(intResistancePerNumberStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow) {

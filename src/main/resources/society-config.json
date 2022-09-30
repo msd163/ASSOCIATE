@@ -38,12 +38,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 20,
+        "honestPercent": 80,
         "adversaryPercent": 0,
         "mischiefPercent": 0,
         "hypocriteBehavior": {
           "honestPercent": 80,
-          "adversaryPercent": 10,
+          "adversaryPercent": 20,
           "mischiefPercent": 0
         }
       }
