@@ -1,7 +1,5 @@
 import simulateLayer.Simulator;
-
-import java.util.ArrayList;
-import java.util.List;
+import utils.Globals;
 
 
 public class Main {
@@ -18,12 +16,13 @@ public class Main {
         System.out.print("\n");
         System.out.print("\n");
 
-          Simulator simulator = new Simulator();
+        Simulator simulator = new Simulator();
         simulator.simulate();
 
         System.out.print("\n");
         System.out.print("\n");
         System.out.print("Main function finished.");
+        Globals.FINISHED = true;
 
     }
 

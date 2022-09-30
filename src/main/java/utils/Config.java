@@ -19,12 +19,11 @@ public class Config {
     //============================ World
     public static final TtSimulationMode SIMULATION_MODE = TtSimulationMode.Consequence;
 
-    public static int WORLD_LIFE_TIME = 255;                                 // Time of execution in each world
+    public static int WORLD_LIFE_TIME = 200;                                 // Time of execution in each world
     public static int WORLD_SLEEP_MILLISECOND = 0;                          // Sleep time in each run of world
-    public static int WORLD_SLEEP_MILLISECOND_IN_PAUSE = 200;              // Sleep time in each run of world when the world execution is PAUSED
+    public static int WORLD_SLEEP_MILLISECOND_IN_PAUSE = 500;              // Sleep time in each run of world when the world execution is PAUSED
     public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 500;            // Sleep time of drawing thread
-    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 0;   // Sleep time of drawing thread when it is PAUSED.
-
+    public static int WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 200;   // Sleep time of drawing thread when it is PAUSED.
 
 
     public static int STATE_TILE_WIDTH = 30;                            // used in state machine diagram
@@ -52,6 +51,9 @@ public class Config {
     //============================ Drawing Windows
 
     public static final TtDiagramThemeMode THEME_MODE /*            */ = TtDiagramThemeMode.Light;
+
+    public static final boolean DRAWING_WINDOWS_MAXIMIZING /*                       */ = true;
+    public static final boolean DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY /*        */ = true;
 
     //============================ Drawing Windows
 
@@ -89,5 +91,33 @@ public class Config {
     public static final boolean STATISTICS_IS_SAVE_IMAGE /*         */ = false;
     public static final boolean TRUST_MATRIX_IS_GENERATE /*         */ = true;
     public static final boolean TRUST_MATRIX_IS_ON /*               */ = true;
+
+
+    public static final boolean DRAWING_SHOW_ENABLED =
+            Config.DRAWING_SHOW_stateMachineWindow
+                    || Config.DRAWING_SHOW_travelStatsLinearDrawingWindow
+                    || Config.DRAWING_SHOW_travelHistoryBarDrawingWindow
+                    || Config.DRAWING_SHOW_trustMatrixDrawingWindow
+                    || Config.DRAWING_SHOW_trustStatsLinearDrawingWindow
+                    || Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow
+                    || Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow
+                    || Config.DRAWING_SHOW_experienceBarDrawingWindow
+                    || Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow
+                    || Config.DRAWING_SHOW_observationBarDrawingWindow
+                    || Config.DRAWING_SHOW_indirectObservationBarDrawingWindow
+                    || Config.DRAWING_SHOW_recommendationBarDrawingWindow;
+
+
+    public static final boolean INT_DRAWING_SHOW_ENABLED =
+            INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow
+                    || INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow
+                    || INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow
+                    || INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow
+                    || INT_DRAWING_SHOW_RocPointDrawingWindow
+                    || INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow
+                    || INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow
+                    || INT_DRAWING_SHOW_ResistanceLinearDrawingWindow
+                    || INT_DRAWING_SHOW_FluctuationLinearDrawingWindow;
+
 
 }

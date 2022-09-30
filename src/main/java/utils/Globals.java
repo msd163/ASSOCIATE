@@ -198,9 +198,11 @@ public class Globals {
         }
 
         public static Color $pause = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen1;
+        public static Color $finished = Config.THEME_MODE == TtDiagramThemeMode.Dark ? blue : darkBlue2;
         public static Color $background = Config.THEME_MODE == TtDiagramThemeMode.Dark ? black : white;
         public static Color $mainTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : darkGray2;
-        public static Color $subTitle = gray;
+        public static Color $subTitle2 = darkGray2;
+        public static Color $subTitle = darkGray;
         public static Color $simTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : black;
         public static Color $configTitle = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGray1 : darkGray2;
         public static Color $axis = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : black;
@@ -224,6 +226,8 @@ public class Globals {
     public static Random RANDOM = new Random(new Date().getTime());
 
     public static boolean PAUSE = false;
+    public static boolean HIDE_ALL_DRAWING = false;
+    public static boolean FINISHED = false;
 
 
     //============================//============================//============================

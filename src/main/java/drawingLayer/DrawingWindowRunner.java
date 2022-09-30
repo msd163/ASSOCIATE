@@ -1,9 +1,6 @@
 package drawingLayer;
 
 import _type.TtDrawingWindowLocation;
-import drawingLayer.integrated.IntTravelStatsLinearDrawingWindow;
-import drawingLayer.integrated.IntTrustAnalysisLinearDrawingWindow;
-import drawingLayer.integrated.IntTrustStatsLinearDrawingWindow;
 import drawingLayer.routing.StateMachineDrawingWindow;
 import drawingLayer.routing.TravelHistoryBarDrawingWindow;
 import drawingLayer.routing.TravelStatsLinearDrawingWindow;
@@ -11,6 +8,7 @@ import drawingLayer.trust.*;
 import societyLayer.agentSubLayer.World;
 import trustLayer.TrustMatrix;
 import utils.Config;
+import utils.Globals;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +44,7 @@ public class DrawingWindowRunner extends Thread {
 
     @Override
     public void run() {
-        while (true){
+        while (true) {
 
             if (Config.DRAWING_SHOW_stateMachineWindow) {
                 stateMachineDrawingWindow.repaint();
@@ -86,11 +84,23 @@ public class DrawingWindowRunner extends Thread {
             }
 
 
-           /* try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
+            if (Globals.PAUSE) {
+                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE > 0) {
+                    try {
+                        Thread.sleep(Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING > 0) {
+                    try {
+                        Thread.sleep(Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
@@ -105,7 +115,12 @@ public class DrawingWindowRunner extends Thread {
         drawingWindow.setDoubleBuffered(true);
         JFrame mainFrame = new JFrame();
         mainFrame.getContentPane().add(drawingWindow);
-        mainFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+        if (Config.DRAWING_WINDOWS_MAXIMIZING) {
+            mainFrame.setMinimumSize(new Dimension(2 * widthHalf, 2 * heightHalf));
+            location = TtDrawingWindowLocation.TopLeft;
+        } else {
+            mainFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+        }
         mainFrame.setVisible(true);
         if (exitAppOnCLose) {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

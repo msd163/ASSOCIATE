@@ -90,11 +90,17 @@ public class IntDrawingWindowRunner extends Thread {
     private void initDrawingWindow(DrawingWindow drawingWindow, int widthHalf, int heightHalf) {
         drawingWindow.setDoubleBuffered(true);
         JFrame statsFrame = new JFrame();
-
         statsFrame.getContentPane().add(drawingWindow);
-        statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
         statsFrame.setVisible(true);
-        statsFrame.setLocation(0, heightHalf);
+
+        if (Config.DRAWING_WINDOWS_MAXIMIZING) {
+            statsFrame.setMinimumSize(new Dimension(2 * widthHalf, 2 * heightHalf));
+            statsFrame.setLocation(0, 0);
+        } else {
+            statsFrame.setMinimumSize(new Dimension(widthHalf, heightHalf));
+            statsFrame.setLocation(0, heightHalf);
+        }
+
         statsFrame.setTitle(drawingWindow.getHeaderTitle());
     }
 

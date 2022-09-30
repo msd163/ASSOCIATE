@@ -60,6 +60,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private boolean showMousePlus = true;
     private boolean isShowDrawingTitle = true;
     private boolean isShowStatsInfo = true;
+    private boolean isPaintTheChart = Config.DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY;
     protected boolean isShowSimInfo = true;
     protected boolean isShowAgentId = true;
     protected boolean isShowBarChartCapInfo = true;
@@ -134,13 +135,15 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 if (e.isShiftDown()) {
                     //System.out.println(keyCode);
                     switch (keyCode) {
-                        case 112:        // left
+                        case 112:        // left  F1
                             if (_vs > 25) {
                                 _vs -= 25;
+                               // pnOffset.y += getRealHeight(0)/2;
                             }
                             break;
-                        case 113:        // top
+                        case 113:        // top   F2
                             _vs += 25;
+                            //pnOffset.y += getRealHeight(0)/2;
                             break;
                         case 37:        // left
                             if (_hs > 1) {
@@ -207,7 +210,17 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         if (index < showLineChartsFlag.length) {
                             showLineChartsFlag[index] = !showLineChartsFlag[index];
                         }
+                    } else {
+                        switch (keyCode) {
+                            case (int) 'H':
+                                Globals.HIDE_ALL_DRAWING = true;
+                                break;
+                            case (int) 'S':
+                                Globals.HIDE_ALL_DRAWING = false;
+                                break;
+                        }
                     }
+
                 }
                 //-- For showing or hiding line charts in each chart
                 if (e.isControlDown()) {
@@ -219,34 +232,84 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             showChartsFlag[index] = !showChartsFlag[index];
                         }
                     } else {
-                        if (keyCode == (int) 'q' || keyCode == (int) 'Q') {
-                            isShowDrawingTitle = !isShowDrawingTitle;
-                        } else if (keyCode == (int) 'w' || keyCode == (int) 'W') {
-                            isShowStatsInfo = !isShowStatsInfo;
-                        } else if (keyCode == (int) 'e' || keyCode == (int) 'E') {
-                            isShowSimInfo = !isShowSimInfo;
-                        } else if (keyCode == (int) 'r' || keyCode == (int) 'R') {
-                            isShowAgentId = !isShowAgentId;
-                        } else if (keyCode == (int) 't' || keyCode == (int) 'T') {
-                            isShowBarChartCapInfo = !isShowBarChartCapInfo;
+                        switch (keyCode) {
+                            case (int) 'Q':
+                                isShowDrawingTitle = !isShowDrawingTitle;
+                                break;
+                            case (int) 'W':
+                                isShowStatsInfo = !isShowStatsInfo;
+                                break;
+                            case (int) 'E':
+                                isShowSimInfo = !isShowSimInfo;
+                                break;
+                            case (int) 'R':
+                                isShowAgentId = !isShowAgentId;
+                                break;
+                            case (int) 'T':
+                                isShowBarChartCapInfo = !isShowBarChartCapInfo;
 
-                        } else if (keyCode == (int) 'a' || keyCode == (int) 'A') {
-                            pnOffset.y = -getRealHeight(0);
-                            pnOffset.x = 0;
+                                break;
+                            case (int) 'A':
+                                pnOffset.y = -getRealHeight(0);
+                                pnOffset.x = 0;
 
-                        } else if (keyCode == (int) 'h' || keyCode == (int) 'H') {
-                            Arrays.fill(showChartsFlag, false);
-                            isShowStatsInfo = false;
-                            isShowBarChartCapInfo = false;
-                            isShowDrawingTitle = false;
-                            isShowSimInfo = false;
-                        } else if (keyCode == (int) 's' || keyCode == (int) 'S') {
-                            Arrays.fill(showChartsFlag, true);
-                            isShowStatsInfo = true;
-                            isShowDrawingTitle = true;
-                            isShowBarChartCapInfo = true;
-                            isShowSimInfo = true;
+                                break;
+                            case (int) 'H':
+                                isPaintTheChart = false;
+                                break;
+                            case (int) 'S':
+                                isPaintTheChart = true;
+                                break;
                         }
+
+                        //============================//============================ PAUSE SETTING
+                        switch (keyCode) {
+                            case 116:
+                                if (Config.WORLD_SLEEP_MILLISECOND > 100) {
+                                    Config.WORLD_SLEEP_MILLISECOND -= 100;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND = 0;
+                                }
+                                break;
+                            case 117:
+                                Config.WORLD_SLEEP_MILLISECOND += 100;
+                                break;
+
+                            case 118:
+                                if (Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE > 100) {
+                                    Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE -= 100;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE = 0;
+                                }
+                                break;
+                            case 119:
+                                Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE += 100;
+                                break;
+
+                            case 120:
+                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING > 100) {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING -= 100;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 0;
+                                }
+                                break;
+                            case 121:
+                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING += 100;
+                                break;
+
+                            case 122:
+                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE > 100) {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE -= 100;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 0;
+                                }
+                                break;
+                            case 123:
+                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE += 100;
+                                break;
+
+                        }
+
                     }
                 }
                 //- Pausing and UnPausing
@@ -366,9 +429,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
 
         g = (Graphics2D) gr;
-        g.setBackground(Globals.Color$.$background);
+        g.setBackground(Globals.HIDE_ALL_DRAWING ? Globals.Color$.darkGray1 : isPaintTheChart ? Globals.Color$.$background : Globals.Color$.darkGreen3);
         g.clearRect(0, 0, getWidth(), getHeight());
-        pauseNotice(g);
+        pauseAndFinishNotice(g);
 
         printDrawingTitle(title, subTitle);
 
@@ -384,8 +447,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 g.drawString(": " + world.getId(), 1300, 50);
             } else {
                 g.drawString("Simulation Time", 1100, 50);
-                g.drawString(": " + simulationTimer, 1300, 50);
+                g.drawString(": " + simulationTimer + "/" + worlds.length, 1300, 50);
             }
+
+            g.setColor(Globals.Color$.$subTitle2);
+
             g.drawString("World Time", 1100, 90);
             g.drawString(": " + worldTimer, 1300, 90);
             g.drawString("Episode", 1100, 130);
@@ -399,8 +465,16 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
             g.drawString("Horizontal: X " + _hs, 1500, 90);
             g.drawString("Zoom: X " + scale, 1500, 130);
             g.drawString("LineThick: " + lineThickness, 1500, 170);
+
+
+            g.drawString("SLEEP : " + Config.WORLD_SLEEP_MILLISECOND, 1800, 50);
+            g.drawString("SLEEP (PAUSE) : " + Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE, 1800, 90);
+            g.drawString("SLEEP DRAWING : " + Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING, 1800, 130);
+            g.drawString("SLEEP DRAWING (PAUSE) : " + Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE, 1800, 170);
+
+
         }
-        return true;
+        return isPaintTheChart && !Globals.HIDE_ALL_DRAWING;
     }
 
     protected void drawAxisX(int index) {
@@ -707,11 +781,17 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return count == 0 ? value * 2 : (2 * value) / (count);
     }
 
-    protected void pauseNotice(Graphics2D g) {
+    protected void pauseAndFinishNotice(Graphics2D g) {
         if (Globals.PAUSE) {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
             g.setColor(Globals.Color$.$pause);
-            g.drawString("PAUSED ", 400, 100);
+            g.drawString("PAUSED ", 600, 200);
+        }
+
+        if (Globals.FINISHED) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+            g.setColor(Globals.Color$.$finished);
+            g.drawString("FINISHED ", 800, 20);
         }
     }
     //============================//============================//============================ Mouse events

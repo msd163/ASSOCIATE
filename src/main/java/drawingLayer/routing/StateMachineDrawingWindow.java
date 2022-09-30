@@ -61,7 +61,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
         g.clearRect(0, 0, getWidth(), getHeight());
-        pauseNotice(g);
+        pauseAndFinishNotice(g);
 
         if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;

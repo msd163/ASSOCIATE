@@ -25,7 +25,9 @@ public class World {
         this.id = id;
         this.simulator = simulator;
         this.simulationConfigItem = simulationConfigItem;
-        this.drawingWindowRunner = new DrawingWindowRunner(this);
+        if (Config.DRAWING_SHOW_ENABLED) {
+            this.drawingWindowRunner = new DrawingWindowRunner(this);
+        }
     }
 
     private int id;
@@ -150,7 +152,7 @@ public class World {
                 if (i >= Config.STATISTICS_AVERAGE_TIME_WINDOW) {
                     wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], wdStatistics[i - Config.STATISTICS_AVERAGE_TIME_WINDOW], environment);
                 } else {
-                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1],  null, environment);
+                    wdStatistics[i] = new WorldStatistics(wdStatistics[i - 1], null, environment);
                 }
             }
         }
@@ -243,8 +245,11 @@ public class World {
      **/
     public void run() throws InterruptedException {
 
-        drawingWindowRunner.initDrawingWindows(matrixGenerator);
-        drawingWindowRunner.start();
+        if (Config.DRAWING_SHOW_ENABLED) {
+            drawingWindowRunner.initDrawingWindows(matrixGenerator);
+            drawingWindowRunner.start();
+        }
+
         /* ****************************
          *            MAIN LOOP      *
          * ****************************/
@@ -277,11 +282,11 @@ public class World {
                 Agent agent = agents.get(i);
                 // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
                 //todo: adding doing service capacity to agents as capacity param
-               // System.out.print(" | 1 > profile...");
+                // System.out.print(" | 1 > profile...");
                 agent.updateProfile();
-               // System.out.print(" | 2 > watchList...");
+                // System.out.print(" | 2 > watchList...");
                 agent.updateWatchList();
-               // System.out.print(" | 3 > nextStep...");
+                // System.out.print(" | 3 > nextStep...");
                 router.updateNextSteps(agent);
             }
 
@@ -468,7 +473,7 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
-        if (Config.STATISTICS_IS_GENERATE&& Config.STATISTICS_IS_SAVE_IMAGE) {
+        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE && Config.DRAWING_SHOW_ENABLED) {
             new ImageBuilder().generateStatisticsImages(
                     drawingWindowRunner.getStateMachineDrawingWindow(),
                     drawingWindowRunner.getTravelStatsLinearDrawingWindow(),

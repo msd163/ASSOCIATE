@@ -88,9 +88,11 @@ public class Simulator {
 
         }
 
-        intDrawingWindowRunner = new IntDrawingWindowRunner(worlds, simulationConfig);
-        intDrawingWindowRunner.initDrawingWindows();
-        intDrawingWindowRunner.start();
+        if (Config.INT_DRAWING_SHOW_ENABLED) {
+            intDrawingWindowRunner = new IntDrawingWindowRunner(worlds, simulationConfig);
+            intDrawingWindowRunner.initDrawingWindows();
+            intDrawingWindowRunner.start();
+        }
 
     }
 
@@ -135,7 +137,7 @@ public class Simulator {
         }
 
         Globals.SIMULATION_TIMER--;
-        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE) {
+        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE && Config.INT_DRAWING_SHOW_ENABLED) {
             System.out.print("Simulator images are generating...");
             new ImageBuilder().generateSimulationImages(
                     intDrawingWindowRunner.getIntTravelStatsLinearDrawingWindow(),
