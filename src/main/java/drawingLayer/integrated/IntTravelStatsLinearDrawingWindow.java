@@ -3,7 +3,7 @@ package drawingLayer.integrated;
 import _type.TtSimulationMode;
 import _type.TtTrustMethodology;
 import drawingLayer.DrawingWindow;
-import simulateLayer.SimulationConfig;
+import simulateLayer.config.trust.TrustConfig;
 import simulateLayer.statistics.EpisodeStatistics;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.World;
@@ -15,11 +15,11 @@ import java.awt.*;
 
 public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
 
-    private SimulationConfig configBunch;
+    private TrustConfig configBunch;
 
     //============================//============================  panning params
 
-    public IntTravelStatsLinearDrawingWindow(World worlds[], SimulationConfig configBunch) {
+    public IntTravelStatsLinearDrawingWindow(World worlds[], TrustConfig configBunch) {
         super(worlds.length);
         this.worlds = worlds;
         this.configBunch = configBunch;

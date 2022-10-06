@@ -2,8 +2,10 @@ package simulateLayer;
 
 import com.google.gson.Gson;
 import drawingLayer.IntDrawingWindowRunner;
-import simulateLayer.profiler.PopulationBunch;
-import simulateLayer.profiler.SimulationProfiler;
+import simulateLayer.config.simulation.SimulationConfig;
+import simulateLayer.config.society.PopulationBunch;
+import simulateLayer.config.society.SimulationProfiler;
+import simulateLayer.config.trust.TrustConfig;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.World;
 import societyLayer.environmentSubLayer.Environment;
@@ -14,30 +16,36 @@ import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Simulator {
 
     private World[] worlds;
     private Environment loadedSocietyFromJson;
     private SimulationProfiler loadedSocietyProfileFromJson;
+    private TrustConfig trustConfig;
     private SimulationConfig simulationConfig;
     private IntDrawingWindowRunner intDrawingWindowRunner;
 
-    public SimulationConfig getSimulationConfigBunch() {
-        return simulationConfig;
+    public TrustConfig getTrustConfigBunch() {
+        return trustConfig;
     }
 
     //============================//============================
 
     private FileReader fileReader;
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
+
+    long startTime;
+    long endTime;
 
     //============================//============================//============================
     private void init() throws Exception {
         //============================//============================ Loading Environment from file
-        fileReader = new FileReader(Config.SocietyDataFilePath);
+        fileReader = new FileReader(Globals.SocietyDataFilePath);
         loadedSocietyFromJson = gson.fromJson(fileReader, Environment.class);
 
         if (loadedSocietyFromJson == null) {
@@ -46,13 +54,24 @@ public class Simulator {
             return;
         }
 
-        fileReader = new FileReader(Config.SocietyDataSimProfileFilePath);
+        fileReader = new FileReader(Globals.SocietyDataSimProfileFilePath);
         loadedSocietyProfileFromJson = gson.fromJson(fileReader, SimulationProfiler.class);
 
-        System.out.println("> Environment loaded from file.");
+        System.out.println("> Society loaded from file.");
 
-        //============================//============================ Loading Simulation Config file from file
-        fileReader = new FileReader(Config.TrustConfigFilePath);
+        //============================//============================ Loading Trust Config file from file
+        fileReader = new FileReader(Globals.TrustConfigFilePath);
+        trustConfig = gson.fromJson(fileReader, TrustConfig.class);
+
+        if (trustConfig == null) {
+            System.out.println(">> Simulator.init");
+            System.out.println("> Error: trust config file not found.");
+            return;
+        }
+        System.out.println("> Trust Config file loaded from file.");
+
+        //============================//============================ Loading Trust Config file from file
+        fileReader = new FileReader(Globals.SimulationConfigFilePath);
         simulationConfig = gson.fromJson(fileReader, SimulationConfig.class);
 
         if (simulationConfig == null) {
@@ -63,12 +82,14 @@ public class Simulator {
 
         System.out.println("> Simulation Config file loaded from file.");
 
+        updateSimulationConfig();
+
         //============================//============================ Initializing worlds
-        Globals.SIMULATION_ROUND = simulationConfig.getSimulationRound();
+        Globals.SIMULATION_ROUND = trustConfig.getValidConfigCount();
         worlds = new World[Globals.SIMULATION_ROUND];
 
         for (int i = 0, worldsLength = worlds.length; i < worldsLength; i++) {
-            worlds[i] = new World(i, this, simulationConfig.getNextConfig());
+            worlds[i] = new World(i, this, trustConfig.getNextConfig());
         }
 
         //============================//============================ Initializing statistics report file
@@ -81,33 +102,101 @@ public class Simulator {
             ProjectPath.instance().createDirectoryIfNotExist(ProjectPath.instance().statisticsDir() + "/" + statName);
 
             //-- Copying environment-x.json to statistics directory
-            Path sourcePath = Paths.get(Config.SocietyDataFilePath);
-            Path targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.SocietyDataFileName);
+            Path sourcePath = Paths.get(Globals.SocietyDataFilePath);
+            Path targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Globals.SocietyDataFileName);
             Files.copy(sourcePath, targetPath);
 
             //-- Copying society-config-x.json to statistics directory
-            sourcePath = Paths.get(Config.SocietyConfigFilePath);
-            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.SocietyConfigFileName);
+            sourcePath = Paths.get(Globals.SocietyConfigFilePath);
+            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Globals.SocietyConfigFileName);
             Files.copy(sourcePath, targetPath);
 
             //-- Copying trust-config-x.json to statistics directory
-            sourcePath = Paths.get(Config.TrustConfigFilePath);
-            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Config.TrustConfigFileName);
+            sourcePath = Paths.get(Globals.TrustConfigFilePath);
+            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Globals.TrustConfigFileName);
             Files.copy(sourcePath, targetPath);
 
         }
 
-        if (Config.INT_DRAWING_SHOW_ENABLED) {
-            intDrawingWindowRunner = new IntDrawingWindowRunner(worlds, simulationConfig);
+        if (Config.INT_DRAWING_SHOW_ENABLED()) {
+            intDrawingWindowRunner = new IntDrawingWindowRunner(worlds, trustConfig);
             intDrawingWindowRunner.initDrawingWindows();
             intDrawingWindowRunner.start();
         }
 
     }
 
+    private void updateSimulationConfig() {
+        Config.WORLD_LIFE_TIME = simulationConfig.getWorldLifeTime();
+        Config.RUNTIME_THREAD_COUNT = simulationConfig.getRuntimeThreadCount();
+        Config.THEME_MODE = simulationConfig.getThemeMode();
+
+        Config.WORLD_SLEEP_MILLISECOND = simulationConfig.getWorldSleepMillisecond();
+        Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE = simulationConfig.getWorldSleepMillisecondInPause();
+        Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING = simulationConfig.getWorldSleepMillisecondForDrawing();
+        Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = simulationConfig.getWorldSleepMillisecondForDrawingInPause();
+
+        Config.IMPROVEMENT_ANALYSIS_COEFFICIENT = simulationConfig.getImprovementAnalysisCoefficient();
+
+        Config.STATISTICS_AVERAGE_TIME_WINDOW = simulationConfig.getStatisticsAverageTimeWindow();
+        Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE = simulationConfig.getStatisticsAverageTimeWindowForResistance();
+        Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION = simulationConfig.getStatisticsAverageTimeWindowForCollaboration();
+        Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC = simulationConfig.getStatisticsAverageTimeWindowForRoc();
+        Config.STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD = simulationConfig.getStatisticsHypocriteDiagnosisThreshold();
+        Config.STATISTICS_HYPOCRITE_RESISTANCE_COUNT = simulationConfig.getStatisticsHypocriteResistanceCount();
+
+        Config.STATISTICS_SCALE_UP_Y_AXIS_NUMBER = simulationConfig.getStatisticsScaleUpYAxisNumber();
+
+        Config.ROUTING_STAY_IN_TARGET_TIME = simulationConfig.getRoutingStayInTargetTime();
+        Config.ROUTING_STAY_IN_PITFALL_TIME = simulationConfig.getRoutingStayInPitfallTime();
+
+        Config.TRUST_MATRIX_IS_ON = simulationConfig.isOptimizeMemory();
+
+        Config.TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE = simulationConfig.isTurboCertifiedDagraSingleUpdateMultipleClone();
+
+
+        Config.DRAWING_WINDOWS_MAXIMIZING = simulationConfig.isDrawingWindowsMaximizing();
+        Config.DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY = simulationConfig.isDrawingWindowsDefaultPaintVisibility();
+
+
+        Config.DRAWING_SHOW_stateMachineWindow = simulationConfig.isDrawingShowStateMachineWindow();
+        Config.DRAWING_SHOW_travelStatsLinearDrawingWindow = simulationConfig.isDrawingShowTravelStatsLinearDrawingWindow();
+        Config.DRAWING_SHOW_travelHistoryBarDrawingWindow = simulationConfig.isDrawingShowTravelHistoryBarDrawingWindow();
+
+        Config.DRAWING_SHOW_trustMatrixDrawingWindow = simulationConfig.isDrawingShowTrustMatrixDrawingWindow();
+        Config.DRAWING_SHOW_trustStatsLinearDrawingWindow = simulationConfig.isDrawingShowTrustStatsLinearDrawingWindow();
+        Config.DRAWING_SHOW_trustRecogniseLinearDrawingWindow = simulationConfig.isDrawingShowTrustRecogniseLinearDrawingWindow();
+        Config.DRAWING_SHOW_trustAnalysisLinearDrawingWindow = simulationConfig.isDrawingShowTrustAnalysisLinearDrawingWindow();
+
+        Config.DRAWING_SHOW_experienceBarDrawingWindow = simulationConfig.isDrawingShowExperienceBarDrawingWindow();
+        Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow = simulationConfig.isDrawingShowIndirectExperienceBarDrawingWindow();
+
+        Config.DRAWING_SHOW_observationBarDrawingWindow = simulationConfig.isDrawingShowObservationBarDrawingWindow();
+        Config.DRAWING_SHOW_indirectObservationBarDrawingWindow = simulationConfig.isDrawingShowIndirectObservationBarDrawingWindow();
+
+        Config.DRAWING_SHOW_recommendationBarDrawingWindow = simulationConfig.isDrawingShowRecommendationBarDrawingWindow();
+
+        Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTravelStatsLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTrustAnalysisLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTrustStatsLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow = simulationConfig.isIntDrawingShowIntResistancePerNumberLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_RocPointDrawingWindow = simulationConfig.isIntDrawingShowRocPointDrawingWindow();
+        Config.INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow = simulationConfig.isIntDrawingShowHonestCollaborationLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow = simulationConfig.isIntDrawingShowHypocriteCollaborationLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow = simulationConfig.isIntDrawingShowResistanceLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_FluctuationLinearDrawingWindow = simulationConfig.isIntDrawingShowFluctuationLinearDrawingWindow();
+
+
+        Config.STATISTICS_IS_GENERATE = simulationConfig.isStatisticsIsGenerate();
+        Config.STATISTICS_IS_SAVE_IMAGE = simulationConfig.isStatisticsIsSaveImage();
+        Config.TRUST_MATRIX_IS_GENERATE = simulationConfig.isTrustMatrixIsGenerate();
+        Config.TRUST_MATRIX_IS_ON = simulationConfig.isTrustMatrixIsOn();
+
+    }
+
     private void reloadEnvironmentFromFile() throws FileNotFoundException {
 
-        fileReader = new FileReader(Config.SocietyDataFilePath);
+        fileReader = new FileReader(Globals.SocietyDataFilePath);
         loadedSocietyFromJson = gson.fromJson(fileReader, Environment.class);
 
         if (loadedSocietyFromJson == null) {
@@ -124,6 +213,7 @@ public class Simulator {
 
         MakeSound sound = new MakeSound();
 
+        // playing start sound
         Thread.sleep(900);
         sound.playSound(ProjectPath.instance().alertStartFile());
 
@@ -134,7 +224,8 @@ public class Simulator {
             return;
         }
 
-        int i = 1;
+        startTime = new Date().getTime();
+
         for (World world : worlds) {
             if (Globals.SIMULATION_TIMER > 0) {
                 reloadEnvironmentFromFile();
@@ -153,7 +244,7 @@ public class Simulator {
         }
 
         Globals.SIMULATION_TIMER--;
-        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE && Config.INT_DRAWING_SHOW_ENABLED) {
+        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE && Config.INT_DRAWING_SHOW_ENABLED()) {
             System.out.print("Simulator images are generating...");
             new ImageBuilder().generateSimulationImages(
                     intDrawingWindowRunner.getIntTravelStatsLinearDrawingWindow(),
@@ -171,9 +262,12 @@ public class Simulator {
         System.out.print("\n");
         System.out.print("Simulator run is finished.");
 
+        endTime = new Date().getTime();
+
+        timeReport();
+
         improvementAnalysis();
 
-
         sound.playSound(ProjectPath.instance().alertEndFile());
         Thread.sleep(200);
         sound.playSound(ProjectPath.instance().alertEndFile());
@@ -181,6 +275,10 @@ public class Simulator {
         sound.playSound(ProjectPath.instance().alertEndFile());
         Thread.sleep(200);
 
+    }
+
+    private void timeReport() {
+        System.out.println("\n  > simulation duration: [" + new DecimalFormat().format((endTime - startTime) / 1000) + "] seconds");
     }
 
 
@@ -353,7 +451,7 @@ public class Simulator {
                 overallResistance + "," +
                 overallIgnorePos + "," +
                 overallIgnoreNeg + "," +
-                Config.SocietyDataFileName
+                Globals.SocietyDataFileName
         );
 
 

@@ -5,7 +5,7 @@ import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import societyLayer.environmentSubLayer.StateX;
 import societyLayer.environmentSubLayer.TravelHistory;
-import simulateLayer.profiler.SimulationProfiler;
+import simulateLayer.config.society.SimulationProfiler;
 import trustLayer.AgentTrust;
 import trustLayer.consensus.DaGra;
 import utils.Cryptor;

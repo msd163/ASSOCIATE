@@ -1,7 +1,6 @@
 package drawingLayer.integrated;
 
 import drawingLayer.DrawingWindow;
-import simulateLayer.SimulationConfig;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.World;
 import utils.Config;

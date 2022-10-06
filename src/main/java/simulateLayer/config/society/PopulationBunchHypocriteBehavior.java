@@ -1,4 +1,4 @@
-package simulateLayer.profiler;
+package simulateLayer.config.society;
 
 import com.google.gson.annotations.Expose;
 

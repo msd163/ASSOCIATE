@@ -3,7 +3,7 @@ package societyLayer.agentSubLayer;
 import _type.*;
 import drawingLayer.DrawingWindowRunner;
 import internetLayer.Internet;
-import simulateLayer.SimulationConfigItem;
+import simulateLayer.config.trust.TrustConfigItem;
 import simulateLayer.Simulator;
 import simulateLayer.statistics.EpisodeStatistics;
 import simulateLayer.statistics.WorldStatistics;
@@ -21,11 +21,11 @@ import java.util.List;
 
 public class World {
 
-    public World(int id, Simulator simulator, SimulationConfigItem simulationConfigItem) {
+    public World(int id, Simulator simulator, TrustConfigItem trustConfigItem) {
         this.id = id;
         this.simulator = simulator;
-        this.simulationConfigItem = simulationConfigItem;
-        if (Config.DRAWING_SHOW_ENABLED) {
+        this.trustConfigItem = trustConfigItem;
+        if (Config.DRAWING_SHOW_ENABLED()) {
             this.drawingWindowRunner = new DrawingWindowRunner(this);
         }
 
@@ -52,7 +52,7 @@ public class World {
 
     public TrustMatrix matrixGenerator = new TrustMatrix();
 
-    private SimulationConfigItem simulationConfigItem;
+    private TrustConfigItem trustConfigItem;
 
     private TrustManager trustManager;
 
@@ -72,7 +72,7 @@ public class World {
         //============================//============================
         wdStatistics = new WorldStatistics[Config.WORLD_LIFE_TIME];
 
-        trustManager = new TrustManager(simulationConfigItem, wdStatistics);
+        trustManager = new TrustManager(trustConfigItem, wdStatistics);
 
         router = new Router(this);
         //============================ Setting agents count
@@ -249,7 +249,7 @@ public class World {
      **/
     public void run() throws InterruptedException {
 
-        if (Config.DRAWING_SHOW_ENABLED) {
+        if (Config.DRAWING_SHOW_ENABLED()) {
             drawingWindowRunner.initDrawingWindows(matrixGenerator);
             drawingWindowRunner.start();
         }
@@ -284,7 +284,7 @@ public class World {
             System.out.println("> updating agents' profile, watched list, and next steps...");
 
 
-            if (Config.RUNTIME_THREAD_AGENT_COUNT > 1) {
+            if (Config.RUNTIME_THREAD_COUNT > 1) {
                 AgentUpdaterRunner.execute();
             } else {
                 for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
@@ -308,9 +308,9 @@ public class World {
             }
 
             //============================//============================ Observation
-            if (simulationConfigItem.isIsUseObservation() || simulationConfigItem.isIsUseIndirectObservation()) {
+            if (trustConfigItem.isIsUseObservation() || trustConfigItem.isIsUseIndirectObservation()) {
                 System.out.println("> observing...");
-                if (Config.RUNTIME_THREAD_AGENT_COUNT > 1) {
+                if (Config.RUNTIME_THREAD_COUNT > 1) {
                     AgentObservationRunner.execute();
                 } else {
                     for (Agent agent : agents) {
@@ -325,11 +325,11 @@ public class World {
 
             if (
                     (
-                            simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
-                                    simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
+                            trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
+                                    trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
                     )
-                            && simulationConfigItem.isIsUseSharingRecommendationWithInternet()
-                            && (Globals.WORLD_TIMER % simulationConfigItem.getSharingRecommendationWithInternetPeriod() == 0)
+                            && trustConfigItem.isIsUseSharingRecommendationWithInternet()
+                            && (Globals.WORLD_TIMER % trustConfigItem.getSharingRecommendationWithInternetPeriod() == 0)
             ) {
                 System.out.println("> sending recommendation through Internet...");
                 trustManager.sendRecommendationsWithInternet(internet.getAgentList());
@@ -340,11 +340,11 @@ public class World {
             /* Updating all contracts status and filling toBeSignedContracts and toBeVerifiedContracts lists  */
             if (
                     (
-                            simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
-                                    simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
+                            trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_ShortPath ||
+                                    trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_RandomPath
                     )
-                            && simulationConfigItem.getCert().isIsUseCertification()
-                            && simulationConfigItem.getCert().isIsUseDaGra()) {
+                            && trustConfigItem.getCert().isIsUseCertification()
+                            && trustConfigItem.getCert().isIsUseDaGra()) {
                 System.out.println("> DaGra: updating status and list...");
 
                 for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
@@ -364,10 +364,10 @@ public class World {
 
                 /* Creating a list for agents that have register request, and sent a certain request to the DaGra randomly*/
                 /* If the request period has arrived */
-                if ((Globals.WORLD_TIMER + 1) % simulationConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
+                if ((Globals.WORLD_TIMER + 1) % trustConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
                     System.out.println("> DaGra: sending new requests...");
                     /* If the maximum allowed number of requests is not consumed */
-                    if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
+                    if (Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD <= trustConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
 
                         /* Creating register request list */
                         List<Agent> registerRequestList = new ArrayList<>();
@@ -382,7 +382,7 @@ public class World {
                         /* As long as there is a request, and the capacity of request registration is not full. */
                         while (registerRequestList.size() > 0 &&
                                 Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD
-                                        <= simulationConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
+                                        <= trustConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
 
                             /* Selecting a requester randomly */
                             int nextInt = Globals.RANDOM.nextInt(registerRequestList.size());
@@ -488,7 +488,7 @@ public class World {
             System.out.println("Trust Matrix Generated.");
         }
 
-        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE && Config.DRAWING_SHOW_ENABLED) {
+        if (Config.STATISTICS_IS_GENERATE && Config.STATISTICS_IS_SAVE_IMAGE && Config.DRAWING_SHOW_ENABLED()) {
             new ImageBuilder().generateStatisticsImages(
                     drawingWindowRunner.getStateMachineDrawingWindow(),
                     drawingWindowRunner.getTravelStatsLinearDrawingWindow(),
@@ -532,21 +532,21 @@ public class World {
     }
 
     public String getSimulationConfigInfo() {
-        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo(environment.getCertifiedCount());
+        return simulator.getTrustConfigBunch().getByIndex(id).getInfo(environment.getCertifiedCount());
     }
 
     public String getSimulationConfigInfo(int i) {
         switch (i) {
             case 1:
-                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
+                return simulator.getTrustConfigBunch().getByIndex(id).getInfo_1();
             case 2:
-                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_2();
+                return simulator.getTrustConfigBunch().getByIndex(id).getInfo_2();
             case 3:
-                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_3(environment.getCertifiedCount());
+                return simulator.getTrustConfigBunch().getByIndex(id).getInfo_3(environment.getCertifiedCount());
             case 4:
-                return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_4();
+                return simulator.getTrustConfigBunch().getByIndex(id).getInfo_4();
         }
-        return simulator.getSimulationConfigBunch().getByIndex(id).getInfo_1();
+        return simulator.getTrustConfigBunch().getByIndex(id).getInfo_1();
     }
 
     public String toString(int tabIndex) {
@@ -593,8 +593,8 @@ public class World {
         return epStatistics;
     }
 
-    public SimulationConfigItem getSimulationConfig() {
-        return simulationConfigItem;
+    public TrustConfigItem getSimulationConfig() {
+        return trustConfigItem;
     }
 
     public TrustManager getTrustManager() {

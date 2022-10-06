@@ -1,7 +1,7 @@
 package societyLayer.agentSubLayer;
 
 import com.google.gson.annotations.Expose;
-import simulateLayer.profiler.SimulationProfiler;
+import simulateLayer.config.society.SimulationProfiler;
 import utils.Globals;
 
 public class AgentCapacity {

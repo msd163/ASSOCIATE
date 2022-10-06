@@ -12,6 +12,24 @@ import java.util.Random;
 
 public class Globals {
 
+    //============================//============================
+    public static final String SocietyConfigFilePath = ProjectPath.instance().societyConfigFile();
+    public static final String SocietyConfigFileName = SocietyConfigFilePath.substring(SocietyConfigFilePath.lastIndexOf("/"));
+
+    public static final String TrustConfigFilePath = ProjectPath.instance().trustConfigFile();
+    public static final String TrustConfigFileName = TrustConfigFilePath.substring(TrustConfigFilePath.lastIndexOf("/"));
+
+    public static final String SimulationConfigFilePath = ProjectPath.instance().simulationConfigFile();
+    public static final String SimulationConfigFileName = SimulationConfigFilePath.substring(SimulationConfigFilePath.lastIndexOf("/"));
+
+    public static final String SocietyDataFilePath = ProjectPath.instance().societyData();
+    public static final String SocietyDataFileName = SocietyDataFilePath.substring(SocietyDataFilePath.lastIndexOf("/"));
+
+    public static final String SocietyDataSimProfileFilePath = ProjectPath.instance().societyDataSimPro();
+
+
+
+
     public static class ProfileBunchMax {
         public static int maxExperienceCap = 0;
         public static int maxExperienceItemCap = 0;
@@ -251,7 +269,7 @@ public class Globals {
     public static String STATS_FILE_NAME = ParsCalendar.getInstance().getShortDateTime()
             .replaceAll("[ ]", "-")
             .replaceAll("[:/]", "")
-            + "_" + Config.SocietyDataFilePath.substring(Config.SocietyDataFilePath.lastIndexOf("/") + 1, Config.SocietyDataFilePath.lastIndexOf("."));
+            + "_" + Globals.SocietyDataFilePath.substring(Globals.SocietyDataFilePath.lastIndexOf("/") + 1, Globals.SocietyDataFilePath.lastIndexOf("."));
 
     public static StatsEnvGenerator statsEnvGenerator = new StatsEnvGenerator();
     public static StatsTrustGenerator statsTrustGenerator = new StatsTrustGenerator();

@@ -3,7 +3,7 @@ package transitionLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
-import simulateLayer.SimulationConfigItem;
+import simulateLayer.config.trust.TrustConfigItem;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.WatchedAgent;
@@ -25,12 +25,12 @@ public class Router {
     private WorldStatistics statistics___;
     private World world;
     private TrustManager trustManager;
-    private SimulationConfigItem simulationConfigItem;
+    private TrustConfigItem trustConfigItem;
 
     public Router(World world) {
         this.world = world;
         this.trustManager = world.getTrustManager();
-        simulationConfigItem = world.getSimulationConfig();
+        trustConfigItem = world.getSimulationConfig();
 
     }
 
@@ -195,7 +195,7 @@ public class Router {
             return;
         }
 
-        if (simulationConfigItem.getTtMethod() == TtTrustMethodology.FullyRandomly) {
+        if (trustConfigItem.getTtMethod() == TtTrustMethodology.FullyRandomly) {
             return;
         }
 
@@ -251,7 +251,7 @@ public class Router {
 
                 // The SafeMode method needs only one helper. All helper are honest
                 // After finding the first helper, we exit form the loop
-                if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
+                if (trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
                     routingHelps.add(routingHelp);
                     break;
 
@@ -283,7 +283,7 @@ public class Router {
 
 
         List<RoutingHelp> sortedRoutingHelps = routingHelps;
-        switch (simulationConfigItem.getTtMethod()) {
+        switch (trustConfigItem.getTtMethod()) {
 
             case TrustMode_ShortPath:
                 //System.out.print(" *ts*");
@@ -334,34 +334,34 @@ public class Router {
 
 
         float trustValueOfHelperToAgent = trustManager.getTrustValue(help.getHelperAgent(), agent);
-        if (simulationConfigItem.isIsUseIndirectExperience()) {
+        if (trustConfigItem.isIsUseIndirectExperience()) {
             /* If receiver of experiences (the helper or truster in routing procedure) trusts to the sender (the trustee in routing procedure),
             the helper accepts experiences of the agent
             * */
             if (trustValueOfHelperToAgent > 0) {
                 trustManager.shareExperiences(agent, help.getHelperAgent());
             }
-            if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
+            if (trustConfigItem.isIsBidirectionalExperienceSharing()) {
                 /* The agent trusts to helper, thus he accepts experiences of helper  */
                 trustManager.shareExperiences(help.getHelperAgent(), agent);
             }
         }
         /*
          * */
-        if (simulationConfigItem.isIsUseIndirectObservation()) {
+        if (trustConfigItem.isIsUseIndirectObservation()) {
             if (trustValueOfHelperToAgent > 0) {
                 trustManager.shareObservations(agent, help.getHelperAgent());
             }
-            if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
+            if (trustConfigItem.isIsBidirectionalObservationSharing()) {
                 trustManager.shareObservations(help.getHelperAgent(), agent);
             }
         }
 
-        if (simulationConfigItem.isUseRecommendation()) {
+        if (trustConfigItem.isUseRecommendation()) {
             if (trustValueOfHelperToAgent > 0) {
                 trustManager.sendRecommendations(agent, help.getHelperAgent());
             }
-            if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
+            if (trustConfigItem.isIsBidirectionalRecommendationSharing()) {
                 trustManager.sendRecommendations(help.getHelperAgent(), agent);
             }
         }
@@ -440,7 +440,7 @@ public class Router {
 
         int srIndex = 0;
         for (int routingHelpsSize = routingHelps.size();
-             srIndex < routingHelpsSize && srIndex < simulationConfigItem.getMaximumConsideredRoutingHelpInTrustMechanism();
+             srIndex < routingHelpsSize && srIndex < trustConfigItem.getMaximumConsideredRoutingHelpInTrustMechanism();
              srIndex++) {
             RoutingHelp help = routingHelps.get(srIndex);
             if (help.getTrustValue() < 0) {
@@ -557,7 +557,7 @@ public class Router {
      */
     private RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
 
-        if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
+        if (trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
             return responseAsHonest(agent, goalState);
         }
 

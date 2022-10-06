@@ -2,7 +2,7 @@ package trustLayer;
 
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
-import simulateLayer.SimulationConfigItem;
+import simulateLayer.config.trust.TrustConfigItem;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.WatchedAgent;
@@ -19,11 +19,11 @@ import java.util.List;
 public class TrustManager {
 
 
-    private SimulationConfigItem simulationConfigItem;
+    private TrustConfigItem trustConfigItem;
     private WorldStatistics[] wdStatistics;
 
-    public TrustManager(SimulationConfigItem simConfig, WorldStatistics[] wdStatistics) {
-        this.simulationConfigItem = simConfig;
+    public TrustManager(TrustConfigItem simConfig, WorldStatistics[] wdStatistics) {
+        this.trustConfigItem = simConfig;
         this.wdStatistics = wdStatistics;
     }
 
@@ -42,7 +42,9 @@ public class TrustManager {
             return verifier.getDaGra().getValidCertificationTrustValue(toBeVerified);
         }
 
-        for (WatchedAgent watchedAgent : verifier.getWatchedAgents()) {
+        List<WatchedAgent> watchedAgents = verifier.getWatchedAgents();
+        for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
+            WatchedAgent watchedAgent = watchedAgents.get(i);
             // For preventing request from the agent that we want to verify it.
             if (watchedAgent.getAgent().getId() == toBeVerified.getId()) {
                 continue;
@@ -62,21 +64,21 @@ public class TrustManager {
     //============================//============================//============================
 
     private float getForgottenFactor(int time) {
-        if (simulationConfigItem.getTrustForgottenCoeff() == 0) {
+        if (trustConfigItem.getTrustForgottenCoeff() == 0) {
             return 1.0f;
         }
-        return (float) Math.pow(1 - simulationConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - time);
+        return (float) Math.pow(1 - trustConfigItem.getTrustForgottenCoeff(), Globals.WORLD_TIMER - time);
     }
 
     private float getScoreByOrder(int index) {
         if (index < 0) {
             System.out.println(">> Error::getScoreByOrder: index is less than ZERO: " + index);
         }
-        switch (simulationConfigItem.getTtTrustFormula()) {
+        switch (trustConfigItem.getTtTrustFormula()) {
             case Formula_1:
                 return 1 / (float) ((index + 1) * (index + 1));
             case Formula_2_Maclaurin:
-                float alpha = simulationConfigItem.getTrustFormula2MaclaurinAlpha();
+                float alpha = trustConfigItem.getTrustFormula2MaclaurinAlpha();
                 return (float) Math.pow(alpha, index);
             //return 1 / (float) (Math.pow(2, index));
             default:
@@ -94,11 +96,11 @@ public class TrustManager {
         }
 
         float innerTrustValue = -64;
-        if (simulationConfigItem.getCert().isIsUseCertification()                   // Certification mode is enabled in config file
+        if (trustConfigItem.getCert().isIsUseCertification()                   // Certification mode is enabled in config file
                 && responder.getTrust().isHasCandidateForCertification()) {         // The responder agent has capability of gaining certification
 
             // If DaGra mode is enabled
-            if (simulationConfigItem.getCert().isIsUseDaGra()) {
+            if (trustConfigItem.getCert().isIsUseDaGra()) {
                 Float trustValueInDaGra = getValidCertificationTrustValueInDaGra(requester, responder);
                 if (trustValueInDaGra != null) {
                     innerTrustValue =
@@ -120,19 +122,19 @@ public class TrustManager {
             innerTrustValue = calcInnerTrustValue(requester, responder);
 
             //-- trust of recommendation
-            if (simulationConfigItem.isUseRecommendation()) {
+            if (trustConfigItem.isUseRecommendation()) {
                 float calculatedTrustValueFromRecom = calcRecommendedTrustValue(requester, responder);
                 //-- If there is any trust value from recommendation
                 if (
-                        (simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom != 0) ||
-                                (!simulationConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom > 0)
+                        (trustConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom != 0) ||
+                                (!trustConfigItem.isIsUseNegativeRecommendationEffect() && calculatedTrustValueFromRecom > 0)
                 ) {
                     //-- In safe mode, if there is no inner trust value, final trust value will be recommendation trust value.
-                    if (simulationConfigItem.isIsSafeUseRecommendation()) {
+                    if (trustConfigItem.isIsSafeUseRecommendation()) {
                         if (innerTrustValue != 0) {
                             innerTrustValue =
-                                    (simulationConfigItem.getRecommendationCoeff() * calculatedTrustValueFromRecom)
-                                            + ((1 - simulationConfigItem.getRecommendationCoeff()) * innerTrustValue)
+                                    (trustConfigItem.getRecommendationCoeff() * calculatedTrustValueFromRecom)
+                                            + ((1 - trustConfigItem.getRecommendationCoeff()) * innerTrustValue)
                             ;
 
                         } else
@@ -144,8 +146,8 @@ public class TrustManager {
                     //-- If don't use safe mode recommendation
                     else {
                         innerTrustValue =
-                                (simulationConfigItem.getRecommendationCoeff() * calculatedTrustValueFromRecom)
-                                        + ((1 - simulationConfigItem.getRecommendationCoeff()) * innerTrustValue)
+                                (trustConfigItem.getRecommendationCoeff() * calculatedTrustValueFromRecom)
+                                        + ((1 - trustConfigItem.getRecommendationCoeff()) * innerTrustValue)
                         ;
                     }
 
@@ -256,7 +258,7 @@ public class TrustManager {
 
     private double formulateTrustValue(int index, Float t) {
 
-        switch (simulationConfigItem.getTtTrustFormula()) {
+        switch (trustConfigItem.getTtTrustFormula()) {
             case Formula_1:
                 return ((t) / ((index + 2) * (index + 2)));
             case Formula_2_Maclaurin:
@@ -264,7 +266,7 @@ public class TrustManager {
                  * برای این مورد باید اثر آخرین امتیازات کسب شده متضاد را کمتر کنیم.
                  *  برای این منظور می توانیم از توزیع هایی مثل پواسون در فرمولهایی که زمان در آنها دخیل است، مثل ضریب فراموشی، استفاده کرد.
                  * */
-                float alpha = simulationConfigItem.getTrustFormula2MaclaurinAlpha();
+                float alpha = trustConfigItem.getTrustFormula2MaclaurinAlpha();
                 return (1 - alpha) * t * Math.pow(alpha, index);
             //return 0.5f * t * Math.pow(0.5, index);
         }
@@ -275,28 +277,28 @@ public class TrustManager {
 
         List<Float> normList = new ArrayList<>();
 
-        if (simulationConfigItem.isIsUseExperience()) {
+        if (trustConfigItem.isIsUseExperience()) {
             TrustExperience experience = getExperience(requester, responder);
             if (experience != null) {
                 normList.addAll(normalizeWithForgottenFactor(experience.getItems()));
             }
         }
 
-        if (simulationConfigItem.isIsUseIndirectExperience()) {
+        if (trustConfigItem.isIsUseIndirectExperience()) {
             TrustIndirectExperience indirectExperience = getIndirectExperience(requester, responder);
             if (indirectExperience != null) {
                 normList.addAll(normalizeWithForgottenFactorAndTrustValue(requester, indirectExperience.getItems()));
             }
         }
 
-        if (simulationConfigItem.isIsUseObservation()) {
+        if (trustConfigItem.isIsUseObservation()) {
             TrustObservation observation = getObservation(requester, responder);
             if (observation != null) {
                 normList.addAll(normalizeWithForgottenFactor(observation.getItems()));
             }
         }
 
-        if (simulationConfigItem.isIsUseIndirectObservation()) {
+        if (trustConfigItem.isIsUseIndirectObservation()) {
             TrustIndirectObservation indirectObservation = getIndirectObservation(requester, responder);
             if (indirectObservation != null) {
                 normList.addAll(normalizeWithForgottenFactorAndTrustValue(requester, indirectObservation.getItems()));
@@ -360,7 +362,8 @@ public class TrustManager {
 
         List<Float> norList = new ArrayList<>();
 
-        for (TrustDataItem item : items) {
+        for (int i = 0, itemsSize = items.size(); i < itemsSize; i++) {
+            TrustDataItem item = items.get(i);
             norList.add(item.getScore() * getForgottenFactor(item.getTime()));
         }
         return norList;
@@ -370,7 +373,8 @@ public class TrustManager {
 
         List<Float> norList = new ArrayList<>();
 
-        for (TrustDataItem item : items) {
+        for (int i = 0, itemsSize = items.size(); i < itemsSize; i++) {
+            TrustDataItem item = items.get(i);
             //-- For preventing stack overflow in calculating trust, we use trust value that is calculated previously
             //-- Calculating trust value of requester to recommender
             float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
@@ -422,7 +426,7 @@ public class TrustManager {
         for (int tvhIndex = travelHistory.size() - 1, scoreCount = 0; tvhIndex > -1; tvhIndex--) {
 
             //-- If experience depth exceeded. this depth defines how many of responder agents considered in score mechanism.
-            if (scoreCount >= simulationConfigItem.getExperienceDepthInScoring()) {
+            if (scoreCount >= trustConfigItem.getExperienceDepthInScoring()) {
                 return;
             }
 
@@ -481,7 +485,7 @@ public class TrustManager {
                         for (int k = 1, historiesLength = experiences.size(); k < historiesLength; k++) {
                             TrustExperience tExp = experiences.get(k);
 
-                            if (oldHistory.getLastTime() > tExp.getLastTime()) {
+                            if (oldHistory != null && tExp != null && oldHistory.getLastTime() > tExp.getLastTime()) {
                                 historyIndex = k;
                                 oldHistory = tExp;
                             }
@@ -511,8 +515,11 @@ public class TrustManager {
             return null;
         }
 
-        for (TrustExperience experience : requester.getTrust().getExperiences()) {
-            if (experience.getResponder().getId() == responder.getId()) {
+        List<TrustExperience> experiences = requester.getTrust().getExperiences();
+        for (int i = 0, experiencesSize = experiences.size(); i < experiencesSize; i++) {
+            TrustExperience experience = experiences.get(i);
+            if (experience != null && experience.getResponder() != null && responder != null &&
+                    experience.getResponder().getId() == responder.getId()) {
                 return experience;
             }
         }
@@ -527,8 +534,12 @@ public class TrustManager {
             return false;
         }
 
-        for (TrustExperience experience : issuer.getTrust().getExperiences()) {
-            for (TrustDataItem item : experience.getItems()) {
+        List<TrustExperience> experiences = issuer.getTrust().getExperiences();
+        for (int i = 0, experiencesSize = experiences.size(); i < experiencesSize; i++) {
+            TrustExperience experience = experiences.get(i);
+            ArrayList<TrustDataItem> items = experience.getItems();
+            for (int j = 0, itemsSize = items.size(); j < itemsSize; j++) {
+                TrustDataItem item = items.get(j);
                 addIndirectExperience(item, experience.getResponder(), issuer, receiver);
             }
         }
@@ -548,7 +559,8 @@ public class TrustManager {
         boolean isAdded = false;
         for (int k = 0, expLen = experiences.size(); k < expLen; k++) {
             TrustIndirectExperience exp = experiences.get(k);
-            if (exp.getResponder().getId() == responder.getId()) {
+            if (exp != null && exp.getResponder() != null && responder != null &&
+                    exp.getResponder().getId() == responder.getId()) {
                 //-- Adding experience
                 exp.addExperience(indirectExperienceItem);
 
@@ -576,7 +588,7 @@ public class TrustManager {
                     for (int k = 1, historiesLength = experiences.size(); k < historiesLength; k++) {
                         TrustIndirectExperience tExp = experiences.get(k);
 
-                        if (oldHistory.getLastTime() > tExp.getLastTime()) {
+                        if (oldHistory != null && tExp != null && oldHistory.getLastTime() > tExp.getLastTime()) {
                             historyIndex = k;
                             oldHistory = tExp;
                         }
@@ -601,8 +613,11 @@ public class TrustManager {
             return null;
         }
 
-        for (TrustIndirectExperience experience : requester.getTrust().getIndirectExperiences()) {
-            if (experience.getResponder().getId() == responder.getId()) {
+        List<TrustIndirectExperience> indirectExperiences = requester.getTrust().getIndirectExperiences();
+        for (int i = 0, indirectExperiencesSize = indirectExperiences.size(); i < indirectExperiencesSize; i++) {
+            TrustIndirectExperience experience = indirectExperiences.get(i);
+            if (experience != null && experience.getResponder() != null && responder != null &&
+                    experience.getResponder().getId() == responder.getId()) {
                 return experience;
             }
         }
@@ -617,7 +632,9 @@ public class TrustManager {
             return;
         }
 
-        for (WatchedAgent wa : observer.getWatchedAgents()) {
+        List<WatchedAgent> watchedAgents = observer.getWatchedAgents();
+        for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
+            WatchedAgent wa = watchedAgents.get(i);
             Agent observedAg = wa.getAgent();
             TravelHistory lastTravelHistory = observedAg.getLastTravelHistory();
             if (lastTravelHistory == null) {
@@ -790,7 +807,9 @@ public class TrustManager {
             return null;
         }
 
-        for (TrustObservation observation : requester.getTrust().getObservations()) {
+        List<TrustObservation> observations = requester.getTrust().getObservations();
+        for (int i = 0, observationsSize = observations.size(); i < observationsSize; i++) {
+            TrustObservation observation = observations.get(i);
             if (observation.getResponder().getId() == responder.getId()) {
                 return observation;
             }
@@ -832,14 +851,20 @@ public class TrustManager {
         //============================//============================ // Check if the agent added to trustHistory previously and return it's ID.
         boolean isAdded = false;
         for (int k = 0, obsLen = rcvIndirObss.size(); k < obsLen; k++) {
-            TrustIndirectObservation obs = rcvIndirObss.get(k);
-            if (obs != null && obs.getResponder() != null && responder != null && obs.getResponder().getId() == responder.getId()) {
-                //-- Adding observation
-                obs.addObservation(indirectObservationItem);
+            try {
+                TrustIndirectObservation obs = rcvIndirObss.get(k);
+                if (obs != null && obs.getResponder() != null && responder != null && obs.getResponder().getId() == responder.getId()) {
+                    //-- Adding observation
+                    obs.addObservation(indirectObservationItem);
 
-                isAdded = true;
-                break;
+                    isAdded = true;
+                    break;
+
+                }
+            } catch (Exception ee) {
+                System.out.println("EEE: " + ee.getMessage());
             }
+
         }
         if (isAdded) {
             return true;
@@ -894,7 +919,9 @@ public class TrustManager {
             return null;
         }
 
-        for (TrustIndirectObservation observation : requester.getTrust().getIndirectObservations()) {
+        List<TrustIndirectObservation> indirectObservations = requester.getTrust().getIndirectObservations();
+        for (int i = 0, indirectObservationsSize = indirectObservations.size(); i < indirectObservationsSize; i++) {
+            TrustIndirectObservation observation = indirectObservations.get(i);
             if (observation != null && observation.getResponder() != null && responder != null && observation.getResponder().getId() == responder.getId()) {
                 return observation;
             }
@@ -911,7 +938,9 @@ public class TrustManager {
             return false;
         }
 
-        for (TrustAbstract trustAbstract : recommender.getTrust().getTrustAbstracts()) {
+        TrustAbstract[] trustAbstracts = recommender.getTrust().getTrustAbstracts();
+        for (int i = 0, trustAbstractsLength = trustAbstracts.length; i < trustAbstractsLength; i++) {
+            TrustAbstract trustAbstract = trustAbstracts[i];
             //-- If trustAbstract of recommender is about receiver of recommender, ignore it.
             //-- It is not necessary to save recommendation of itself by self.
             //todo: use recommendation values about us by other for analysing environment sight about us (as receiver of recommendation)
@@ -923,7 +952,7 @@ public class TrustManager {
                     addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
                     trustAbstract.addInfoOfSentValueToReceiver(receiver.getId());
                 }
-            } else if (trustAbstract.getTrustValue() < 0 && simulationConfigItem.isIsUseNegativeRecommendationEffect()) {
+            } else if (trustAbstract.getTrustValue() < 0 && trustConfigItem.isIsUseNegativeRecommendationEffect()) {
                 if (!trustAbstract.isSendThisTrustValueToReceiverAgent(receiver.getId())) {
                     addRecommendation(trustAbstract.getResponder(), recommender, receiver, trustAbstract.getTrustValue());
                     trustAbstract.addInfoOfSentValueToReceiver(receiver.getId());
@@ -996,7 +1025,9 @@ public class TrustManager {
             return null;
         }
 
-        for (TrustRecommendation recommendation : requester.getTrust().getRecommendations()) {
+        List<TrustRecommendation> recommendations = requester.getTrust().getRecommendations();
+        for (int i = 0, recommendationsSize = recommendations.size(); i < recommendationsSize; i++) {
+            TrustRecommendation recommendation = recommendations.get(i);
             if (recommendation.getResponder().getId() == responder.getId()) {
                 return recommendation;
             }
@@ -1006,8 +1037,10 @@ public class TrustManager {
 
     public void sendRecommendationsWithInternet(List<Agent> agentList) {
 
-        for (Agent from : agentList) {
-            for (Agent to : agentList) {
+        for (int i = 0, agentListSize = agentList.size(); i < agentListSize; i++) {
+            Agent from = agentList.get(i);
+            for (int j = 0, listSize = agentList.size(); j < listSize; j++) {
+                Agent to = agentList.get(j);
                 if (from.getId() == to.getId()) {
                     continue;
                 }
@@ -1041,7 +1074,15 @@ public class TrustManager {
     }
 
     private void sendRecommendationTo(Agent recommender, Agent receiver, Agent trustee, float trustLevelOfTrustee) {
-
+Exception in thread "Thread-13" java.util.ConcurrentModificationException
+        at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:911)
+        at java.util.ArrayList$Itr.next(ArrayList.java:861)
+        at trustLayer.TrustManager.getIndirectObservation(TrustManager.java:905)
+        at trustLayer.TrustManager.getSortedNormalizedTrustScores(TrustManager.java:300)
+        at trustLayer.TrustManager.calcInnerTrustValue(TrustManager.java:165)
+        at trustLayer.TrustManager.getTrustValue(TrustManager.java:120)
+        at transitionLayer.Router.updateNextSteps(Router.java:336)
+        at utils.AgentUpdaterRunner.run(AgentUpdaterRunner.java:88)
         boolean isAppended = false;
         //-- Check whether the trustee has already been recommended to the receiver
         for (TrustRecommendation rec : receiver.getTrust().getRecommendations()) {

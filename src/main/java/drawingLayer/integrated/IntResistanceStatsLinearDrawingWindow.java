@@ -1,7 +1,7 @@
 package drawingLayer.integrated;
 
 import drawingLayer.DrawingWindow;
-import simulateLayer.SimulationConfig;
+import simulateLayer.config.trust.TrustConfig;
 import simulateLayer.statistics.WorldStatistics;
 import simulateLayer.statistics.WorldStatisticsHypo;
 import societyLayer.agentSubLayer.World;
@@ -13,12 +13,12 @@ import java.awt.*;
 
 public class IntResistanceStatsLinearDrawingWindow extends DrawingWindow {
 
-    private SimulationConfig configBunch;
+    private TrustConfig configBunch;
 
     //============================//============================  panning params
 
 
-    public IntResistanceStatsLinearDrawingWindow(World worlds[], SimulationConfig configBunch) {
+    public IntResistanceStatsLinearDrawingWindow(World worlds[], TrustConfig configBunch) {
         super(worlds.length);
         this.worlds = worlds;
         this.configBunch = configBunch;

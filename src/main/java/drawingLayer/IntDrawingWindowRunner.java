@@ -1,7 +1,7 @@
 package drawingLayer;
 
 import drawingLayer.integrated.*;
-import simulateLayer.SimulationConfig;
+import simulateLayer.config.trust.TrustConfig;
 import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Globals;
@@ -13,7 +13,7 @@ public class IntDrawingWindowRunner extends Thread {
 
 
     World[] worlds;
-    private SimulationConfig simulationConfig;
+    private TrustConfig trustConfig;
 
     private IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow;
     private IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow;
@@ -26,9 +26,9 @@ public class IntDrawingWindowRunner extends Thread {
     private IntFluctuationStatsLinearDrawingWindow intFluctuationStatsLinearDrawingWindow;
 
 
-    public IntDrawingWindowRunner(World[] worlds, SimulationConfig simulationConfig) {
+    public IntDrawingWindowRunner(World[] worlds, TrustConfig trustConfig) {
         this.worlds = worlds;
-        this.simulationConfig = simulationConfig;
+        this.trustConfig = trustConfig;
     }
 
     @Override
@@ -111,22 +111,22 @@ public class IntDrawingWindowRunner extends Thread {
 
         //============================ Initializing Diagram Drawing Windows
         if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
-            intTravelStatsLinearDrawingWindow = new IntTravelStatsLinearDrawingWindow(worlds, simulationConfig);
+            intTravelStatsLinearDrawingWindow = new IntTravelStatsLinearDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intTravelStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow) {
-            intTrustAnalysisLinearDrawingWindow = new IntTrustAnalysisLinearDrawingWindow(worlds, simulationConfig);
+            intTrustAnalysisLinearDrawingWindow = new IntTrustAnalysisLinearDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intTrustAnalysisLinearDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
-            intTrustStatsLinearDrawingWindow = new IntTrustStatsLinearDrawingWindow(worlds, simulationConfig);
+            intTrustStatsLinearDrawingWindow = new IntTrustStatsLinearDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intTrustStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
-            intRocPointDrawingWindow = new IntRocPointDrawingWindow(worlds, simulationConfig);
+            intRocPointDrawingWindow = new IntRocPointDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intRocPointDrawingWindow, widthHalf, heightHalf);
         }
 
@@ -141,18 +141,18 @@ public class IntDrawingWindowRunner extends Thread {
         }
 
         if (Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow) {
-            intResistancePerNumberStatsLinearDrawingWindow = new IntResistancePerNumberStatsLinearDrawingWindow(worlds, simulationConfig);
+            intResistancePerNumberStatsLinearDrawingWindow = new IntResistancePerNumberStatsLinearDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intResistancePerNumberStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow) {
-            intResistanceStatsLinearDrawingWindow = new IntResistanceStatsLinearDrawingWindow(worlds, simulationConfig);
+            intResistanceStatsLinearDrawingWindow = new IntResistanceStatsLinearDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intResistanceStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
 
         if (Config.INT_DRAWING_SHOW_FluctuationLinearDrawingWindow) {
-            intFluctuationStatsLinearDrawingWindow = new IntFluctuationStatsLinearDrawingWindow(worlds, simulationConfig);
+            intFluctuationStatsLinearDrawingWindow = new IntFluctuationStatsLinearDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intFluctuationStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 

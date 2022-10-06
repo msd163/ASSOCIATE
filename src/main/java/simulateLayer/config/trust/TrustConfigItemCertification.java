@@ -1,6 +1,6 @@
-package simulateLayer;
+package simulateLayer.config.trust;
 
-public class SimulationConfigItemCertification {
+public class TrustConfigItemCertification {
 
     private boolean isUseCertification;
     private boolean isUseDaGra;

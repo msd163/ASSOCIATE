@@ -1,4 +1,4 @@
-package simulateLayer.profiler;
+package simulateLayer.config.society;
 
 import utils.DefParameter;
 import utils.Globals;

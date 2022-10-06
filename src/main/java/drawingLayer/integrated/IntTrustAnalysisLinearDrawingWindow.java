@@ -2,7 +2,7 @@ package drawingLayer.integrated;
 
 import _type.TtSimulationMode;
 import drawingLayer.DrawingWindow;
-import simulateLayer.SimulationConfig;
+import simulateLayer.config.trust.TrustConfig;
 import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Globals;
@@ -14,11 +14,11 @@ import java.awt.*;
 
 public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
 
-    private SimulationConfig configBunch;
+    private TrustConfig configBunch;
 
     //============================//============================  panning params
 
-    public IntTrustAnalysisLinearDrawingWindow(World worlds[], SimulationConfig configBunch) {
+    public IntTrustAnalysisLinearDrawingWindow(World worlds[], TrustConfig configBunch) {
         super(worlds.length);
         this.worlds = worlds;
         this.configBunch = configBunch;

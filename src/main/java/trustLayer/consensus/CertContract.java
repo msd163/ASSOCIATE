@@ -1,7 +1,7 @@
 package trustLayer.consensus;
 
 import _type.TtDaGraContractStatus;
-import simulateLayer.SimulationConfigItem;
+import simulateLayer.config.trust.TrustConfigItem;
 import societyLayer.agentSubLayer.Agent;
 import utils.Globals;
 
@@ -68,7 +68,7 @@ public class CertContract {
     }
 
 
-    public TtDaGraContractStatus updateStatus(SimulationConfigItem simulationConfig) {
+    public TtDaGraContractStatus updateStatus(TrustConfigItem simulationConfig) {
 
         if (isGenesis) {
             status = TtDaGraContractStatus.Accept_Accept;

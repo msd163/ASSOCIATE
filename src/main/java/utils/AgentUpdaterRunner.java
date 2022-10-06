@@ -31,8 +31,8 @@ public class AgentUpdaterRunner extends Thread {
 
         int agentsCount = agents.size();
 
-        runners = new AgentUpdaterRunner[Config.RUNTIME_THREAD_AGENT_COUNT];
-        int episodeAgentCount = agentsCount / Config.RUNTIME_THREAD_AGENT_COUNT;
+        runners = new AgentUpdaterRunner[Config.RUNTIME_THREAD_COUNT];
+        int episodeAgentCount = agentsCount / Config.RUNTIME_THREAD_COUNT;
         int oldIndex = 0;
         for (int j = 0, runnerLength = runners.length; j < runnerLength; j++) {
             int index = episodeAgentCount * (j + 1);

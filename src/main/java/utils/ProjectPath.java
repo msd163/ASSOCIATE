@@ -74,7 +74,7 @@ public class ProjectPath {
         return societyDir() + "/society-" + i + ".simPro.json";
     }
 
-    public String simulationSocietyConfigFile() {
+    public String societyConfigFile() {
         return resourcesDir() + "/society-config.json";
     }
 
@@ -91,8 +91,11 @@ public class ProjectPath {
     }
 
 
-    public String simulationTrustConfigFile() {
+    public String trustConfigFile() {
         return resourcesDir() + "/trust-config.json";
+    }
+    public String simulationConfigFile() {
+        return resourcesDir() + "/simulation-config.json";
     }
 
     //============================//============================

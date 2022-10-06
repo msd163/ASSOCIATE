@@ -2,8 +2,7 @@ package _type;
 
 public enum TtDiagramThemeMode {
     Dark,
-    Light
-    ;
+    Light;
 
     public static TtDiagramThemeMode getByOrdinal(int ordinal) {
         for (TtDiagramThemeMode value : values()) {
@@ -11,6 +10,6 @@ public enum TtDiagramThemeMode {
                 return value;
             }
         }
-        return Dark;
+        return Light;
     }
 }

@@ -1,4 +1,4 @@
-package simulateLayer.profiler;
+package simulateLayer.config.society;
 
 public class PopulationBunchCertification {
 

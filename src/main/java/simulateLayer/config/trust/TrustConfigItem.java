@@ -1,9 +1,9 @@
-package simulateLayer;
+package simulateLayer.config.trust;
 
 import _type.TtTrustFormula;
 import _type.TtTrustMethodology;
 
-public class SimulationConfigItem {
+public class TrustConfigItem {
     private int method;
     private int trustFormula;
     private float trustFormula2MaclaurinAlpha;
@@ -24,7 +24,7 @@ public class SimulationConfigItem {
     private float maximumConsideredRoutingHelpInTrustMechanism;
     private boolean isUseSharingRecommendationWithInternet;
     private int sharingRecommendationWithInternetPeriod;
-    private SimulationConfigItemCertification cert;
+    private TrustConfigItemCertification cert;
 
     //============================//============================//============================
     public String getInfo(int certificationCount) {
@@ -204,7 +204,7 @@ public class SimulationConfigItem {
         return sharingRecommendationWithInternetPeriod;
     }
 
-    public SimulationConfigItemCertification getCert() {
+    public TrustConfigItemCertification getCert() {
         return cert;
     }
 }
