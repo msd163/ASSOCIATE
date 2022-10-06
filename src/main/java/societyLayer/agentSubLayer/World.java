@@ -28,6 +28,7 @@ public class World {
         if (Config.DRAWING_SHOW_ENABLED) {
             this.drawingWindowRunner = new DrawingWindowRunner(this);
         }
+
     }
 
     private int id;
@@ -173,6 +174,9 @@ public class World {
         System.out.println("Initializing DaGra...");
         initDaGra();
 
+        AgentUpdaterRunner.init(agents, router);
+        AgentObservationRunner.init(agents, trustManager);
+
     }
 
     private void initDaGra() {
@@ -278,17 +282,24 @@ public class World {
 
             //============================//============================  Updating agents statuses
             System.out.println("> updating agents' profile, watched list, and next steps...");
-            for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
-                Agent agent = agents.get(i);
-                // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
-                //todo: adding doing service capacity to agents as capacity param
-                // System.out.print(" | 1 > profile...");
-                agent.updateProfile();
-                // System.out.print(" | 2 > watchList...");
-                agent.updateWatchList();
-                // System.out.print(" | 3 > nextStep...");
-                router.updateNextSteps(agent);
+
+
+            if (Config.RUNTIME_THREAD_AGENT_COUNT > 1) {
+                AgentUpdaterRunner.execute();
+            } else {
+                for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
+                    Agent agent = agents.get(i);
+                    // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
+                    //todo: adding doing service capacity to agents as capacity param
+                    // System.out.print(" | 1 > profile...");
+                    agent.updateProfile();
+                    // System.out.print(" | 2 > watchList...");
+                    agent.updateWatchList();
+                    // System.out.print(" | 3 > nextStep...");
+                    router.updateNextSteps(agent);
+                }
             }
+
 
             System.out.println("> go to next step...");
             //============================//============================ Traveling
@@ -299,9 +310,13 @@ public class World {
             //============================//============================ Observation
             if (simulationConfigItem.isIsUseObservation() || simulationConfigItem.isIsUseIndirectObservation()) {
                 System.out.println("> observing...");
-                for (Agent agent : agents) {
-                    if (agent.getCapacity().getObservationCap() > 0) {
-                        trustManager.observe(agent);
+                if (Config.RUNTIME_THREAD_AGENT_COUNT > 1) {
+                    AgentObservationRunner.execute();
+                } else {
+                    for (Agent agent : agents) {
+                        if (agent.getCapacity().getObservationCap() > 0) {
+                            trustManager.observe(agent);
+                        }
                     }
                 }
             }

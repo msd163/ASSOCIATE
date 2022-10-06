@@ -2,6 +2,7 @@ package utils;
 
 import _type.TtBehaviorState;
 import _type.TtDiagramThemeMode;
+import _type.TtExecutionTarget;
 import simulateLayer.statistics.StatsEnvGenerator;
 import simulateLayer.statistics.StatsTrustGenerator;
 
@@ -85,14 +86,14 @@ public class Globals {
         public static Color darkOrange2 = new Color(180, 60, 0);
         public static Color darkOrange3 = new Color(150, 30, 0);
 
-        private  static final Color[] lightColors =new Color[]{green, white, gray, red, lightBlue, magenta, yellow, lightGreen, lightRed1, orange,
+        private static final Color[] lightColors = new Color[]{green, white, gray, red, lightBlue, magenta, yellow, lightGreen, lightRed1, orange,
                 lightMagenta, darkGreen, darkGray, darkGreen, darkRed, darkMagenta, lightYellow, lightGray1, lightRed, lightOrange};
 
-        private  static final Color[] darkColors =new Color[]{
-                darkGreen, red, blue, magenta, darkOrange, darkGray,new Color(255, 42, 180),new Color(27, 150, 141),
-                darkGreen3,  darkRed, darkBlue, darkMagenta1, darkOrange1, darkGray1,
-                darkGreen2,  darkRed2, darkBlue2, darkMagenta3, darkOrange3, darkGray3,
-                darkGreen1,  darkRed1, darkBlue1, darkMagenta2, darkOrange2, darkGray2
+        private static final Color[] darkColors = new Color[]{
+                darkGreen, red, blue, magenta, darkOrange, darkGray, new Color(255, 42, 180), new Color(27, 150, 141),
+                darkGreen3, darkRed, darkBlue, darkMagenta1, darkOrange1, darkGray1,
+                darkGreen2, darkRed2, darkBlue2, darkMagenta3, darkOrange3, darkGray3,
+                darkGreen1, darkRed1, darkBlue1, darkMagenta2, darkOrange2, darkGray2
         };
 
         public static Color color(int i) {
@@ -226,9 +227,8 @@ public class Globals {
     public static Random RANDOM = new Random(new Date().getTime());
 
     public static boolean PAUSE = false;
-    public static boolean HIDE_ALL_DRAWING = false;
+    public static boolean HIDE_ALL_DRAWING = !Config.DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY;
     public static boolean FINISHED = false;
-
 
     //============================//============================//============================
     public static int DAGRA_SIGN_NEXT_ID = 0;               // an static variable for counting CertSign ID
@@ -251,7 +251,7 @@ public class Globals {
     public static String STATS_FILE_NAME = ParsCalendar.getInstance().getShortDateTime()
             .replaceAll("[ ]", "-")
             .replaceAll("[:/]", "")
-            + "_" + Config.EnvironmentDataFilePath.substring(Config.EnvironmentDataFilePath.lastIndexOf("/") + 1, Config.EnvironmentDataFilePath.lastIndexOf("."));
+            + "_" + Config.SocietyDataFilePath.substring(Config.SocietyDataFilePath.lastIndexOf("/") + 1, Config.SocietyDataFilePath.lastIndexOf("."));
 
     public static StatsEnvGenerator statsEnvGenerator = new StatsEnvGenerator();
     public static StatsTrustGenerator statsTrustGenerator = new StatsTrustGenerator();

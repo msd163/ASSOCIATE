@@ -60,7 +60,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private boolean showMousePlus = true;
     private boolean isShowDrawingTitle = true;
     private boolean isShowStatsInfo = true;
-    private boolean isPaintTheChart = Config.DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY;
+    private boolean isPaintTheChart = true;
     protected boolean isShowSimInfo = true;
     protected boolean isShowAgentId = true;
     protected boolean isShowBarChartCapInfo = true;

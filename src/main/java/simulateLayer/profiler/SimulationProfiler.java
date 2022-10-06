@@ -151,7 +151,11 @@ public class SimulationProfiler {
         return pitfallCountD.nextValue();
     }
 
-    //============================//============================
+    public ArrayList<PopulationBunch> getBunches() {
+        return bunches;
+    }
+
+//============================//============================
 
     public String toString(int tabIndex) {
         tabIndex++;

@@ -91,8 +91,11 @@ public class PopulationBunch {
     //============================//============================
 
 
-    public int getBunchCount() {
+    public int getNextBunchCount() {
         return bunchCountD.nextValue();
+    }
+    public String getBunchCount() {
+        return bunchCount;
     }
 
     public DefParameter getIndirectExperienceCapD() {

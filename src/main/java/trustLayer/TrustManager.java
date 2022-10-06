@@ -807,8 +807,12 @@ public class TrustManager {
             return false;
         }
 
-        for (TrustObservation observation : issuer.getTrust().getObservations()) {
-            for (TrustDataItem item : observation.getItems()) {
+        List<TrustObservation> observations = issuer.getTrust().getObservations();
+        for (int j = 0, observationsSize = observations.size(); j < observationsSize; j++) {
+            TrustObservation observation = observations.get(j);
+            ArrayList<TrustDataItem> items = observation.getItems();
+            for (int i = 0, itemsSize = items.size(); i < itemsSize; i++) {
+                TrustDataItem item = items.get(i);
                 addIndirectObservation(item, observation.getResponder(), issuer, receiver);
             }
         }
@@ -829,7 +833,7 @@ public class TrustManager {
         boolean isAdded = false;
         for (int k = 0, obsLen = rcvIndirObss.size(); k < obsLen; k++) {
             TrustIndirectObservation obs = rcvIndirObss.get(k);
-            if (obs.getResponder().getId() == responder.getId()) {
+            if (obs != null && obs.getResponder() != null && responder != null && obs.getResponder().getId() == responder.getId()) {
                 //-- Adding observation
                 obs.addObservation(indirectObservationItem);
 
@@ -854,12 +858,21 @@ public class TrustManager {
                     int historyIndex;
                     TrustIndirectObservation oldHistory = rcvTrust.getIndirectObservations().get(0);
                     historyIndex = 0;
-                    for (int k = 1, historiesLength = rcvIndirObss.size(); k < historiesLength; k++) {
-                        TrustIndirectObservation tObs = rcvIndirObss.get(k);
+                    if (oldHistory != null) {
+                        try {
 
-                        if (oldHistory.getLastTime() > tObs.getLastTime()) {
-                            historyIndex = k;
-                            oldHistory = tObs;
+                            for (int k = 1, historiesLength = rcvIndirObss.size(); k < historiesLength; k++) {
+                                TrustIndirectObservation tObs = rcvIndirObss.get(k);
+                                if (tObs == null) {
+                                    continue;
+                                }
+                                if (oldHistory.getLastTime() > tObs.getLastTime()) {
+                                    historyIndex = k;
+                                    oldHistory = tObs;
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.out.println("EEE:  " + e.getMessage());
                         }
                     }
                     rcvTrust.getIndirectObservations().remove(historyIndex);
@@ -882,7 +895,7 @@ public class TrustManager {
         }
 
         for (TrustIndirectObservation observation : requester.getTrust().getIndirectObservations()) {
-            if (observation.getResponder().getId() == responder.getId()) {
+            if (observation != null && observation.getResponder() != null && responder != null && observation.getResponder().getId() == responder.getId()) {
                 return observation;
             }
         }
