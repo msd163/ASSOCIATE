@@ -114,4 +114,8 @@ public class ProjectPath {
             }
         }
     }
+
+    public TtExecutionTarget getTarget() {
+        return target;
+    }
 }

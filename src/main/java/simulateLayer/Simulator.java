@@ -116,6 +116,11 @@ public class Simulator {
             targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Globals.TrustConfigFileName);
             Files.copy(sourcePath, targetPath);
 
+            //-- Copying simulation-config-x.json to statistics directory
+            sourcePath = Paths.get(Globals.SimulationConfigFilePath);
+            targetPath = Paths.get(ProjectPath.instance().statisticsDir() + "/" + statName + "/" + Globals.SimulationConfigFileName);
+            Files.copy(sourcePath, targetPath);
+
         }
 
         if (Config.INT_DRAWING_SHOW_ENABLED()) {
@@ -451,7 +456,8 @@ public class Simulator {
                 overallResistance + "," +
                 overallIgnorePos + "," +
                 overallIgnoreNeg + "," +
-                Globals.SocietyDataFileName
+                Globals.STATS_FILE_NAME + "," +
+                ProjectPath.instance().getTarget()
         );
 
 

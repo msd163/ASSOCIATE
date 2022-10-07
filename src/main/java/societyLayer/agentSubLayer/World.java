@@ -3,8 +3,8 @@ package societyLayer.agentSubLayer;
 import _type.*;
 import drawingLayer.DrawingWindowRunner;
 import internetLayer.Internet;
-import simulateLayer.config.trust.TrustConfigItem;
 import simulateLayer.Simulator;
+import simulateLayer.config.trust.TrustConfigItem;
 import simulateLayer.statistics.EpisodeStatistics;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.environmentSubLayer.Environment;
@@ -174,9 +174,10 @@ public class World {
         System.out.println("Initializing DaGra...");
         initDaGra();
 
-        AgentUpdaterRunner.init(agents, router);
-        AgentObservationRunner.init(agents, trustManager);
-
+        if(Config.RUNTIME_THREAD_COUNT>1) {
+            AgentUpdaterRunner.init(agents, router);
+            AgentObservationRunner.init(agents, trustManager);
+        }
     }
 
     private void initDaGra() {

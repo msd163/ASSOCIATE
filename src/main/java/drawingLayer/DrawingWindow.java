@@ -517,7 +517,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     protected int getRealHeight(int diagramIndex) {
-        return (int) ((maxAxisY[diagramIndex] + 10) * 0.1 * _vs);
+        return (int) ((maxAxisY[diagramIndex] + 100) * 0.1 * _vs);
     }
 
     /**

@@ -1,9 +1,9 @@
 {
   "--------------------------------------------------2": "STATE",
   "stateCount": 400,
-  "stateCapacity": "80",
-  "stateTargetCount": "#4..40",
-  "pitfallCount": "100",
+  "stateCapacity": "100",
+  "stateTargetCount": "#3..10",
+  "pitfallCount": "40",
   "--------------------------------------------------3": "AGENT",
   "agentsCount": "4054",
   "bunches": [
@@ -38,12 +38,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 70,
+        "honestPercent": 100,
         "adversaryPercent": 0,
         "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 70,
-          "adversaryPercent": 30,
+          "honestPercent": 0,
+          "adversaryPercent": 0,
           "mischiefPercent": 0
         }
       }
@@ -52,7 +52,7 @@
       "_..................................................": "2",
       "bunchCount": "169",
       "targetCount": "200",
-      "watchDepth": "#1..3",
+      "watchDepth": "#1..2",
       "watchListCap": "#90..180",
       "travelHistoryCap": "#200..400",
       "_0": "-----------------------------------",
@@ -79,12 +79,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 30,
+        "honestPercent": 0,
         "adversaryPercent": 0,
         "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 70,
-          "adversaryPercent": 30,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -120,12 +120,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 30,
+        "honestPercent": 0,
         "adversaryPercent": 0,
         "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 30,
-          "adversaryPercent": 70,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -134,7 +134,7 @@
       "_..................................................": "4",
       "bunchCount": "150",
       "targetCount": "200",
-      "watchDepth": "#1..2",
+      "watchDepth": "#0..2",
       "watchListCap": "#76..157",
       "travelHistoryCap": "#175..350",
       "_0": "-----------------------------------",
@@ -161,12 +161,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 90,
-        "adversaryPercent": 5,
-        "mischiefPercent": 5,
+        "honestPercent": 0,
+        "adversaryPercent": 0,
+        "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 0,
-          "adversaryPercent": 0,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -203,11 +203,11 @@
       "_6": "-----------------------------------",
       "behavior": {
         "honestPercent": 0,
-        "adversaryPercent": 100,
+        "adversaryPercent": 0,
         "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 0,
-          "adversaryPercent": 0,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -243,12 +243,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 70,
-        "adversaryPercent": 5,
-        "mischiefPercent": 5,
+        "honestPercent": 0,
+        "adversaryPercent": 0,
+        "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 70,
-          "adversaryPercent": 25,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -284,12 +284,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 10,
-        "adversaryPercent": 5,
-        "mischiefPercent": 5,
+        "honestPercent": 0,
+        "adversaryPercent": 0,
+        "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 70,
-          "adversaryPercent": 30,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -325,12 +325,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 90,
-        "adversaryPercent": 5,
-        "mischiefPercent": 5,
+        "honestPercent": 0,
+        "adversaryPercent": 0,
+        "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 0,
-          "adversaryPercent": 0,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -368,10 +368,10 @@
       "behavior": {
         "honestPercent": 0,
         "adversaryPercent": 0,
-        "mischiefPercent": 100,
+        "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 0,
-          "adversaryPercent": 0,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
@@ -407,12 +407,12 @@
       },
       "_6": "-----------------------------------",
       "behavior": {
-        "honestPercent": 70,
-        "adversaryPercent": 10,
-        "mischiefPercent": 20,
+        "honestPercent": 0,
+        "adversaryPercent": 0,
+        "mischiefPercent": 0,
         "hypocriteBehavior": {
-          "honestPercent": 0,
-          "adversaryPercent": 0,
+          "honestPercent": 90,
+          "adversaryPercent": 10,
           "mischiefPercent": 0
         }
       }
