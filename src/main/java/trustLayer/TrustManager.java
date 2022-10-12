@@ -232,11 +232,11 @@ public class TrustManager {
             }
             oldScore = currentScore;
 
-
-            if (fluctuationCount > Config.STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD) {
-                wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoSuspectDiagnosis();
-            }
         }
+        if (fluctuationCount > Config.STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD) {
+            wdStatistics[Globals.WORLD_TIMER].getStatisticsHypo().add_allHypoSuspectDiagnosis();
+        }
+
 
         Float scoreAtTopOfList = sntrs.get(0);
         if (scoreAtTopOfList * trustValue < 0) {
