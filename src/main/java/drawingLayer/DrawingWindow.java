@@ -5,6 +5,7 @@ import _type.TtDiagramThemeMode;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.World;
 import trustLayer.data.TrustData;
+import trustLayer.data.TrustDataArray;
 import utils.Config;
 import utils.Globals;
 import utils.Point;
@@ -14,7 +15,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.List;
 
 public class DrawingWindow extends JPanel implements MouseMotionListener, MouseWheelListener {
 
@@ -138,7 +138,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         case 112:        // left  F1
                             if (_vs > 25) {
                                 _vs -= 25;
-                               // pnOffset.y += getRealHeight(0)/2;
+                                // pnOffset.y += getRealHeight(0)/2;
                             }
                             break;
                         case 113:        // top   F2
@@ -571,9 +571,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
     //============================//============================//============================
 
-    protected void drawBar(Agent agent, TtBehaviorState behaviorState, int i, int dataCap, int dataItemCap, int[] rewardCountArray, List<?> data) {
+    protected void drawBar(Agent agent, TtBehaviorState behaviorState, int i, int dataCap, int dataItemCap, int[] rewardCountArray, TrustDataArray data) {
 
-        int dataSize = data.size();
+        int dataSize = data.getFilledSize();
         int yIndex = i * (21 + _vs - 1);
         //-- Drawing agent cap power rectangle
         g.setColor(Globals.Color$.getNormal(behaviorState));
@@ -613,7 +613,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
             //-- Drawing percentage of items size: itemSize/itemCap
             for (int j = 0, dSize = data.size(); j < dSize; j++) {
-                TrustData io = (TrustData) data.get(j);
+                TrustData io = data.get(j);
+                if (io == null) {
+                    break;
+                }
                 if (io.getItemCap() > 0) {
                     if (io.isIsUpdated()) {
                         g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen2 : Globals.Color$.darkRed);
@@ -622,7 +625,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen1 : Globals.Color$.red);
                     }
                     int d = 1 + _hs;
-                    g.fillRect(6 + j * _hs, yIndex + 3, d > 5 ? d - 4 : d > 3 ? d - 2 : 1, 16 * io.getItems().size() / io.getItemCap());
+                    g.fillRect(6 + j * _hs, yIndex + 3, d > 5 ? d - 4 : d > 3 ? d - 2 : 1, 16 * io.getFilledSize() / io.getItemCap());
                 }
             }
         }
@@ -814,33 +817,48 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         float sc = scale;
 
+        // zoom control
+        if (e.isControlDown()) {
 
-        if (sc > 1) {
-            sc += -0.5 * e.getWheelRotation();
-        } else if (sc < 0.1) {
-            sc += -0.01 * e.getWheelRotation();
-        } else if (sc < 1) {
-            sc += -0.05 * e.getWheelRotation();
-        } else {
-            if (e.getWheelRotation() < 0) {
+            if (sc > 1) {
                 sc += -0.5 * e.getWheelRotation();
-            } else {
+            } else if (sc < 0.1) {
+                sc += -0.01 * e.getWheelRotation();
+            } else if (sc < 1) {
                 sc += -0.05 * e.getWheelRotation();
+            } else {
+                if (e.getWheelRotation() < 0) {
+                    sc += -0.5 * e.getWheelRotation();
+                } else {
+                    sc += -0.05 * e.getWheelRotation();
+                }
+            }
+            if (sc > 20) {
+                sc = 20;
+            } else if (sc < 0.009f) {
+                sc = 0.01f;
+            }
+
+
+            if (sc > scale) {
+                pnOffset.y -= (e.getY() * (sc - scale));
+            } else if (sc < scale) {
+                pnOffset.y += (int) (e.getY() * (scale - sc));
+            }
+            scale = sc;
+        } else if (e.isShiftDown()) {
+            if (e.isAltDown()) {
+                pnOffset.x -= e.getWheelRotation() * 200;
+            } else {
+                pnOffset.x -= e.getWheelRotation() * 10;
+            }
+        } else {
+            if (e.isAltDown()) {
+                pnOffset.y -= e.getWheelRotation() * 200;
+            } else {
+                pnOffset.y -= e.getWheelRotation() * 10;
             }
         }
-        if (sc > 20) {
-            sc = 20;
-        } else if (sc < 0.009f) {
-            sc = 0.01f;
-        }
-
-
-        if (sc > scale) {
-            pnOffset.y -= (e.getY() * (sc - scale));
-        } else if (sc < scale) {
-            pnOffset.y += (int) (e.getY() * (scale - sc));
-        }
-        scale = sc;
     }
 
 }

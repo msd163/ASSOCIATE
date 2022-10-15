@@ -19,6 +19,7 @@ public class TrustConfigItem {
     private boolean isUseObservation;
     private boolean isUseIndirectObservation;
     private boolean isBidirectionalObservationSharing;
+    private boolean isShareObservationWithNeighbors;
     private int experienceDepthInScoring;
     private float ignoringThresholdOfTrustValue;
     private float maximumConsideredRoutingHelpInTrustMechanism;
@@ -46,6 +47,7 @@ public class TrustConfigItem {
                     " @OBS is: " + isUseObservation +
                     " - ind: " + isUseIndirectObservation +
                     " - bid: " + isBidirectionalObservationSharing +
+                    " - shr: " + isShareObservationWithNeighbors +
                     " @RCM cf: " + recommendationCoeff +
                     " - bid: " + isBidirectionalRecommendationSharing +
                     " - sfm: " + isSafeUseRecommendation +
@@ -88,7 +90,8 @@ public class TrustConfigItem {
                             " - dpth: " + experienceDepthInScoring +
                             "  @OBS is: " + isUseObservation +
                             " - ind: " + isUseIndirectObservation +
-                            " - bid: " + isBidirectionalObservationSharing
+                            " - bid: " + isBidirectionalObservationSharing+
+                            " - shr: " + isShareObservationWithNeighbors
                     ;
         }
         return "";
@@ -103,7 +106,7 @@ public class TrustConfigItem {
                             " - bid: " + isBidirectionalRecommendationSharing +
                             " - sfm: " + isSafeUseRecommendation +
                             " - ngEff: " + isUseNegativeRecommendationEffect +
-                            "  @INT is: " + isUseSharingRecommendationWithInternet  + "[" + sharingRecommendationWithInternetPeriod + "]" +
+                            "  @INT is: " + isUseSharingRecommendationWithInternet + "[" + sharingRecommendationWithInternetPeriod + "]" +
                             " - cnt: " + certificationCount
                     ;
         }
@@ -194,6 +197,10 @@ public class TrustConfigItem {
 
     public boolean isIsBidirectionalObservationSharing() {
         return isBidirectionalObservationSharing;
+    }
+
+    public boolean isIsShareObservationWithNeighbors() {
+        return isShareObservationWithNeighbors;
     }
 
     public boolean isIsUseSharingRecommendationWithInternet() {

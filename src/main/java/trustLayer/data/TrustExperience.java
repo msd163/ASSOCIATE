@@ -13,7 +13,7 @@ public class TrustExperience extends TrustData {
     //============================//============================//============================
 
     public void addExperience(Agent requester, StateX source, StateX destination, float reward) {
-        super.addItem(requester, requester, source, destination, reward);
+        super.addDirectItem(requester, requester, source, destination, reward);
     }
 
     //============================//============================//============================

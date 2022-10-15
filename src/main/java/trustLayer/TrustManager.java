@@ -14,6 +14,7 @@ import utils.Globals;
 import utils.OutLog____;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TrustManager {
@@ -369,6 +370,20 @@ public class TrustManager {
         return norList;
     }
 
+    private List<Float> normalizeWithForgottenFactor(TrustDataItem[] items) {
+
+        List<Float> norList = new ArrayList<>();
+
+        for (int i = 0, itemsSize = items.length; i < itemsSize; i++) {
+            TrustDataItem item = items[i];
+            if (item == null) {
+                break;
+            }
+            norList.add(item.getScore() * getForgottenFactor(item.getTime()));
+        }
+        return norList;
+    }
+
     private List<Float> normalizeWithForgottenFactorAndTrustValue(Agent requester, List<TrustDataItem> items) {
 
         List<Float> norList = new ArrayList<>();
@@ -377,9 +392,34 @@ public class TrustManager {
             TrustDataItem item = items.get(i);
             //-- For preventing stack overflow in calculating trust, we use trust value that is calculated previously
             //-- Calculating trust value of requester to recommender
-            float trustValue = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()].getTrustValue(); //getTrustValue(requester, item.getIssuer());
-            if (trustValue > 0) {
-                norList.add(trustValue * item.getScore() * getForgottenFactor(item.getTime()));
+            TrustAbstract trustAbstract = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()];
+            if (trustAbstract != null) {
+                float trustValue = trustAbstract.getTrustValue(); //getTrustValue(requester, item.getIssuer());
+                if (trustValue > 0) {
+                    norList.add(trustValue * item.getScore() * getForgottenFactor(item.getTime()));
+                }
+            }
+        }
+        return norList;
+    }
+
+    private List<Float> normalizeWithForgottenFactorAndTrustValue(Agent requester, TrustDataItem[] items) {
+
+        List<Float> norList = new ArrayList<>();
+
+        for (int i = 0, itemsSize = items.length; i < itemsSize; i++) {
+            TrustDataItem item = items[i];
+            if (item == null) {
+                break;
+            }
+            //-- For preventing stack overflow in calculating trust, we use trust value that is calculated previously
+            //-- Calculating trust value of requester to recommender
+            TrustAbstract trustAbstract = requester.getTrust().getTrustAbstracts()[item.getIssuer().getIndex()];
+            if (trustAbstract != null) {
+                float trustValue = trustAbstract.getTrustValue(); //getTrustValue(requester, item.getIssuer());
+                if (trustValue > 0) {
+                    norList.add(trustValue * item.getScore() * getForgottenFactor(item.getTime()));
+                }
             }
         }
         return norList;
@@ -416,8 +456,7 @@ public class TrustManager {
         }
 
         //============================
-        AgentTrust __trust = requester.getTrust();
-        List<TrustExperience> experiences = __trust.getExperiences();
+        TrustDataArray experiences = requester.getTrust().getExperiences();
 
         int effect = isPositive ? 1 : -1;
 
@@ -432,7 +471,7 @@ public class TrustManager {
 
             TravelHistory tvh = travelHistory.get(tvhIndex);
 
-            // If the history in the first initialized one of the travel is done randomly or by itself info
+            // If the travel is done randomly or by itself info
             if (tvh.getResponder() == null) {
                 continue;
             }
@@ -450,52 +489,24 @@ public class TrustManager {
             }
 
             //============================//============================ // Check if the agent added to trustHistory previously and return it's ID.
-            boolean isScored = false;
-            for (int k = 0, expLen = experiences.size(); k < expLen; k++) {
-                TrustExperience exp = experiences.get(k);
-                if (exp.getResponder().getId() == tvh.getResponder().getId()) {
-                    float score = effect * getScoreByOrder(++consideredExpCount);
-                    //-- Adding experience
-                    exp.addExperience(requester, source, destination, score);
 
-                    travelHistory.get(tvhIndex).setIsTrustCalculated(true);
-                    responderId = exp.getResponder().getId();
-                    scoreCount++;
-                    isScored = true;
-                    break;
-                }
-            }
-            if (isScored) {
+            int indexIfExist = experiences.getIndexIfExist(tvh.getResponder());
+
+            float score = effect * getScoreByOrder(++consideredExpCount);
+
+            if (indexIfExist > -1) {
+
+                //-- Adding experience
+                ((TrustExperience) experiences.get(indexIfExist)).addExperience(requester, source, destination, score);
+
+                travelHistory.get(tvhIndex).setIsTrustCalculated(true);
+                responderId = experiences.get(indexIfExist).getResponder().getId();
+                scoreCount++;
+
                 continue;
             }
 
             //============================//============================  // If the agent not added previously
-
-            if (__trust.getExperiences().size() >= __trust.getExperienceCap()) {
-                // Replacing new history item with an existence one according selected method.
-                switch (__trust.getTrustReplaceMethod()) {
-                    case Sequential_Circular:
-                        __trust.getExperiences().remove(0);
-                        break;
-
-                    case RemoveLastUpdated:
-                        int historyIndex;
-                        TrustExperience oldHistory = __trust.getExperiences().get(0);
-                        historyIndex = 0;
-                        for (int k = 1, historiesLength = experiences.size(); k < historiesLength; k++) {
-                            TrustExperience tExp = experiences.get(k);
-
-                            if (oldHistory != null && tExp != null && oldHistory.getLastTime() > tExp.getLastTime()) {
-                                historyIndex = k;
-                                oldHistory = tExp;
-                            }
-                        }
-                        __trust.getExperiences().remove(historyIndex);
-                        break;
-                }
-            }
-
-            float score = effect * getScoreByOrder(++consideredExpCount);
 
             //-- Creating experience
             TrustExperience experience = new TrustExperience(requester, tvh.getResponder());
@@ -510,20 +521,7 @@ public class TrustManager {
     }
 
     private TrustExperience getExperience(Agent requester, Agent responder) {
-
-        if (requester.getTrust().getExperiences().size() == 0) {
-            return null;
-        }
-
-        List<TrustExperience> experiences = requester.getTrust().getExperiences();
-        for (int i = 0, experiencesSize = experiences.size(); i < experiencesSize; i++) {
-            TrustExperience experience = experiences.get(i);
-            if (experience != null && experience.getResponder() != null && responder != null &&
-                    experience.getResponder().getId() == responder.getId()) {
-                return experience;
-            }
-        }
-        return null;
+        return (TrustExperience) requester.getTrust().getExperiences().get(requester, responder);
     }
 
     //============================//============================//============================ Indirect Experience
@@ -534,12 +532,18 @@ public class TrustManager {
             return false;
         }
 
-        List<TrustExperience> experiences = issuer.getTrust().getExperiences();
+        TrustDataArray experiences = issuer.getTrust().getExperiences();
         for (int i = 0, experiencesSize = experiences.size(); i < experiencesSize; i++) {
-            TrustExperience experience = experiences.get(i);
-            ArrayList<TrustDataItem> items = experience.getItems();
-            for (int j = 0, itemsSize = items.size(); j < itemsSize; j++) {
-                TrustDataItem item = items.get(j);
+            TrustData experience = experiences.get(i);
+            if (experience == null) {
+                break;
+            }
+            TrustDataItem[] items = experience.getItems();
+            for (int j = 0, itemsSize = items.length; j < itemsSize; j++) {
+                TrustDataItem item = items[j];
+                if (item == null) {
+                    break;
+                }
                 addIndirectExperience(item, experience.getResponder(), issuer, receiver);
             }
         }
@@ -548,60 +552,23 @@ public class TrustManager {
 
     public boolean addIndirectExperience(TrustDataItem indirectExperienceItem, Agent responder, Agent issuer, Agent receiver) {
 
-        indirectExperienceItem.setIssuer(issuer);
-
         //============================
-        AgentTrust __trust = receiver.getTrust();
-        List<TrustIndirectExperience> experiences = __trust.getIndirectExperiences();
-
+        TrustDataArray indirectExperiences = receiver.getTrust().getIndirectExperiences();
 
         //============================//============================ // Check if the agent added to trustHistory previously and return it's ID.
-        boolean isAdded = false;
-        for (int k = 0, expLen = experiences.size(); k < expLen; k++) {
-            TrustIndirectExperience exp = experiences.get(k);
-            if (exp != null && exp.getResponder() != null && responder != null &&
-                    exp.getResponder().getId() == responder.getId()) {
-                //-- Adding experience
-                exp.addExperience(indirectExperienceItem);
+        int indexIfExist = indirectExperiences.getIndexIfExist(responder);
 
-                isAdded = true;
-                break;
-            }
-        }
-        if (isAdded) {
+        if (indexIfExist > -1) {
+            ((TrustIndirectExperience) indirectExperiences.get(indexIfExist)).addExperience(indirectExperienceItem, issuer);
             return true;
         }
 
         //============================//============================  // If the agent not added previously
 
-        if (__trust.getIndirectExperiences().size() >= __trust.getIndirectExperienceCap()) {
-            // Replacing new history item with an exist one according selected method.
-            switch (__trust.getTrustReplaceMethod()) {
-                case Sequential_Circular:
-                    __trust.getIndirectExperiences().remove(0);
-                    break;
-
-                case RemoveLastUpdated:
-                    int historyIndex;
-                    TrustIndirectExperience oldHistory = __trust.getIndirectExperiences().get(0);
-                    historyIndex = 0;
-                    for (int k = 1, historiesLength = experiences.size(); k < historiesLength; k++) {
-                        TrustIndirectExperience tExp = experiences.get(k);
-
-                        if (oldHistory != null && tExp != null && oldHistory.getLastTime() > tExp.getLastTime()) {
-                            historyIndex = k;
-                            oldHistory = tExp;
-                        }
-                    }
-                    __trust.getIndirectExperiences().remove(historyIndex);
-                    break;
-            }
-        }
-
         //-- Creating experience
-        TrustIndirectExperience experience = new TrustIndirectExperience(receiver, responder);
-        experience.addExperience(indirectExperienceItem);
-        experiences.add(experience);
+        TrustIndirectExperience indirectExperience = new TrustIndirectExperience(receiver, responder);
+        indirectExperience.addExperience(indirectExperienceItem, issuer);
+        indirectExperiences.add(indirectExperience);
 
         return true;
 
@@ -613,12 +580,12 @@ public class TrustManager {
             return null;
         }
 
-        List<TrustIndirectExperience> indirectExperiences = requester.getTrust().getIndirectExperiences();
+        TrustDataArray indirectExperiences = requester.getTrust().getIndirectExperiences();
         for (int i = 0, indirectExperiencesSize = indirectExperiences.size(); i < indirectExperiencesSize; i++) {
-            TrustIndirectExperience experience = indirectExperiences.get(i);
+            TrustData experience = indirectExperiences.get(i);
             if (experience != null && experience.getResponder() != null && responder != null &&
                     experience.getResponder().getId() == responder.getId()) {
-                return experience;
+                return (TrustIndirectExperience) experience;
             }
         }
         return null;
@@ -653,55 +620,26 @@ public class TrustManager {
     private boolean addObservation(Agent observer, Agent observed, Agent responder, boolean isInTarget) {
 
         //============================
-        AgentTrust __trust = observer.getTrust();
-        List<TrustObservation> observations = __trust.getObservations();
+        TrustDataArray observations = observer.getTrust().getObservations();
 
         //============================//============================ // Check if the agent added to observations previously and return it's ID.
-        boolean isAdded = false;
-        for (int k = 0, obsLen = observations.size(); k < obsLen; k++) {
-            TrustObservation obs = observations.get(k);
-            if (obs.getResponder().getId() == responder.getId()) {
-                //-- Adding observation
-                float score = (isInTarget ? 1 : -1) * getScoreByOrder(0);
-                obs.addObservation(observer, observed, null, null, score);
 
-                isAdded = true;
-                break;
-            }
-        }
-        if (isAdded) {
+
+        int indexIfExist = observations.getIndexIfExist(responder);
+
+        float score = (isInTarget ? 1 : -1) * getScoreByOrder(0);
+
+        if (indexIfExist > -1) {
+            //-- Adding experience
+            ((TrustObservation) observations.get(indexIfExist)).addObservation(observer, observed, null, null, score);
             return true;
         }
 
         //============================//============================  // If the agent not added previously
 
-        if (__trust.getObservations().size() >= __trust.getObservationCap()) {
-            // Replacing new history item with an existence one according selected method.
-            switch (__trust.getTrustReplaceMethod()) {
-                case Sequential_Circular:
-                    __trust.getObservations().remove(0);
-                    break;
-
-                case RemoveLastUpdated:
-                    int historyIndex;
-                    TrustObservation oldHistory = __trust.getObservations().get(0);
-                    historyIndex = 0;
-                    for (int k = 1, historiesLength = observations.size(); k < historiesLength; k++) {
-                        TrustObservation tExp = observations.get(k);
-
-                        if (oldHistory.getLastTime() > tExp.getLastTime()) {
-                            historyIndex = k;
-                            oldHistory = tExp;
-                        }
-                    }
-                    __trust.getObservations().remove(historyIndex);
-                    break;
-            }
-        }
-
         //-- Creating observation
         TrustObservation observation = new TrustObservation(observer, responder);
-        float score = (isInTarget ? 1 : -1) * getScoreByOrder(0);
+
         observation.addObservation(observer, observed, null, null, score);
         observations.add(observation);
 
@@ -802,19 +740,7 @@ public class TrustManager {
 */
 
     private TrustObservation getObservation(Agent requester, Agent responder) {
-
-        if (requester.getTrust().getObservations().size() == 0) {
-            return null;
-        }
-
-        List<TrustObservation> observations = requester.getTrust().getObservations();
-        for (int i = 0, observationsSize = observations.size(); i < observationsSize; i++) {
-            TrustObservation observation = observations.get(i);
-            if (observation.getResponder().getId() == responder.getId()) {
-                return observation;
-            }
-        }
-        return null;
+        return (TrustObservation) requester.getTrust().getObservations().get(requester, responder);
     }
 
 
@@ -826,13 +752,22 @@ public class TrustManager {
             return false;
         }
 
-        List<TrustObservation> observations = issuer.getTrust().getObservations();
+        TrustDataArray observations = issuer.getTrust().getObservations();
         for (int j = 0, observationsSize = observations.size(); j < observationsSize; j++) {
-            TrustObservation observation = observations.get(j);
-            ArrayList<TrustDataItem> items = observation.getItems();
-            for (int i = 0, itemsSize = items.size(); i < itemsSize; i++) {
-                TrustDataItem item = items.get(i);
-                addIndirectObservation(item, observation.getResponder(), issuer, receiver);
+            TrustData observation = observations.get(j);
+            if (observation == null) {
+                break;
+            }
+            // if the receiver show the responder in the current observation, the observation will be share with it.
+            if (receiver.isAgentInWatchList(observation.getResponder())) {
+                TrustDataItem[] items = observation.getItems();
+                for (int i = 0, itemsSize = items.length; i < itemsSize; i++) {
+                    TrustDataItem item = items[i];
+                    if (item == null) {
+                        break;
+                    }
+                    addIndirectObservation(item, observation.getResponder(), issuer, receiver);
+                }
             }
         }
 
@@ -841,94 +776,60 @@ public class TrustManager {
 
     public boolean addIndirectObservation(TrustDataItem indirectObservationItem, Agent responder, Agent issuer/*observer*/, Agent receiver) {
 
-        indirectObservationItem.setIssuer(issuer);
-
         //============================
-        AgentTrust rcvTrust = receiver.getTrust();
-        List<TrustIndirectObservation> rcvIndirObss = rcvTrust.getIndirectObservations();
-
+        TrustDataArray indirectObservations = receiver.getTrust().getIndirectObservations();
 
         //============================//============================ // Check if the agent added to trustHistory previously and return it's ID.
-        boolean isAdded = false;
-        for (int k = 0, obsLen = rcvIndirObss.size(); k < obsLen; k++) {
-            try {
-                TrustIndirectObservation obs = rcvIndirObss.get(k);
-                if (obs != null && obs.getResponder() != null && responder != null && obs.getResponder().getId() == responder.getId()) {
-                    //-- Adding observation
-                    obs.addObservation(indirectObservationItem);
+        int indexIfExist = indirectObservations.getIndexIfExist(responder);
 
-                    isAdded = true;
-                    break;
+        if (indexIfExist > -1) {
+            TrustIndirectObservation trustIndirectObservation = (TrustIndirectObservation) indirectObservations.get(indexIfExist);
+            if (trustIndirectObservation != null) {
 
+//                TrustDataItem[] items = trustIndirectObservation.getItems();
+                /*if (items.length > 1) {
+                    Arrays.sort(items, (a, b) -> {
+                        if (a == null && b == null) {
+                            return 0;
+                        } else if (a == null) {
+                            return 1;
+                        } else if (b == null) {
+                            return -1;
+                        } else {
+                            return -Integer.compare(a.getTime(), b.getTime());
+                        }
+
+                    });
                 }
-            } catch (Exception ee) {
-                System.out.println("EEE: " + ee.getMessage());
-            }
 
-        }
-        if (isAdded) {
+
+                System.out.print("\n>> ");
+                for (TrustDataItem item : items) {
+                    if (item == null) {
+                        break;
+                    }
+                    System.out.print("[" + item.getTime() + " , " + item.getScore() + "] ");
+                }
+                System.out.print(" | \n ");*/
+
+                trustIndirectObservation.addObservation(indirectObservationItem, issuer);
+            }
             return true;
         }
 
         //============================//============================  // If the agent not added previously
 
-        if (rcvTrust.getIndirectObservations().size() >= rcvTrust.getIndirectObservationCap()) {
-            // Replacing new history item with an exist one according selected method.
-            switch (rcvTrust.getTrustReplaceMethod()) {
-                case Sequential_Circular:
-                    rcvTrust.getIndirectObservations().remove(0);
-                    break;
-
-                case RemoveLastUpdated:
-                    int historyIndex;
-                    TrustIndirectObservation oldHistory = rcvTrust.getIndirectObservations().get(0);
-                    historyIndex = 0;
-                    if (oldHistory != null) {
-                        try {
-
-                            for (int k = 1, historiesLength = rcvIndirObss.size(); k < historiesLength; k++) {
-                                TrustIndirectObservation tObs = rcvIndirObss.get(k);
-                                if (tObs == null) {
-                                    continue;
-                                }
-                                if (oldHistory.getLastTime() > tObs.getLastTime()) {
-                                    historyIndex = k;
-                                    oldHistory = tObs;
-                                }
-                            }
-                        } catch (Exception e) {
-                            System.out.println("EEE:  " + e.getMessage());
-                        }
-                    }
-                    rcvTrust.getIndirectObservations().remove(historyIndex);
-                    break;
-            }
-        }
-
         //-- Creating observation
-        TrustIndirectObservation observation = new TrustIndirectObservation(receiver, responder);
-        observation.addObservation(indirectObservationItem);
-        rcvIndirObss.add(observation);
+        TrustIndirectObservation indirectObservation = new TrustIndirectObservation(receiver, responder);
+        indirectObservation.addObservation(indirectObservationItem, issuer);
+        indirectObservations.add(indirectObservation);
 
         return true;
     }
 
     private TrustIndirectObservation getIndirectObservation(Agent requester, Agent responder) {
-
-        if (requester.getTrust().getIndirectObservations().size() == 0) {
-            return null;
-        }
-
-        List<TrustIndirectObservation> indirectObservations = requester.getTrust().getIndirectObservations();
-        for (int i = 0, indirectObservationsSize = indirectObservations.size(); i < indirectObservationsSize; i++) {
-            TrustIndirectObservation observation = indirectObservations.get(i);
-            if (observation != null && observation.getResponder() != null && responder != null && observation.getResponder().getId() == responder.getId()) {
-                return observation;
-            }
-        }
-        return null;
+        return (TrustIndirectObservation) requester.getTrust().getIndirectObservations().get(requester, responder);
     }
-
 
     //============================//============================//============================ Recommendation
 
@@ -963,76 +864,31 @@ public class TrustManager {
         return true;
     }
 
-    public boolean addRecommendation(Agent responder, Agent recommender/*issuer*/, Agent receiver, float trustValue) {
+    public synchronized boolean addRecommendation(Agent responder, Agent recommender/*issuer*/, Agent receiver, float trustValue) {
+
 
         //============================
-        AgentTrust rcvTrust = receiver.getTrust();
-        List<TrustRecommendation> rcvRcmms = rcvTrust.getRecommendations();
+        TrustDataArray recommendations = receiver.getTrust().getRecommendations();
 
-        //============================//============================ // Check if the agent added to recommendation previously and return it's ID.
-        boolean isAdded = false;
-        for (int k = 0, rcmmLen = rcvRcmms.size(); k < rcmmLen; k++) {
-            TrustRecommendation rcmm = rcvRcmms.get(k);
-            if (rcmm.getResponder().getId() == responder.getId()) {
-                //-- Adding recommendation
-                rcmm.addRecommendation(recommender, trustValue);
+        //============================//============================ // Check if the agent added to trustHistory previously and return it's ID.
+        int indexIfExist = recommendations.getIndexIfExist(responder);
 
-                isAdded = true;
-                break;
-            }
-        }
-        if (isAdded) {
+        if (indexIfExist > -1) {
+            ((TrustRecommendation) recommendations.get(indexIfExist)).addRecommendation(recommender, trustValue);
             return true;
         }
 
         //============================//============================  // If the agent not added previously
-
-        if (rcvTrust.getRecommendations().size() >= rcvTrust.getRecommendationCap()) {
-            // Replacing new history item with an exist one according selected method.
-            switch (rcvTrust.getTrustReplaceMethod()) {
-                case Sequential_Circular:
-                    rcvTrust.getRecommendations().remove(0);
-                    break;
-
-                case RemoveLastUpdated:
-                    int historyIndex;
-                    TrustRecommendation oldHistory = rcvTrust.getRecommendations().get(0);
-                    historyIndex = 0;
-                    for (int k = 1, historiesLength = rcvRcmms.size(); k < historiesLength; k++) {
-                        TrustRecommendation tObs = rcvRcmms.get(k);
-
-                        if (oldHistory.getLastTime() > tObs.getLastTime()) {
-                            historyIndex = k;
-                            oldHistory = tObs;
-                        }
-                    }
-                    rcvTrust.getRecommendations().remove(historyIndex);
-                    break;
-            }
-        }
-
         //-- Creating recommendation
         TrustRecommendation recommendation = new TrustRecommendation(receiver, responder);
         recommendation.addRecommendation(recommender, trustValue);
-        rcvRcmms.add(recommendation);
+        recommendations.add(recommendation);
 
         return true;
     }
 
     private TrustRecommendation getRecommendation(Agent requester, Agent responder) {
-
-        if (requester.getTrust().getRecommendations().size() == 0) {
-            return null;
-        }
-
-        List<TrustRecommendation> recommendations = requester.getTrust().getRecommendations();
-        for (int i = 0, recommendationsSize = recommendations.size(); i < recommendationsSize; i++) {
-            TrustRecommendation recommendation = recommendations.get(i);
-            if (recommendation.getResponder().getId() == responder.getId()) {
-                return recommendation;
-            }
-        }
-        return null;
+        return (TrustRecommendation) requester.getTrust().getRecommendations().get(requester, responder);
     }
 
     public void sendRecommendationsWithInternet(List<Agent> agentList) {
@@ -1082,7 +938,7 @@ Exception in thread "Thread-13" java.util.ConcurrentModificationException
         at trustLayer.TrustManager.calcInnerTrustValue(TrustManager.java:165)
         at trustLayer.TrustManager.getTrustValue(TrustManager.java:120)
         at transitionLayer.Router.updateNextSteps(Router.java:336)
-        at utils.AgentUpdaterRunner.run(AgentUpdaterRunner.java:88)
+        at utils.runner.AgentUpdaterRunner.run(AgentUpdaterRunner.java:88)
         boolean isAppended = false;
         //-- Check whether the trustee has already been recommended to the receiver
         for (TrustRecommendation rec : receiver.getTrust().getRecommendations()) {

@@ -15,6 +15,9 @@ import trustLayer.TrustMatrix;
 import trustLayer.consensus.CertContract;
 import trustLayer.consensus.DaGra;
 import utils.*;
+import utils.runner.AgentObservationRunner;
+import utils.runner.AgentUpdaterRunner;
+import utils.runner.ShareObservationRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,9 +177,12 @@ public class World {
         System.out.println("Initializing DaGra...");
         initDaGra();
 
-        if(Config.RUNTIME_THREAD_COUNT>1) {
+        if (Config.RUNTIME_THREAD_COUNT > 1) {
             AgentUpdaterRunner.init(agents, router);
             AgentObservationRunner.init(agents, trustManager);
+            if (trustConfigItem.isIsShareObservationWithNeighbors()) {
+                ShareObservationRunner.init(agents, trustManager);
+            }
         }
     }
 
@@ -320,6 +326,12 @@ public class World {
                         }
                     }
                 }
+            }
+
+            //============================//============================ Sharing Observation
+
+            if (Config.RUNTIME_THREAD_COUNT > 1 && trustConfigItem.isIsShareObservationWithNeighbors()) {
+                ShareObservationRunner.execute();
             }
 
             //============================//============================ Sharing With Internet

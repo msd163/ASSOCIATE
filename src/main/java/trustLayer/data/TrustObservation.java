@@ -11,7 +11,7 @@ public class TrustObservation extends TrustData {
     //============================//============================//============================
 
     public void addObservation(Agent issuer, Agent requester, StateX source, StateX destination, float reward) {
-        super.addItem(issuer, requester, source, destination, reward);
+        super.addDirectItem(issuer, requester, source, destination, reward);
     }
 
     //============================//============================//============================

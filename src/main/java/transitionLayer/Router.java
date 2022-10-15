@@ -560,7 +560,7 @@ public class Router {
         if (trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
             return responseAsHonest(agent, goalState);
         }
-
+        agent.getBehavior().updateBehaviorState();
         switch (agent.getBehavior().getCurrentBehaviorState()) {
             case Honest:
                 return responseAsHonest(agent, goalState);
