@@ -4,9 +4,6 @@ authors:
 - family-names: "Narimani Zaman Abadi"
   given-names: "Masoud"
   orcid: "https://orcid.org/0000-0003-2040-8284"
-- family-names: "Hossein Khani"
-  given-names: "Ebrahim"
-  orcid: "https://orcid.org/0000-0001-5047-9572"
 title: "ASSOCIATE: A Soft Security Simulator for Trust in Cognitive Internet of Things"
 version: 1.0.0
 date-released: 2022-27-08
