@@ -1,6 +1,6 @@
 package trustLayer;
 
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 import trustLayer.data.TrustAbstract;
 import utils.Globals;
 import simulateLayer.statistics.WorldStatistics;
@@ -33,6 +33,7 @@ public class TrustMatrix {
 
     public void update(WorldStatistics statistics) {
         Agent responder;
+        statistics.resetPopulation();
         for (int i = 0; i < agentCount; i++) {
             Agent agent = sAgents.get(i);
             TrustAbstract[] trustAbstracts = agent.getTrust().getTrustAbstracts();
@@ -42,24 +43,37 @@ public class TrustMatrix {
                 int updateTime = trustAbstracts[k].getUpdateTime();
                 if (/*tValue != 0 && */updateTime == Globals.WORLD_TIMER) {
                     trustMatrix[i][k] = tValue;
+              /*      if(!responder.getBehavior().getHasHonestState())
+                    {
+                        statistics.add_NegativePop();
+                    }
+                    else
+                    {
+                        statistics.add_PositivePop();
+                    }*/
+
+
                     if (tValue > 0 && !responder.getBehavior().getHasHonestState()) {
                         statistics.add_Itt_FalseNegativeTrust();
+                        statistics.add_PositivePop();
                         // statistics.getAgentStatistics()[j].addAsTrustee_FN();
                     }
                     if (tValue < 0 && responder.getBehavior().getHasHonestState()) {
                         statistics.add_Itt_FalsePositiveTrust();
+                        statistics.add_NegativePop();
                         //  statistics.getAgentStatistics()[j].addAsTrustee_FP();
                     }
                     if (tValue > 0 && responder.getBehavior().getHasHonestState()) {
                         statistics.add_Itt_TrueNegativeTrust();
+                        statistics.add_NegativePop();
                         //  statistics.getAgentStatistics()[j].addAsTrustee_TN();
                     }
                     if (tValue < 0 && !responder.getBehavior().getHasHonestState()) {
                         statistics.add_Itt_TruePositiveTrust();
+                        statistics.add_PositivePop();
                         //  statistics.getAgentStatistics()[j].addAsTrustee_TP();
                     }
                     break;
-
                 }
             }
         }
@@ -111,5 +125,18 @@ public class TrustMatrix {
 
     public List<Agent> getsAgents() {
         return sAgents;
+    }
+
+    public void destroy() {
+
+        if (trustMatrix != null) {
+            for (int i = 0; i < agentCount; i++) {
+                for (int j = 0; j < agentCount; j++) {
+                    trustMatrix[i][j] = null;
+                }
+            }
+        }
+        this.trustMatrix = null;
+
     }
 }

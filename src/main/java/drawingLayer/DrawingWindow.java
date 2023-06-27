@@ -1,27 +1,34 @@
 package drawingLayer;
 
 import _type.TtBehaviorState;
-import systemLayer.Agent;
-import systemLayer.World;
+import _type.TtDiagramThemeMode;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 import trustLayer.data.TrustData;
+import trustLayer.data.TrustDataArray;
+import utils.Config;
 import utils.Globals;
 import utils.Point;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.List;
 
 public class DrawingWindow extends JPanel implements MouseMotionListener, MouseWheelListener {
 
     //============================//============================  panning params
-    protected utils.Point scaleOffset = new utils.Point(0, 0);
-    protected utils.Point pnOffset = new utils.Point(0, 0);
-    protected utils.Point pnOffsetOld = new utils.Point(0, 0);
-    protected utils.Point pnStartPoint = new utils.Point(0, 0);
-    protected utils.Point mousePosition = new utils.Point(0, 0);
+    protected Point scaleOffset = new Point(0, 0);
+    protected Point pnOffset = new Point(0, 0);
+    protected Point pnOffsetOld = new Point(0, 0);
+    protected Point pnStartPoint = new Point(0, 0);
+    protected Point mousePosition = new Point(0, 0);
 
+    protected int lineThickness = 1;
+    protected int axisNumberFontSize = 35;
+
+    protected int loAxisX;      // a temp variable for saving previous X value in drawing curves
     protected int axisX = 0;
     protected int axisY = 0;
     protected int dynamicHeight = 0;
@@ -29,7 +36,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected int maxAxisY[];       // For holding maximum Y value of each chart
 
     protected int _hs = 8; // For adding space to charts horizontally
-    protected int _vs = 1; // For adding space to charts vertically
+    protected int _vs = 10; // For adding space to charts vertically
 
     protected float scale = 1f;
 
@@ -42,7 +49,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected boolean showLineChartsFlag[];
     protected boolean showChartsFlag[];
 
-    protected utils.Point prevPoints[];      //-- Previously visited point
+    protected Point prevPoints[];      //-- Previously visited point
 
     protected int translateInTitle_Y = 0;
     private int translateInNormCoord_X = 200;
@@ -51,6 +58,14 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private float translateInRevCoord_Y = 100;
 
     private boolean showMousePlus = true;
+    private boolean isShowDrawingTitle = true;
+    private boolean isShowStatsInfo = true;
+    private boolean isPaintTheChart = true;
+    protected boolean isShowSimInfo = true;
+    protected boolean isShowAgentId = true;
+    protected boolean isShowBarChartCapInfo = true;
+
+    protected double axisYScale = Config.STATISTICS_SCALE_UP_Y_AXIS_NUMBER;
 
     public int getWorldId() {
         return world == null ? -1 : world.getId();
@@ -80,7 +95,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         showWorldsFlag = new boolean[worldCount];
         Arrays.fill(showWorldsFlag, true);
 
-        maxAxisY = new int[worldCount];
+        maxAxisY = new int[3];
         Arrays.fill(maxAxisY, 0);
 
         //============================//============================
@@ -99,9 +114,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             resetParams();
                         }
 
-                        if (e.isControlDown()) {
-                            Globals.PAUSE = !Globals.PAUSE;
-                        }
                     }
                 });
 
@@ -123,25 +135,60 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 if (e.isShiftDown()) {
                     //System.out.println(keyCode);
                     switch (keyCode) {
+                        case 112:        // left  F1
+                            if (_vs > 25) {
+                                _vs -= 25;
+                                // pnOffset.y += getRealHeight(0)/2;
+                            }
+                            break;
+                        case 113:        // top   F2
+                            _vs += 25;
+                            //pnOffset.y += getRealHeight(0)/2;
+                            break;
                         case 37:        // left
                             if (_hs > 1) {
                                 _hs--;
                             }
                             break;
                         case 38:        // top
-                            _vs++;
+                            _vs += 1;
                             break;
                         case 39:        // right
                             _hs++;
                             break;
                         case 40:        // bottom
                             if (_vs > 1) {
-                                _vs--;
+                                _vs -= 1;
                             }
                             break;
                         case 90:        // z
                             _hs = 8;
-                            _vs = 1;
+                            _vs = 10;
+                            break;
+
+                        //  Changing Line Thickness of chart lines
+                        case 33:        // page_up
+                            lineThickness++;
+                            lineThicknessObj_x = new BasicStroke(lineThickness);
+                            break;
+
+                        case 34:        // page_down
+                            if (lineThickness > 1) {
+                                lineThickness--;
+                                lineThicknessObj_x = new BasicStroke(lineThickness);
+                            }
+                            break;
+
+
+                        //  Changing font size of axis X and axis Y
+                        case 36:        // HOME
+                            axisNumberFontSize++;
+                            break;
+
+                        case 35:        // END
+                            if (axisNumberFontSize > 1) {
+                                axisNumberFontSize--;
+                            }
                             break;
                     }
                     //-- for showing or hiding Simulation charts
@@ -163,7 +210,17 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         if (index < showLineChartsFlag.length) {
                             showLineChartsFlag[index] = !showLineChartsFlag[index];
                         }
+                    } else {
+                        switch (keyCode) {
+                            case (int) 'H':
+                                Globals.HIDE_ALL_DRAWING = true;
+                                break;
+                            case (int) 'S':
+                                Globals.HIDE_ALL_DRAWING = false;
+                                break;
+                        }
                     }
+
                 }
                 //-- For showing or hiding line charts in each chart
                 if (e.isControlDown()) {
@@ -174,7 +231,90 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         if (index < showChartsFlag.length) {
                             showChartsFlag[index] = !showChartsFlag[index];
                         }
+                    } else {
+                        switch (keyCode) {
+                            case (int) 'Q':
+                                isShowDrawingTitle = !isShowDrawingTitle;
+                                break;
+                            case (int) 'W':
+                                isShowStatsInfo = !isShowStatsInfo;
+                                break;
+                            case (int) 'E':
+                                isShowSimInfo = !isShowSimInfo;
+                                break;
+                            case (int) 'R':
+                                isShowAgentId = !isShowAgentId;
+                                break;
+                            case (int) 'T':
+                                isShowBarChartCapInfo = !isShowBarChartCapInfo;
+
+                                break;
+                            case (int) 'A':
+                                pnOffset.y = -getRealHeight(0);
+                                pnOffset.x = 0;
+
+                                break;
+                            case (int) 'H':
+                                isPaintTheChart = false;
+                                break;
+                            case (int) 'S':
+                                isPaintTheChart = true;
+                                break;
+                        }
+
+                        //============================//============================ PAUSE SETTING
+                        switch (keyCode) {
+                            case 116:
+                                if (Config.WORLD_SLEEP_MILLISECOND > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND -= 200;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND = 0;
+                                }
+                                break;
+                            case 117:
+                                Config.WORLD_SLEEP_MILLISECOND += 200;
+                                break;
+
+                            case 118:
+                                if (Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE -= 200;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE = 0;
+                                }
+                                break;
+                            case 119:
+                                Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE += 200;
+                                break;
+
+                            case 120:
+                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING -= 200;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING = 0;
+                                }
+                                break;
+                            case 121:
+                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING += 200;
+                                break;
+
+                            case 122:
+                                if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE > 200) {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE -= 200;
+                                } else {
+                                    Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE = 0;
+                                }
+                                break;
+                            case 123:
+                                Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE += 200;
+                                break;
+
+                        }
+
                     }
+                }
+                //- Pausing and UnPausing
+                if (keyCode == (int) ' ') {
+                    Globals.PAUSE = !e.isControlDown();
                 }
 
             }
@@ -191,16 +331,20 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     public void printDrawingTitle(String title, String subTitle) {
 
+        if (!isShowDrawingTitle) {
+            return;
+        }
+
         java.awt.Point mousePoint = getMousePosition();
         if (showMousePlus && mousePoint != null) {
-            g.setColor(Color.WHITE);
+            g.setColor(Globals.Color$.$mousePlus);
             //-- (TOP-DOWN) Drawing vertical line for mouse pointer
             g.drawLine(mousePoint.x, 0, mousePoint.x, getHeight());
             //-- (LEFT-RIGHT) Drawing horizontal line for mouse pointer
             g.drawLine(0, mousePoint.y, getWidth(), mousePoint.y);
         }
 
-        g.setColor(Color.cyan);
+        g.setColor(Globals.Color$.$drawingTitle);
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
         g.drawString(title, 100, 50);
         if (subTitle != null) {
@@ -219,12 +363,20 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void printStatsInfo(int index, String title, Color color) {
+
+        if (!isShowStatsInfo) {
+            return;
+        }
+
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         dynamicHeight = Math.max(index * 50, dynamicHeight);
     }
 
     public void printStatsInfo(int index, String title, int value, Color color) {
+        if (!isShowStatsInfo) {
+            return;
+        }
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
@@ -232,6 +384,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void printStatsInfo(int index, String title, float value, Color color) {
+        if (!isShowStatsInfo) {
+            return;
+        }
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value, 600, index * 50);
@@ -239,6 +394,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     public void printStatsInfo(int index, String title, int value1, String value2, Color color) {
+        if (!isShowStatsInfo) {
+            return;
+        }
         g.setColor(color);
         g.drawString(title, 100, index * 50);
         g.drawString(": " + value1, 600, index * 50);
@@ -271,59 +429,77 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
 
         g = (Graphics2D) gr;
-        g.setBackground(Color.BLACK);
+        g.setBackground(Globals.HIDE_ALL_DRAWING ? Globals.Color$.darkGray1 : isPaintTheChart ? Globals.Color$.$background : Globals.Color$.darkGreen3);
         g.clearRect(0, 0, getWidth(), getHeight());
-        pauseNotice(g);
+        pauseAndFinishNotice(g);
 
         printDrawingTitle(title, subTitle);
 
-        g.setColor(Color.YELLOW);
+        g.setColor(Globals.Color$.$mainTitle);
 
         //============================//============================ Translate for panning and scaling
-
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
-        if (world != null) {
-            g.drawString("World Id", 1100, 50);
-            g.drawString(": " + world.getId(), 1300, 50);
-        } else {
-            g.drawString("Simulation Time", 1100, 50);
-            g.drawString(": " + simulationTimer, 1300, 50);
+        if (isShowDrawingTitle) {
+
+            if (world != null) {
+                g.drawString("World Id", 1100, 50);
+                g.drawString(": " + world.getId(), 1300, 50);
+            } else {
+                g.drawString("Simulation Time", 1100, 50);
+                g.drawString(": " + simulationTimer + "/" + worlds.length, 1300, 50);
+            }
+
+            g.setColor(Globals.Color$.$subTitle2);
+
+            g.drawString("World Time", 1100, 90);
+            g.drawString(": " + worldTimer, 1300, 90);
+            g.drawString("Episode", 1100, 130);
+            g.drawString(": " + Globals.EPISODE, 1300, 130);
+            g.drawString("Average", 1100, 170);
+            g.drawString(": " + Config.STATISTICS_AVERAGE_TIME_WINDOW, 1300, 170);
+
+            g.setColor(Globals.Color$.$subTitle);
+
+            g.drawString("Vertical   : X " + _vs, 1500, 50);
+            g.drawString("Horizontal: X " + _hs, 1500, 90);
+            g.drawString("Zoom: X " + scale, 1500, 130);
+            g.drawString("LineThick: " + lineThickness, 1500, 170);
+
+
+            g.drawString("SLEEP : " + Config.WORLD_SLEEP_MILLISECOND, 1800, 50);
+            g.drawString("SLEEP (PAUSE) : " + Config.WORLD_SLEEP_MILLISECOND_IN_PAUSE, 1800, 90);
+            g.drawString("SLEEP DRAWING : " + Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING, 1800, 130);
+            g.drawString("SLEEP DRAWING (PAUSE) : " + Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE, 1800, 170);
+
+
         }
-        g.drawString("World Time", 1100, 90);
-        g.drawString(": " + worldTimer, 1300, 90);
-        g.drawString("Episode", 1100, 130);
-        g.drawString(": " + Globals.EPISODE, 1300, 130);
-
-        g.setColor(Color.GRAY);
-        g.drawString("Vertical   : X " + _vs, 1500, 50);
-        g.drawString("Horizontal: X " + _hs, 1500, 90);
-        g.drawString("Zoom: X " + scale, 1500, 130);
-
-        return true;
+        return isPaintTheChart && !Globals.HIDE_ALL_DRAWING;
     }
 
     protected void drawAxisX(int index) {
         int realWith = getRealWith();
-        g.setColor(Color.WHITE);
+        int realHeight = getRealHeight(index);
+
+        g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
         for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
-            g.setColor(Color.WHITE);
+            g.setColor(Globals.Color$.$axis);
             if (i > 0) {
                 if (i % (10 * _hs) == 0) {
-                    if (_hs > 5 || i % (20 * _hs) == 0) {
+                    if (_hs > 20 || (_hs > 10 && i % (10 * _hs) == 0) || (_hs > 5 && i % (20 * _hs) == 0) || (_hs > 1 && i % (40 * _hs) == 0) || i % (80 * _hs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", i - 5, 20);
+                        g.drawString(x + "", i - (axisNumberFontSize / 2), axisNumberFontSize);
                         g.scale(1, -1);
                     }
                     g.drawLine(i, -5, i, 5);
-                    g.setColor(Globals.Color$.darkGray);
-                    g.drawLine(i, 5, i, maxAxisY[index] * _vs);
+                    g.setColor(Globals.Color$.$axisSplit);
+                    g.drawLine(i, 5, i, realHeight);
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
-                    g.setColor(Globals.Color$.darkGray2);
-                    g.drawLine(i, 5, i, maxAxisY[index] * _vs);
+                    g.setColor(Globals.Color$.$axisSplit2);
+                    g.drawLine(i, 5, i, realHeight);
                 } else if (_hs > 1) {
                     g.drawLine(i, 0, i, 1);
                 }
@@ -331,28 +507,61 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
     }
 
+    private static final DecimalFormat decimalFormat = new DecimalFormat();
+
+    protected void drawDiameter(int index) {
+        int realHeight = getRealHeight(index);
+        int realWith = (maxAxisY[0] + 10) * _hs;
+        g.drawLine(0, 0, realWith, realHeight);
+
+    }
+
+    protected int getRealHeight(int diagramIndex) {
+        return (int) ((maxAxisY[diagramIndex] + 100) * 0.1 * _vs);
+    }
+
+    /**
+     * This function is used in begin of drawing chart
+     *
+     * @param chartIndex indicated the index of chart in the one drawing windows
+     */
+    protected void prepareChartPosition(int chartIndex) {
+        g.translate(0, -getRealHeight(chartIndex) - 100);
+        loAxisX = 0;
+
+        drawAxisX(chartIndex);
+        drawAxisY(chartIndex);
+    }
+
     protected void drawAxisY(int index) {
-        int realWith = (maxAxisY[index] + 10) * _vs;
-        g.setColor(Color.WHITE);
-        g.drawLine(0, 0, 0, realWith);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
-        for (int i = 0, x = 0; i < realWith; i += _vs, x++) {
-            g.setColor(Color.WHITE);
-            if (i > 0) {
-                if (i % (10 * _vs) == 0) {
-                    if (_vs > 5 || i % (20 * _vs) == 0) {
+        int realHeight = getRealHeight(index);
+        g.setColor(Globals.Color$.$axis);
+        g.drawLine(0, 0, 0, realHeight);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
+        for (int i = 0, x = 0, z = 0; i < realHeight; i += _vs, x++, z += 10) {
+            g.setColor(Globals.Color$.$axis);
+            if (x > 0) {
+                if (_vs > 60 || i % 5 == 0) {
+                    if (_vs > 60
+                            || (_vs > 40 && x % 2 == 0)
+                            || (_vs > 15 && _vs <= 40 && x % (5) == 0)
+                            || (_vs > 5 && _vs <= 15 && x % (10) == 0)
+                            || (_vs > 2 && _vs <= 5 && x % (20) == 0)
+                            || (_vs > 0 && _vs <= 2 && x % (50) == 0)
+                    ) {
                         g.scale(1, -1);
-                        g.drawString(x + "", -40, -i + 5);
+                        g.drawString((z * axisYScale) > 1 ? ((int) (z * axisYScale) + "") : (decimalFormat.format(z * axisYScale)),
+                                (z * axisYScale >= 10000 ? -3 * axisNumberFontSize : z * axisYScale >= 1000 ? (int) (-2.5 * axisNumberFontSize) : -2 * axisNumberFontSize), -i + (axisNumberFontSize / 7));
                         g.scale(1, -1);
                         g.drawLine(-8, i, 5, i);
+                        g.setColor(Globals.Color$.$axisSplit);
+                        g.drawLine(5, i, getRealWith(), i);
                     } else {
                         g.drawLine(-4, i, 5, i);
                     }
-                    g.setColor(Globals.Color$.darkGray);
-                    g.drawLine(5, i, getRealWith(), i);
                 } else if (_vs > 1 && i % (5 * _vs) == 0) {
                     g.drawLine(-3, i, 1, i);
-                    g.setColor(Globals.Color$.darkGray2);
+                    g.setColor(Globals.Color$.$axisSplit2);
                     g.drawLine(5, i, getRealWith(), i);
                 } else if (_vs > 3) {
                     g.drawLine(0, i, 1, i);
@@ -362,53 +571,61 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
     //============================//============================//============================
 
-    protected void drawBar(Agent agent, TtBehaviorState behaviorState, int i, int dataCap, int dataItemCap, int[] rewardCountArray, List<?> data) {
+    protected void drawBar(Agent agent, TtBehaviorState behaviorState, int i, int dataCap, int dataItemCap, int[] rewardCountArray, TrustDataArray data) {
 
-        int dataSize = data.size();
-
+        int dataSize = data.getFilledSize();
+        int yIndex = i * (21 + _vs - 1);
         //-- Drawing agent cap power rectangle
         g.setColor(Globals.Color$.getNormal(behaviorState));
-        g.fillRect(-agent.getCapacity().getCapPower(), i * 21, agent.getCapacity().getCapPower(), 20);
+        g.fillRect(-agent.getCapacity().getCapPower(), yIndex, agent.getCapacity().getCapPower(), 20);
 
         //-- Printing agent ID
-        g.setColor(Color.BLACK);
-        g.drawString(agent.getId() + "", -30, i * 21 + 15);
-
+        if (isShowAgentId) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 7));
+            g.setColor(Color.BLACK);
+            g.drawString("A" + agent.getId(), -50, yIndex + 15);
+        }
         //-- Drawing total number rectangle
-        g.setColor(Color.GRAY);
-        g.fillRect(5, i * 21, dataCap, 20);
-
+        g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.darkGray1 : Globals.Color$.lightGray1);
+        g.fillRect(5, yIndex, dataCap * _hs, 20);
 
         //-- Drawing filled number rectangle
-        g.setColor(Globals.Color$.lightGray);
-        g.fillRect(5, i * 21, dataSize, 20);
+        g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.gray : Globals.Color$.lightGray);
+        g.fillRect(5, yIndex, dataSize * _hs, 20);
 
         //-- Printing data_number/data_cap
-        g.setColor(Color.LIGHT_GRAY);
-        g.drawString(dataSize + " / " + dataCap,
-                dataSize + 20, i * 21 + 15);
-        //-- Printing dataItemCap
-        g.drawString("I.C: " + dataItemCap,
-                dataSize + 150, i * 21 + 15);
+        if (isShowBarChartCapInfo) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 9));
 
+            g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.lightGray2 : Globals.Color$.gray);
+            g.drawString(dataSize + " / " + dataCap,
+                    dataCap * _hs + 20, yIndex + 15);
+            //-- Printing dataItemCap
+            g.drawString("I.C: " + dataItemCap,
+                    dataCap * _hs + 80, yIndex + 15);
+        }
         if (dataSize > 0) {
             //-- Drawing positive and negative reward bars
-            g.setColor(Globals.Color$.lightGreen);
-            g.fillRect(5, i * 21, rewardCountArray[0], 20);
-            g.setColor(Globals.Color$.lightRed);
-            g.fillRect(5 + rewardCountArray[0], i * 21, rewardCountArray[1], 20);
+            g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.lightGreen : Globals.Color$.darkGreen);
+            g.fillRect(5, yIndex, rewardCountArray[0] * _hs, 20);
+            g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.lightRed1 : Globals.Color$.lightRed);
+            g.fillRect(5 + rewardCountArray[0] * _hs, yIndex, rewardCountArray[1] * _hs, 20);
 
             //-- Drawing percentage of items size: itemSize/itemCap
             for (int j = 0, dSize = data.size(); j < dSize; j++) {
-                TrustData io = (TrustData) data.get(j);
+                TrustData io = data.get(j);
+                if (io == null) {
+                    break;
+                }
                 if (io.getItemCap() > 0) {
                     if (io.isIsUpdated()) {
                         g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen2 : Globals.Color$.darkRed);
                         io.setIsUpdated(false);
                     } else {
-                        g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen : Globals.Color$.red);
+                        g.setColor(io.getAbstractReward() > 0 ? Globals.Color$.darkGreen1 : Globals.Color$.red);
                     }
-                    g.drawLine(5 + j, i * 21 + 3, 5 + j, i * 21 + 3 + 16 * io.getItems().size() / io.getItemCap());
+                    int d = 1 + _hs;
+                    g.fillRect(6 + j * _hs, yIndex + 3, d > 5 ? d - 4 : d > 3 ? d - 2 : 1, 16 * io.getFilledSize() / io.getItemCap());
                 }
             }
         }
@@ -435,62 +652,106 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     //============================//============================
 
     public void drawCurve(int x, int y, Color color, int index, int xIndex) {
-        drawCurve(x, y, color, index, 18, xIndex);
+        drawCurve(x, y, color, index, 25, xIndex);
     }
 
     public void drawCurve(int x, int y, Color color, int index, int size, int xIndex) {
-        if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
-            size = (_hs / 2);
-            size = Math.min(size, 4);
+
+
+        g.setColor(color);
+
+        int sizeHf = 0;
+        if (xIndex == -11) {
+            size = (_hs);
+            size = Math.min(size, 10);
+            sizeHf = size / 2;
+        } else {
+            switch (index) {
+                case 0:
+                case 2:
+                    if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
+                        size = (_hs);
+                        size = Math.min(size, 4);
+                    }
+                    sizeHf = size / 2;
+                    break;
+                case 1:
+                case 3:
+                case 4:
+                case 6:
+                default:
+                    if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
+                        size = (_hs);
+                        size = Math.min(size, 4);
+                        sizeHf = size / 2;
+                        if (lineThickness > 1) {
+                            sizeHf += 1;
+                        }
+                    } else {
+                        sizeHf = size / 2;
+                    }
+                    g.setStroke(lineThicknessObj_x);
+
+                    break;
+
+            }
         }
-        int sizeHf = size / 2;
         switch (index) {
             case 0:
-                g.setColor(color);
                 g.fillOval(x - sizeHf, y - sizeHf, size, size);
                 break;
             case 1:
-                g.setColor(color);
                 g.drawLine(x - sizeHf, y, x + sizeHf, y);
                 g.drawLine(x, y - sizeHf, x, y + sizeHf);
+                g.setStroke(lineThicknessObj_1);
+
                 break;
             case 2:
-                g.setColor(color);
                 g.fillRect(x - sizeHf, y - sizeHf, size, size);
                 break;
             case 3:
-                g.setColor(color);
                 g.drawLine(x - sizeHf, y - sizeHf, x + sizeHf, y + sizeHf);
                 g.drawLine(x - sizeHf, y + sizeHf, x + sizeHf, y - sizeHf);
+                g.setStroke(lineThicknessObj_1);
                 break;
             case 4:
-                g.setColor(color);
                 g.drawRect(x - sizeHf, y - sizeHf, size, size);
+                g.setStroke(lineThicknessObj_1);
                 break;
             case 5:
-                g.setColor(color);
                 g.drawOval(x - sizeHf, y - sizeHf, size, size);
                 break;
             case 6:
-                g.setColor(color);
+
                 g.drawLine(x - sizeHf, y, x + sizeHf, y);
+                g.setStroke(lineThicknessObj_1);
                 break;
             default:
-                g.setColor(color);
-                g.drawLine(x, y, x, y + size * 3);
+                g.drawOval(x - sizeHf, y - sizeHf, size, size);
+                g.setStroke(lineThicknessObj_1);
         }
+    }
+
+    BasicStroke lineThicknessObj_1 = new BasicStroke(1);
+    BasicStroke lineThicknessObj_x = new BasicStroke(lineThickness);
+
+    public void drawLine(int fromX, int fromY, int toX, int toY) {
+        g.setStroke(lineThicknessObj_x);
+        g.drawLine(fromX, fromY, toX, (int) (0.1 * _vs * toY));
+        g.setStroke(lineThicknessObj_1);
+
     }
 
     //============================//============================
     public void resetParams() {
-        pnOffset = new utils.Point(0, 0);
-        pnOffsetOld = new utils.Point(0, 0);
-        pnStartPoint = new utils.Point(0, 0);
+        pnOffset = new Point(0, 0);
+        pnOffsetOld = new Point(0, 0);
+        pnStartPoint = new Point(0, 0);
         pnOffsetOld.x = pnOffset.x;
         pnOffsetOld.y = pnOffset.y;
         scaleOffset = new Point(0, 0);
         _hs = 8;
-        _vs = 1;
+        _vs = 10;
         scale = 1f;
 
 
@@ -512,8 +773,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return axisX + 400;
     }
 
+    @Deprecated
     public int getRealHeight() {
-        return axisY > 0 ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
+        return (axisY > 0 || g.getTransform() == null) ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
 
     }
 
@@ -522,11 +784,17 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         return count == 0 ? value * 2 : (2 * value) / (count);
     }
 
-    protected void pauseNotice(Graphics2D g) {
+    protected void pauseAndFinishNotice(Graphics2D g) {
         if (Globals.PAUSE) {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
-            g.setColor(Color.GREEN);
-            g.drawString("PAUSED ", 400, 100);
+            g.setColor(Globals.Color$.$pause);
+            g.drawString("PAUSED ", 600, 200);
+        }
+
+        if (Globals.FINISHED) {
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+            g.setColor(Globals.Color$.$finished);
+            g.drawString("FINISHED ", 1200, 80);
         }
     }
     //============================//============================//============================ Mouse events
@@ -540,8 +808,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     @Override
     public void mouseMoved(MouseEvent e) {
 //        mousePosition.x = e.getX();
-        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + (int) (getHeight() / scale) - 100;
-        mousePosition.x = (int) ((e.getX() - pnOffset.x - scaleOffset.x) / scale) - 100;
+//        mousePosition.y = (int) ((e.getY() - pnOffset.y - scaleOffset.y) / -scale) + (int) (getHeight() / scale) - 100;
+//        mousePosition.x = (int) ((e.getX() - pnOffset.x - scaleOffset.x) / scale) - 100;
     }
 
     @Override
@@ -549,32 +817,48 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         float sc = scale;
 
-        if (sc > 1) {
-            sc += -0.5 * e.getWheelRotation();
-        } else if (sc < 0.1) {
-            sc += -0.01 * e.getWheelRotation();
-        } else if (sc < 1) {
-            sc += -0.05 * e.getWheelRotation();
-        } else {
-            if (e.getWheelRotation() < 0) {
+        // zoom control
+        if (e.isControlDown()) {
+
+            if (sc > 1) {
                 sc += -0.5 * e.getWheelRotation();
-            } else {
+            } else if (sc < 0.1) {
+                sc += -0.01 * e.getWheelRotation();
+            } else if (sc < 1) {
                 sc += -0.05 * e.getWheelRotation();
+            } else {
+                if (e.getWheelRotation() < 0) {
+                    sc += -0.5 * e.getWheelRotation();
+                } else {
+                    sc += -0.05 * e.getWheelRotation();
+                }
+            }
+            if (sc > 20) {
+                sc = 20;
+            } else if (sc < 0.009f) {
+                sc = 0.01f;
+            }
+
+
+            if (sc > scale) {
+                pnOffset.y -= (e.getY() * (sc - scale));
+            } else if (sc < scale) {
+                pnOffset.y += (int) (e.getY() * (scale - sc));
+            }
+            scale = sc;
+        } else if (e.isShiftDown()) {
+            if (e.isAltDown()) {
+                pnOffset.x -= e.getWheelRotation() * 200;
+            } else {
+                pnOffset.x -= e.getWheelRotation() * 10;
+            }
+        } else {
+            if (e.isAltDown()) {
+                pnOffset.y -= e.getWheelRotation() * 200;
+            } else {
+                pnOffset.y -= e.getWheelRotation() * 10;
             }
         }
-        if (sc > 20) {
-            sc = 20;
-        } else if (sc < 0.009f) {
-            sc = 0.01f;
-        }
-
-
-        if (sc > scale) {
-            pnOffset.y -= (e.getY() * (sc - scale));
-        } else if (sc < scale) {
-            pnOffset.y += (int) (e.getY() * (scale - sc));
-        }
-        scale = sc;
     }
 
 }

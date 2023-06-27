@@ -1,8 +1,8 @@
 package drawingLayer.trust;
 
 import drawingLayer.DrawingWindow;
-import systemLayer.Agent;
-import systemLayer.World;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 
 import java.awt.*;
 import java.util.List;
@@ -18,6 +18,8 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
         axisY = world.getAgentsCount() * 21;
         headerTitle = "Trust Experience Bar Chart";
         setName("tut_exp");
+        _hs = 1;
+        _vs = 1;
     }
 
     Agent agent;
@@ -39,14 +41,16 @@ public class ExperienceBarDrawingWindow extends DrawingWindow {
 
             agent = agents.get(jj);
 
-            drawBar(agent,
-                    agent.getBehavior().getBehaviorState(),
-                    i,
-                    agent.getCapacity().getExperienceCap(),
-                    agent.getCapacity().getExperienceItemCap(),
-                    agent.getTrust().getExperienceRewardsCount(),
-                    agent.getTrust().getExperiences()
-            );
+            if (agent != null && agent.getBehavior() != null && agent.getCapacity() != null && agent.getTrust() != null) {
+                drawBar(agent,
+                        agent.getBehavior().getBehaviorState(),
+                        i,
+                        agent.getCapacity().getExperienceCap(),
+                        agent.getCapacity().getExperienceItemCap(),
+                        agent.getTrust().getExperienceRewardsCount(),
+                        agent.getTrust().getExperiences()
+                );
+            }
         }
     }
 

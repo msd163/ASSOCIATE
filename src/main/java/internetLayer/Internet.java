@@ -1,8 +1,7 @@
 package internetLayer;
 
-import systemLayer.Agent;
-import systemLayer.World;
-import utils.Globals;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +16,23 @@ public class Internet {
     public Internet(World world) {
         updateTime = -1;
         this.world = world;
-        intAgents = new ArrayList<>();
+        intAgents = null;
+
     }
 
     public List<Agent> getAgentList() {
 
-        if (updateTime == Globals.WORLD_TIMER) {
+        if (intAgents == null) {
+            intAgents = new ArrayList<>();
+            for (Agent agent : world.getAgents()) {
+                if (agent.getCapacity().isHasInternet()) {
+                    intAgents.add(agent);
+                }
+            }
+            System.out.println("intAgents.size() " + intAgents.size());
+        }
+
+   /*     if (updateTime == Globals.WORLD_TIMER) {
             return intAgents;
         }
 
@@ -32,7 +42,7 @@ public class Internet {
                 intAgents.add(agent);
             }
         }
-        updateTime = Globals.WORLD_TIMER;
+        updateTime = Globals.WORLD_TIMER;*/
         return intAgents;
     }
 

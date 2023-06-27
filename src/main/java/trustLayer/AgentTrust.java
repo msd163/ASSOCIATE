@@ -2,12 +2,9 @@ package trustLayer;
 
 import _type.TtTrustReplaceMethod;
 import com.google.gson.annotations.Expose;
-import systemLayer.Agent;
-import trustLayer.data.*;
-import utils.Config;
-
-import java.util.ArrayList;
-import java.util.List;
+import societyLayer.agentSubLayer.Agent;
+import trustLayer.data.TrustAbstract;
+import trustLayer.data.TrustDataArray;
 
 public class AgentTrust {
 
@@ -17,7 +14,8 @@ public class AgentTrust {
             int indirectExperienceCap, int indirectExperienceItemCap,
             int observationCap, int observationItemCap,
             int indirectObservationCap, int indirectObservationItemCap,
-            int recommendationCap, int recommendationItemCap
+            int recommendationCap, int recommendationItemCap,
+            int certificationCandidateCapPowerThreshold, boolean isUseCertificationForDishonestAgents
     ) {
         this.trustReplaceMethod = replaceHistoryMethod;
         this.experienceCap = experienceCap;
@@ -30,6 +28,8 @@ public class AgentTrust {
         this.indirectObservationItemCap = indirectObservationItemCap;
         this.recommendationCap = recommendationCap;
         this.recommendationItemCap = recommendationItemCap;
+        this.certificationCandidateCapPowerThreshold = certificationCandidateCapPowerThreshold;
+        this.isUseCertificationForDishonestAgents = isUseCertificationForDishonestAgents;
     }
 
     public void setTrustParams(
@@ -56,17 +56,20 @@ public class AgentTrust {
 
         this.agent = parentAgent;
 
-        experiences = new ArrayList<>();
-        indirectExperiences = new ArrayList<>();
+        experiences = new TrustDataArray(experienceCap, trustReplaceMethod, agent);
+        indirectExperiences = new TrustDataArray(indirectExperienceCap, trustReplaceMethod, agent);
 
-        recommendations = new ArrayList<>();
+        recommendations = new TrustDataArray(recommendationCap, trustReplaceMethod, agent);
 
-        observations = new ArrayList<>();
-        indirectObservations = new ArrayList<>();
+        observations = new TrustDataArray(observationCap, trustReplaceMethod, agent);
+        indirectObservations = new TrustDataArray(indirectObservationCap, trustReplaceMethod, agent);
 
         /* Selecting candidate for getting certification from the network */
-        this.hasCandidateForCertification = agent.getCapacity().getCapPower() > Config.TRUST_CERTIFIED_HONEST_PERCENTAGE_THRESHOLD
-                /*&& agent.getBehavior().getHasHonestState()*/;
+        this.hasCandidateForCertification =
+                agent.getCapacity().getCapPower() > certificationCandidateCapPowerThreshold &&
+                        (agent.getBehavior().getHasHonestState() ||
+                                isUseCertificationForDishonestAgents)
+        /*&& agent.getBehavior().getHasHonestState()*/;
 
     }
 
@@ -90,31 +93,33 @@ public class AgentTrust {
 
     //============================//============================//============================  Recommendation
     //-- Received recommendation form others
-    private List<TrustRecommendation> recommendations;
+    private TrustDataArray recommendations;
     private int recommendationCap;
     private int recommendationItemCap;
+    private int certificationCandidateCapPowerThreshold;
+    private boolean isUseCertificationForDishonestAgents;
 
     //============================//============================//============================ Direct Experience
     //-- All experience tuples that calculated across world run
-    private List<TrustExperience> experiences;
+    private TrustDataArray experiences;
     private int experienceCap;     // maximum size of history
     private int experienceItemCap; // max size of services in each history
 
     //============================//============================//============================ Direct Experience
     //-- All indirect experience tuples that calculated across world run
-    private List<TrustIndirectExperience> indirectExperiences;
+    private TrustDataArray indirectExperiences;
     private int indirectExperienceCap;     // maximum size of indirectExperience
     private int indirectExperienceItemCap; // max size of items in each indirectExperience
 
     //============================//============================//============================ Direct Observation
     //-- All observation tuples that calculated across world run
-    private List<TrustObservation> observations;
+    private TrustDataArray observations;
     private int observationCap;     // maximum size of observations
     private int observationItemCap; // max size of items in each observation
 
     //============================//============================//============================ Indirect Observation
     //-- All indirect observation tuples that calculated across world run
-    private List<TrustIndirectObservation> indirectObservations;
+    private TrustDataArray indirectObservations;
     private int indirectObservationCap;     // maximum size of indirect observations
     private int indirectObservationItemCap; // max size of items in each indirect observation
 
@@ -125,73 +130,24 @@ public class AgentTrust {
     //============================//============================//============================
 
     public int[] getObservationRewardsCount() {
-        int[] tarPit = {0, 0};
-
-        for (TrustObservation obs : observations) {
-            int ar = obs.getAbstractReward();
-            if (ar > 0) {
-                tarPit[0]++;
-            } else if (ar < 0) {
-                tarPit[1]++;
-            }
-        }
-        return tarPit;
+        return observations.getRewardsCount();
     }
 
     public int[] getIndirectObservationRewardsCount() {
-        int[] tarPit = {0, 0};
-
-        for (TrustIndirectObservation obs : indirectObservations) {
-            int ar = obs.getAbstractReward();
-            if (ar > 0) {
-                tarPit[0]++;
-            } else if (ar < 0) {
-                tarPit[1]++;
-            }
-        }
-        return tarPit;
+        return indirectObservations.getRewardsCount();
     }
 
     public int[] getExperienceRewardsCount() {
-        int[] tarPit = {0, 0};
-
-        for (TrustExperience exp : experiences) {
-            int ar = exp.getAbstractReward();
-            if (ar > 0) {
-                tarPit[0]++;
-            } else if (ar < 0) {
-                tarPit[1]++;
-            }
-        }
-        return tarPit;
+        return experiences.getRewardsCount();
     }
 
     public int[] getRecommendationRewardsCount() {
-        int[] tarPit = {0, 0};
+        return recommendations.getRewardsCount();
 
-        for (TrustRecommendation exp : recommendations) {
-            int ar = exp.getAbstractReward();
-            if (ar > 0) {
-                tarPit[0]++;
-            } else if (ar < 0) {
-                tarPit[1]++;
-            }
-        }
-        return tarPit;
     }
 
     public int[] getIndirectExperienceRewardsCount() {
-        int[] tarPit = {0, 0};
-
-        for (TrustIndirectExperience obs : indirectExperiences) {
-            int ar = obs.getAbstractReward();
-            if (ar > 0) {
-                tarPit[0]++;
-            } else if (ar < 0) {
-                tarPit[1]++;
-            }
-        }
-        return tarPit;
+        return indirectExperiences.getRewardsCount();
     }
 
     //============================//============================//============================
@@ -228,7 +184,7 @@ public class AgentTrust {
         return agent;
     }
 
-    public List<TrustExperience> getExperiences() {
+    public TrustDataArray getExperiences() {
         return experiences;
     }
 
@@ -248,7 +204,7 @@ public class AgentTrust {
         this.trustReplaceMethod = trustReplaceMethod;
     }
 
-    public List<TrustRecommendation> getRecommendations() {
+    public TrustDataArray getRecommendations() {
         return recommendations;
     }
 
@@ -264,7 +220,7 @@ public class AgentTrust {
         return observationCap;
     }
 
-    public List<TrustIndirectExperience> getIndirectExperiences() {
+    public TrustDataArray getIndirectExperiences() {
         return indirectExperiences;
     }
 
@@ -276,7 +232,7 @@ public class AgentTrust {
         return indirectExperienceItemCap;
     }
 
-    public List<TrustObservation> getObservations() {
+    public TrustDataArray getObservations() {
         return observations;
     }
 
@@ -284,7 +240,7 @@ public class AgentTrust {
         return observationItemCap;
     }
 
-    public List<TrustIndirectObservation> getIndirectObservations() {
+    public TrustDataArray getIndirectObservations() {
         return indirectObservations;
     }
 
@@ -302,5 +258,14 @@ public class AgentTrust {
 
     public boolean isHasCandidateForCertification() {
         return hasCandidateForCertification;
+    }
+
+    public void destroy() {
+        this.trustAbstracts = null;
+        this.recommendations = null;
+        this.experiences = null;
+        this.indirectExperiences = null;
+        this.indirectObservations = null;
+        this.observations = null;
     }
 }

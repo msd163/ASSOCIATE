@@ -5,7 +5,7 @@ import static utils.Globals.RANDOM;
 
 public class DefParameter {
     private TtParamType paramType;
-    private int value;                  // this variable store parameter value.
+    private int currentValue;                  // this variable store parameter value.
     private int randRange;              // this variable store maximum number of random vars.
     private int upperBound;             // in range parameters upper bound will be stored here, of course result of range will be stored in value
     private int lowerBound;             // in range parameters lower bound will be stored here, of course result of range will be stored in value
@@ -14,7 +14,7 @@ public class DefParameter {
 
     //============================//============================
     public DefParameter() {
-        value = 0;
+        currentValue = 0;
     }
 
     public DefParameter(String paramFromTxtFile) {
@@ -47,7 +47,7 @@ public class DefParameter {
                 paramType = TtParamType.Percent;
                 break;
             default:  // this means this parameter has const value
-                value = Integer.parseInt(paramFromTxtFile);
+                currentValue = Integer.parseInt(paramFromTxtFile);
                 paramType = TtParamType.Const;
                 break;
         }
@@ -67,30 +67,30 @@ public class DefParameter {
     public int nextValue() {
         switch (paramType) {
             case Rand:
-                value = RANDOM.nextInt(randRange+1);
+                currentValue = RANDOM.nextInt(randRange + 1);
                 break;
             case Const:
-                value = value;
+                currentValue = currentValue;
                 break;
             case Range:
-                value = lowerBound + RANDOM.nextInt(upperBound - lowerBound+1);
+                currentValue = lowerBound + RANDOM.nextInt(upperBound - lowerBound + 1);
                 break;
             case Percent:
-                value = (percentRefValue * percentDesired) / 100;
+                currentValue = (percentRefValue * percentDesired) / 100;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + paramType);
         }
-        return value;
+        return currentValue;
     }
 
 
     public int getMaxValue() {
         switch (paramType) {
             case Rand:
-               return randRange;
+                return randRange;
             case Const:
-                return value;
+                return currentValue;
             case Range:
                 return upperBound;
             case Percent:
@@ -112,7 +112,7 @@ public class DefParameter {
         }
         return tx + "DefParameter{" +
                 ti + "  paramType=" + paramType +
-                ti + ", value=" + value +
+                ti + ", value=" + currentValue +
                 ti + ", randRange=" + randRange +
                 ti + ", upperBound=" + upperBound +
                 ti + ", lowerBound=" + lowerBound +
@@ -124,5 +124,9 @@ public class DefParameter {
     @Override
     public String toString() {
         return toString(0);
+    }
+
+    public int getCurrentValue() {
+        return currentValue;
     }
 }

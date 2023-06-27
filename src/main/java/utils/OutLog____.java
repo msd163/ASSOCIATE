@@ -2,8 +2,8 @@ package utils;
 
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
-import environmentLayer.StateX;
-import systemLayer.Agent;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.agentSubLayer.Agent;
 
 public class OutLog____ {
 

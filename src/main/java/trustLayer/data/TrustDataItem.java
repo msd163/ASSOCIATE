@@ -1,7 +1,7 @@
 package trustLayer.data;
 
-import environmentLayer.StateX;
-import systemLayer.Agent;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.agentSubLayer.Agent;
 
 public class TrustDataItem {
 
@@ -13,17 +13,17 @@ public class TrustDataItem {
     private StateX destination;
 
     private int time;
-    private float reward;
+    private float score;
 
     //============================//============================//============================
 
-    public TrustDataItem(Agent issuer, Agent requester, StateX source, StateX destination, int time,float reward) {
+    public TrustDataItem(Agent issuer, Agent requester, StateX source, StateX destination, int time,float score) {
         this.issuer = issuer;
         this.requester = requester;
         this.source = source;
         this.destination = destination;
         this.time = time;
-        this.reward = reward;
+        this.score = score;
     }
 
     //============================//============================//============================
@@ -68,11 +68,11 @@ public class TrustDataItem {
         this.destination = destination;
     }
 
-    public float getReward() {
-        return reward;
+    public float getScore() {
+        return score;
     }
 
-    public void setReward(float reward) {
-        this.reward = reward;
+    public void setScore(float score) {
+        this.score = score;
     }
 }

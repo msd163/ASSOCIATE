@@ -1,7 +1,7 @@
 package trustLayer.data;
 
-import environmentLayer.StateX;
-import systemLayer.Agent;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.agentSubLayer.Agent;
 
 public class TrustObservation extends TrustData {
 
@@ -11,7 +11,7 @@ public class TrustObservation extends TrustData {
     //============================//============================//============================
 
     public void addObservation(Agent issuer, Agent requester, StateX source, StateX destination, float reward) {
-        super.addItem(issuer, requester, source, destination, reward);
+        super.addDirectItem(issuer, requester, source, destination, reward);
     }
 
     //============================//============================//============================

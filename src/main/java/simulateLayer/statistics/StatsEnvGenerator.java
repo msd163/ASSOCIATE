@@ -1,6 +1,6 @@
 package simulateLayer.statistics;
 
-import environmentLayer.Environment;
+import societyLayer.environmentSubLayer.Environment;
 import utils.Globals;
 import utils.ParsCalendar;
 

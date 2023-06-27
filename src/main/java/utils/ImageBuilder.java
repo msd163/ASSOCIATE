@@ -73,6 +73,7 @@ public class ImageBuilder {
     public void generateSimulationImages(IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow,
                                          IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow,
                                          IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow) {
+
         if (Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow) {
             generateStatisticsImage(intTravelStatsLinearDrawingWindow);
         }

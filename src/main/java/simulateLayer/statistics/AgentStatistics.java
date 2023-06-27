@@ -1,6 +1,6 @@
 package simulateLayer.statistics;
 
-import systemLayer.Agent;
+import societyLayer.agentSubLayer.Agent;
 
 public class AgentStatistics {
 

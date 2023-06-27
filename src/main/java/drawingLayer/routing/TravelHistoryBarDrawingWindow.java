@@ -1,8 +1,10 @@
 package drawingLayer.routing;
 
+import _type.TtDiagramThemeMode;
 import drawingLayer.DrawingWindow;
-import systemLayer.Agent;
-import systemLayer.World;
+import societyLayer.agentSubLayer.Agent;
+import societyLayer.agentSubLayer.World;
+import utils.Config;
 import utils.Globals;
 
 import java.awt.*;
@@ -19,6 +21,8 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
         axisY = world.getAgentsCount() * 21;
         headerTitle = "Travel History Bar Chart";
         setName("tvl_his");
+        _hs = 1;
+        _vs = 1;
     }
 
     @Override
@@ -32,30 +36,39 @@ public class TravelHistoryBarDrawingWindow extends DrawingWindow {
 
         //============================//============================//============================
 
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 9));
         List<Agent> agents = world.getAgents();
         for (int i = 0, jj = agents.size() - 1, agentsLength = agents.size(); i < agentsLength; jj--, i++) {
             Agent agent = agents.get(jj);
+            int yIndex = i * (21 + _vs - 1);
+
+            if (agent == null || agent.getTravelHistories() == null) {
+                continue;
+            }
+
             int size = agent.getTravelHistories().size();
 
             g.setColor(Globals.Color$.getNormal(agent.getBehavior().getBehaviorState()));
 
-            g.fillRect(-agent.getCapacity().getCapPower(), i * 21, agent.getCapacity().getCapPower(), 20);
+            g.fillRect(-agent.getCapacity().getCapPower(), yIndex, agent.getCapacity().getCapPower(), 20);
             g.setColor(Color.BLACK);
-            g.drawString(agent.getId() + "", -30, i * 21 + 12);
-            g.setColor(Color.GRAY);
-            g.fillRect(5, i * 21, agent.getCapacity().getTravelHistoryCap(), 20);
+            g.drawString("A" + agent.getId(), -60, yIndex + 12);
+            g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.darkGray1 : Globals.Color$.gray);
+            g.fillRect(5, yIndex, agent.getCapacity().getTravelHistoryCap() * _hs, 20);
 
-            g.setColor(Globals.Color$.getLight(agent.getBehavior().getBehaviorState()));
+            g.setColor(Globals.Color$.getNormal(agent.getBehavior().getBehaviorState()));
 
-            g.fillRect(5, i * 21, size, 20);
+            g.fillRect(5, yIndex, size * _hs, 20);
 
             //-- Printing data_number/data_cap
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawString(size + " / " + agent.getCapacity().getTravelHistoryCap(),
-                    size + 20, i * 21 + 15);
-
-            g.drawString("cTarget: " + (agent.getCurrentTargetStateIndex()) + "/" + agent.getTargetCounts(), size + 150, i * 21 + 15);
+            if (isShowBarChartCapInfo) {
+                g.setColor(Globals.Color$.lightGray1);
+                g.drawString(size + " / " + agent.getCapacity().getTravelHistoryCap(),
+                        agent.getCapacity().getTravelHistoryCap() * _hs+ 8, yIndex + 15);
+//                g.setColor(Color.LIGHT_GRAY);
+//                g.drawString("cTarget: " + (agent.getCurrentTargetStateIndex()) + "/" + agent.getTargetCounts(), size * _hs
+//                        + 150, yIndex + 15);
+            }
         }
     }
 }
