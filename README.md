@@ -26,16 +26,17 @@ To run ASSOCIATE, ensure you have the following installed:
 ### Installation
 
 1. Clone the ASSOCIATE repository to your local machine:
-
-```bash  
-git clone https://github.com/msd163/ASSOCIATE.git
-```
+    ```bash  
+    git clone https://github.com/msd163/ASSOCIATE.git
+    ```
 
 2. Open the cloned project in your preferred Java-based IDE, such as IntelliJ IDEA or Eclipse.
 
-3. Build and compile the project using the IDE's build tools.
+3. Update maven libraries
 
-4. Run the compiled project in your IDE's execution environment.
+4. Build and compile the project using the IDE's build tools.
+
+5. Run the compiled project in your IDE's execution environment.
 
 ### Usage
 
