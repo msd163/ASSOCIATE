@@ -61,4 +61,21 @@ We appreciate your interest in ASSOCIATE and hope that it serves as a valuable t
 
 *Note: The GitHub URL for ASSOCIATE is [https://github.com/msd163/ASSOCIATE](https://github.com/msd163/ASSOCIATE).*
 
+## Related Publications
+
+### Article 01: A Comprehensive Soft Security Model for Cognitive Internet of Things
+
+      @article{ABADI2023100858,
+      title = {A comprehensive soft security model for Cognitive Internet of Things},
+      journal = {Internet of Things},
+      pages = {100858},
+      year = {2023},
+      issn = {2542-6605},
+      doi = {https://doi.org/10.1016/j.iot.2023.100858},
+      url = {https://www.sciencedirect.com/science/article/pii/S2542660523001816},
+      author = {Masoud Narimani Zaman Abadi and Amir Jalaly Bidgoly and Yaghoub Farjami and Ebrahim Hossein Khani},
+      keywords = {Cognitive Internet of Things, Soft security, Trust model, Reinforcement learning algorithm, Maclaurin series},
+      abstract = {The Cognitive Internet of Things (CIoT) is a rapidly evolving field that combines artificial intelligence (AI) with the Internet of Things (IoT) ecosystem. By augmenting IoT with AI, objects can sense, perceive, think, and make decisions independently with minimal initial knowledge. These cognitive objects form a society and work towards achieving their goals through cooperation. However, trust is a significant security challenge in such a society. To address this challenge, this paper proposes a soft security approach to model trust in CIoT using Collaborative Multi-Agent Systems (CMAS). Our model introduces an interactive, autonomous, and self-taught agent that can move toward a secure situation without needing a supervisor. We use a state machine to model an insecure ecosystem where agents can behave honestly, adversarially, neutrally, or hypocritically. We define inner trust as a combination of direct and indirect experiences and observations and global trust as the weighted average of inner trust and recommendations. Additionally, we employ the reinforcement learning algorithm to train agents. To evaluate our model, we developed a proprietary tool called ASSOCIATE and assessed our model using data from the Santander Smart City dataset and simulator-generated data. Our evaluations encompass three aspects: the success rate in achieving the goal, the recognition of agents’ behavior, and the quality of the diagnosis.}
+      }
+
 
