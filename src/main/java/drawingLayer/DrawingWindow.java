@@ -310,6 +310,18 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
                         }
 
+                        //============================//============================ X-AXIS SCALE
+                        switch (keyCode) {
+                            case 37:        // left
+                                if (Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE > 2) {
+                                    Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE--;
+                                }
+                                break;
+
+                            case 39:        // right
+                                Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE++;
+                        }
+
                     }
                 }
                 //- Pausing and UnPausing
@@ -484,22 +496,28 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
         g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
+        int verticalGridCount = 0;
         for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
             g.setColor(Globals.Color$.$axis);
             if (i > 0) {
                 if (i % (10 * _hs) == 0) {
-                    if (_hs > 20 || (_hs > 10 && i % (10 * _hs) == 0) || (_hs > 5 && i % (20 * _hs) == 0) || (_hs > 1 && i % (40 * _hs) == 0) || i % (80 * _hs) == 0) {
-                        g.scale(1, -1);
-                        g.drawString(x + "", i - (axisNumberFontSize / 2), axisNumberFontSize);
-                        g.scale(1, -1);
+                    if (verticalGridCount % Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE == 0) {
+                        if (_hs > 20 || (_hs > 10 && i % (10 * _hs) == 0) || (_hs > 5 && i % (20 * _hs) == 0) || (_hs > 1 && i % (40 * _hs) == 0) || i % (80 * _hs) == 0) {
+                            g.scale(1, -1);
+                            g.drawString(x + "", i - (axisNumberFontSize / 2), axisNumberFontSize);
+                            g.scale(1, -1);
+                        }
+                        g.drawLine(i, -5, i, 5);
+                        g.setColor(Globals.Color$.$axisSplit);
+                        g.drawLine(i, 5, i, realHeight);
                     }
-                    g.drawLine(i, -5, i, 5);
-                    g.setColor(Globals.Color$.$axisSplit);
-                    g.drawLine(i, 5, i, realHeight);
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
-                    g.setColor(Globals.Color$.$axisSplit2);
-                    g.drawLine(i, 5, i, realHeight);
+                    if (verticalGridCount % Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE == 0) {
+                        g.setColor(Globals.Color$.$axisSplit2);
+                        g.drawLine(i, 5, i, realHeight);
+                    }
+                    verticalGridCount++;
                 } else if (_hs > 1) {
                     g.drawLine(i, 0, i, 1);
                 }

@@ -23,13 +23,13 @@ public class Config {
 
     public static float IMPROVEMENT_ANALYSIS_COEFFICIENT;                            // used in state machine diagram
 
-    public static int STATISTICS_AVERAGE_TIME_WINDOW ;
-    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE ;
-    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION ;
-    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC ;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC;
 
-    public static int STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD ;               // After a number of fluctuation (this threshold) in scores (saved in descending normalized list: [L'']), the agent labeled as Hypocrite
-    public static int STATISTICS_HYPOCRITE_RESISTANCE_COUNT ;                    // the resistance_number count that will be saved in statistics and traced
+    public static int STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD;               // After a number of fluctuation (this threshold) in scores (saved in descending normalized list: [L'']), the agent labeled as Hypocrite
+    public static int STATISTICS_HYPOCRITE_RESISTANCE_COUNT;                    // the resistance_number count that will be saved in statistics and traced
 
     public static double STATISTICS_SCALE_UP_Y_AXIS_NUMBER;                   // This is for scaling up result. i.e. 1 is presented in scale of this value
 
@@ -48,6 +48,7 @@ public class Config {
 
     public static boolean DRAWING_WINDOWS_MAXIMIZING;
     public static boolean DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY;
+    public static int DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE = 1;
 
     //============================ Drawing Windows
 

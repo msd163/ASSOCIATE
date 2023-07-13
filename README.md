@@ -66,6 +66,9 @@ We appreciate your interest in ASSOCIATE and hope that it serves as a valuable t
 
 ### Article 01: A Comprehensive Soft Security Model for Cognitive Internet of Things
 
+###  https://doi.org/10.1016/j.iot.2023.100858
+
+
       @article{ABADI2023100858,
       title = {A comprehensive soft security model for Cognitive Internet of Things},
       journal = {Internet of Things},
