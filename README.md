@@ -14,6 +14,13 @@
 - **Flexible Society Generation**: The Society Generation Module (SGM) allows researchers to create diverse and customized societies by specifying desired characteristics through a configuration file. This empowers security engineers to define various scenarios and evaluate different trust profiles in CIoT simulations.
 - **Visualization and Reporting**: ASSOCIATE generates visual representations of evaluation results in the form of charts and graphs. These visualizations provide valuable insights into the performance and effectiveness of soft security models under different scenarios. The results can be saved in image and CSV file formats, facilitating further analysis and comparison.
 
+## Types of Agents in ASSOCIATE
+ASSOCIATE is a tool for analysing multi agent system which could model following four types of agents:
+- **Honest Agents: Honest agents always provide correct answers to other agents’ requests. They are reliable and trustworthy
+- **Adversary Agents: Adversary agents are dishonest and malicious. They intentionally lead requesters to trap states, compromising the security of the system.
+- **Neutral Agents: Neutral agents are neither malicious nor reliable. They provide irrelevant and random answers, which can disrupt communication within the system.
+- **Hypocrite Agents: Hypocrite agents exhibit different behaviors at different moments with a predefined probability. They can adopt the behaviors of honest agents, adversaries, or neutral agents, depending on the situation.
+
 ## Getting Started
 
 ### Prerequisites
