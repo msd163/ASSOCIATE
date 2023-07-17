@@ -16,10 +16,10 @@
 
 ## Types of Agents in ASSOCIATE
 ASSOCIATE is a tool for analysing multi agent system which could model following four types of agents:
-- **Honest Agents: Honest agents always provide correct answers to other agents’ requests. They are reliable and trustworthy
-- **Adversary Agents: Adversary agents are dishonest and malicious. They intentionally lead requesters to trap states, compromising the security of the system.
-- **Neutral Agents: Neutral agents are neither malicious nor reliable. They provide irrelevant and random answers, which can disrupt communication within the system.
-- **Hypocrite Agents: Hypocrite agents exhibit different behaviors at different moments with a predefined probability. They can adopt the behaviors of honest agents, adversaries, or neutral agents, depending on the situation.
+- Honest Agents: Honest agents always provide correct answers to other agents’ requests. They are reliable and trustworthy
+- Adversary Agents: Adversary agents are dishonest and malicious. They intentionally lead requesters to trap states, compromising the security of the system.
+- Neutral Agents: Neutral agents are neither malicious nor reliable. They provide irrelevant and random answers, which can disrupt communication within the system.
+- Hypocrite Agents: Hypocrite agents exhibit different behaviors at different moments with a predefined probability. They can adopt the behaviors of honest agents, adversaries, or neutral agents, depending on the situation.
 
 ## Getting Started
 
