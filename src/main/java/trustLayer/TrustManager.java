@@ -47,7 +47,7 @@ public class TrustManager {
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent watchedAgent = watchedAgents.get(i);
             // For preventing request from the agent that we want to verify it.
-            if (watchedAgent.getAgent().getId() == toBeVerified.getId()) {
+            if (watchedAgent == null || watchedAgent.getAgent().getId() == toBeVerified.getId()) {
                 continue;
             }
 

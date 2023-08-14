@@ -96,7 +96,9 @@ public class AgentTrust {
     private TrustDataArray recommendations;
     private int recommendationCap;
     private int recommendationItemCap;
+    @Expose
     private int certificationCandidateCapPowerThreshold;
+    @Expose
     private boolean isUseCertificationForDishonestAgents;
 
     //============================//============================//============================ Direct Experience
@@ -171,7 +173,7 @@ public class AgentTrust {
     @Override
     public String toString() {
         return "AgentTrust{" +
-                "\n\t\tagent=" + agent +
+//                "\n\t\tagent=" + agent +
                 ",\n\t\t experienceCap=" + experienceCap +
                 ",\n\t\t experienceItemCap=" + experienceItemCap +
                 '}';

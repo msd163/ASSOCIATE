@@ -132,7 +132,8 @@ public class Agent {
     }
 
     public void initVars() {
-        trust.setTrustParams(
+        trust.
+                setTrustParams(
                 capacity.getExperienceCap(),
                 capacity.getExperienceItemCap(),
                 capacity.getIndirectExperienceCap(),

@@ -360,14 +360,18 @@ public class World {
                             && trustConfigItem.getCert().isIsUseDaGra()) {
                 System.out.println("> DaGra: updating status and list...");
 
+                Agent agentZero = null;
+                boolean isFirstAgentWithCertFound = false;
                 for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
                     Agent agent = agents.get(i);
                     if (agent.getTrust().isHasCandidateForCertification()) {
                         if (Config.TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE) {
-                            if (i == 0) {
+                            if (!isFirstAgentWithCertFound) {
                                 agent.getDaGra().updatingStatusAndList();
+                                isFirstAgentWithCertFound = true;
+                                agentZero = agent;
                             } else {
-                                agent.getDaGra().updatingStatusAndList(agent.getDaGra());
+                                agent.getDaGra().updatingStatusAndList(agentZero.getDaGra());
                             }
                         } else {
                             agent.getDaGra().updatingStatusAndList();
