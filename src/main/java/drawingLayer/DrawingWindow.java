@@ -48,6 +48,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected boolean showWorldsFlag[];
     protected boolean showLineChartsFlag[];
     protected boolean showChartsFlag[];
+    int tempPrevFromX[];
+    int tempPrevFromY[];
 
     protected Point prevPoints[];      //-- Previously visited point
 
@@ -61,11 +63,20 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private boolean isShowDrawingTitle = true;
     private boolean isShowStatsInfo = true;
     private boolean isPaintTheChart = true;
+    private boolean isAntialiasText = true;
+    private boolean isAntialiasCurve = true;
+
     protected boolean isShowSimInfo = true;
     protected boolean isShowAgentId = true;
     protected boolean isShowBarChartCapInfo = true;
 
     protected double axisYScale = Config.STATISTICS_SCALE_UP_Y_AXIS_NUMBER;
+
+    protected int verticalGridLineScaleInAxisX = 1;
+    protected int symbolIncreaseSizeOnCurves = 0;
+
+    protected int curveSmoothStep = 1;
+
 
     public int getWorldId() {
         return world == null ? -1 : world.getId();
@@ -91,6 +102,12 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         showChartsFlag = new boolean[9];
         Arrays.fill(showChartsFlag, true);
+
+        tempPrevFromX = new int[9];
+        Arrays.fill(tempPrevFromX, -999);
+
+        tempPrevFromY = new int[9];
+        Arrays.fill(tempPrevFromY, -999);
 
         showWorldsFlag = new boolean[worldCount];
         Arrays.fill(showWorldsFlag, true);
@@ -166,7 +183,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             _vs = 10;
                             break;
 
-                        //  Changing Line Thickness of chart lines
+                        //============================   Changing Line Thickness of chart lines
                         case 33:        // page_up
                             lineThickness++;
                             lineThicknessObj_x = new BasicStroke(lineThickness);
@@ -180,7 +197,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                             break;
 
 
-                        //  Changing font size of axis X and axis Y
+                        //============================   Changing font size of axis X and axis Y
                         case 36:        // HOME
                             axisNumberFontSize++;
                             break;
@@ -190,6 +207,16 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                                 axisNumberFontSize--;
                             }
                             break;
+
+                        //============================  Symbol Increment On The Curve
+                        case 127:        // DELETE keyCode
+                            symbolIncreaseSizeOnCurves--;
+
+                            break;
+
+                        case 155:        // INSERT keyCode
+                            symbolIncreaseSizeOnCurves++;
+
                     }
                     //-- for showing or hiding Simulation charts
                     if (keyCode == 48) {
@@ -217,6 +244,15 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                                 break;
                             case (int) 'S':
                                 Globals.HIDE_ALL_DRAWING = false;
+                                break;
+
+                            case 37:        // left
+                                if (curveSmoothStep > 1) {
+                                    curveSmoothStep--;
+                                }
+                                break;
+                            case 39:        // right
+                                curveSmoothStep++;
                                 break;
                         }
                     }
@@ -259,6 +295,15 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                                 break;
                             case (int) 'S':
                                 isPaintTheChart = true;
+                                break;
+
+                            // antialias
+                            case (int) 'Z':
+                                isAntialiasText = !isAntialiasText;
+                                break;
+
+                            case (int) 'X':
+                                isAntialiasCurve = !isAntialiasCurve;
                                 break;
                         }
 
@@ -313,14 +358,15 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         //============================//============================ X-AXIS SCALE
                         switch (keyCode) {
                             case 37:        // left
-                                if (Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE > 2) {
-                                    Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE--;
+                                if (verticalGridLineScaleInAxisX > 1) {
+                                    verticalGridLineScaleInAxisX--;
                                 }
                                 break;
 
                             case 39:        // right
-                                Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE++;
+                                verticalGridLineScaleInAxisX++;
                         }
+
 
                     }
                 }
@@ -441,6 +487,22 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
 
         g = (Graphics2D) gr;
+
+        // antialiasing for curves
+        if(isAntialiasCurve) {
+            g.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+        }
+
+        if(isAntialiasText) {
+            // antialiasing for text
+            g.setRenderingHint(
+                    RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        }
+
         g.setBackground(Globals.HIDE_ALL_DRAWING ? Globals.Color$.darkGray1 : isPaintTheChart ? Globals.Color$.$background : Globals.Color$.darkGreen3);
         g.clearRect(0, 0, getWidth(), getHeight());
         pauseAndFinishNotice(g);
@@ -496,24 +558,26 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
         g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
-        int verticalGridCount = 0;
+        int verticalGridCount = 1;
+        int verticalLabelCount = 0;
         for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
             g.setColor(Globals.Color$.$axis);
             if (i > 0) {
                 if (i % (10 * _hs) == 0) {
-                    if (verticalGridCount % Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE == 0) {
-                        if (_hs > 20 || (_hs > 10 && i % (10 * _hs) == 0) || (_hs > 5 && i % (20 * _hs) == 0) || (_hs > 1 && i % (40 * _hs) == 0) || i % (80 * _hs) == 0) {
-                            g.scale(1, -1);
-                            g.drawString(x + "", i - (axisNumberFontSize / 2), axisNumberFontSize);
-                            g.scale(1, -1);
-                        }
+                    if (verticalGridCount % verticalGridLineScaleInAxisX == 0) {
+//                        if (_hs > 20 || (_hs > 10 && i % (10 * _hs) == 0) || (_hs > 5 && i % (20 * _hs) == 0) || (_hs > 1 && i % (40 * _hs) == 0) || i % (80 * _hs) == 0) {
+                        g.scale(1, -1);
+                        g.drawString(x + "", i - (axisNumberFontSize / 2), axisNumberFontSize);
+                        g.scale(1, -1);
+//                        }
                         g.drawLine(i, -5, i, 5);
                         g.setColor(Globals.Color$.$axisSplit);
                         g.drawLine(i, 5, i, realHeight);
                     }
+                    verticalGridCount++;
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
-                    if (verticalGridCount % Config.DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE == 0) {
+                    if (verticalGridCount % verticalGridLineScaleInAxisX == 0) {
                         g.setColor(Globals.Color$.$axisSplit2);
                         g.drawLine(i, 5, i, realHeight);
                     }
@@ -669,28 +733,29 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     //============================//============================
 
-    public void drawCurve(int x, int y, Color color, int index, int xIndex) {
-        drawCurve(x, y, color, index, 25, xIndex);
+    public void drawSymbolOnCurve(int x, int y, Color color, int index, int xIndex) {
+        drawSymbolOnCurve(x, y, color, index, 25, xIndex);
     }
 
-    public void drawCurve(int x, int y, Color color, int index, int size, int xIndex) {
+    public void drawSymbolOnCurve(int x, int y, Color color, int index, int size, int xIndex) {
 
 
         g.setColor(color);
 
-        int sizeHf = 0;
+        int sizeHf;
         if (xIndex == -11) {
             size = (_hs);
             size = Math.min(size, 10);
             sizeHf = size / 2;
         } else {
+            if (xIndex != -1 && (5 * index + xIndex) % (300 / _hs) != 0) {
+                return;
+            }
             switch (index) {
                 case 0:
                 case 2:
-                    if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
-                        size = (_hs);
-                        size = Math.min(size, 4);
-                    }
+
+                    size = Math.max(size + symbolIncreaseSizeOnCurves, 4);
                     sizeHf = size / 2;
                     break;
                 case 1:
@@ -698,16 +763,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 case 4:
                 case 6:
                 default:
-                    if (xIndex != -1 && (index + xIndex) % (150 / _hs) != 0) {
-                        size = (_hs);
-                        size = Math.min(size, 4);
-                        sizeHf = size / 2;
-                        if (lineThickness > 1) {
-                            sizeHf += 1;
-                        }
-                    } else {
-                        sizeHf = size / 2;
-                    }
+                    size = Math.max(size + symbolIncreaseSizeOnCurves, 4);
+                    sizeHf = size / 2;
+
                     g.setStroke(lineThicknessObj_x);
 
                     break;
@@ -722,7 +780,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 g.drawLine(x - sizeHf, y, x + sizeHf, y);
                 g.drawLine(x, y - sizeHf, x, y + sizeHf);
                 g.setStroke(lineThicknessObj_1);
-
                 break;
             case 2:
                 g.fillRect(x - sizeHf, y - sizeHf, size, size);
@@ -740,7 +797,6 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 g.drawOval(x - sizeHf, y - sizeHf, size, size);
                 break;
             case 6:
-
                 g.drawLine(x - sizeHf, y, x + sizeHf, y);
                 g.setStroke(lineThicknessObj_1);
                 break;
@@ -750,12 +806,21 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
     }
 
-    BasicStroke lineThicknessObj_1 = new BasicStroke(1);
-    BasicStroke lineThicknessObj_x = new BasicStroke(lineThickness);
+    BasicStroke lineThicknessObj_1 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+    BasicStroke lineThicknessObj_x = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 
-    public void drawLine(int fromX, int fromY, int toX, int toY) {
-        g.setStroke(lineThicknessObj_x);
-        g.drawLine(fromX, fromY, toX, (int) (0.1 * _vs * toY));
+    public void drawLine(int fromX, int fromY, int toX, int toY, int roundIndex, int curveIndex) {
+        if (tempPrevFromX[curveIndex] == -999 || roundIndex < 2) {
+            g.setStroke(lineThicknessObj_x);
+            g.drawLine(fromX, fromY, toX, (int) (0.1 * _vs * toY));
+            tempPrevFromX[curveIndex] = toX;
+            tempPrevFromY[curveIndex] = (int) (0.1 * _vs * toY);
+        } else if (roundIndex % curveSmoothStep == 0) {
+            g.setStroke(lineThicknessObj_x);
+            g.drawLine(tempPrevFromX[curveIndex], tempPrevFromY[curveIndex], toX, (int) (0.1 * _vs * toY));
+            tempPrevFromX[curveIndex] = toX;
+            tempPrevFromY[curveIndex] = (int) (0.1 * _vs * toY);
+        }
         g.setStroke(lineThicknessObj_1);
 
     }

@@ -68,26 +68,26 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_4, j, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.$curve_4, j, 20, -1);
                         g.drawString("Mischief", 220, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(450, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
+                        drawSymbolOnCurve(450, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
                         g.drawString("Honest", 470, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(700, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
+                        drawSymbolOnCurve(700, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
                         g.drawString("Hypocrite", 720, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[3]) {
-                        drawCurve(950, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
+                        drawSymbolOnCurve(950, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
                         g.drawString("Adversary", 970, dynamicHeight);
                     }
                     if (showLineChartsFlag[4]) {
-                        drawCurve(1050, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
+                        drawSymbolOnCurve(1050, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
                         g.drawString("AUC: " + auc[j], 1070, dynamicHeight);
                     }
                 }
@@ -128,10 +128,10 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                 maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTimeAvgTrustToHypocrite());
                 maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTimeAvgTrustToAdversary());
 
-                for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                    WorldStatistics stat = statistics[i];
+                for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                    WorldStatistics stat = statistics[sttIdx];
 
-                    if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                         loAxisX += _hs;
                         prevPoints[0].y = (int) (0.1 * _vs * stat.getTimeAvgTrustToMischief());
                         prevPoints[1].y = (int) (0.1 * _vs * stat.getTimeAvgTrustToHonest());
@@ -141,39 +141,39 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
 
                     } else {
 
-                        prevPoints[0].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToMischief());
-                        prevPoints[1].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToHonest());
-                        prevPoints[2].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToHypocrite());
-                        prevPoints[3].y = (int) (0.1 * _vs * statistics[i - 1].getTimeAvgTrustToAdversary());
+                        prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimeAvgTrustToMischief());
+                        prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimeAvgTrustToHonest());
+                        prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimeAvgTrustToHypocrite());
+                        prevPoints[3].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimeAvgTrustToAdversary());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToMischief()), Globals.Color$.$curve_4, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToMischief()), Globals.Color$.$curve_4, j, sttIdx);
                         if (prevPoints[0].y >= 0) {
-                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimeAvgTrustToMischief());
+                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimeAvgTrustToMischief(),sttIdx,0);
                         }
                     }
 
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToHonest()), Globals.Color$.$curve_1, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToHonest()), Globals.Color$.$curve_1, j, sttIdx);
                         if (prevPoints[1].y >= 0) {
-                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimeAvgTrustToHonest());
+                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimeAvgTrustToHonest(),sttIdx,1);
                         }
                     }
 
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToHypocrite()), Globals.Color$.$curve_3, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToHypocrite()), Globals.Color$.$curve_3, j, sttIdx);
                         if (prevPoints[2].y >= 0) {
-                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimeAvgTrustToHypocrite());
+                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimeAvgTrustToHypocrite(),sttIdx,2);
                         }
                     }
 
                     if (showLineChartsFlag[3]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToAdversary()), Globals.Color$.$curve_2, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimeAvgTrustToAdversary()), Globals.Color$.$curve_2, j, sttIdx);
                         if (prevPoints[2].y >= 0) {
-                            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimeAvgTrustToAdversary());
+                            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimeAvgTrustToAdversary(),sttIdx,3);
                         }
                     }
 

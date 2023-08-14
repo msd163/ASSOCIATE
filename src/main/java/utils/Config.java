@@ -48,7 +48,6 @@ public class Config {
 
     public static boolean DRAWING_WINDOWS_MAXIMIZING;
     public static boolean DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY;
-    public static int DRAWING_AXIS_X_SCALE_FOR_VERTICAL_GRID_LINE = 1;
 
     //============================ Drawing Windows
 

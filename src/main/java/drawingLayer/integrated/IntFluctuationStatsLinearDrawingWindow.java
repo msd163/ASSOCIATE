@@ -79,32 +79,32 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
                         g.drawString("Flc", 220, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(320, dynamicHeight, Globals.Color$.color(1), j, 20, -1);
+                        drawSymbolOnCurve(320, dynamicHeight, Globals.Color$.color(1), j, 20, -1);
                         g.drawString("Dgn", 340, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(440, dynamicHeight, Globals.Color$.color(2), j, 20, -1);
+                        drawSymbolOnCurve(440, dynamicHeight, Globals.Color$.color(2), j, 20, -1);
                         g.drawString("IgPs", 460, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[3]) {
-                        drawCurve(560, dynamicHeight, Globals.Color$.color(3), j, 20, -1);
+                        drawSymbolOnCurve(560, dynamicHeight, Globals.Color$.color(3), j, 20, -1);
                         g.drawString("IgNg", 580, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[4]) {
-                        drawCurve(680, dynamicHeight, Globals.Color$.color(4), j, 20, -1);
+                        drawSymbolOnCurve(680, dynamicHeight, Globals.Color$.color(4), j, 20, -1);
                         g.drawString("IgPsTP", 700, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[5]) {
-                        drawCurve(800, dynamicHeight, Globals.Color$.color(5), j, 20, -1);
+                        drawSymbolOnCurve(800, dynamicHeight, Globals.Color$.color(5), j, 20, -1);
                         g.drawString("IgPsNg", 820, dynamicHeight);
                         //============================
                     }
@@ -158,45 +158,46 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = prevPoints[4].x = prevPoints[5].x = loAxisX;
 
 
-                for (int i = 1, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
 
-                    WorldStatisticsHypo stat = statistics[i].getStatisticsHypo();
+                    int curveIndex = -1;
+                    WorldStatisticsHypo stat = statistics[sttIdx].getStatisticsHypo();
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoFluct()), Globals.Color$.color(0), worldIdx, i);
-                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAvgHypoFluct());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoFluct()), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAvgHypoFluct(), sttIdx,++curveIndex);
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoSuspectDiagnosis()), Globals.Color$.color(1), worldIdx, i);
-                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAvgHypoSuspectDiagnosis());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoSuspectDiagnosis()), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAvgHypoSuspectDiagnosis(), sttIdx, ++curveIndex);
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPos()), Globals.Color$.color(2), worldIdx, i);
-                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getAvgHypoIgnoredPos());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPos()), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getAvgHypoIgnoredPos(), sttIdx, ++curveIndex);
                     }
 
                     if (showLineChartsFlag[3]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNeg()), Globals.Color$.color(3), worldIdx, i);
-                        drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getAvgHypoIgnoredNeg());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNeg()), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getAvgHypoIgnoredNeg(), sttIdx, ++curveIndex);
                     }
 
                     if (showLineChartsFlag[4]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPosTruePositive()), Globals.Color$.color(4), worldIdx, i);
-                        drawLine(prevPoints[4].x, prevPoints[4].y, loAxisX, stat.getAvgHypoIgnoredPosTruePositive());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredPosTruePositive()), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[4].x, prevPoints[4].y, loAxisX, stat.getAvgHypoIgnoredPosTruePositive(), sttIdx, ++curveIndex);
                     }
 
                     if (showLineChartsFlag[5]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNegTruePositive()), Globals.Color$.color(5), worldIdx, i);
-                        drawLine(prevPoints[5].x, prevPoints[5].y, loAxisX, stat.getAvgHypoIgnoredNegTruePositive());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAvgHypoIgnoredNegTruePositive()), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[5].x, prevPoints[5].y, loAxisX, stat.getAvgHypoIgnoredNegTruePositive(), sttIdx, ++curveIndex);
                     }
 
 
-                    prevPoints[0].y = (int) (0.1 * _vs * statistics[i].getStatisticsHypo().getAvgHypoFluct());
-                    prevPoints[1].y = (int) (0.1 * _vs * statistics[i].getStatisticsHypo().getAvgHypoSuspectDiagnosis());
-                    prevPoints[2].y = (int) (0.1 * _vs * statistics[i].getStatisticsHypo().getAvgHypoIgnoredPos());
-                    prevPoints[3].y = (int) (0.1 * _vs * statistics[i].getStatisticsHypo().getAvgHypoIgnoredNeg());
-                    prevPoints[4].y = (int) (0.1 * _vs * statistics[i].getStatisticsHypo().getAvgHypoIgnoredPosTruePositive());
-                    prevPoints[5].y = (int) (0.1 * _vs * statistics[i].getStatisticsHypo().getAvgHypoIgnoredNegTruePositive());
+                    prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx].getStatisticsHypo().getAvgHypoFluct());
+                    prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx].getStatisticsHypo().getAvgHypoSuspectDiagnosis());
+                    prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx].getStatisticsHypo().getAvgHypoIgnoredPos());
+                    prevPoints[3].y = (int) (0.1 * _vs * statistics[sttIdx].getStatisticsHypo().getAvgHypoIgnoredNeg());
+                    prevPoints[4].y = (int) (0.1 * _vs * statistics[sttIdx].getStatisticsHypo().getAvgHypoIgnoredPosTruePositive());
+                    prevPoints[5].y = (int) (0.1 * _vs * statistics[sttIdx].getStatisticsHypo().getAvgHypoIgnoredNegTruePositive());
                     prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = prevPoints[4].x = prevPoints[5].x = loAxisX;
 
                     loAxisX += _hs;
@@ -241,21 +242,22 @@ public class IntFluctuationStatsLinearDrawingWindow extends DrawingWindow {
                 prevPoints[0].x = prevPoints[1].x = loAxisX;
 
 
-                for (int i = 1, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                for (int sttIdx = 1, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
 
-                    WorldStatisticsHypo stat = statistics[i].getStatisticsHypo();
+                    WorldStatisticsHypo stat = statistics[sttIdx].getStatisticsHypo();
+                    int curveIndex = 5;
 
 
                     if (showLineChartsFlag[0]) {
                         propPos = stat.getAvgIgnoredPosProportionToFluct1000();
 
-                        drawCurve(loAxisX, (int) (0.1 * _vs * propPos), Globals.Color$.color(6), worldIdx, i);
-                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, propPos);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * propPos), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, propPos, sttIdx, ++curveIndex);
                     }
                     if (showLineChartsFlag[1]) {
                         propNeg = stat.getAvgIgnoredNegProportionToFluct1000();
-                        drawCurve(loAxisX, (int) (0.1 * _vs * propNeg), Globals.Color$.color(7), worldIdx, i);
-                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, propNeg);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * propNeg), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, propNeg, sttIdx, ++curveIndex);
                     }
 
                     prevPoints[0].y = (int) (0.1 * _vs * propPos);

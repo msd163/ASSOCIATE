@@ -74,7 +74,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
                         g.drawString("DATA", 220, dynamicHeight);
                         //============================
                     }
@@ -134,7 +134,7 @@ public class IntRocPointDrawingWindow extends DrawingWindow {
                         fpr /= (0.01 * Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC);
                         tpr /= (0.01 * Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC);
 
-                        drawCurve((int) fpr, (int) tpr, Globals.Color$.color(worldIdx), worldIdx, -11);
+                        drawSymbolOnCurve((int) fpr, (int) tpr, Globals.Color$.color(worldIdx), worldIdx, -11);
                         /*if (prevPoints[0].y >= 0) {
                             drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, acc);
                         }*/

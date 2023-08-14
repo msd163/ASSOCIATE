@@ -72,17 +72,17 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
                         //============================
-                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
                         g.drawString("AgentsInTarget", 220, dynamicHeight);
                     }
                     if (showLineChartsFlag[1]) {
                         //============================
-                        drawCurve(500, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
+                        drawSymbolOnCurve(500, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
                         g.drawString("AgentsInPitfall", 520, dynamicHeight);
                     }
                     if (showLineChartsFlag[2]) {
                         //============================
-                        drawCurve(800, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
+                        drawSymbolOnCurve(800, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
                         g.drawString("RandomTravel", 820, dynamicHeight);
                     }
                 }
@@ -136,36 +136,38 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getIttAgentsInPitfall());
                 maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getIttRandomTravelToNeighbors());
 
-                for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                    WorldStatistics stat = statistics[i];
+                for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                    WorldStatistics stat = statistics[sttIdx];
 
-                    if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    int curveIndex = -1;
+
+                    if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                         loAxisX += _hs;
-                        prevPoints[0].y = (int)(0.1 * _vs * stat.getIttAgentsInTarget());
-                        prevPoints[1].y = (int)(0.1 * _vs * stat.getIttAgentsInPitfall());
-                        prevPoints[2].y = (int)(0.1 * _vs * stat.getIttRandomTravelToNeighbors());
+                        prevPoints[0].y = (int) (0.1 * _vs * stat.getIttAgentsInTarget());
+                        prevPoints[1].y = (int) (0.1 * _vs * stat.getIttAgentsInPitfall());
+                        prevPoints[2].y = (int) (0.1 * _vs * stat.getIttRandomTravelToNeighbors());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
 
                     } else {
 
-                        prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getIttAgentsInTarget());
-                        prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getIttAgentsInPitfall());
-                        prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getIttRandomTravelToNeighbors());
+                        prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttAgentsInTarget());
+                        prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttAgentsInPitfall());
+                        prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttRandomTravelToNeighbors());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttAgentsInTarget()), Globals.Color$.$curve_1, j, i);
-                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttAgentsInTarget());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getIttAgentsInTarget()), Globals.Color$.$curve_1, j, sttIdx);
+                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttAgentsInTarget(), sttIdx, ++curveIndex);
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttAgentsInPitfall()), Globals.Color$.$curve_2, j, i);
-                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getIttAgentsInPitfall()), Globals.Color$.$curve_2, j, sttIdx);
+                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall(), sttIdx, ++curveIndex);
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttRandomTravelToNeighbors()), Globals.Color$.$curve_3, j, i);
-                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getIttRandomTravelToNeighbors());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getIttRandomTravelToNeighbors()), Globals.Color$.$curve_3, j, sttIdx);
+                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getIttRandomTravelToNeighbors(), sttIdx, ++curveIndex);
                     }
                     if (axisX < loAxisX) {
                         axisX = loAxisX;
@@ -202,38 +204,40 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                 maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getTimedAvgRandomTravel());
 
 
-                for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                    WorldStatistics stat = statistics[i];
+                for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                    WorldStatistics stat = statistics[sttIdx];
 
-                    if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    int curveIndex = 2;
+
+                    if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                         loAxisX += _hs;
-                        prevPoints[0].y = (int)(0.1 * _vs * stat.getTimedAvgAgentTarget());
-                        prevPoints[1].y = (int)(0.1 * _vs * stat.getTimedAvgAgentInPitfall());
-                        prevPoints[2].y = (int)(0.1 * _vs * stat.getTimedAvgRandomTravel());
+                        prevPoints[0].y = (int) (0.1 * _vs * stat.getTimedAvgAgentTarget());
+                        prevPoints[1].y = (int) (0.1 * _vs * stat.getTimedAvgAgentInPitfall());
+                        prevPoints[2].y = (int) (0.1 * _vs * stat.getTimedAvgRandomTravel());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
 
                     } else {
 
-                        prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgAgentTarget());
-                        prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgAgentInPitfall());
-                        prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgRandomTravel());
+                        prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgAgentTarget());
+                        prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgAgentInPitfall());
+                        prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgRandomTravel());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgAgentTarget()), Globals.Color$.$curve_1, j, i);
-                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimedAvgAgentTarget());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimedAvgAgentTarget()), Globals.Color$.$curve_1, j, sttIdx);
+                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTimedAvgAgentTarget(), sttIdx, ++curveIndex);
                     }
 
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgAgentInPitfall()), Globals.Color$.$curve_2, j, i);
-                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimedAvgAgentInPitfall());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimedAvgAgentInPitfall()), Globals.Color$.$curve_2, j, sttIdx);
+                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTimedAvgAgentInPitfall(), sttIdx, ++curveIndex);
                     }
 
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgRandomTravel()), Globals.Color$.$curve_3, j, i);
-                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimedAvgRandomTravel());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimedAvgRandomTravel()), Globals.Color$.$curve_3, j, sttIdx);
+                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimedAvgRandomTravel(), sttIdx, ++curveIndex);
                     }
 
                     if (axisX < loAxisX) {
@@ -267,31 +271,33 @@ public class IntTravelStatsLinearDrawingWindow extends DrawingWindow {
                     worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
 
                     EpisodeStatistics[] statistics = world.getEpStatistics();
-                    for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                        EpisodeStatistics stat = statistics[i];
+                    for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                        EpisodeStatistics stat = statistics[sttIdx];
 
                         if (stat.getToTime() == 0) {
                             break;
                         }
+                        int curveIndex = 5;
 
-                        if (i > 0) {
+
+                        if (sttIdx > 0) {
                             prevPoints[0].x = prevPoints[1].x = loAxisX;
-                            prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getMidAgentsInTarget());
-                            prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getMidAgentsInPitfall());
+                            prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getMidAgentsInTarget());
+                            prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getMidAgentsInPitfall());
                             loAxisX += 100;
 
                         } else {
                             loAxisX += 100;
                             prevPoints[0].x = prevPoints[1].x = loAxisX;
-                            prevPoints[0].y = (int)(0.1 * _vs * stat.getMidAgentsInTarget());
-                            prevPoints[1].y = (int)(0.1 * _vs * stat.getMidAgentsInPitfall());
+                            prevPoints[0].y = (int) (0.1 * _vs * stat.getMidAgentsInTarget());
+                            prevPoints[1].y = (int) (0.1 * _vs * stat.getMidAgentsInPitfall());
                         }
 
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getMidAgentsInTarget()), Globals.Color$.$curve_1, j, 20, i);
-                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getMidAgentsInTarget());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getMidAgentsInTarget()), Globals.Color$.$curve_1, j, 20, sttIdx);
+                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getMidAgentsInTarget(), sttIdx, ++curveIndex);
 
-                        drawCurve(loAxisX, (int)(0.1 * _vs * stat.getMidAgentsInPitfall()), Globals.Color$.$curve_2, j, 20, i);
-                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getMidAgentsInPitfall());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getMidAgentsInPitfall()), Globals.Color$.$curve_2, j, 20, sttIdx);
+                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getMidAgentsInPitfall(), sttIdx, ++curveIndex);
 
                     }
                 }

@@ -19,14 +19,14 @@ public class TrustAnalysisLinearDrawingWindow extends DrawingWindow {
         for (int i = 0; i < this.prevPoints.length; i++) {
             prevPoints[i] = new Point(0, 0);
         }
-        headerTitle= "Trust Analyzing (A.S.S) Linear Chart";
+        headerTitle = "Trust Analyzing (A.S.S) Linear Chart";
         setName("tut_anl");
     }
 
 
     @Override
     public void paint(Graphics gr) {
-        if (!mainPaint(gr, headerTitle+ " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
+        if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
         }
         axisX = 0;
@@ -46,36 +46,38 @@ public class TrustAnalysisLinearDrawingWindow extends DrawingWindow {
 
         WorldStatistics[] statistics = world.getWdStatistics();
 
-        for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {
-            WorldStatistics stat = statistics[i];
+        for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < Globals.WORLD_TIMER && sttIdx < statisticsLength; sttIdx++) {
+            WorldStatistics stat = statistics[sttIdx];
 
-            if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+            int curveIndex = -1;
+
+            if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                 axisX += 8;
-                prevPoints[0].y = (int)(0.1 * 0.1 * _vs * stat.getTrustAccuracyI100());
-                prevPoints[1].y = (int)(0.1 * 0.1 * _vs * stat.getTrustSensitivityI100());
-                prevPoints[2].y = (int)(0.1 * 0.1 * _vs * stat.getTrustSpecificityI100());
+                prevPoints[0].y = (int) (0.1 * 0.1 * _vs * stat.getTrustAccuracyI100());
+                prevPoints[1].y = (int) (0.1 * 0.1 * _vs * stat.getTrustSensitivityI100());
+                prevPoints[2].y = (int) (0.1 * 0.1 * _vs * stat.getTrustSpecificityI100());
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
 
             } else {
 
-                prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getTrustAccuracyI100());
-                prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getTrustSensitivityI100());
-                prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getTrustSpecificityI100());
+                prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustAccuracyI100());
+                prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustSensitivityI100());
+                prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustSpecificityI100());
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = axisX;
                 axisX += 8;
             }
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getTrustAccuracyI100()), Color.GREEN, 1, i);
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getTrustAccuracyI100()), Color.GREEN, 1, sttIdx);
             if (prevPoints[0].y >= 0) {
-                drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI100());
+                drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTrustAccuracyI100(), sttIdx, ++curveIndex);
             }
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getTrustSensitivityI100()), Color.YELLOW, 2, i);
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getTrustSensitivityI100()), Color.YELLOW, 2, sttIdx);
             if (prevPoints[1].y >= 0) {
-                drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI100());
+                drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTrustSensitivityI100(), sttIdx, ++curveIndex);
             }
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getTrustSpecificityI100()), Color.PINK, 3, i);
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getTrustSpecificityI100()), Color.PINK, 3, sttIdx);
             if (prevPoints[2].y >= 0) {
-                drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI100());
+                drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTrustSpecificityI100(), sttIdx, ++curveIndex);
             }
         }
 

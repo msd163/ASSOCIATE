@@ -64,17 +64,17 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                 //============================
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.$curve_1, j, 20, -1);
                         g.drawString("Accuracy", 220, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(500, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
+                        drawSymbolOnCurve(500, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
                         g.drawString("Sensitivity", 520, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(800, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
+                        drawSymbolOnCurve(800, dynamicHeight, Globals.Color$.$curve_3, j, 20, -1);
                         g.drawString("Specificity", 820, dynamicHeight);
                         //============================
                     }
@@ -116,10 +116,10 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                 maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTrustSensitivityI100());
                 maxAxisY[0] = Math.max(maxAxisY[0], statistics[worldTimer - 1].getTrustSpecificityI100());
 
-                for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                    WorldStatistics stat = statistics[i];
+                for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                    WorldStatistics stat = statistics[sttIdx];
 
-                    if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                         loAxisX += _hs;
                         prevPoints[0].y = (int) (0.1 * _vs * stat.getTrustAccuracyI100());
                         prevPoints[1].y = (int) (0.1 * _vs * stat.getTrustSensitivityI100());
@@ -128,29 +128,29 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
 
                     } else {
 
-                        prevPoints[0].y = (int) (0.1 * _vs * statistics[i - 1].getTrustAccuracyI100());
-                        prevPoints[1].y = (int) (0.1 * _vs * statistics[i - 1].getTrustSensitivityI100());
-                        prevPoints[2].y = (int) (0.1 * _vs * statistics[i - 1].getTrustSpecificityI100());
+                        prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustAccuracyI100());
+                        prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustSensitivityI100());
+                        prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustSpecificityI100());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustAccuracyI100()), Globals.Color$.$curve_1, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustAccuracyI100()), Globals.Color$.$curve_1, j, sttIdx);
                         if (prevPoints[0].y >= 0) {
-                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI100());
+                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI100(), sttIdx,0);
                         }
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSensitivityI100()), Globals.Color$.$curve_2, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSensitivityI100()), Globals.Color$.$curve_2, j, sttIdx);
                         if (prevPoints[1].y >= 0) {
-                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI100());
+                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI100(), sttIdx,1);
                         }
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSpecificityI100()), Globals.Color$.$curve_3, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSpecificityI100()), Globals.Color$.$curve_3, j, sttIdx);
                         if (prevPoints[2].y >= 0) {
-                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI100());
+                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI100(), sttIdx,2);
                         }
                     }
 
@@ -186,10 +186,10 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                 maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getAllTrustSensitivityI100());
                 maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getAllTrustSpecificityI100());
 
-                for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                    WorldStatistics stat = statistics[i];
+                for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                    WorldStatistics stat = statistics[sttIdx];
 
-                    if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                    if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                         loAxisX += _hs;
                         prevPoints[0].y = (int) (0.1 * _vs * stat.getAllTrustAccuracyI100());
                         prevPoints[1].y = (int) (0.1 * _vs * stat.getAllTrustSensitivityI100());
@@ -198,29 +198,29 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
 
                     } else {
 
-                        prevPoints[0].y = (int) (0.1 * _vs * statistics[i - 1].getAllTrustAccuracyI100());
-                        prevPoints[1].y = (int) (0.1 * _vs * statistics[i - 1].getAllTrustSensitivityI100());
-                        prevPoints[2].y = (int) (0.1 * _vs * statistics[i - 1].getAllTrustSpecificityI100());
+                        prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getAllTrustAccuracyI100());
+                        prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getAllTrustSensitivityI100());
+                        prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getAllTrustSpecificityI100());
                         prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
                         loAxisX += _hs;
                     }
 
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAllTrustAccuracyI100()), Globals.Color$.$curve_1, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAllTrustAccuracyI100()), Globals.Color$.$curve_1, j, sttIdx);
                         if (prevPoints[0].y >= 0) {
-                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAllTrustAccuracyI100());
+                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getAllTrustAccuracyI100(), sttIdx,3);
                         }
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAllTrustSensitivityI100()), Globals.Color$.$curve_2, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAllTrustSensitivityI100()), Globals.Color$.$curve_2, j, sttIdx);
                         if (prevPoints[1].y >= 0) {
-                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAllTrustSensitivityI100());
+                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getAllTrustSensitivityI100(), sttIdx,4);
                         }
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getAllTrustSpecificityI100()), Globals.Color$.$curve_3, j, i);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getAllTrustSpecificityI100()), Globals.Color$.$curve_3, j, sttIdx);
                         if (prevPoints[2].y >= 0) {
-                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getAllTrustSpecificityI100());
+                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getAllTrustSpecificityI100(), sttIdx,5);
                         }
                     }
 
@@ -255,18 +255,18 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                     worldTimer = j < Globals.SIMULATION_TIMER ? world.getEpStatistics().length : Globals.EPISODE - 1;
 
                     EpisodeStatistics[] statistics = world.getEpStatistics();
-                    for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                        EpisodeStatistics stat = statistics[i];
+                    for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                        EpisodeStatistics stat = statistics[sttIdx];
 
                         if (stat.getToTime() == 0) {
                             break;
                         }
 
-                        if (i > 0) {
+                        if (sttIdx > 0) {
                             prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = loAxisX;
-                            prevPoints[0].y = (int) (0.1 * _vs * statistics[i - 1].getTrustAccuracyI200());
-                            prevPoints[1].y = (int) (0.1 * _vs * statistics[i - 1].getTrustSensitivityI200());
-                            prevPoints[2].y = (int) (0.1 * _vs * statistics[i - 1].getTrustSpecificityI200());
+                            prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustAccuracyI200());
+                            prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustSensitivityI200());
+                            prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTrustSpecificityI200());
                             loAxisX += 100;
 
                         } else {
@@ -277,14 +277,14 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                             prevPoints[2].y = (int) (0.1 * _vs * stat.getTrustSpecificityI200());
                         }
 
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustAccuracyI200()), Globals.Color$.$curve_1, j, 20, i);
-                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI200());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustAccuracyI200()), Globals.Color$.$curve_1, j, 20, sttIdx);
+                        drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getTrustAccuracyI200(), sttIdx,6);
 
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSensitivityI200()), Globals.Color$.$curve_2, j, 20, i);
-                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI200());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSensitivityI200()), Globals.Color$.$curve_2, j, 20, sttIdx);
+                        drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getTrustSensitivityI200(), sttIdx,7);
 
-                        drawCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSpecificityI200()), Globals.Color$.$curve_3, j, 20, i);
-                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI200());
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTrustSpecificityI200()), Globals.Color$.$curve_3, j, 20, sttIdx);
+                        drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTrustSpecificityI200(), sttIdx,8);
 
                     }
                 }

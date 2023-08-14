@@ -45,37 +45,37 @@ public class TrustRecogniseLinearDrawingWindow extends DrawingWindow {
 
         WorldStatistics[] statistics = world.getWdStatistics();
 
-        for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {
-            WorldStatistics stat = statistics[i];
+        for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < Globals.WORLD_TIMER && sttIdx < statisticsLength; sttIdx++) {
+            WorldStatistics stat = statistics[sttIdx];
 
-            if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+            if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                 axisX += 8;
-                prevPoints[0].y = (int)(0.1 * _vs * stat.getIttFalsePositiveTrust());
-                prevPoints[1].y = (int)(0.1 * _vs * stat.getIttFalseNegativeTrust());
-                prevPoints[2].y = (int)(0.1 * _vs * stat.getIttTruePositiveTrust());
-                prevPoints[3].y = (int)(0.1 * _vs * stat.getIttTrueNegativeTrust());
+                prevPoints[0].y = (int) (0.1 * _vs * stat.getIttFalsePositiveTrust());
+                prevPoints[1].y = (int) (0.1 * _vs * stat.getIttFalseNegativeTrust());
+                prevPoints[2].y = (int) (0.1 * _vs * stat.getIttTruePositiveTrust());
+                prevPoints[3].y = (int) (0.1 * _vs * stat.getIttTrueNegativeTrust());
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
 
             } else {
-                prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getIttFalsePositiveTrust());
-                prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getIttFalseNegativeTrust());
-                prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getIttTruePositiveTrust());
-                prevPoints[3].y = (int)(0.1 * _vs * statistics[i - 1].getIttTrueNegativeTrust());
+                prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttFalsePositiveTrust());
+                prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttFalseNegativeTrust());
+                prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttTruePositiveTrust());
+                prevPoints[3].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttTrueNegativeTrust());
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
                 axisX += 8;
             }
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getIttFalsePositiveTrust()), Color.PINK, 1, i);
-            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getIttFalsePositiveTrust());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getIttFalsePositiveTrust()), Color.PINK, 1, sttIdx);
+            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getIttFalsePositiveTrust(), sttIdx,0);
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getIttFalseNegativeTrust()), Color.RED, 2, i);
-            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getIttFalseNegativeTrust());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getIttFalseNegativeTrust()), Color.RED, 2, sttIdx);
+            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getIttFalseNegativeTrust(), sttIdx,1);
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getIttTruePositiveTrust()), Color.YELLOW, 3, i);
-            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getIttTruePositiveTrust());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getIttTruePositiveTrust()), Color.YELLOW, 3, sttIdx);
+            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getIttTruePositiveTrust(), sttIdx,2);
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getIttTrueNegativeTrust()), Color.GREEN, 4, i);
-            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getIttTrueNegativeTrust());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getIttTrueNegativeTrust()), Color.GREEN, 4, sttIdx);
+            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getIttTrueNegativeTrust(), sttIdx,3);
 
         }
         //============================//============================ Draw X-axis line
@@ -87,37 +87,37 @@ public class TrustRecogniseLinearDrawingWindow extends DrawingWindow {
         g.translate(0, -600);
         axisX = 0;
 
-        for (int i = 0, statisticsLength = statistics.length; i < Globals.WORLD_TIMER && i < statisticsLength; i++) {
-            WorldStatistics stat = statistics[i];
+        for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < Globals.WORLD_TIMER && sttIdx < statisticsLength; sttIdx++) {
+            WorldStatistics stat = statistics[sttIdx];
 
-            if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+            if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                 axisX += 8;
-                prevPoints[0].y = (int)(0.1 * _vs * stat.getTimedAvgFalsePositive());
-                prevPoints[1].y = (int)(0.1 * _vs * stat.getTimedAvgFalseNegative());
-                prevPoints[2].y = (int)(0.1 * _vs * stat.getTimedAvgTruePositive());
-                prevPoints[3].y = (int)(0.1 * _vs * stat.getTimedAvgTrueNegative());
+                prevPoints[0].y = (int) (0.1 * _vs * stat.getTimedAvgFalsePositive());
+                prevPoints[1].y = (int) (0.1 * _vs * stat.getTimedAvgFalseNegative());
+                prevPoints[2].y = (int) (0.1 * _vs * stat.getTimedAvgTruePositive());
+                prevPoints[3].y = (int) (0.1 * _vs * stat.getTimedAvgTrueNegative());
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
 
             } else {
-                prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgFalsePositive());
-                prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgFalseNegative());
-                prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgTruePositive());
-                prevPoints[3].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgTrueNegative());
+                prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgFalsePositive());
+                prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgFalseNegative());
+                prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgTruePositive());
+                prevPoints[3].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgTrueNegative());
                 prevPoints[0].x = prevPoints[1].x = prevPoints[2].x = prevPoints[3].x = axisX;
                 axisX += 8;
             }
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getTimedAvgFalsePositive()), Color.PINK, 1, i);
-            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTimedAvgFalsePositive());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getTimedAvgFalsePositive()), Color.PINK, 1, sttIdx);
+            drawLine(prevPoints[0].x, prevPoints[0].y, axisX, stat.getTimedAvgFalsePositive(), sttIdx,4);
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getTimedAvgFalseNegative()), Color.RED, 2, i);
-            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTimedAvgFalseNegative());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getTimedAvgFalseNegative()), Color.RED, 2, sttIdx);
+            drawLine(prevPoints[1].x, prevPoints[1].y, axisX, stat.getTimedAvgFalseNegative(), sttIdx,5);
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getTimedAvgTruePositive()), Color.YELLOW, 3, i);
-            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTimedAvgTruePositive());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getTimedAvgTruePositive()), Color.YELLOW, 3, sttIdx);
+            drawLine(prevPoints[2].x, prevPoints[2].y, axisX, stat.getTimedAvgTruePositive(), sttIdx,6);
 
-            drawCurve(axisX, (int)(0.1 * _vs * stat.getTimedAvgTrueNegative()), Color.GREEN, 4, i);
-            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getTimedAvgTrueNegative());
+            drawSymbolOnCurve(axisX, (int) (0.1 * _vs * stat.getTimedAvgTrueNegative()), Color.GREEN, 4, sttIdx);
+            drawLine(prevPoints[3].x, prevPoints[3].y, axisX, stat.getTimedAvgTrueNegative(), sttIdx,7);
 
         }
         //============================//============================ Draw X-axis line

@@ -108,10 +108,10 @@ public class Globals {
                 lightMagenta, darkGreen, darkGray, darkGreen, darkRed, darkMagenta, lightYellow, lightGray1, lightRed, lightOrange};
 
         private static final Color[] darkColors = new Color[]{
-                darkGreen, red, blue, magenta, darkOrange, darkGray, new Color(255, 42, 180), new Color(27, 150, 141),
+                darkGreen1, red, blue, magenta, orange, darkGray, new Color(1, 140, 162), new Color(136, 108, 0),
                 darkGreen3, darkRed, darkBlue, darkMagenta1, darkOrange1, darkGray1,
                 darkGreen2, darkRed2, darkBlue2, darkMagenta3, darkOrange3, darkGray3,
-                darkGreen1, darkRed1, darkBlue1, darkMagenta2, darkOrange2, darkGray2
+                darkGreen, darkRed1, darkBlue1, darkMagenta2, darkOrange2, darkGray2
         };
 
         public static Color color(int i) {

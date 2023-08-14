@@ -72,7 +72,7 @@ public class IntResistancePerNumberStatsLinearDrawingWindow extends DrawingWindo
 
                 if (showWorldsFlag[j]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.color(0), j, 20, -1);
                         g.drawString("DATA", 220, dynamicHeight);
                         //============================
                     }
@@ -119,14 +119,14 @@ public class IntResistancePerNumberStatsLinearDrawingWindow extends DrawingWindo
                     prevPoints[idx].x = loAxisX;
                 }
 
-                for (int i = 1, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
+                for (int sttIdx = 1, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
 
-                    int[] number = statistics[i].getStatisticsHypo().getAvgHypoResistanceByNumberAgainstAll();
+                    int[] number = statistics[sttIdx].getStatisticsHypo().getAvgHypoResistanceByNumberAgainstAll();
                     for (int idx = 0; idx < Config.STATISTICS_HYPOCRITE_RESISTANCE_COUNT; idx++) {
                         if (showLineChartsFlag[idx]) {
-                            drawCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.color(idx), worldIdx, i);
+                            drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number[idx]), Globals.Color$.color(idx), idx, sttIdx);
                             if (prevPoints[idx].y >= 0) {
-                                drawLine(prevPoints[idx].x, prevPoints[idx].y, loAxisX, number[idx]);
+                                drawLine(prevPoints[idx].x, prevPoints[idx].y, loAxisX, number[idx], sttIdx,idx);
                             }
                         }
                     }

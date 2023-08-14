@@ -1,10 +1,10 @@
 package drawingLayer.routing;
 
 import drawingLayer.DrawingWindow;
+import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.World;
 import utils.Config;
 import utils.Point;
-import simulateLayer.statistics.WorldStatistics;
 
 import java.awt.*;
 
@@ -50,38 +50,38 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
 
 
             WorldStatistics[] statistics = world.getWdStatistics();
-            for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                WorldStatistics stat = statistics[i];
+            for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                WorldStatistics stat = statistics[sttIdx];
 
-                if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                     loAxisX += _hs;
-                    prevPoints[0].y = (int)(0.1 * _vs * stat.getIttAgentsInTarget());
-                    prevPoints[1].y = (int)(0.1 * _vs * stat.getIttAgentsInPitfall());
-                    prevPoints[4].y = (int)(0.1 * _vs * stat.getIttSuccessTravelToNeighbor());
-                    prevPoints[5].y = (int)(0.1 * _vs * stat.getIttRandomTravelToNeighbors());
+                    prevPoints[0].y = (int) (0.1 * _vs * stat.getIttAgentsInTarget());
+                    prevPoints[1].y = (int) (0.1 * _vs * stat.getIttAgentsInPitfall());
+                    prevPoints[4].y = (int) (0.1 * _vs * stat.getIttSuccessTravelToNeighbor());
+                    prevPoints[5].y = (int) (0.1 * _vs * stat.getIttRandomTravelToNeighbors());
                     prevPoints[0].x = prevPoints[1].x = prevPoints[4].x = prevPoints[5].x = loAxisX;
 
                 } else {
 
-                    prevPoints[0].y = (int)(0.1 * _vs * statistics[i - 1].getIttAgentsInTarget());
-                    prevPoints[1].y = (int)(0.1 * _vs * statistics[i - 1].getIttAgentsInPitfall());
-                    prevPoints[4].y = (int)(0.1 * _vs * statistics[i - 1].getIttSuccessTravelToNeighbor());
-                    prevPoints[5].y = (int)(0.1 * _vs * statistics[i - 1].getIttRandomTravelToNeighbors());
+                    prevPoints[0].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttAgentsInTarget());
+                    prevPoints[1].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttAgentsInPitfall());
+                    prevPoints[4].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttSuccessTravelToNeighbor());
+                    prevPoints[5].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getIttRandomTravelToNeighbors());
                     prevPoints[0].x = prevPoints[1].x = prevPoints[4].x = prevPoints[5].x = loAxisX;
                     loAxisX += _hs;
                 }
 
-                drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttAgentsInTarget()), Color.GREEN, 0, i);
-                drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttAgentsInTarget());
+                drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getIttAgentsInTarget()), Color.GREEN, 0, sttIdx);
+                drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, stat.getIttAgentsInTarget(), sttIdx, 0);
 
-                drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttAgentsInPitfall()), Color.RED, 1, i);
-                drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall());
+                drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getIttAgentsInPitfall()), Color.RED, 1, sttIdx);
+                drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, stat.getIttAgentsInPitfall(), sttIdx, 1);
 
-                drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttSuccessTravelToNeighbor()), Color.WHITE, 4, i);
-                drawLine(prevPoints[4].x, prevPoints[4].y, loAxisX, stat.getIttSuccessTravelToNeighbor());
+                drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getIttSuccessTravelToNeighbor()), Color.WHITE, 4, sttIdx);
+                drawLine(prevPoints[4].x, prevPoints[4].y, loAxisX, stat.getIttSuccessTravelToNeighbor(), sttIdx, 4);
 
-                drawCurve(loAxisX, (int)(0.1 * _vs * stat.getIttRandomTravelToNeighbors()), Color.MAGENTA, 5, i);
-                drawLine(prevPoints[5].x, prevPoints[5].y, loAxisX, stat.getIttRandomTravelToNeighbors());
+                drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getIttRandomTravelToNeighbors()), Color.MAGENTA, 5, sttIdx);
+                drawLine(prevPoints[5].x, prevPoints[5].y, loAxisX, stat.getIttRandomTravelToNeighbors(), sttIdx, 5);
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;
@@ -97,28 +97,28 @@ public class TravelStatsLinearDrawingWindow extends DrawingWindow {
             loAxisX = 0;
 
 
-            for (int i = 0, statisticsLength = statistics.length; i < worldTimer && i < statisticsLength; i++) {
-                WorldStatistics stat = statistics[i];
+            for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
+                WorldStatistics stat = statistics[sttIdx];
 
-                if (i == 0 || stat.getEpisode() != statistics[i - 1].getEpisode()) {
+                if (sttIdx == 0 || stat.getEpisode() != statistics[sttIdx - 1].getEpisode()) {
                     loAxisX += _hs;
-                    prevPoints[2].y = (int)(0.1 * _vs * stat.getTimedAvgAgentTarget());
-                    prevPoints[3].y = (int)(0.1 * _vs * stat.getTimedAvgAgentInPitfall());
+                    prevPoints[2].y = (int) (0.1 * _vs * stat.getTimedAvgAgentTarget());
+                    prevPoints[3].y = (int) (0.1 * _vs * stat.getTimedAvgAgentInPitfall());
                     prevPoints[2].x = prevPoints[3].x = loAxisX;
 
                 } else {
 
-                    prevPoints[2].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgAgentTarget());
-                    prevPoints[3].y = (int)(0.1 * _vs * statistics[i - 1].getTimedAvgAgentInPitfall());
+                    prevPoints[2].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgAgentTarget());
+                    prevPoints[3].y = (int) (0.1 * _vs * statistics[sttIdx - 1].getTimedAvgAgentInPitfall());
                     prevPoints[2].x = prevPoints[3].x = loAxisX;
                     loAxisX += _hs;
                 }
 
-                drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgAgentTarget()), Color.YELLOW, 2, i);
-                drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimedAvgAgentTarget());
+                drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimedAvgAgentTarget()), Color.YELLOW, 2, sttIdx);
+                drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, stat.getTimedAvgAgentTarget(), sttIdx, 2);
 
-                drawCurve(loAxisX, (int)(0.1 * _vs * stat.getTimedAvgAgentInPitfall()), Color.pink, 3, i);
-                drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimedAvgAgentInPitfall());
+                drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * stat.getTimedAvgAgentInPitfall()), Color.pink, 3, sttIdx);
+                drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, stat.getTimedAvgAgentInPitfall(), sttIdx, 3);
 
                 if (axisX < loAxisX) {
                     axisX = loAxisX;

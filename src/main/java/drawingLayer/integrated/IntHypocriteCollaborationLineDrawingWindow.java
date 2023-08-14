@@ -72,23 +72,23 @@ public class IntHypocriteCollaborationLineDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[worldIdx]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_1, worldIdx, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.$curve_1, worldIdx, 20, -1);
                         g.drawString("T2Hyp", 220, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(350, dynamicHeight, Globals.Color$.$curve_2, worldIdx, 20, -1);
+                        drawSymbolOnCurve(350, dynamicHeight, Globals.Color$.$curve_2, worldIdx, 20, -1);
                         g.drawString("HypCl", 370, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(500, dynamicHeight, Globals.Color$.$curve_3, worldIdx, 20, -1);
+                        drawSymbolOnCurve(500, dynamicHeight, Globals.Color$.$curve_3, worldIdx, 20, -1);
                         g.drawString("HypClRn", 520, dynamicHeight);
                         //============================
                     }
 
                     if (showLineChartsFlag[3]) {
-                        drawCurve(650, dynamicHeight, Globals.Color$.$curve_4, worldIdx, 20, -1);
+                        drawSymbolOnCurve(650, dynamicHeight, Globals.Color$.$curve_4, worldIdx, 20, -1);
                         g.drawString("TrtPerColl", 670, dynamicHeight);
                         //============================
                     }
@@ -109,8 +109,7 @@ public class IntHypocriteCollaborationLineDrawingWindow extends DrawingWindow {
         axisYScale = Config.STATISTICS_SCALE_UP_Y_AXIS_NUMBER;
 
         if (showChartsFlag[0]) {
-           prepareChartPosition(0);
-
+            prepareChartPosition(0);
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
                 if (!showWorldsFlag[worldIdx]) {
@@ -146,29 +145,30 @@ public class IntHypocriteCollaborationLineDrawingWindow extends DrawingWindow {
 
                 for (int sttIdx = 1, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
 
+
                     int number = statistics[sttIdx].getStatisticsCollab().getAvgTrustToHypocriteInRound();
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_1, worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_1, worldIdx, sttIdx);
                         if (prevPoints[0].y >= 0) {
-                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, number);
+                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, number, sttIdx, 0);
                         }
                     }
                     prevPoints[0].y = (int) (0.1 * _vs * number);
 
                     number = statistics[sttIdx].getStatisticsCollab().getAvgHypocriteCollaboration();
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_2, worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_2, worldIdx, sttIdx);
                         if (prevPoints[1].y >= 0) {
-                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, number);
+                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, number, sttIdx, 1);
                         }
                     }
                     prevPoints[1].y = (int) (0.1 * _vs * number);
 
                     number = statistics[sttIdx].getStatisticsCollab().getAvgHypocriteCollaborationInRound();
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_3, worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
                         if (prevPoints[2].y >= 0) {
-                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, number);
+                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, number, sttIdx, 2);
                         }
                     }
 
@@ -191,7 +191,7 @@ public class IntHypocriteCollaborationLineDrawingWindow extends DrawingWindow {
         axisYScale = 0.01;
 
         if (showChartsFlag[1]) {
-           prepareChartPosition(1);
+            prepareChartPosition(1);
 
             for (int worldIdx = 0, worldsLength = worlds.length; worldIdx < worldsLength; worldIdx++) {
                 if (!showWorldsFlag[worldIdx]) {
@@ -223,9 +223,9 @@ public class IntHypocriteCollaborationLineDrawingWindow extends DrawingWindow {
 
                     int number = statistics[sttIdx].getStatisticsCollab().getAvgHypocriteTrustPerCollab100();
                     if (showLineChartsFlag[3]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
                         if (prevPoints[3].y >= 0) {
-                            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, number);
+                            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, number, sttIdx, 3);
                         }
                     }
                     prevPoints[3].y = (int) (0.1 * _vs * number);

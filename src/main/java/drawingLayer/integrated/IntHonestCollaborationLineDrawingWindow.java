@@ -73,23 +73,23 @@ public class IntHonestCollaborationLineDrawingWindow extends DrawingWindow {
 
                 if (showWorldsFlag[worldIdx]) {
                     if (showLineChartsFlag[0]) {
-                        drawCurve(200, dynamicHeight, Globals.Color$.$curve_1, worldIdx, 20, -1);
+                        drawSymbolOnCurve(200, dynamicHeight, Globals.Color$.$curve_1, worldIdx, 20, -1);
                         g.drawString("T2Hon", 220, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[1]) {
-                        drawCurve(350, dynamicHeight, Globals.Color$.$curve_2, worldIdx, 20, -1);
+                        drawSymbolOnCurve(350, dynamicHeight, Globals.Color$.$curve_2, worldIdx, 20, -1);
                         g.drawString("HonCl", 370, dynamicHeight);
                         //============================
                     }
                     if (showLineChartsFlag[2]) {
-                        drawCurve(500, dynamicHeight, Globals.Color$.$curve_3, worldIdx, 20, -1);
+                        drawSymbolOnCurve(500, dynamicHeight, Globals.Color$.$curve_3, worldIdx, 20, -1);
                         g.drawString("HonClRn", 520, dynamicHeight);
                         //============================
                     }
 
                     if (showLineChartsFlag[3]) {
-                        drawCurve(650, dynamicHeight, Globals.Color$.$curve_4, worldIdx, 20, -1);
+                        drawSymbolOnCurve(650, dynamicHeight, Globals.Color$.$curve_4, worldIdx, 20, -1);
                         g.drawString("TtPerColl", 670, dynamicHeight);
                         //============================
                     }
@@ -148,27 +148,27 @@ public class IntHonestCollaborationLineDrawingWindow extends DrawingWindow {
 
                     int number = statistics[sttIdx].getStatisticsCollab().getAvgTrustToHonestInRound();
                     if (showLineChartsFlag[0]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_1, worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_1, worldIdx, sttIdx);
                         if (prevPoints[0].y >= 0) {
-                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, number);
+                            drawLine(prevPoints[0].x, prevPoints[0].y, loAxisX, number,sttIdx, 0);
                         }
                     }
                     prevPoints[0].y = (int) (0.1 * _vs * number);
 
                     number = statistics[sttIdx].getStatisticsCollab().getAvgHonestCollaboration();
                     if (showLineChartsFlag[1]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_2, worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_2, worldIdx, sttIdx);
                         if (prevPoints[1].y >= 0) {
-                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, number);
+                            drawLine(prevPoints[1].x, prevPoints[1].y, loAxisX, number,sttIdx, 1);
                         }
                     }
                     prevPoints[1].y = (int) (0.1 * _vs * number);
 
                     number = statistics[sttIdx].getStatisticsCollab().getAvgHonestCollaborationInRound();
                     if (showLineChartsFlag[2]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_3, worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.$curve_3, worldIdx, sttIdx);
                         if (prevPoints[2].y >= 0) {
-                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, number);
+                            drawLine(prevPoints[2].x, prevPoints[2].y, loAxisX, number,sttIdx, 2);
                         }
                     }
 
@@ -221,11 +221,12 @@ public class IntHonestCollaborationLineDrawingWindow extends DrawingWindow {
 
                 for (int sttIdx = 1, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
 
+
                     int number = statistics[sttIdx].getStatisticsCollab().getAvgHonestTrustPerCollab100();
                     if (showLineChartsFlag[3]) {
-                        drawCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
+                        drawSymbolOnCurve(loAxisX, (int) (0.1 * _vs * number), Globals.Color$.color(worldIdx), worldIdx, sttIdx);
                         if (prevPoints[3].y >= 0) {
-                            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, number);
+                            drawLine(prevPoints[3].x, prevPoints[3].y, loAxisX, number,sttIdx, 3);
                         }
                     }
                     prevPoints[3].y = (int) (0.1 * _vs * number);
