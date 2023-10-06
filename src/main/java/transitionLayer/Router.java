@@ -3,15 +3,15 @@ package transitionLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
-import societyLayer.environmentSubLayer.StateX;
-import societyLayer.environmentSubLayer.TransitionX;
-import societyLayer.environmentSubLayer.TravelHistory;
-import simulateLayer.SimulationConfigItem;
+import simulateLayer.config.trust.TrustConfigItem;
 import simulateLayer.statistics.WorldStatistics;
 import societyLayer.agentSubLayer.Agent;
 import societyLayer.agentSubLayer.WatchedAgent;
 import societyLayer.agentSubLayer.WatchedState;
 import societyLayer.agentSubLayer.World;
+import societyLayer.environmentSubLayer.StateX;
+import societyLayer.environmentSubLayer.TransitionX;
+import societyLayer.environmentSubLayer.TravelHistory;
 import trustLayer.TrustManager;
 import utils.Config;
 import utils.Globals;
@@ -25,12 +25,12 @@ public class Router {
     private WorldStatistics statistics___;
     private World world;
     private TrustManager trustManager;
-    private SimulationConfigItem simulationConfigItem;
+    private TrustConfigItem trustConfigItem;
 
     public Router(World world) {
         this.world = world;
         this.trustManager = world.getTrustManager();
-        simulationConfigItem = world.getSimulationConfig();
+        trustConfigItem = world.getSimulationConfig();
 
     }
 
@@ -195,7 +195,7 @@ public class Router {
             return;
         }
 
-        if (simulationConfigItem.getTtMethod() == TtTrustMethodology.FullyRandomly) {
+        if (trustConfigItem.getTtMethod() == TtTrustMethodology.FullyRandomly) {
             return;
         }
 
@@ -229,6 +229,8 @@ public class Router {
         //System.out.print(" *k*");
         //-- Asking from watched list and filling routingHelps. all watchedAgents than know where is the goal state
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
+        boolean isHonestCollaboration = false;
+        boolean isHypocriteCollaboration = false;
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent wa = watchedAgents.get(i);
             routingHelp = doYouKnowWhereIs(wa.getAgent(), goalState);
@@ -239,9 +241,17 @@ public class Router {
                     continue;
                 }
 
+                if (routingHelp.getHelperAgent().getBehavior().getHasHonestState()) {
+                    isHonestCollaboration = true;
+                    statistics___.getStatisticsCollab().add_allHonestCollaboration();
+                } else if (routingHelp.getHelperAgent().getBehavior().getHasHypocriteState()) {
+                    isHypocriteCollaboration = true;
+                    statistics___.getStatisticsCollab().add_allHypocriteCollaboration();
+                }
+
                 // The SafeMode method needs only one helper. All helper are honest
                 // After finding the first helper, we exit form the loop
-                if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
+                if (trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
                     routingHelps.add(routingHelp);
                     break;
 
@@ -258,6 +268,13 @@ public class Router {
             }
         }
 
+        if (isHonestCollaboration) {
+            statistics___.getStatisticsCollab().add_allHonestCollaborationInRound();
+        }
+        if (isHypocriteCollaboration) {
+            statistics___.getStatisticsCollab().add_allHypocriteCollaborationInRound();
+        }
+
         // If there is no routerHelper...
         if (routingHelps.isEmpty()) {
             OutLog____.pl(TtOutLogMethodSection.UpdateNextStep, TtOutLogStatus.WARN, "There is no routerHelp that know where is the goal state", agent, agent.getState(), goalState);
@@ -266,7 +283,7 @@ public class Router {
 
 
         List<RoutingHelp> sortedRoutingHelps = routingHelps;
-        switch (simulationConfigItem.getTtMethod()) {
+        switch (trustConfigItem.getTtMethod()) {
 
             case TrustMode_ShortPath:
                 //System.out.print(" *ts*");
@@ -317,44 +334,47 @@ public class Router {
 
 
         float trustValueOfHelperToAgent = trustManager.getTrustValue(help.getHelperAgent(), agent);
-        if (simulationConfigItem.isIsUseIndirectExperience()) {
+        if (trustConfigItem.isIsUseIndirectExperience()) {
             /* If receiver of experiences (the helper or truster in routing procedure) trusts to the sender (the trustee in routing procedure),
             the helper accepts experiences of the agent
             * */
             if (trustValueOfHelperToAgent > 0) {
                 trustManager.shareExperiences(agent, help.getHelperAgent());
             }
-            if (simulationConfigItem.isIsBidirectionalExperienceSharing()) {
+            if (trustConfigItem.isIsBidirectionalExperienceSharing()) {
                 /* The agent trusts to helper, thus he accepts experiences of helper  */
                 trustManager.shareExperiences(help.getHelperAgent(), agent);
             }
         }
         /*
          * */
-        if (simulationConfigItem.isIsUseIndirectObservation()) {
+        if (trustConfigItem.isIsUseIndirectObservation()) {
             if (trustValueOfHelperToAgent > 0) {
                 trustManager.shareObservations(agent, help.getHelperAgent());
             }
-            if (simulationConfigItem.isIsBidirectionalObservationSharing()) {
+            if (trustConfigItem.isIsBidirectionalObservationSharing()) {
                 trustManager.shareObservations(help.getHelperAgent(), agent);
             }
         }
 
-        if (simulationConfigItem.isUseRecommendation()) {
+        if (trustConfigItem.isUseRecommendation()) {
             if (trustValueOfHelperToAgent > 0) {
                 trustManager.sendRecommendations(agent, help.getHelperAgent());
             }
-            if (simulationConfigItem.isIsBidirectionalRecommendationSharing()) {
+            if (trustConfigItem.isIsBidirectionalRecommendationSharing()) {
                 trustManager.sendRecommendations(help.getHelperAgent(), agent);
             }
         }
 
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {
             statistics___.add_Itt_TrustToHonest();
+            statistics___.getStatisticsCollab().add_allTrustToHonestInRound();
         } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
             statistics___.add_Itt_TrustToAdversary();
         } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
             statistics___.add_Itt_TrustToHypocrite();
+            statistics___.getStatisticsCollab().add_allTrustToHypocriteInRound();
+
         } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
             statistics___.add_Itt_TrustToMischief();
         }
@@ -420,7 +440,7 @@ public class Router {
 
         int srIndex = 0;
         for (int routingHelpsSize = routingHelps.size();
-             srIndex < routingHelpsSize && srIndex < simulationConfigItem.getMaximumConsideredRoutingHelpInTrustMechanism();
+             srIndex < routingHelpsSize && srIndex < trustConfigItem.getMaximumConsideredRoutingHelpInTrustMechanism();
              srIndex++) {
             RoutingHelp help = routingHelps.get(srIndex);
             if (help.getTrustValue() < 0) {
@@ -537,10 +557,10 @@ public class Router {
      */
     private RoutingHelp doYouKnowWhereIs(Agent agent, StateX goalState) {
 
-        if (simulationConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
+        if (trustConfigItem.getTtMethod() == TtTrustMethodology.TrustMode_SafeMode) {
             return responseAsHonest(agent, goalState);
         }
-
+        agent.getBehavior().updateBehaviorState();
         switch (agent.getBehavior().getCurrentBehaviorState()) {
             case Honest:
                 return responseAsHonest(agent, goalState);

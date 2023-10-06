@@ -2,7 +2,6 @@ package drawingLayer.routing;
 
 import _type.TtDiagramThemeMode;
 import drawingLayer.DrawingWindow;
-import jdk.nashorn.internal.objects.Global;
 import societyLayer.agentSubLayer.*;
 import societyLayer.environmentSubLayer.Environment;
 import societyLayer.environmentSubLayer.StateX;
@@ -62,7 +61,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
         g = (Graphics2D) gr;
         g.setBackground(Color.BLACK);
         g.clearRect(0, 0, getWidth(), getHeight());
-        pauseNotice(g);
+        pauseAndFinishNotice(g);
 
         if (!mainPaint(gr, headerTitle + " :: " + world.getDrawingTitle(), world.getSimulationConfigInfo())) {
             return;
@@ -95,7 +94,7 @@ public class StateMachineDrawingWindow extends DrawingWindow {
                     g.setStroke(new BasicStroke(10));
                     trans.setDrawIsActive(false);
                 } else {
-                    g.setColor(Config.THEME_MODE== TtDiagramThemeMode.Dark ? Globals.Color$.darkGray2: Globals.Color$.darkGray);
+                    g.setColor(Config.THEME_MODE == TtDiagramThemeMode.Dark ? Globals.Color$.darkGray2 : Globals.Color$.darkGray);
                     g.setStroke(new BasicStroke(2));
                 }
 

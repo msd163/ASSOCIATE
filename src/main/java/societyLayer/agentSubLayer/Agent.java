@@ -3,9 +3,9 @@ package societyLayer.agentSubLayer;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
+import simulateLayer.config.society.SimulationProfiler;
 import societyLayer.environmentSubLayer.StateX;
 import societyLayer.environmentSubLayer.TravelHistory;
-import simulateLayer.profiler.SimulationProfiler;
 import trustLayer.AgentTrust;
 import trustLayer.consensus.DaGra;
 import utils.Cryptor;
@@ -132,7 +132,8 @@ public class Agent {
     }
 
     public void initVars() {
-        trust.setTrustParams(
+        trust.
+                setTrustParams(
                 capacity.getExperienceCap(),
                 capacity.getExperienceItemCap(),
                 capacity.getIndirectExperienceCap(),
@@ -303,7 +304,7 @@ public class Agent {
      * Clearing the current watch list and filling it according the current state of the agent.
      * The watch list is depends on the watch radius, that is the capacity of the agent.
      */
-    public void updateWatchList() {
+    public synchronized void updateWatchList() {
         watchedAgents.clear();
         watchedStates.clear();
         ArrayList<StateX> parentPath = new ArrayList<>();
@@ -385,6 +386,21 @@ public class Agent {
     public List<WatchedAgent> getWatchedAgents() {
         return watchedAgents;
     }
+
+    public boolean isAgentInWatchList(Agent agent) {
+        try {
+            for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
+                if (watchedAgents.get(i).getAgent().getId() == agent.getId()) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception ex) {
+            System.out.println(" EEE 333: " + ex);
+            return false;
+        }
+    }
+
 
     public boolean isSimConfigLinkToWatchedAgents() {
         return simConfigLinkToWatchedAgents;

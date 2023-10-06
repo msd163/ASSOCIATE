@@ -10,12 +10,12 @@ public class TrustIndirectObservation extends TrustData {
     }
     //============================//============================//============================
 
-    public void addObservation(TrustDataItem item) {
+    public void addObservation(TrustDataItem item, Agent issuer) {
         if (lastTime < item.getTime()) {
             lastTime = item.getTime();
         }
 
-        super.addItem(item);
+        super.addItem(item, issuer);
     }
     //============================//============================//============================
 

@@ -299,7 +299,8 @@ public class StateX {
         //============================  For all agents in this state..., Adding agents of current state to watchedAgents list
         // - If the watchedAgents is filled,adding agents will be ignored.
         if (remainedAgentCount > 0) {
-            for (Agent agent : agents) {
+            for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
+                Agent agent = agents.get(i);
                 //-- If the watch list of the source agent is full...
                 if (remainedAgentCount < 1) {
                     break;

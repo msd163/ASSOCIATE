@@ -13,7 +13,7 @@ public class TrustRecommendation extends TrustData {
     //============================//============================//============================
 
     public void addRecommendation(Agent recommender, float trustValue) {
-        super.addItem(recommender, null, null,null, trustValue);
+        super.addDirectItem(recommender, null, null,null, trustValue);
     }
 
     //============================//============================//============================

@@ -1,11 +1,16 @@
 package simulateLayer.statistics;
 
+import societyLayer.environmentSubLayer.Environment;
 import utils.Config;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 
 public class WorldStatistics {
+
+
+    private int negativePop;
+
+    private int positivePop;
 
 
     private WorldStatistics prevStats;      // previous statistics for calculating 'allTrustToHonest' and 'allTrustToDishonest'
@@ -51,7 +56,11 @@ public class WorldStatistics {
     private int allTrueNegativeTrust;
 
     //============================
-    private Map<Integer, AgentStatistics> agentStatistics;
+
+    private WorldStatisticsCollaboration statisticsCollab;
+    private WorldStatisticsHypo statisticsHypo;
+
+    //============================
 
 
     //--  (Number of correct assessments)/Number of all assessments)
@@ -62,6 +71,10 @@ public class WorldStatistics {
     //--  (Number of true positive assessment)/(Number of all positive assessment)
     //--  True Positive rate
     private float trustSensitivity;
+    private float trustTpRate;
+    private float trustTnRate;
+    private float trustFpRate;
+    private float trustFnRate;
     private float allTrustSensitivity;
 
     //--  Specificity relates to the test's ability to correctly reject healthy patients without a condition. Specificity of a test is the proportion of who truly do not have the condition who test negative for the condition.
@@ -74,13 +87,20 @@ public class WorldStatistics {
 
     private WorldStatistics xPrevStats;
 
-    private int timedAverageTarget;
-    private int timedAveragePitfall;
-
     //============================//============================
 
 
-    public WorldStatistics(WorldStatistics prevStats, int agentCount, WorldStatistics xPrevStats) {
+    public WorldStatistics(WorldStatistics prevStats, WorldStatistics xPrevStats, Environment environment) {
+
+        this.statisticsHypo = new WorldStatisticsHypo(
+                xPrevStats == null ? null : xPrevStats.getStatisticsHypo(),
+                prevStats == null ? null : prevStats.getStatisticsHypo()
+        );
+        this.statisticsCollab = new WorldStatisticsCollaboration(
+                xPrevStats == null ? null : xPrevStats.getStatisticsCollab(),
+                prevStats == null ? null : prevStats.getStatisticsCollab()
+        );
+
         this.prevStats = prevStats;
         this.xPrevStats = xPrevStats;
         worldTime
@@ -103,7 +123,7 @@ public class WorldStatistics {
                 = ittTrueNegativeTrust
                 = 0;
 
-        agentStatistics = new HashMap<>(agentCount);
+
 
     }
 
@@ -123,6 +143,9 @@ public class WorldStatistics {
             allTruePositiveTrust = prevStats.getAllTruePositiveTrust();
             allTrueNegativeTrust = prevStats.getAllTrueNegativeTrust();
 
+            statisticsHypo.init(prevStats.getStatisticsHypo());
+            statisticsCollab.init(prevStats.getStatisticsCollab());
+
         } else {
 
             allTrustToAdversary
@@ -137,6 +160,16 @@ public class WorldStatistics {
                     = allTruePositiveTrust
                     = allTrueNegativeTrust
                     = 0;
+
+            statisticsHypo = new WorldStatisticsHypo(
+                    xPrevStats == null ? null : xPrevStats.getStatisticsHypo(),
+                    prevStats == null ? null : prevStats.getStatisticsHypo()
+            );
+
+            statisticsCollab = new WorldStatisticsCollaboration(
+                    xPrevStats == null ? null : xPrevStats.getStatisticsCollab(),
+                    prevStats == null ? null : prevStats.getStatisticsCollab()
+            );
 
         }
     }
@@ -235,10 +268,18 @@ public class WorldStatistics {
         allTrueNegativeTrust++;
     }
 
+
     public void calcTrustParams() {
+
+        int pAll = positivePop;
+
+        int nAll = negativePop;
+
+
         int tp_fn = ittTruePositiveTrust + ittFalseNegativeTrust;
         int tn_fp = ittTrueNegativeTrust + ittFalsePositiveTrust;
-        int all_ = ittTruePositiveTrust + ittTrueNegativeTrust + ittFalsePositiveTrust + ittFalseNegativeTrust;
+        int all_1 = ittTruePositiveTrust + ittTrueNegativeTrust + ittFalsePositiveTrust + ittFalseNegativeTrust;
+        int all_ = nAll + pAll;//ittTruePositiveTrust + ittTrueNegativeTrust + ittFalsePositiveTrust + ittFalseNegativeTrust;
         trustSensitivity = tp_fn == 0 ? -1 : (float) ittTruePositiveTrust / tp_fn;
         trustSpecificity = tn_fp == 0 ? -1 : (float) ittTrueNegativeTrust / tn_fp;
         trustAccuracy = all_ == 0 ? -1 : (float) (ittTruePositiveTrust + ittTrueNegativeTrust) / all_;
@@ -250,6 +291,13 @@ public class WorldStatistics {
         allTrustSpecificity = tn_fp == 0 ? -1 : (float) allTrueNegativeTrust / tn_fp;
         allTrustAccuracy = all_ == 0 ? -1 : (float) (allTruePositiveTrust + allTrueNegativeTrust) / all_;
 
+        //double tpRate = (double) ittTruePositiveTrust / pAll;
+        //double tnRate = (double) ittTrueNegativeTrust / nAll;
+
+        trustTpRate = pAll == 0 ? -1 : (float) ittTruePositiveTrust / pAll;
+        trustTnRate = nAll == 0 ? -1 : (float) ittTrueNegativeTrust / nAll;
+        trustFpRate = pAll == 0 ? -1 : (float) ittFalsePositiveTrust / pAll;
+        trustFnRate = nAll == 0 ? -1 : (float) ittFalseNegativeTrust / nAll;
 
     }
 
@@ -289,12 +337,24 @@ public class WorldStatistics {
     }
 
     //============================//============================
+    private int calcAverage(int currentVal, Integer xPrevVal) {
+
+        if (xPrevVal == null) {
+            return (int) ((float) currentVal / (worldTime == 0 ? 1 : worldTime));
+        } else {
+            return (int) ((float) (currentVal - xPrevVal) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
+        }
+    }
+
+    //============================//============================
     public int getWorldTime() {
         return worldTime;
     }
 
     public void setWorldTime(int worldTime) {
         this.worldTime = worldTime;
+        statisticsHypo.setWorldTime(worldTime);
+        statisticsCollab.setWorldTime(worldTime);
     }
 
     public int getAllAgentsInTarget() {
@@ -461,104 +521,117 @@ public class WorldStatistics {
         return xPrevStats;
     }
 
+    public float getTrustTpRate() {
+        return trustTpRate;
+    }
+
+    public float getTrustTnRate() {
+        return trustTnRate;
+    }
+
+    public int getTrustTpRate100I() {
+        return (int) (trustTpRate * 100);
+    }
+
+    public int getTrustTnRate100I() {
+        return (int) (trustTnRate * 100);
+    }
+
+    public float getTrustFpRate() {
+        return trustFpRate;
+    }
+
+    public float getTrustFnRate() {
+        return trustFnRate;
+    }
+
+    public int getTrustFpRate100I() {
+        return (int) (trustFpRate * 100);
+    }
+
+    public int getTrustFnRate100I() {
+        return (int) (trustFnRate * 100);
+    }
+
     //============================//============================//============================ Timed Average
 
     public int getTimedAvgAgentTarget() {
 
-        if (xPrevStats == null) {
-            timedAverageTarget = allAgentsInTarget / (worldTime == 0 ? 1 : worldTime);
-        } else {
-            timedAverageTarget = (allAgentsInTarget - xPrevStats.allAgentsInTarget) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-        }
-
-        return timedAverageTarget;
+        return calcAverage(allAgentsInTarget, xPrevStats == null ? null : xPrevStats.allAgentsInTarget);
     }
 
     public int getTimedAvgAgentInPitfall() {
-        if (xPrevStats == null) {
-            timedAveragePitfall = allAgentsInPitfall / (worldTime == 0 ? 1 : worldTime);
-        } else {
-            timedAveragePitfall = (allAgentsInPitfall - xPrevStats.allAgentsInPitfall) / Config.STATISTICS_AVERAGE_TIME_WINDOW;
-        }
 
-        return timedAveragePitfall;
+        return calcAverage(allAgentsInPitfall, xPrevStats == null ? null : xPrevStats.allAgentsInPitfall);
     }
 
     public int getTimedAvgRandomTravel() {
-        if (xPrevStats == null) {
-            return (allRandomTravelToNeighbor / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allRandomTravelToNeighbor - xPrevStats.allRandomTravelToNeighbor) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
 
+        return calcAverage(allRandomTravelToNeighbor, xPrevStats == null ? null : xPrevStats.allRandomTravelToNeighbor);
     }
 
     public int getTimedAvgTruePositive() {
-        if (xPrevStats == null) {
-            return (allTruePositiveTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTruePositiveTrust - xPrevStats.allTruePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+        return calcAverage(allTruePositiveTrust, xPrevStats == null ? null : xPrevStats.allTruePositiveTrust);
+
     }
 
     public int getTimedAvgTrueNegative() {
-        if (xPrevStats == null) {
-            return (allTrueNegativeTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrueNegativeTrust - xPrevStats.allTrueNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrueNegativeTrust, xPrevStats == null ? null : xPrevStats.allTrueNegativeTrust);
     }
 
     public int getTimedAvgFalsePositive() {
-        if (xPrevStats == null) {
-            return (allFalsePositiveTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allFalsePositiveTrust - xPrevStats.allFalsePositiveTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allFalsePositiveTrust, xPrevStats == null ? null : xPrevStats.allFalsePositiveTrust);
     }
 
     public int getTimedAvgFalseNegative() {
-        if (xPrevStats == null) {
-            return (allFalseNegativeTrust / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allFalseNegativeTrust - xPrevStats.allFalseNegativeTrust) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allFalseNegativeTrust, xPrevStats == null ? null : xPrevStats.allFalseNegativeTrust);
     }
 
     public int getTimeAvgTrustToAdversary() {
-        if (xPrevStats == null) {
-            return (allTrustToAdversary / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToAdversary - xPrevStats.allTrustToAdversary) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrustToAdversary, xPrevStats == null ? null : xPrevStats.allTrustToAdversary);
     }
 
     public int getTimeAvgTrustToHonest() {
-        if (xPrevStats == null) {
-            return (allTrustToHonest / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToHonest - xPrevStats.allTrustToHonest) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrustToHonest, xPrevStats == null ? null : xPrevStats.allTrustToHonest);
     }
 
     public int getTimeAvgTrustToMischief() {
-        if (xPrevStats == null) {
-            return (allTrustToMischief / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToMischief - xPrevStats.allTrustToMischief) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
+
+        return calcAverage(allTrustToMischief, xPrevStats == null ? null : xPrevStats.allTrustToMischief);
     }
 
     public int getTimeAvgTrustToHypocrite() {
-        if (xPrevStats == null) {
-            return (allTrustToHypocrite / (worldTime == 0 ? 1 : worldTime));
-        } else {
-            return ((allTrustToHypocrite - xPrevStats.allTrustToHypocrite) / Config.STATISTICS_AVERAGE_TIME_WINDOW);
-        }
 
+        return calcAverage(allTrustToHypocrite, xPrevStats == null ? null : xPrevStats.allTrustToHypocrite);
     }
 
     public int getAllRandomTravelToNeighbor() {
         return allRandomTravelToNeighbor;
+    }
+
+    public void add_NegativePop() {
+        negativePop++;
+    }
+
+    public void add_PositivePop() {
+        positivePop++;
+    }
+
+    public void resetPopulation() {
+        negativePop = 0;
+        positivePop = 0;
+    }
+
+    public WorldStatisticsHypo getStatisticsHypo() {
+        return statisticsHypo;
+    }
+
+    public WorldStatisticsCollaboration getStatisticsCollab() {
+        return statisticsCollab;
     }
 }

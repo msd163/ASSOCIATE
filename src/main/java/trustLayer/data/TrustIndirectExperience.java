@@ -12,12 +12,12 @@ public class TrustIndirectExperience extends TrustData {
 
     //============================//============================//============================
 
-    public void addExperience(TrustDataItem item) {
+    public void addExperience(TrustDataItem item, Agent issuer) {
         if (lastTime < item.getTime()) {
             lastTime = item.getTime();
         }
 
-        super.addItem(item);
+        super.addItem(item, issuer);
     }
 
 
