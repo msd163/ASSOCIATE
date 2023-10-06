@@ -210,7 +210,7 @@ public class Simulator {
             return;
         }
 
-        System.out.println("> Environment reloaded from file. simulationTimer");
+        System.out.println("> Environment reloaded from [" + Globals.SocietyDataFilePath + "]. simulationTimer");
     }
 
 
@@ -245,7 +245,6 @@ public class Simulator {
             world.destroy();
             OutLog____.pl("s");
             sound.playSound(ProjectPath.instance().alertMidFile());
-
         }
 
         Globals.SIMULATION_TIMER--;

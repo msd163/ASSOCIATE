@@ -269,8 +269,8 @@ public class World {
             epStatistics[0].setFromTime(Globals.WORLD_TIMER);
         }
         //============================//============================  Main loop of running in a world
-        for (; Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME; Globals.WORLD_TIMER++) {
-
+        while (Globals.WORLD_TIMER < Config.WORLD_LIFE_TIME) {
+            Globals.WORLD_TIMER++;
             Globals.DAGRA_REQUEST_STAGE__REQUESTED_COUNT_IN_CURRENT_PERIOD = 0;
 
             WorldStatistics wdStats = wdStatistics[Globals.WORLD_TIMER];
