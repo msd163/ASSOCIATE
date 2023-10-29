@@ -69,7 +69,8 @@ public class AgentTrust {
                 agent.getCapacity().getCapPower() > certificationCandidateCapPowerThreshold &&
                         (agent.getBehavior().getHasHonestState() ||
                                 isUseCertificationForDishonestAgents)
-        /*&& agent.getBehavior().getHasHonestState()*/;
+        /*&& agent.getBehavior().getHasHonestState()*/
+        ;
 
     }
 
@@ -173,7 +174,7 @@ public class AgentTrust {
     @Override
     public String toString() {
         return "AgentTrust{" +
-//                "\n\t\tagent=" + agent +
+//                "\n\t\t Agent=" + agent +
                 ",\n\t\t experienceCap=" + experienceCap +
                 ",\n\t\t experienceItemCap=" + experienceItemCap +
                 '}';
