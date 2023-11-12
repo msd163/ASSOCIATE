@@ -556,6 +556,10 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     protected void drawAxisX(int index) {
+        drawAxisX(index, true);
+    }
+
+    protected void drawAxisX(int index, boolean isDrawGridLine) {
         int realWith = getRealWith();
         int realUpHeight = getRealUpHeight(index);
         int realDownHeight = getRealDownHeight(index);
@@ -564,7 +568,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g.drawLine(0, 0, realWith, 0);
         g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
         int verticalGridCount = 1;
-        int verticalLabelCount = 0;
+
         for (int i = 0, x = 0; i < realWith; i += _hs, x++) {
             g.setColor(Globals.Color$.$axis);
             if (i > 0) {
@@ -576,20 +580,23 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                         g.scale(1, -1);
 //                        }
                         g.drawLine(i, -5, i, 5);
-                        g.setColor(Globals.Color$.$axisSplit);
-                        g.drawLine(i, -realDownHeight, i, realUpHeight);
+                        if (isDrawGridLine) {
+                            g.setColor(Globals.Color$.$axisSplit);
+                            g.drawLine(i, -realDownHeight, i, realUpHeight);
+                        }
                     }
                     verticalGridCount++;
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
-                    if (verticalGridCount % verticalGridLineScaleInAxisX == 0) {
-                        g.setColor(Globals.Color$.$axisSplit2);
-                        g.drawLine(i, -realDownHeight, i, realUpHeight);
+                    if (isDrawGridLine) {
+                        if (verticalGridCount % verticalGridLineScaleInAxisX == 0) {
+                            g.setColor(Globals.Color$.$axisSplit2);
+                            g.drawLine(i, -realDownHeight, i, realUpHeight);
+                        }
                     }
                     verticalGridCount++;
                 } else if (_hs > 1) {
-                    g.drawLine(i, 0,
-                            i, 1);
+                    g.drawLine(i, 0, i, 1);
                 }
             }
         }
@@ -625,7 +632,24 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         drawAxisY(chartIndex);
     }
 
-    private void drawAxisY(int minLength, int maxLength, int bigSplitter, int littleSplitter, int labelStep) {
+    /**
+     * This function is used in begin of drawing chart
+     *
+     * @param chartIndex indicated the index of chart in the one drawing windows
+     */
+    protected void prepareChartPosition(int chartIndex, boolean isDrawAxisX, boolean isDrawAxisXGrid, boolean isDrawAxisY, boolean isDrawAxisYGrid) {
+        g.translate(0, -getRealUpHeight(chartIndex) - 100);
+        loAxisX = 0;
+
+        if (isDrawAxisX) {
+            drawAxisX(chartIndex, isDrawAxisXGrid);
+        }
+        if (isDrawAxisY) {
+            drawAxisY(chartIndex, isDrawAxisYGrid);
+        }
+    }
+
+    private void drawAxisY(int minLength, int maxLength, int bigSplitter, int littleSplitter, int labelStep, boolean isDrawAxisYGrid) {
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, minLength, 0, maxLength);
         g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
@@ -688,7 +712,11 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     protected void drawAxisY(int index) {
-        drawAxisY(-getRealDownHeight(index), getRealUpHeight(index), 100, 10, 50);
+        drawAxisY(-getRealDownHeight(index), getRealUpHeight(index), 100, 10, 50, false);
+    }
+
+    protected void drawAxisY(int index, boolean isDrawAxisYGrid) {
+        drawAxisY(-getRealDownHeight(index), getRealUpHeight(index), 100, 10, 50, isDrawAxisYGrid);
     }
     //============================//============================//============================
 

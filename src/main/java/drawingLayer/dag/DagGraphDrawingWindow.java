@@ -65,10 +65,12 @@ public class DagGraphDrawingWindow extends DrawingWindow {
 
     }
 
-    private void drawContract(CertContract contract) {
+    private void drawContract(CertContract contract, int chartIndex) {
         int size = 24 + symbolIncreaseSizeOnCurves;
         int drawX = contract.getDrawX() - 12;
         int drawY = contract.getDrawY() - 12;
+
+        maxAxisY[chartIndex] = Math.max(maxAxisY[chartIndex], drawY);
 
         switch (contract.getStatus()) {
             case NoContract:
@@ -163,27 +165,91 @@ public class DagGraphDrawingWindow extends DrawingWindow {
         g.translate(0, -getRealUpHeight(0) - 100);
         loAxisX = 0;
 
-        if (selectedAgent.getDaGra().getContracts() != null) {
+
+
+        //============================//============================//============================//============================
+        if (showChartsFlag[0] || showChartsFlag[1] || showChartsFlag[2]) {
             for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
-
-                calculateContractPosition(contract);
-
-                //--------------------------------------------------
-
-                for (CertSign certSign : contract.getSignedContracts()) {
-                    drawSignConnection(contract, certSign.getSigned(), Globals.Color$.$dagSignConnection_active, Globals.Color$.$dagSignConnection_expired);
+                if (contract.getDrawX() > axisX) {
+                    axisX = contract.getDrawX();
                 }
-
-                for (CertVerify verifiedContract : contract.getVerifiedContracts()) {
-                    drawVerifyConnection(contract, verifiedContract.getVerified(), Globals.Color$.$dagVerifyConnection_active, Globals.Color$.$dagVerifyConnection_expired);
-                }
-            }
-
-            for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
-                drawContract(contract);
             }
         }
 
+        //============================//============================//============================//============================ ALL
+
+        if (showChartsFlag[0]) {
+
+            prepareChartPosition(0, true, false, false, false);
+
+            if (selectedAgent.getDaGra().getContracts() != null) {
+                for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
+
+                    calculateContractPosition(contract);
+
+                    //--------------------------------------------------
+
+                    for (CertSign certSign : contract.getSignedContracts()) {
+                        drawSignConnection(contract, certSign.getSigned(), Globals.Color$.$dagSignConnection_active, Globals.Color$.$dagSignConnection_expired);
+                    }
+
+                    for (CertVerify verifiedContract : contract.getVerifiedContracts()) {
+                        drawVerifyConnection(contract, verifiedContract.getVerified(), Globals.Color$.$dagVerifyConnection_active, Globals.Color$.$dagVerifyConnection_expired);
+                    }
+                }
+
+                for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
+                    drawContract(contract, 0);
+                }
+            }
+
+        }
+
+
+        //============================//============================//============================//============================ SIGN
+
+        if (showChartsFlag[1]) {
+            prepareChartPosition(1, true, false, false, false);
+            if (selectedAgent.getDaGra().getContracts() != null) {
+                for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
+
+                    calculateContractPosition(contract);
+
+                    //--------------------------------------------------
+
+                    for (CertSign certSign : contract.getSignedContracts()) {
+                        drawSignConnection(contract, certSign.getSigned(), Globals.Color$.$dagSignConnection_active, Globals.Color$.$dagSignConnection_expired);
+                    }
+                }
+
+                for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
+                    drawContract(contract, 1);
+                }
+            }
+        }
+
+
+        //============================//============================//============================//============================ VERIFY
+
+        if (showChartsFlag[2]) {
+            prepareChartPosition(2, true, false, false, false);
+            if (selectedAgent.getDaGra().getContracts() != null) {
+                for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
+
+                    calculateContractPosition(contract);
+
+                    //--------------------------------------------------
+
+                    for (CertVerify verifiedContract : contract.getVerifiedContracts()) {
+                        drawVerifyConnection(contract, verifiedContract.getVerified(), Globals.Color$.$dagVerifyConnection_active, Globals.Color$.$dagVerifyConnection_expired);
+                    }
+                }
+
+                for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
+                    drawContract(contract, 2);
+                }
+            }
+        }
 
     }
 }
