@@ -5,7 +5,7 @@
   "stateTargetCount": "#2..5",
   "pitfallCount": "20",
   "--------------------------------------------------3": "AGENT",
-  "agentsCount": "500",
+  "agentsCount": "400",
   "bunches": [
     {
       "_..................................................": "1",
@@ -74,8 +74,8 @@
       "trustRecommendationItemCap": "20",
       "_5": "-----------------------------------",
       "cert": {
-        "candidateCapPowerThreshold": 25,
-        "isUsedForDishonestAgents": true
+        "candidateCapPowerThreshold": 77,
+        "isUsedForDishonestAgents": false
       },
       "_6": "-----------------------------------",
       "behavior": {
@@ -91,7 +91,7 @@
     },
     {
       "_..................................................": "3",
-      "bunchCount": "250",
+      "bunchCount": "150",
       "targetCount": "300",
       "watchDepth": "#0..2",
       "watchListCap": "#50..100",

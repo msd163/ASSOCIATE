@@ -74,7 +74,7 @@
       "trustRecommendationItemCap": "20",
       "_5": "-----------------------------------",
       "cert": {
-        "candidateCapPowerThreshold": 25,
+        "candidateCapPowerThreshold": 40,
         "isUsedForDishonestAgents": true
       },
       "_6": "-----------------------------------",
