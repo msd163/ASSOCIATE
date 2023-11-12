@@ -2,7 +2,6 @@ package utils;
 
 import _type.TtBehaviorState;
 import _type.TtDiagramThemeMode;
-import _type.TtExecutionTarget;
 import simulateLayer.statistics.StatsEnvGenerator;
 import simulateLayer.statistics.StatsTrustGenerator;
 
@@ -26,8 +25,6 @@ public class Globals {
     public static final String SocietyDataFileName = SocietyDataFilePath.substring(SocietyDataFilePath.lastIndexOf("/"));
 
     public static final String SocietyDataSimProfileFilePath = ProjectPath.instance().societyDataSimPro();
-
-
 
 
     public static class ProfileBunchMax {
@@ -87,14 +84,21 @@ public class Globals {
 
         public static Color lightYellow = new Color(232, 223, 168);
         public static Color yellow = new Color(247, 255, 68);
+        public static Color darkYellow = new Color(122, 122, 0);
 
 
-        public static Color lightMagenta = new Color(224, 186, 223);
-        public static Color magenta = new Color(252, 72, 252);
-        public static Color darkMagenta = new Color(210, 52, 210);
-        public static Color darkMagenta1 = new Color(175, 42, 175);
-        public static Color darkMagenta2 = new Color(145, 7, 145);
-        public static Color darkMagenta3 = new Color(110, 3, 110);
+        public static Color lightMagenta = new Color(195, 123, 246);
+        public static Color magenta = new Color(172, 68, 252);
+        public static Color darkMagenta = new Color(148, 12, 255);
+        public static Color darkMagenta1 = new Color(101, 0, 175);
+        public static Color darkMagenta2 = new Color(87, 0, 147);
+        public static Color darkMagenta3 = new Color(60, 1, 101);
+
+        public static Color lightPink = new Color(255, 143, 246);
+        public static Color pink = new Color(255, 102, 245);
+        public static Color darkPink = new Color(255, 77, 243);
+        public static Color darkPink1 = new Color(255, 42, 239);
+        public static Color darkPink2 = new Color(206, 0, 190);
 
 
         public static Color lightOrange = new Color(255, 173, 0);
@@ -234,8 +238,26 @@ public class Globals {
         public static Color $curve_2 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? red : darkRed;
         public static Color $curve_3 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? magenta : darkMagenta;
         public static Color $curve_4 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? white : Color.blue;
-        public static Color $curve_5 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : Color.darkGray;
+        public static Color $curve_5 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightPink : darkPink2;
         public static Color $curve_6 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightOrange : darkOrange1;
+        public static Color $curve_7 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGreen : darkGreen1;
+        public static Color $curve_8 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightMagenta : darkMagenta2;
+        public static Color $curve_9 = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : darkYellow;
+
+        public static Color $dagSignConnection_active = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightRed : lightRed;
+        public static Color $dagSignConnection_expired = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray : darkGray;
+        public static Color $dagVerifyConnection_active = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGreen1 : darkGreen2;
+        public static Color $dagVerifyConnection_expired = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray : darkGray;
+
+        public static Color $dagContract_nc = Config.THEME_MODE == TtDiagramThemeMode.Dark ? gray : darkGray;
+        public static Color $dagContract_ex = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGray1 : darkGray;
+        public static Color $dagContract_rn = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightYellow : lightOrange;
+        public static Color $dagContract_rs = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : orange;
+        public static Color $dagContract_rv = Config.THEME_MODE == TtDiagramThemeMode.Dark ? yellow : orange;
+        public static Color $dagContract_an = Config.THEME_MODE == TtDiagramThemeMode.Dark ? lightGreen : darkGreen;
+        public static Color $dagContract_as = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen;
+        public static Color $dagContract_av = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGreen : darkGreen1;
+        public static Color $dagContract_aa = Config.THEME_MODE == TtDiagramThemeMode.Dark ? darkGreen1 : darkGreen2;
 
         public static Color $trustHonest = Config.THEME_MODE == TtDiagramThemeMode.Dark ? green : darkGreen1;
         public static Color $trustAdversary = red;
@@ -243,6 +265,10 @@ public class Globals {
     }
 
     public static Random RANDOM = new Random(new Date().getTime());
+
+    public static void RANDOM_RESEED() {
+        RANDOM = new Random(new Date().getTime());
+    }
 
     public static boolean PAUSE = false;
     public static boolean HIDE_ALL_DRAWING = !Config.DRAWING_WINDOWS_DEFAULT_PAINT_VISIBILITY;
@@ -277,7 +303,7 @@ public class Globals {
 
 
     public static void reset() {
-        RANDOM = new Random(new Date().getTime());
+        RANDOM_RESEED();
         EPISODE = 0;
         //-- Initializing the timer of the world.
         //-- Setting -1 for registering first history of travel time to -1;

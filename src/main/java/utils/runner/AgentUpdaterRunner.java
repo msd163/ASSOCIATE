@@ -83,7 +83,7 @@ public class AgentUpdaterRunner extends Thread {
                 // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
                 //todo: adding doing service capacity to agents as capacity param
                 // System.out.print(" | 1 > profile...");
-                //agent.updateProfile();
+                agent.updateProfile();
                 // System.out.print(" | 2 > watchList...");
                 agent.updateWatchList();
                 // System.out.print(" | 3 > nextStep...");

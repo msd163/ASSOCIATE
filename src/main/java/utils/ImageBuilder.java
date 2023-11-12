@@ -96,13 +96,13 @@ public class ImageBuilder {
                 w = 22000;
             }
 
-            int h = 2 * drawingWindow.getRealHeight();
+            int h = 2 * drawingWindow.getRealUpHeight();
             if (h > 12000) {
                 h = 12000;
             }
             BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = image.createGraphics();
-            graphics2D.translate(100, drawingWindow.getRealHeight());
+            graphics2D.translate(100, drawingWindow.getRealUpHeight());
             drawingWindow.paint(graphics2D);
 
             int worldId = drawingWindow.getWorldId();

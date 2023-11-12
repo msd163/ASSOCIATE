@@ -211,8 +211,9 @@ public class IntHypocriteCollaborationLineDrawingWindow extends DrawingWindow {
                 WorldStatistics[] statistics = world.getWdStatistics();
 
 
-                maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getStatisticsCollab().getAvgHypocriteTrustPerCollab100());
-
+                if( statistics[worldTimer - 1]!=null) {
+                    maxAxisY[1] = Math.max(maxAxisY[1], statistics[worldTimer - 1].getStatisticsCollab().getAvgHypocriteTrustPerCollab100());
+                }
 
                 prevPoints[3].y = (int) (0.1 * _vs * statistics[0].getStatisticsCollab().getAvgHypocriteTrustPerCollab100());
                 prevPoints[3].x

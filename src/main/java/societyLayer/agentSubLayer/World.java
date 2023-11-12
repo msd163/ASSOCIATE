@@ -298,7 +298,7 @@ public class World {
                     Agent agent = agents.get(i);
                     // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
                     //todo: adding doing service capacity to agents as capacity param
-                    // System.out.print(" | 1 > profile...");
+                    //System.out.print(" | 1 > profile...");
                     agent.updateProfile();
                     // System.out.print(" | 2 > watchList...");
                     agent.updateWatchList();
@@ -350,6 +350,7 @@ public class World {
 
 
             //============================//============================ DaGra processes
+
             /* Updating all contracts status and filling toBeSignedContracts and toBeVerifiedContracts lists  */
             if (
                     (
@@ -360,18 +361,18 @@ public class World {
                             && trustConfigItem.getCert().isIsUseDaGra()) {
                 System.out.println("> DaGra: updating status and list...");
 
-                Agent agentZero = null;
-                boolean isFirstAgentWithCertFound = false;
+                Agent baseCandidateAgent = null;                         // for saving the first agent that is candidate for certification, and its trust data is updated.
+                boolean isFirstCandidateAgentIsFoundAsBase = false;
                 for (int i = 0, agentsSize = agents.size(); i < agentsSize; i++) {
                     Agent agent = agents.get(i);
                     if (agent.getTrust().isHasCandidateForCertification()) {
                         if (Config.TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE) {
-                            if (!isFirstAgentWithCertFound) {
+                            if (!isFirstCandidateAgentIsFoundAsBase) {
                                 agent.getDaGra().updatingStatusAndList();
-                                isFirstAgentWithCertFound = true;
-                                agentZero = agent;
+                                isFirstCandidateAgentIsFoundAsBase = true;
+                                baseCandidateAgent = agent;
                             } else {
-                                agent.getDaGra().updatingStatusAndList(agentZero.getDaGra());
+                                agent.getDaGra().updatingStatusAndList(baseCandidateAgent.getDaGra());
                             }
                         } else {
                             agent.getDaGra().updatingStatusAndList();
@@ -379,7 +380,40 @@ public class World {
                     }
                 }
 
-                /* Creating a list for agents that have register request, and sent a certain request to the DaGra randomly*/
+                for (Agent selectedAgent : agents) {
+                    if (selectedAgent.getTrust().isHasCandidateForCertification()) {
+
+                        if (selectedAgent.getDaGra().getContracts() != null) {
+                            for (CertContract contract : selectedAgent.getDaGra().getContracts()) {
+                                if (contract.getStatus() == TtDaGraContractStatus.Request_New) {
+                                    wdStats.getStatisticsDagra().add_requestNewCount();
+                                } else if (contract.getStatus() == TtDaGraContractStatus.Request_Signing) {
+                                    wdStats.getStatisticsDagra().add_requestSingingCount();
+                                } else if (contract.getStatus() == TtDaGraContractStatus.Request_Verifying) {
+                                    wdStats.getStatisticsDagra().add_requestVerifyingCount();
+                                } else if (contract.getStatus() == TtDaGraContractStatus.Accept_New) {
+                                    wdStats.getStatisticsDagra().add_acceptNewCount();
+                                } else if (contract.getStatus() == TtDaGraContractStatus.Accept_Signing) {
+                                    wdStats.getStatisticsDagra().add_acceptSigningCount();
+                                } else if (contract.getStatus() == TtDaGraContractStatus.Accept_Verifying) {
+                                    wdStats.getStatisticsDagra().add_acceptVerifyingCount();
+                                } else if (contract.getStatus() == TtDaGraContractStatus.Accept_Accept) {
+                                    wdStats.getStatisticsDagra().add_acceptAcceptCount();
+                                } else if (contract.getStatus() == TtDaGraContractStatus.Expired) {
+                                    if (!contract.isIsOldExpired()) {
+                                        wdStats.getStatisticsDagra().add_expiredContractCount();
+                                        contract.setIsOldExpired(true);
+                                    }
+                                } else if (contract.getStatus() == TtDaGraContractStatus.NoContract) {
+                                    wdStats.getStatisticsDagra().add_noContractCount();
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                /* Creating a list for agents that have registration request, and sent a certain request to the DaGra randomly*/
                 /* If the request period has arrived */
                 if ((Globals.WORLD_TIMER + 1) % trustConfigItem.getCert().getCertRequestPeriodTime_DaGra() == 0) {
                     System.out.println("> DaGra: sending new requests...");
@@ -402,6 +436,7 @@ public class World {
                                         <= trustConfigItem.getCert().getNumberOfCertRequestInEachPeriod_DaGra()) {
 
                             /* Selecting a requester randomly */
+                            //todo: IDEA: adding a random algorithm for selecting 'NumberOfCertRequestInEachPeriod_DaGra' agents randomly.
                             int nextInt = Globals.RANDOM.nextInt(registerRequestList.size());
                             Agent selectedAgent = registerRequestList.remove(nextInt);
                             /* Sending a request to DaGra */

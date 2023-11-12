@@ -134,11 +134,17 @@ public class DaGra {
 
     //============================//============================//============================
 
+    //todo: this function has error and does not work correctly
+    @Deprecated
     public void updatingStatusAndList(DaGra daGra) {
-        toBeSignedContracts.clear();
+
+      /*  toBeSignedContracts.clear();
         toBeVerifiedContracts.clear();
         toBeSignedContracts.addAll(daGra.getToBeSignedContracts());
-        toBeVerifiedContracts.addAll(daGra.getToBeVerifiedContracts());
+        toBeVerifiedContracts.addAll(daGra.getToBeVerifiedContracts());*/
+
+        // for operating correctly in the function, now, we have used the main function instead of optimized one.
+        updatingStatusAndList();
     }
 
     public void updatingStatusAndList() {
@@ -171,7 +177,7 @@ public class DaGra {
         switch (status) {
             case NoContract:
             case Expired:
-                // For these statues, process will be done in World main loop.
+                // For these statues, the DaGra process will be done in the World main loop.
                 break;
             case Request_New:
             case Request_Signing:
@@ -354,7 +360,11 @@ public class DaGra {
 
         /* If there is no contract to be signed, the Genesis contract will be signed */
         if (toBeSignedContracts.size() == 0) {
-            return performSign(genesis, 1.0f);
+            if (Globals.WORLD_TIMER < world.getSimulationConfig().getCert().getExpiredTimeOfCert_DaGra() * 5) {
+                OutLog____.pl("$$> performSign(genesis, 1.0f) by " + owner.getId());
+                return performSign(genesis, 1.0f);
+            }
+            return false;
         }
 
         boolean isSignedPreviously;
@@ -386,6 +396,11 @@ public class DaGra {
                 continue;
             }
 
+            /* 1-1 For preventing signing the contracts requested after this contract (MY) */
+            if (contract.getRequestTime() >= my.getRequestTime()) {
+                continue;
+            }
+
             float trustValue = world.getTrustManager().getTrustValue(owner, contract.getRequester());
 
 
@@ -395,6 +410,7 @@ public class DaGra {
                 if (trustValue != 0.0f) {
 
                     //HONEST BEHAVES: There is no cycle in the signed graphs
+                    //todo: now, only the cycles that are created in presence of this contract (my) is checked. here, all kind of cycles have to be checked and identified.
                     List<CertContract> openList = new ArrayList<>();
                     openList.add(contract);
                     boolean isFindCycle;
@@ -453,6 +469,11 @@ public class DaGra {
                 continue;
             }
 
+            /* 1-1 For preventing verifying the contracts requested after this contract (MY) */
+            if (contract.getRequestTime() >= my.getRequestTime()) {
+                continue;
+            }
+
             /* 2-  For checking if selected contract is verified previously via this contract */
             isVerifiedPreviously = false;
             for (CertVerify verify : my.getVerifiedContracts()) {
@@ -477,6 +498,21 @@ public class DaGra {
             if (isItsOwn) {
                 //   continue;
             }
+
+            /* 3-1 For preventing verifying the signed contract by itself */
+            //todo: preventing for same verifying and signing: no agent can sign and verify a same contract
+          /*  boolean isItsOwn = false;
+            for (CertSign sign : contract.getSigns()) {
+                if (sign.getSigner().getId() == my.getId()) {
+                    isItsOwn = true;
+                    break;
+                }
+            }
+            if (isItsOwn) {
+                //   continue;
+            }*/
+
+
 
             /* 4- Checking sings of the contract do not expired */
             boolean isInvalid = false;

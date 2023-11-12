@@ -59,6 +59,7 @@ public class WorldStatistics {
 
     private WorldStatisticsCollaboration statisticsCollab;
     private WorldStatisticsHypo statisticsHypo;
+    private WorldStatisticsDagra statisticsDagra;
 
     //============================
 
@@ -99,6 +100,10 @@ public class WorldStatistics {
         this.statisticsCollab = new WorldStatisticsCollaboration(
                 xPrevStats == null ? null : xPrevStats.getStatisticsCollab(),
                 prevStats == null ? null : prevStats.getStatisticsCollab()
+        );
+        this.statisticsDagra = new WorldStatisticsDagra(
+                xPrevStats == null ? null : xPrevStats.getStatisticsDagra(),
+                prevStats == null ? null : prevStats.getStatisticsDagra()
         );
 
         this.prevStats = prevStats;
@@ -145,6 +150,7 @@ public class WorldStatistics {
 
             statisticsHypo.init(prevStats.getStatisticsHypo());
             statisticsCollab.init(prevStats.getStatisticsCollab());
+            statisticsDagra.init(prevStats.getStatisticsDagra());
 
         } else {
 
@@ -169,6 +175,11 @@ public class WorldStatistics {
             statisticsCollab = new WorldStatisticsCollaboration(
                     xPrevStats == null ? null : xPrevStats.getStatisticsCollab(),
                     prevStats == null ? null : prevStats.getStatisticsCollab()
+            );
+
+            statisticsDagra = new WorldStatisticsDagra(
+                    xPrevStats == null ? null : xPrevStats.getStatisticsDagra(),
+                    prevStats == null ? null : prevStats.getStatisticsDagra()
             );
 
         }
@@ -355,6 +366,7 @@ public class WorldStatistics {
         this.worldTime = worldTime;
         statisticsHypo.setWorldTime(worldTime);
         statisticsCollab.setWorldTime(worldTime);
+        statisticsDagra.setWorldTime(worldTime);
     }
 
     public int getAllAgentsInTarget() {
@@ -633,5 +645,9 @@ public class WorldStatistics {
 
     public WorldStatisticsCollaboration getStatisticsCollab() {
         return statisticsCollab;
+    }
+
+    public WorldStatisticsDagra getStatisticsDagra() {
+        return statisticsDagra;
     }
 }

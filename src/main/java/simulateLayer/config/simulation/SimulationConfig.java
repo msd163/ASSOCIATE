@@ -19,6 +19,7 @@ public class SimulationConfig {
     private int statisticsAverageTimeWindow;
     private int statisticsAverageTimeWindowForResistance;
     private int statisticsAverageTimeWindowForCollaboration;
+    private int statisticsAverageTimeWindowForDominance;
     private int statisticsAverageTimeWindowForRoc;
     private int statisticsHypocriteDiagnosisThreshold;
     private int statisticsHypocriteResistanceCount;
@@ -55,6 +56,7 @@ public class SimulationConfig {
 
     private boolean drawingShowRecommendationBarDrawingWindow;
 
+    private boolean drawingShowDagGraphDrawingWindow;
 
     private boolean intDrawingShowIntTravelStatsLinearDrawingWindow;
     private boolean intDrawingShowIntTrustAnalysisLinearDrawingWindow;
@@ -65,6 +67,8 @@ public class SimulationConfig {
     private boolean intDrawingShowHypocriteCollaborationLinearDrawingWindow;
     private boolean intDrawingShowResistanceLinearDrawingWindow;
     private boolean intDrawingShowFluctuationLinearDrawingWindow;
+    private boolean intDrawingShowDominanceLinearDrawingWindow;
+    private boolean intDrawingShowDagraStatLinearDrawingWindow;
 
 
     private boolean statisticsIsGenerate;
@@ -91,6 +95,10 @@ public class SimulationConfig {
 
     public int getStatisticsAverageTimeWindowForCollaboration() {
         return statisticsAverageTimeWindowForCollaboration;
+    }
+
+    public int getStatisticsAverageTimeWindowForDominance() {
+        return statisticsAverageTimeWindowForDominance;
     }
 
     public int getStatisticsAverageTimeWindowForRoc() {
@@ -185,6 +193,10 @@ public class SimulationConfig {
         return drawingShowRecommendationBarDrawingWindow;
     }
 
+    public boolean isDrawingShowDagGraphDrawingWindow() {
+        return drawingShowDagGraphDrawingWindow;
+    }
+
     public boolean isIntDrawingShowIntTravelStatsLinearDrawingWindow() {
         return intDrawingShowIntTravelStatsLinearDrawingWindow;
     }
@@ -219,6 +231,14 @@ public class SimulationConfig {
 
     public boolean isIntDrawingShowFluctuationLinearDrawingWindow() {
         return intDrawingShowFluctuationLinearDrawingWindow;
+    }
+
+    public boolean isIntDrawingShowDominanceLinearDrawingWindow() {
+        return intDrawingShowDominanceLinearDrawingWindow;
+    }
+
+    public boolean isIntDrawingShowDagraStatLinearDrawingWindow() {
+        return intDrawingShowDagraStatLinearDrawingWindow;
     }
 
     public boolean isStatisticsIsGenerate() {

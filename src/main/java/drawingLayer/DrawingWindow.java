@@ -34,6 +34,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     protected int dynamicHeight = 0;
     protected int widthOfInfo = 0;
     protected int maxAxisY[];       // For holding maximum Y value of each chart
+    protected int minAxisY[];       // For holding minimum Y value of each chart
 
     protected int _hs = 8; // For adding space to charts horizontally
     protected int _vs = 10; // For adding space to charts vertically
@@ -114,6 +115,9 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
         maxAxisY = new int[3];
         Arrays.fill(maxAxisY, 0);
+
+        minAxisY = new int[3];
+        Arrays.fill(minAxisY, 0);
 
         //============================//============================
         addMouseListener(
@@ -286,7 +290,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
                                 break;
                             case (int) 'A':
-                                pnOffset.y = -getRealHeight(0);
+                                pnOffset.y = -getRealUpHeight(0);
                                 pnOffset.x = 0;
 
                                 break;
@@ -489,14 +493,14 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         g = (Graphics2D) gr;
 
         // antialiasing for curves
-        if(isAntialiasCurve) {
+        if (isAntialiasCurve) {
             g.setRenderingHint(
                     RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
         }
 
-        if(isAntialiasText) {
+        if (isAntialiasText) {
             // antialiasing for text
             g.setRenderingHint(
                     RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -553,7 +557,8 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
 
     protected void drawAxisX(int index) {
         int realWith = getRealWith();
-        int realHeight = getRealHeight(index);
+        int realUpHeight = getRealUpHeight(index);
+        int realDownHeight = getRealDownHeight(index);
 
         g.setColor(Globals.Color$.$axis);
         g.drawLine(0, 0, realWith, 0);
@@ -567,23 +572,24 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                     if (verticalGridCount % verticalGridLineScaleInAxisX == 0) {
 //                        if (_hs > 20 || (_hs > 10 && i % (10 * _hs) == 0) || (_hs > 5 && i % (20 * _hs) == 0) || (_hs > 1 && i % (40 * _hs) == 0) || i % (80 * _hs) == 0) {
                         g.scale(1, -1);
-                        g.drawString(x + "", i - (axisNumberFontSize / 2), axisNumberFontSize);
+                        g.drawString(x + "", i - (axisNumberFontSize / 2), (int) (1.2 * axisNumberFontSize));
                         g.scale(1, -1);
 //                        }
                         g.drawLine(i, -5, i, 5);
                         g.setColor(Globals.Color$.$axisSplit);
-                        g.drawLine(i, 5, i, realHeight);
+                        g.drawLine(i, -realDownHeight, i, realUpHeight);
                     }
                     verticalGridCount++;
                 } else if (i % (5 * _hs) == 0) {
                     g.drawLine(i, -3, i, 1);
                     if (verticalGridCount % verticalGridLineScaleInAxisX == 0) {
                         g.setColor(Globals.Color$.$axisSplit2);
-                        g.drawLine(i, 5, i, realHeight);
+                        g.drawLine(i, -realDownHeight, i, realUpHeight);
                     }
                     verticalGridCount++;
                 } else if (_hs > 1) {
-                    g.drawLine(i, 0, i, 1);
+                    g.drawLine(i, 0,
+                            i, 1);
                 }
             }
         }
@@ -592,14 +598,18 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     private static final DecimalFormat decimalFormat = new DecimalFormat();
 
     protected void drawDiameter(int index) {
-        int realHeight = getRealHeight(index);
+        int realHeight = getRealUpHeight(index);
         int realWith = (maxAxisY[0] + 10) * _hs;
         g.drawLine(0, 0, realWith, realHeight);
 
     }
 
-    protected int getRealHeight(int diagramIndex) {
-        return (int) ((maxAxisY[diagramIndex] + 100) * 0.1 * _vs);
+    protected int getRealUpHeight(int diagramIndex) {
+        return maxAxisY[diagramIndex] == 0 ? 0 : (int) ((maxAxisY[diagramIndex] + 100) * 0.1 * _vs);
+    }
+
+    protected int getRealDownHeight(int diagramIndex) {
+        return minAxisY[diagramIndex] == 0 ? 0 : (int) ((-minAxisY[diagramIndex] + 100) * 0.1 * _vs);
     }
 
     /**
@@ -608,48 +618,77 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
      * @param chartIndex indicated the index of chart in the one drawing windows
      */
     protected void prepareChartPosition(int chartIndex) {
-        g.translate(0, -getRealHeight(chartIndex) - 100);
+        g.translate(0, -getRealUpHeight(chartIndex) - 100);
         loAxisX = 0;
 
         drawAxisX(chartIndex);
         drawAxisY(chartIndex);
     }
 
-    protected void drawAxisY(int index) {
-        int realHeight = getRealHeight(index);
+    private void drawAxisY(int minLength, int maxLength, int bigSplitter, int littleSplitter, int labelStep) {
         g.setColor(Globals.Color$.$axis);
-        g.drawLine(0, 0, 0, realHeight);
+        g.drawLine(0, minLength, 0, maxLength);
         g.setFont(new Font("TimesRoman", Font.PLAIN, axisNumberFontSize));
-        for (int i = 0, x = 0, z = 0; i < realHeight; i += _vs, x++, z += 10) {
+        for (int i = 0, z = 0; i < maxLength; i += _vs, z += 10) {
             g.setColor(Globals.Color$.$axis);
-            if (x > 0) {
-                if (_vs > 60 || i % 5 == 0) {
-                    if (_vs > 60
-                            || (_vs > 40 && x % 2 == 0)
-                            || (_vs > 15 && _vs <= 40 && x % (5) == 0)
-                            || (_vs > 5 && _vs <= 15 && x % (10) == 0)
-                            || (_vs > 2 && _vs <= 5 && x % (20) == 0)
-                            || (_vs > 0 && _vs <= 2 && x % (50) == 0)
-                    ) {
-                        g.scale(1, -1);
-                        g.drawString((z * axisYScale) > 1 ? ((int) (z * axisYScale) + "") : (decimalFormat.format(z * axisYScale)),
-                                (z * axisYScale >= 10000 ? -3 * axisNumberFontSize : z * axisYScale >= 1000 ? (int) (-2.5 * axisNumberFontSize) : -2 * axisNumberFontSize), -i + (axisNumberFontSize / 7));
-                        g.scale(1, -1);
-                        g.drawLine(-8, i, 5, i);
-                        g.setColor(Globals.Color$.$axisSplit);
-                        g.drawLine(5, i, getRealWith(), i);
-                    } else {
-                        g.drawLine(-4, i, 5, i);
-                    }
-                } else if (_vs > 1 && i % (5 * _vs) == 0) {
-                    g.drawLine(-3, i, 1, i);
-                    g.setColor(Globals.Color$.$axisSplit2);
-                    g.drawLine(5, i, getRealWith(), i);
-                } else if (_vs > 3) {
-                    g.drawLine(0, i, 1, i);
-                }
+
+            if (i % bigSplitter == 0) {
+                g.drawLine(-8, i, 9, i);
+            } else if (i % littleSplitter == 0) {
+                g.drawLine(-5, i, 5, i);
+            }
+            if (i % labelStep == 0) {
+                g.scale(1, -1);
+                double yValue = z * axisYScale;
+
+                int xPosOfString =
+                        (yValue >= 10000 ? -5 * axisNumberFontSize
+                                : yValue >= 1000 ? (int) (-3.1 * axisNumberFontSize)
+                                : yValue >= 100 ? (int) (-2.7 * axisNumberFontSize)
+                                : yValue >= 10 ? (int) (-2.0 * axisNumberFontSize)
+                                : yValue >= 1 ? (int) (-1.3 * axisNumberFontSize)
+                                : (int) (-1.9 * axisNumberFontSize)
+                        );
+
+                g.drawString(yValue > 1 ? ((int) (yValue) + "") : decimalFormat.format(yValue),
+                        xPosOfString,
+                        -i + (axisNumberFontSize / 7));
+                g.scale(1, -1);
             }
         }
+
+
+        for (int i = -_vs, z = 10; i > minLength; i -= _vs, z += 10) {
+            g.setColor(Globals.Color$.$axis);
+
+            if (i % bigSplitter == 0) {
+                g.drawLine(-8, i, 9, i);
+            } else if (i % littleSplitter == 0) {
+                g.drawLine(-5, i, 5, i);
+            }
+            if (i % labelStep == 0) {
+                g.scale(1, -1);
+                double yValue = z * axisYScale;
+
+                int xPosOfString =
+                        (yValue >= 10000 ? (int) (-3.5 * axisNumberFontSize)
+                                : yValue >= 1000 ? (int) (-2.9 * axisNumberFontSize)
+                                : yValue >= 100 ? (int) (-2.7 * axisNumberFontSize)
+                                : yValue >= 10 ? (int) (-2.2 * axisNumberFontSize)
+                                : yValue >= 1 ? (int) (-1.8 * axisNumberFontSize)
+                                : (int) (-2.2 * axisNumberFontSize)
+                        );
+
+                g.drawString(yValue > 1 ? ((int) (-yValue) + "") : (decimalFormat.format(-yValue)),
+                        xPosOfString,
+                        -i + (axisNumberFontSize / 7));
+                g.scale(1, -1);
+            }
+        }
+    }
+
+    protected void drawAxisY(int index) {
+        drawAxisY(-getRealDownHeight(index), getRealUpHeight(index), 100, 10, 50);
     }
     //============================//============================//============================
 
@@ -807,7 +846,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     BasicStroke lineThicknessObj_1 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-    BasicStroke lineThicknessObj_x = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+    protected BasicStroke lineThicknessObj_x = new BasicStroke(lineThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 
     public void drawLine(int fromX, int fromY, int toX, int toY, int roundIndex, int curveIndex) {
         if (tempPrevFromX[curveIndex] == -999 || roundIndex < 2) {
@@ -823,6 +862,40 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
         }
         g.setStroke(lineThicknessObj_1);
 
+    }
+
+    public void drawDottedLine(int fromX, int fromY, int toX, int toY, int gap) {
+
+        int diffX = toX - fromX;
+        int diffY = toY - fromY;
+
+        float gapX, gapY;
+        float splitCount;
+
+        if (diffX < diffY) {
+            gapX = gap;
+            splitCount = (float) diffX / (gap);
+            gapY = diffY / (splitCount == 0 ? 1 : splitCount);
+        } else {
+            gapY = gap;
+            splitCount = (float) diffY / (gap);
+            gapX = diffX / (splitCount == 0 ? 1 : splitCount);
+        }
+
+
+        int currentX = fromX, currentY = fromY;
+
+        for (int cnt = 0; cnt < splitCount * 2; cnt++) {
+            if (currentX > toX || currentY > toY) {
+                currentX = toX;
+                currentY = toY;
+            }
+
+            g.drawOval(currentX, currentY, 1, 1);
+
+            currentX += gapX;
+            currentY += gapY;
+        }
     }
 
     //============================//============================
@@ -857,7 +930,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
     }
 
     @Deprecated
-    public int getRealHeight() {
+    public int getRealUpHeight() {
         return (axisY > 0 || g.getTransform() == null) ? axisY + 1500 : (int) g.getTransform().getTranslateY() + 200;//axisY;
 
     }

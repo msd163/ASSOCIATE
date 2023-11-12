@@ -134,17 +134,17 @@ public class Agent {
     public void initVars() {
         trust.
                 setTrustParams(
-                capacity.getExperienceCap(),
-                capacity.getExperienceItemCap(),
-                capacity.getIndirectExperienceCap(),
-                capacity.getIndirectExperienceItemCap(),
-                capacity.getObservationCap(),
-                capacity.getObservationItemCap(),
-                capacity.getIndirectObservationCap(),
-                capacity.getIndirectObservationItemCap(),
-                capacity.getTrustRecommendationCap(),
-                capacity.getTrustRecommendationItemCap()
-        );
+                        capacity.getExperienceCap(),
+                        capacity.getExperienceItemCap(),
+                        capacity.getIndirectExperienceCap(),
+                        capacity.getIndirectExperienceItemCap(),
+                        capacity.getObservationCap(),
+                        capacity.getObservationItemCap(),
+                        capacity.getIndirectObservationCap(),
+                        capacity.getIndirectObservationItemCap(),
+                        capacity.getTrustRecommendationCap(),
+                        capacity.getTrustRecommendationItemCap()
+                );
 
         trust.init(this);
 
@@ -200,7 +200,7 @@ public class Agent {
     public void updateTravelHistory() {
 
         int size = travelHistories.size();
-        // If the agent do not moved and it's state doesnt changed, only the visit time will to be updated.
+        // If the agent do not moved and it's state doesn't changed, only the visit time will to be updated.
         if (size > 0 && travelHistories.get(size - 1).getStateX().getId() == state.getId()) {
             travelHistories.get(size - 1).updateVisitTime();
             return;
@@ -390,7 +390,7 @@ public class Agent {
     public boolean isAgentInWatchList(Agent agent) {
         try {
             for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
-                if (watchedAgents.get(i).getAgent().getId() == agent.getId()) {
+                if (watchedAgents.get(i) != null && watchedAgents.get(i).getAgent().getId() == agent.getId()) {
                     return true;
                 }
             }

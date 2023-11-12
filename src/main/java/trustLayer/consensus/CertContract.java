@@ -21,10 +21,16 @@ public class CertContract {
             this.id = id;
         }
         acceptTime = -1;
+        lastUpdateTime = Globals.WORLD_TIMER;
         this.expireTimeRange = expireTimeRange;
         this.status = TtDaGraContractStatus.NoContract;
+        this.isOldExpired = false;
     }
 
+    //=======================================================
+    int drawX;
+    int drawY;
+    //=======================================================
     private int dagraId;
 
     private final int id;
@@ -39,6 +45,8 @@ public class CertContract {
     /* The time that this certification status is Accept_Accept */
     private int acceptTime;
 
+    /* when the state of the contract is changed, this time will be updated by the current time */
+    private int lastUpdateTime;
     /* The time range that the certification will be expired  */
     private int expireTimeRange;
 
@@ -61,15 +69,20 @@ public class CertContract {
     private TtDaGraContractStatus status;
 
     private float finalTrustValue;
+
+    private boolean isOldExpired;
     //============================//============================//============================
 
     public boolean isExpired() {
-        return acceptTime > -1 && (Globals.WORLD_TIMER - acceptTime) >= expireTimeRange;
+        if (status == TtDaGraContractStatus.Accept_Accept)
+            return (Globals.WORLD_TIMER - lastUpdateTime) >= expireTimeRange;
+        else
+            return ( status ==  TtDaGraContractStatus.Expired) || (Globals.WORLD_TIMER - lastUpdateTime) >= (expireTimeRange * 4);
     }
 
 
     public TtDaGraContractStatus updateStatus(TrustConfigItem simulationConfig) {
-
+        TtDaGraContractStatus prevStat = status;
         if (isGenesis) {
             status = TtDaGraContractStatus.Accept_Accept;
             return status;
@@ -91,11 +104,13 @@ public class CertContract {
 
         if (signedContractCount == 0) {
             status = TtDaGraContractStatus.Request_New;
+            lastUpdateTime = (status == prevStat) ? lastUpdateTime : Globals.WORLD_TIMER;
             return status;
         }
 
         if (signedContractCount < simulationConfig.getCert().getNumberOfCertToBeSigned_DaGra()) {
             status = TtDaGraContractStatus.Request_Signing;
+            lastUpdateTime = (status == prevStat) ? lastUpdateTime : Globals.WORLD_TIMER;
             return status;
         }
 
@@ -104,6 +119,7 @@ public class CertContract {
 
         if (verifiedContractCount < simulationConfig.getCert().getNumberOfCertToBeVerified_DaGra()) {
             status = TtDaGraContractStatus.Request_Verifying;
+            lastUpdateTime = (status == prevStat) ? lastUpdateTime : Globals.WORLD_TIMER;
             return status;
         }
 
@@ -123,6 +139,7 @@ public class CertContract {
 
         if (validSignCount == 0) {
             status = TtDaGraContractStatus.Accept_New;
+            lastUpdateTime = (status == prevStat) ? lastUpdateTime : Globals.WORLD_TIMER;
             return status;
         }
         /* Calculating finalTrustValue */
@@ -130,6 +147,7 @@ public class CertContract {
 
         if (validSignCount < simulationConfig.getCert().getNumberOfNeededSing_DaGra()) {
             status = TtDaGraContractStatus.Accept_Signing;
+            lastUpdateTime = (status == prevStat) ? lastUpdateTime : Globals.WORLD_TIMER;
             return status;
         }
 
@@ -138,12 +156,13 @@ public class CertContract {
 
         if (verifiesCount < simulationConfig.getCert().getNumberOfNeededVerify_DaGra()) {
             status = TtDaGraContractStatus.Accept_Verifying;
+            lastUpdateTime = (status == prevStat) ? lastUpdateTime : Globals.WORLD_TIMER;
             return status;
         }
 
         //============================//============================ Accept Stage: Checking 'Accept' status
         status = TtDaGraContractStatus.Accept_Accept;
-
+        lastUpdateTime = (status == prevStat) ? lastUpdateTime : Globals.WORLD_TIMER;
         return status;
     }
 
@@ -274,8 +293,32 @@ public class CertContract {
         this.expireTimeRange = expireTimeRange;
     }
 
+    public boolean isIsOldExpired() {
+        return isOldExpired;
+    }
+
+    public void setIsOldExpired(boolean oldExpired) {
+        isOldExpired = oldExpired;
+    }
+
     public void setFinalTrustValue(float finalTrustValue) {
         this.finalTrustValue = finalTrustValue;
+    }
+
+    public int getDrawX() {
+        return drawX;
+    }
+
+    public void setDrawX(int drawX) {
+        this.drawX = drawX;
+    }
+
+    public int getDrawY() {
+        return drawY;
+    }
+
+    public void setDrawY(int drawY) {
+        this.drawY = drawY;
     }
 
     public void destroy() {

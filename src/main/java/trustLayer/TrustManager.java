@@ -14,7 +14,6 @@ import utils.Globals;
 import utils.OutLog____;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TrustManager {
@@ -44,20 +43,33 @@ public class TrustManager {
         }
 
         List<WatchedAgent> watchedAgents = verifier.getWatchedAgents();
-        for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
-            WatchedAgent watchedAgent = watchedAgents.get(i);
-            // For preventing request from the agent that we want to verify it.
-            if (watchedAgent == null || watchedAgent.getAgent().getId() == toBeVerified.getId()) {
-                continue;
+        if (trustConfigItem.getCert().getIsUseAllDagraAgentToVerify_DaGra()) {
+            for (Agent agent : verifier.getWorld().getAgents()) {
+                if (agent.getDaGra() != null && agent.getDaGra().getMy() != null) {
+                    //todo:
+                    return agent.getDaGra().getValidCertificationTrustValue(toBeVerified);
+                }
             }
+        } else {
+            for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
+                try {
+                    WatchedAgent watchedAgent = watchedAgents.get(i);
+                    // For preventing request from the agent that we want to verify it.
+                    if (watchedAgent == null || watchedAgent.getAgent().getId() == toBeVerified.getId()) {
+                        continue;
+                    }
 
-            //if (verifier.getTrust().getTrustAbstracts()[watchedAgent.getAgent().getIndex()].getTrustValue() > 0) {
-            if (watchedAgent.getAgent().getDaGra() != null) {
-                //todo: it is need to check other agents with DaGra if current agent has no validity info . Continuing for loop
+                    //if (verifier.getTrust().getTrustAbstracts()[watchedAgent.getAgent().getIndex()].getTrustValue() > 0) {
+                    if (watchedAgent.getAgent().getDaGra() != null) {
+                        //todo: it is need to check other agents with DaGra if current agent has no validity info . Continuing for loop
 //                    System.out.println("------------>>>> Verifier: " + watchedAgent.getAgent().getId());
-                return watchedAgent.getAgent().getDaGra().getValidCertificationTrustValue(toBeVerified);
+                        return watchedAgent.getAgent().getDaGra().getValidCertificationTrustValue(toBeVerified);
+                    }
+                }catch (Exception e){
+
+                }
+                //}
             }
-            //}
         }
 
         return null;

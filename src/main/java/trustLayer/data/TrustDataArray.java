@@ -2,9 +2,6 @@ package trustLayer.data;
 
 import _type.TtTrustReplaceMethod;
 import societyLayer.agentSubLayer.Agent;
-import societyLayer.agentSubLayer.WatchedAgent;
-
-import java.util.List;
 
 public class TrustDataArray {
 
@@ -136,7 +133,7 @@ public class TrustDataArray {
         return -1;
     }
 
-    public  void add(TrustData trustData) {
+    public void add(TrustData trustData) {
 
         if (length <= 0 || array == null) {
             return;
@@ -144,11 +141,13 @@ public class TrustDataArray {
 
         currentIndex = getIndexToBeSet();
 
-        if (array[currentIndex] != null) {
-            array[currentIndex].destroy();
-            array[currentIndex] = null;
+        if (currentIndex < array.length) {
+            if (array[currentIndex] != null) {
+                array[currentIndex].destroy();
+                array[currentIndex] = null;
+            }
+            array[currentIndex] = trustData;
         }
-        array[currentIndex] = trustData;
     }
 
 

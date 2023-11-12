@@ -26,6 +26,7 @@ public class Config {
     public static int STATISTICS_AVERAGE_TIME_WINDOW;
     public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE;
     public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION;
+    public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_DOMINANCE;
     public static int STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC;
 
     public static int STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD;               // After a number of fluctuation (this threshold) in scores (saved in descending normalized list: [L'']), the agent labeled as Hypocrite
@@ -68,6 +69,8 @@ public class Config {
 
     public static boolean DRAWING_SHOW_recommendationBarDrawingWindow;
 
+    public static boolean DRAWING_SHOW_dagGraphDrawingWindow;
+
     //============================ Integrated Drawing Windows in Simulation Rounds
 
     public static boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow;
@@ -79,6 +82,8 @@ public class Config {
     public static boolean INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_ResistanceLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_FluctuationLinearDrawingWindow;
+    public static boolean INT_DRAWING_SHOW_DominanceLinearDrawingWindow;
+    public static boolean INT_DRAWING_SHOW_DagStatLinearDrawingWindow;
 
     //============================ Statistics
     public static boolean STATISTICS_IS_GENERATE;
@@ -100,7 +105,9 @@ public class Config {
                         || Config.DRAWING_SHOW_indirectExperienceBarDrawingWindow
                         || Config.DRAWING_SHOW_observationBarDrawingWindow
                         || Config.DRAWING_SHOW_indirectObservationBarDrawingWindow
-                        || Config.DRAWING_SHOW_recommendationBarDrawingWindow;
+                        || Config.DRAWING_SHOW_recommendationBarDrawingWindow
+                        || Config.DRAWING_SHOW_dagGraphDrawingWindow
+                ;
     }
 
     public static boolean INT_DRAWING_SHOW_ENABLED() {
@@ -113,7 +120,10 @@ public class Config {
                         || INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow
                         || INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow
                         || INT_DRAWING_SHOW_ResistanceLinearDrawingWindow
-                        || INT_DRAWING_SHOW_FluctuationLinearDrawingWindow;
+                        || INT_DRAWING_SHOW_FluctuationLinearDrawingWindow
+                        || INT_DRAWING_SHOW_DominanceLinearDrawingWindow
+                        || INT_DRAWING_SHOW_DagStatLinearDrawingWindow
+                ;
 
     }
 

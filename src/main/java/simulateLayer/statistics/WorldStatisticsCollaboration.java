@@ -19,6 +19,10 @@ public class WorldStatisticsCollaboration {
                 = allTrustToHypocriteInRound
                 = 0;
 
+        allHonestDominanceToDishonestCollaborationInRound
+                = allHonestWithDishonestCollaborationInRound
+                = 0;
+
 
     }
 
@@ -31,6 +35,8 @@ public class WorldStatisticsCollaboration {
         allHypocriteCollaborationInRound = hypo.allHypocriteCollaborationInRound;
         allTrustToHypocriteInRound = hypo.allTrustToHypocriteInRound;
 
+        allHonestWithDishonestCollaborationInRound = hypo.allHonestWithDishonestCollaborationInRound;
+        allHonestDominanceToDishonestCollaborationInRound = hypo.allHonestDominanceToDishonestCollaborationInRound;
     }
 
     private final WorldStatisticsCollaboration xPrevStatCollab;
@@ -44,21 +50,28 @@ public class WorldStatisticsCollaboration {
     private int allHypocriteCollaborationInRound;
     private int allTrustToHypocriteInRound;
 
+    private int allDishonestCollaborationInRound;
+
+    private int allHonestWithDishonestCollaborationInRound;
+
+    private int allHonestDominanceToDishonestCollaborationInRound;
+
+    private float dominanceInRound;
 
     private int worldTime;
 
     //============================//============================
-    private int calcAverage(int coeff, int currentVal, Integer xPrevVal) {
+    private int calcAverage(int coeff, int currentVal, Integer xPrevVal, int average) {
 
         if (xPrevVal == null) {
             return (int) ((float) currentVal / (worldTime == 0 ? 1 : worldTime));
         } else {
-            return (int) ((coeff) * (float) (currentVal - xPrevVal) / Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
+            return (int) ((coeff) * (float) (currentVal - xPrevVal) / average);
         }
     }
 
-    private int calcAverage(int currentVal, Integer xPrevVal) {
-        return calcAverage(1, currentVal, xPrevVal);
+    private int calcAverage(int currentVal, Integer xPrevVal, int average) {
+        return calcAverage(1, currentVal, xPrevVal, average);
     }
 
     //============================//============================//============================
@@ -76,6 +89,24 @@ public class WorldStatisticsCollaboration {
     //============================//============================
     public void add_allHonestCollaborationInRound() {
         allHonestCollaborationInRound++;
+    }
+
+    public void add_allDishonestCollaborationInRound() {
+        allDishonestCollaborationInRound++;
+    }
+
+    public void add_allHonestWithDishonestCollaborationInRound() {
+        allHonestWithDishonestCollaborationInRound++;
+//        dominanceInRound = (((float) allHonestDominanceToDishonestCollaborationInRound / allHonestWithDishonestCollaborationInRound) * 2) - 1;
+    }
+
+    public void add_allHonestDominanceToDishonestCollaborationInRound() {
+        allHonestDominanceToDishonestCollaborationInRound++;
+//        if (allHonestWithDishonestCollaborationInRound > 0) {
+//            dominanceInRound = (((float) allHonestDominanceToDishonestCollaborationInRound / allHonestWithDishonestCollaborationInRound) * 2) - 1;
+//        } else {
+//            dominanceInRound = 0;
+//        }
     }
 
     public void add_allHonestCollaboration() {
@@ -110,7 +141,9 @@ public class WorldStatisticsCollaboration {
     }
 
     public int getAvgHonestCollaboration() {
-        return calcAverage(allHonestCollaboration, xPrevStatCollab == null ? null : xPrevStatCollab.allHonestCollaboration);
+        return calcAverage(allHonestCollaboration,
+                xPrevStatCollab == null ? null : xPrevStatCollab.allHonestCollaboration,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
     }
 
     public int getIttHonestCollaborationInRound() {
@@ -121,8 +154,34 @@ public class WorldStatisticsCollaboration {
     }
 
     public int getAvgHonestCollaborationInRound() {
-        return calcAverage(allHonestCollaborationInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allHonestCollaborationInRound);
+        return calcAverage(allHonestCollaborationInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allHonestCollaborationInRound,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
 
+    }
+
+    public int getAvgDishonestCollaborationInRound() {
+        return calcAverage(allDishonestCollaborationInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allDishonestCollaborationInRound,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
+    }
+
+    public float getDominanceInRound() {
+        return dominanceInRound;
+    }
+
+    public int getAvgDominanceInRound100() {
+
+        int allHonAvg = calcAverage(allHonestDominanceToDishonestCollaborationInRound,
+                xPrevStatCollab == null ? null : xPrevStatCollab.allHonestDominanceToDishonestCollaborationInRound,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_DOMINANCE);
+
+        int allHonWithDisAvg = calcAverage(allHonestWithDishonestCollaborationInRound,
+                xPrevStatCollab == null ? null : xPrevStatCollab.allHonestWithDishonestCollaborationInRound,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_DOMINANCE);
+
+
+        dominanceInRound = (((float) allHonAvg / allHonWithDisAvg));
+
+        return (int) (dominanceInRound * 200)-100;
     }
 
     public int getIttTrustToHonestInRound() {
@@ -133,7 +192,8 @@ public class WorldStatisticsCollaboration {
     }
 
     public int getAvgTrustToHonestInRound() {
-        return calcAverage(allTrustToHonestInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allTrustToHonestInRound);
+        return calcAverage(allTrustToHonestInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allTrustToHonestInRound,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
     }
 
     public int getAvgHonestTrustPerCollab100() {
@@ -153,7 +213,8 @@ public class WorldStatisticsCollaboration {
     }
 
     public int getAvgHypocriteCollaboration() {
-        return calcAverage(allHypocriteCollaboration, xPrevStatCollab == null ? null : xPrevStatCollab.allHypocriteCollaboration);
+        return calcAverage(allHypocriteCollaboration, xPrevStatCollab == null ? null : xPrevStatCollab.allHypocriteCollaboration,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
     }
 
     public int getIttHypocriteCollaborationInRound() {
@@ -164,7 +225,8 @@ public class WorldStatisticsCollaboration {
     }
 
     public int getAvgHypocriteCollaborationInRound() {
-        return calcAverage(allHypocriteCollaborationInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allHypocriteCollaborationInRound);
+        return calcAverage(allHypocriteCollaborationInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allHypocriteCollaborationInRound,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
 
     }
 
@@ -176,7 +238,8 @@ public class WorldStatisticsCollaboration {
     }
 
     public int getAvgTrustToHypocriteInRound() {
-        return calcAverage(allTrustToHypocriteInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allTrustToHypocriteInRound);
+        return calcAverage(allTrustToHypocriteInRound, xPrevStatCollab == null ? null : xPrevStatCollab.allTrustToHypocriteInRound,
+                Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION);
     }
 
     public int getAvgHypocriteTrustPerCollab100() {

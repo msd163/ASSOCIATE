@@ -1,6 +1,7 @@
 package drawingLayer;
 
 import _type.TtDrawingWindowLocation;
+import drawingLayer.dag.DagGraphDrawingWindow;
 import drawingLayer.routing.StateMachineDrawingWindow;
 import drawingLayer.routing.TravelHistoryBarDrawingWindow;
 import drawingLayer.routing.TravelStatsLinearDrawingWindow;
@@ -33,8 +34,9 @@ public class DrawingWindowRunner extends Thread {
     private ObservationBarDrawingWindow observationBarDrawingWindow;
     private IndirectObservationBarDrawingWindow indirectObservationBarDrawingWindow;
 
-
     private RecommendationBarDrawingWindow recommendationBarDrawingWindow;
+
+    private DagGraphDrawingWindow dagGraphDrawingWindow;
 
     //==========================
 
@@ -82,7 +84,9 @@ public class DrawingWindowRunner extends Thread {
             if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
                 indirectObservationBarDrawingWindow.repaint();
             }
-
+            if (Config.DRAWING_SHOW_dagGraphDrawingWindow) {
+                dagGraphDrawingWindow.repaint();
+            }
 
             if (Globals.PAUSE) {
                 if (Config.WORLD_SLEEP_MILLISECOND_FOR_DRAWING_IN_PAUSE > 0) {
@@ -211,10 +215,16 @@ public class DrawingWindowRunner extends Thread {
         if (Config.DRAWING_SHOW_observationBarDrawingWindow) {
             initDrawingWindow(widthHalf, heightHalf, observationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
-        //============================ Initializing Observation Drawing Windows
+        //============================ Initializing IndirectObservation Drawing Windows
         indirectObservationBarDrawingWindow = new IndirectObservationBarDrawingWindow(world);
         if (Config.DRAWING_SHOW_indirectObservationBarDrawingWindow) {
             initDrawingWindow(widthHalf, heightHalf, indirectObservationBarDrawingWindow, TtDrawingWindowLocation.BottomRight);
+        }
+
+        //============================ Initializing Dagra Drawing Windows
+        dagGraphDrawingWindow = new DagGraphDrawingWindow(world);
+        if (Config.DRAWING_SHOW_dagGraphDrawingWindow) {
+            initDrawingWindow(widthHalf, heightHalf, dagGraphDrawingWindow, TtDrawingWindowLocation.BottomRight);
         }
     }
 

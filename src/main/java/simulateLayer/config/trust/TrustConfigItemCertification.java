@@ -5,6 +5,10 @@ public class TrustConfigItemCertification {
     private boolean isUseCertification;
     private boolean isUseDaGra;
     private int certRequestPeriodTime_DaGra;                      // The new certification request is sent in this period times
+
+    private boolean isUseAllDagraAgentToVerify_DaGra;                   // When an agent needs to verify a certification, the agent can use Dagra capabilities in the network
+                                                                  // , however the agent has no DagDar itself and don't access any Dagdar directly.
+                                                                  // It is for accessing all agents to Dagra's verifications mechanism all over the network
     private int numberOfCertRequestInEachPeriod_DaGra;            // The number of certification request which is sent in each period times
     private int expiredTimeOfCert_DaGra;                          // After this time, the sign that done in a certification will be expired.
     private int numberOfCertToBeSigned_DaGra;                     // The number of certifications which any candidate agent has to sign in order to go to 'Request_Verifying' stage
@@ -22,6 +26,7 @@ public class TrustConfigItemCertification {
                 return
                         "     @CERT is: " + true +
                                 "  - dag: " + true +
+                                "  - alDag: " + isUseAllDagraAgentToVerify_DaGra +
                                 "  - prd: " + certRequestPeriodTime_DaGra +
                                 "  - req: " + numberOfCertRequestInEachPeriod_DaGra +
                                 "  - exp: " + expiredTimeOfCert_DaGra +
@@ -51,6 +56,10 @@ public class TrustConfigItemCertification {
 
     public int getCertRequestPeriodTime_DaGra() {
         return certRequestPeriodTime_DaGra;
+    }
+
+    public boolean getIsUseAllDagraAgentToVerify_DaGra() {
+        return isUseAllDagraAgentToVerify_DaGra;
     }
 
     public int getNumberOfCertRequestInEachPeriod_DaGra() {

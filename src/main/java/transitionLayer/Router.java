@@ -106,7 +106,7 @@ public class Router {
             return state;
         }
 
-        // the state has no output state. The agent is in an state that is pit
+        // the state has no output state. The agent is in a state that is pitfall
         if (state.getTargets().size() == 0) {
             agent.clearNextSteps();
             OutLog____.pl(
@@ -231,6 +231,7 @@ public class Router {
         ArrayList<RoutingHelp> routingHelps = new ArrayList<>();
         boolean isHonestCollaboration = false;
         boolean isHypocriteCollaboration = false;
+        boolean isDishonestCollaboration = false;
         for (int i = 0, watchedAgentsSize = watchedAgents.size(); i < watchedAgentsSize; i++) {
             WatchedAgent wa = watchedAgents.get(i);
             routingHelp = doYouKnowWhereIs(wa.getAgent(), goalState);
@@ -246,7 +247,10 @@ public class Router {
                     statistics___.getStatisticsCollab().add_allHonestCollaboration();
                 } else if (routingHelp.getHelperAgent().getBehavior().getHasHypocriteState()) {
                     isHypocriteCollaboration = true;
+                    isDishonestCollaboration = true;
                     statistics___.getStatisticsCollab().add_allHypocriteCollaboration();
+                } else {
+                    isDishonestCollaboration = true;
                 }
 
                 // The SafeMode method needs only one helper. All helper are honest
@@ -273,6 +277,12 @@ public class Router {
         }
         if (isHypocriteCollaboration) {
             statistics___.getStatisticsCollab().add_allHypocriteCollaborationInRound();
+        }
+        if (isDishonestCollaboration) {
+            statistics___.getStatisticsCollab().add_allDishonestCollaborationInRound();
+        }
+        if (isDishonestCollaboration && isHonestCollaboration) {
+            statistics___.getStatisticsCollab().add_allHonestWithDishonestCollaborationInRound();
         }
 
         // If there is no routerHelper...
@@ -369,6 +379,9 @@ public class Router {
         if (help.getHelperAgent().getBehavior().getHasHonestState()) {
             statistics___.add_Itt_TrustToHonest();
             statistics___.getStatisticsCollab().add_allTrustToHonestInRound();
+            if (isDishonestCollaboration && isHonestCollaboration) {
+                statistics___.getStatisticsCollab().add_allHonestDominanceToDishonestCollaborationInRound();
+            }
         } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
             statistics___.add_Itt_TrustToAdversary();
         } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {

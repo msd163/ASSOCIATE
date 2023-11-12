@@ -146,6 +146,7 @@ public class Simulator {
         Config.STATISTICS_AVERAGE_TIME_WINDOW = simulationConfig.getStatisticsAverageTimeWindow();
         Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_RESISTANCE = simulationConfig.getStatisticsAverageTimeWindowForResistance();
         Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_COLLABORATION = simulationConfig.getStatisticsAverageTimeWindowForCollaboration();
+        Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_DOMINANCE = simulationConfig.getStatisticsAverageTimeWindowForDominance();
         Config.STATISTICS_AVERAGE_TIME_WINDOW_FOR_ROC = simulationConfig.getStatisticsAverageTimeWindowForRoc();
         Config.STATISTICS_HYPOCRITE_DIAGNOSIS_THRESHOLD = simulationConfig.getStatisticsHypocriteDiagnosisThreshold();
         Config.STATISTICS_HYPOCRITE_RESISTANCE_COUNT = simulationConfig.getStatisticsHypocriteResistanceCount();
@@ -181,6 +182,8 @@ public class Simulator {
 
         Config.DRAWING_SHOW_recommendationBarDrawingWindow = simulationConfig.isDrawingShowRecommendationBarDrawingWindow();
 
+        Config.DRAWING_SHOW_dagGraphDrawingWindow = simulationConfig.isDrawingShowDagGraphDrawingWindow();
+
         Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTravelStatsLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTrustAnalysisLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTrustStatsLinearDrawingWindow();
@@ -190,6 +193,8 @@ public class Simulator {
         Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow = simulationConfig.isIntDrawingShowHypocriteCollaborationLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow = simulationConfig.isIntDrawingShowResistanceLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_FluctuationLinearDrawingWindow = simulationConfig.isIntDrawingShowFluctuationLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_DominanceLinearDrawingWindow = simulationConfig.isIntDrawingShowDominanceLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_DagStatLinearDrawingWindow = simulationConfig.isIntDrawingShowDagraStatLinearDrawingWindow();
 
 
         Config.STATISTICS_IS_GENERATE = simulationConfig.isStatisticsIsGenerate();

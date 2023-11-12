@@ -1,5 +1,6 @@
 package drawingLayer;
 
+import drawingLayer.dag.IntDagStatLinearDrawingWindow;
 import drawingLayer.integrated.*;
 import simulateLayer.config.trust.TrustConfig;
 import societyLayer.agentSubLayer.World;
@@ -24,6 +25,8 @@ public class IntDrawingWindowRunner extends Thread {
     private IntHypocriteCollaborationLineDrawingWindow intHypocriteCollaborationLineDrawingWindow;
     private IntResistanceStatsLinearDrawingWindow intResistanceStatsLinearDrawingWindow;
     private IntFluctuationStatsLinearDrawingWindow intFluctuationStatsLinearDrawingWindow;
+    private IntDominanceCollaborationLineDrawingWindow intDominanceCollaborationLineDrawingWindow;
+    private IntDagStatLinearDrawingWindow intDagStatLinearDrawingWindow;
 
 
     public IntDrawingWindowRunner(World[] worlds, TrustConfig trustConfig) {
@@ -61,6 +64,12 @@ public class IntDrawingWindowRunner extends Thread {
             }
             if (Config.INT_DRAWING_SHOW_FluctuationLinearDrawingWindow) {
                 intFluctuationStatsLinearDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_DominanceLinearDrawingWindow) {
+                intDominanceCollaborationLineDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_DagStatLinearDrawingWindow) {
+                intDagStatLinearDrawingWindow.repaint();
             }
 
             if (Globals.PAUSE) {
@@ -156,6 +165,16 @@ public class IntDrawingWindowRunner extends Thread {
             initDrawingWindow(intFluctuationStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
+        if (Config.INT_DRAWING_SHOW_DominanceLinearDrawingWindow) {
+            intDominanceCollaborationLineDrawingWindow = new IntDominanceCollaborationLineDrawingWindow(worlds);
+            initDrawingWindow(intDominanceCollaborationLineDrawingWindow, widthHalf, heightHalf);
+        }
+
+        if (Config.INT_DRAWING_SHOW_DagStatLinearDrawingWindow) {
+            intDagStatLinearDrawingWindow = new IntDagStatLinearDrawingWindow(worlds, trustConfig);
+            initDrawingWindow(intDagStatLinearDrawingWindow, widthHalf, heightHalf);
+        }
+
     }
 
 
@@ -164,6 +183,10 @@ public class IntDrawingWindowRunner extends Thread {
 
     public IntTravelStatsLinearDrawingWindow getIntTravelStatsLinearDrawingWindow() {
         return intTravelStatsLinearDrawingWindow;
+    }
+
+    public IntDagStatLinearDrawingWindow getIntDagStatLinearDrawingWindow() {
+        return intDagStatLinearDrawingWindow;
     }
 
     public IntTrustAnalysisLinearDrawingWindow getIntTrustAnalysisLinearDrawingWindow() {
