@@ -22,6 +22,7 @@ public class IntDrawingWindowRunner extends Thread {
     private IntResistancePerNumberStatsLinearDrawingWindow intResistancePerNumberStatsLinearDrawingWindow;
     private IntRocPointDrawingWindow intRocPointDrawingWindow;
     private IntHonestCollaborationLineDrawingWindow intHonestCollaborationLineDrawingWindow;
+    private IntDishonestCollaborationLineDrawingWindow intDishonestCollaborationLineDrawingWindow;
     private IntHypocriteCollaborationLineDrawingWindow intHypocriteCollaborationLineDrawingWindow;
     private IntResistanceStatsLinearDrawingWindow intResistanceStatsLinearDrawingWindow;
     private IntFluctuationStatsLinearDrawingWindow intFluctuationStatsLinearDrawingWindow;
@@ -55,6 +56,9 @@ public class IntDrawingWindowRunner extends Thread {
             }
             if (Config.INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow) {
                 intHonestCollaborationLineDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_DishonestCollaborationLinearDrawingWindow) {
+                intDishonestCollaborationLineDrawingWindow.repaint();
             }
             if (Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow) {
                 intHypocriteCollaborationLineDrawingWindow.repaint();
@@ -142,6 +146,11 @@ public class IntDrawingWindowRunner extends Thread {
         if (Config.INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow) {
             intHonestCollaborationLineDrawingWindow = new IntHonestCollaborationLineDrawingWindow(worlds);
             initDrawingWindow(intHonestCollaborationLineDrawingWindow, widthHalf, heightHalf);
+        }
+
+        if (Config.INT_DRAWING_SHOW_DishonestCollaborationLinearDrawingWindow) {
+            intDishonestCollaborationLineDrawingWindow = new IntDishonestCollaborationLineDrawingWindow(worlds);
+            initDrawingWindow(intDishonestCollaborationLineDrawingWindow, widthHalf, heightHalf);
         }
 
         if (Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow) {

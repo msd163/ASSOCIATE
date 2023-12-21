@@ -249,8 +249,10 @@ public class Router {
                     isHypocriteCollaboration = true;
                     isDishonestCollaboration = true;
                     statistics___.getStatisticsCollab().add_allHypocriteCollaboration();
+                    statistics___.getStatisticsCollab().add_allDishonestCollaboration();
                 } else {
                     isDishonestCollaboration = true;
+                    statistics___.getStatisticsCollab().add_allDishonestCollaboration();
                 }
 
                 // The SafeMode method needs only one helper. All helper are honest
@@ -384,12 +386,14 @@ public class Router {
             }
         } else if (help.getHelperAgent().getBehavior().getHasAdversaryState()) {
             statistics___.add_Itt_TrustToAdversary();
+            statistics___.getStatisticsCollab().add_allTrustToDishonestInRound();
         } else if (help.getHelperAgent().getBehavior().getHasHypocriteState()) {
             statistics___.add_Itt_TrustToHypocrite();
             statistics___.getStatisticsCollab().add_allTrustToHypocriteInRound();
-
+            statistics___.getStatisticsCollab().add_allTrustToDishonestInRound();
         } else if (help.getHelperAgent().getBehavior().getHasMischief()) {
             statistics___.add_Itt_TrustToMischief();
+            statistics___.getStatisticsCollab().add_allTrustToDishonestInRound();
         }
 
 //       }

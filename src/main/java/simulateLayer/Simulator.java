@@ -190,6 +190,7 @@ public class Simulator {
         Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow = simulationConfig.isIntDrawingShowIntResistancePerNumberLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_RocPointDrawingWindow = simulationConfig.isIntDrawingShowRocPointDrawingWindow();
         Config.INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow = simulationConfig.isIntDrawingShowHonestCollaborationLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_DishonestCollaborationLinearDrawingWindow = simulationConfig.isIntDrawingShowDishonestCollaborationLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow = simulationConfig.isIntDrawingShowHypocriteCollaborationLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_ResistanceLinearDrawingWindow = simulationConfig.isIntDrawingShowResistanceLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_FluctuationLinearDrawingWindow = simulationConfig.isIntDrawingShowFluctuationLinearDrawingWindow();

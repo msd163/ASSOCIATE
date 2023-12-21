@@ -43,7 +43,7 @@ public class Config {
     public static boolean OPTIMIZE_MEMORY;      // destroying old data (for finished worlds) such as TrustMatrix
 
     //============================ TURBO
-    public static boolean TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE;   // For fast processing- processing DaGra network for the first time and copying it to other networks
+    public static boolean TURBO_CERTIFIED_DAGRA_SINGLE_UPDATE_MULTIPLE_CLONE;   // For fast processing. processing DaGra network for the first time and copying it to other networks
 
     //============================ Drawing Windows
 
@@ -79,6 +79,7 @@ public class Config {
     public static boolean INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_RocPointDrawingWindow;
     public static boolean INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow;
+    public static boolean INT_DRAWING_SHOW_DishonestCollaborationLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_ResistanceLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_FluctuationLinearDrawingWindow;
@@ -118,6 +119,7 @@ public class Config {
                         || INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow
                         || INT_DRAWING_SHOW_RocPointDrawingWindow
                         || INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow
+                        || INT_DRAWING_SHOW_DishonestCollaborationLinearDrawingWindow
                         || INT_DRAWING_SHOW_HypocriteCollaborationLinearDrawingWindow
                         || INT_DRAWING_SHOW_ResistanceLinearDrawingWindow
                         || INT_DRAWING_SHOW_FluctuationLinearDrawingWindow
