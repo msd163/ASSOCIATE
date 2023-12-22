@@ -22,7 +22,7 @@ public class IntDishonestCollaborationLineDrawingWindow extends DrawingWindow {
             prevPoints[i] = new Point(0, 0);
         }
         headerTitle = "Integrated Dishonest Collaboration [#Worlds: " + worlds.length + "]";
-        setName("i_coll_stt");
+        setName("i_coll_dis");
 
         //axisYScale = 1;
         _vs = 60;

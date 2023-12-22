@@ -192,6 +192,11 @@ public class IntTrustAnalysisLinearDrawingWindow extends DrawingWindow {
                         = isCurveStarted[2]
                         = false;
 
+                prevPoints[0].y
+                        = prevPoints[1].y
+                        = prevPoints[2].y
+                        = -1;
+
                 for (int sttIdx = 0, statisticsLength = statistics.length; sttIdx < worldTimer && sttIdx < statisticsLength; sttIdx++) {
                     WorldStatistics stat = statistics[sttIdx];
 

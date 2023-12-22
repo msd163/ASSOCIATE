@@ -525,7 +525,7 @@ public class DrawingWindow extends JPanel implements MouseMotionListener, MouseW
                 g.drawString(": " + world.getId(), 1300, 50);
             } else {
                 g.drawString("Simulation Time", 1100, 50);
-                g.drawString(": " + simulationTimer + "/" + worlds.length, 1300, 50);
+                g.drawString(": " + simulationTimer + "/" + (worlds.length - 1), 1300, 50);
             }
 
             g.setColor(Globals.Color$.$subTitle2);

@@ -29,12 +29,9 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
 
 //        axisYScale = 1;
         _vs = 100;
-        auc = new int[worlds.length];
 
     }
 
-
-    int[] auc;
 
     @Override
     public void paint(Graphics gr) {
@@ -43,7 +40,7 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
             return;
         }
 
-        printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToMischief(), Globals.Color$.$curve_3);
+        printStatsInfo(1, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Mischief", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToMischief(), Globals.Color$.$curve_4);
         printStatsInfo(2, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Honest", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHonest(), Globals.Color$.$curve_1);
         printStatsInfo(3, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Hypocrite", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToHypocrite(), Globals.Color$.$curve_3);
         printStatsInfo(4, "Avg (" + Config.STATISTICS_AVERAGE_TIME_WINDOW + ") Trust to Adversary", worlds[simulationTimer].getWdStatistics()[worldTimer].getTimeAvgTrustToAdversary(), Globals.Color$.$curve_2);
@@ -85,10 +82,6 @@ public class IntTrustStatsLinearDrawingWindow extends DrawingWindow {
                     if (showLineChartsFlag[3]) {
                         drawSymbolOnCurve(950, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
                         g.drawString("Adversary", 970, dynamicHeight);
-                    }
-                    if (showLineChartsFlag[4]) {
-                        drawSymbolOnCurve(1050, dynamicHeight, Globals.Color$.$curve_2, j, 20, -1);
-                        g.drawString("AUC: " + auc[j], 1070, dynamicHeight);
                     }
                 }
                 //============================

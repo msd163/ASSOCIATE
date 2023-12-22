@@ -33,7 +33,7 @@ public class IntDominanceCollaborationLineDrawingWindow extends DrawingWindow {
     public void resetParams() {
         super.resetParams();
 
-        axisYScale = 0.1;
+        axisYScale = 0.01;
         _vs = 60;
         _hs = 8;
     }
