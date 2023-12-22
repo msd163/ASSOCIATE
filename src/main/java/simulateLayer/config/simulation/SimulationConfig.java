@@ -61,6 +61,7 @@ public class SimulationConfig {
     private boolean intDrawingShowIntTravelStatsLinearDrawingWindow;
     private boolean intDrawingShowIntTrustAnalysisLinearDrawingWindow;
     private boolean intDrawingShowIntTrustStatsLinearDrawingWindow;
+    private boolean intDrawingShowIntTrustRecogniseLinearDrawingWindow;
     private boolean intDrawingShowIntResistancePerNumberLinearDrawingWindow;
     private boolean intDrawingShowRocPointDrawingWindow;
     private boolean intDrawingShowHonestCollaborationLinearDrawingWindow;
@@ -208,6 +209,10 @@ public class SimulationConfig {
 
     public boolean isIntDrawingShowIntTrustStatsLinearDrawingWindow() {
         return intDrawingShowIntTrustStatsLinearDrawingWindow;
+    }
+
+    public boolean isIntDrawingShowIntTrustRecogniseLinearDrawingWindow() {
+        return intDrawingShowIntTrustRecogniseLinearDrawingWindow;
     }
 
     public boolean isIntDrawingShowIntResistancePerNumberLinearDrawingWindow() {

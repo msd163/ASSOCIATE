@@ -19,6 +19,7 @@ public class IntDrawingWindowRunner extends Thread {
     private IntTravelStatsLinearDrawingWindow intTravelStatsLinearDrawingWindow;
     private IntTrustAnalysisLinearDrawingWindow intTrustAnalysisLinearDrawingWindow;
     private IntTrustStatsLinearDrawingWindow intTrustStatsLinearDrawingWindow;
+    private IntTrustRecogniseLinearDrawingWindow intTrustRecogniseLinearDrawingWindow;
     private IntResistancePerNumberStatsLinearDrawingWindow intResistancePerNumberStatsLinearDrawingWindow;
     private IntRocPointDrawingWindow intRocPointDrawingWindow;
     private IntHonestCollaborationLineDrawingWindow intHonestCollaborationLineDrawingWindow;
@@ -47,6 +48,9 @@ public class IntDrawingWindowRunner extends Thread {
             }
             if (Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow) {
                 intTrustStatsLinearDrawingWindow.repaint();
+            }
+            if (Config.INT_DRAWING_SHOW_IntTrustRecogniseLinearDrawingWindow) {
+                intTrustRecogniseLinearDrawingWindow.repaint();
             }
             if (Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow) {
                 intResistancePerNumberStatsLinearDrawingWindow.repaint();
@@ -138,6 +142,11 @@ public class IntDrawingWindowRunner extends Thread {
             initDrawingWindow(intTrustStatsLinearDrawingWindow, widthHalf, heightHalf);
         }
 
+        if (Config.INT_DRAWING_SHOW_IntTrustRecogniseLinearDrawingWindow) {
+            intTrustRecogniseLinearDrawingWindow = new IntTrustRecogniseLinearDrawingWindow(worlds, trustConfig);
+            initDrawingWindow(intTrustRecogniseLinearDrawingWindow, widthHalf, heightHalf);
+        }
+
         if (Config.INT_DRAWING_SHOW_RocPointDrawingWindow) {
             intRocPointDrawingWindow = new IntRocPointDrawingWindow(worlds, trustConfig);
             initDrawingWindow(intRocPointDrawingWindow, widthHalf, heightHalf);
@@ -204,6 +213,10 @@ public class IntDrawingWindowRunner extends Thread {
 
     public IntTrustStatsLinearDrawingWindow getIntTrustStatsLinearDrawingWindow() {
         return intTrustStatsLinearDrawingWindow;
+    }
+
+    public IntTrustRecogniseLinearDrawingWindow getIntTrustRecogniseLinearDrawingWindow() {
+        return intTrustRecogniseLinearDrawingWindow;
     }
 
     public IntResistancePerNumberStatsLinearDrawingWindow getIntEffectiveFlucStatsLinearDrawingWindow() {

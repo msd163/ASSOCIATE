@@ -187,6 +187,7 @@ public class Simulator {
         Config.INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTravelStatsLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTrustAnalysisLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTrustStatsLinearDrawingWindow();
+        Config.INT_DRAWING_SHOW_IntTrustRecogniseLinearDrawingWindow = simulationConfig.isIntDrawingShowIntTrustRecogniseLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow = simulationConfig.isIntDrawingShowIntResistancePerNumberLinearDrawingWindow();
         Config.INT_DRAWING_SHOW_RocPointDrawingWindow = simulationConfig.isIntDrawingShowRocPointDrawingWindow();
         Config.INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow = simulationConfig.isIntDrawingShowHonestCollaborationLinearDrawingWindow();

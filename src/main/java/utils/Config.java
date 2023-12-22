@@ -76,6 +76,7 @@ public class Config {
     public static boolean INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow;
+    public static boolean INT_DRAWING_SHOW_IntTrustRecogniseLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow;
     public static boolean INT_DRAWING_SHOW_RocPointDrawingWindow;
     public static boolean INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow;
@@ -116,6 +117,7 @@ public class Config {
                 INT_DRAWING_SHOW_intTravelStatsLinearDrawingWindow
                         || INT_DRAWING_SHOW_intTrustAnalysisLinearDrawingWindow
                         || INT_DRAWING_SHOW_IntTrustStatsLinearDrawingWindow
+                        || INT_DRAWING_SHOW_IntTrustRecogniseLinearDrawingWindow
                         || INT_DRAWING_SHOW_IntResistancePerNumberLinearDrawingWindow
                         || INT_DRAWING_SHOW_RocPointDrawingWindow
                         || INT_DRAWING_SHOW_HonestCollaborationLinearDrawingWindow
