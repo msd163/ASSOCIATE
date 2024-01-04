@@ -1,7 +1,7 @@
 package WSM.trust.data;
 
-import _type.TtOutLogMethodSection;
-import _type.TtOutLogStatus;
+import core.enums.TtOutLogMethodSection;
+import core.enums.TtOutLogStatus;
 import WSM.society.agent.Agent;
 import WSM.society.environment.StateX;
 import core.utils.Globals;

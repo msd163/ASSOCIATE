@@ -1,6 +1,6 @@
 package core.utils;
 
-import _type.TtExecutionTarget;
+import core.enums.TtExecutionTarget;
 
 import java.io.File;
 

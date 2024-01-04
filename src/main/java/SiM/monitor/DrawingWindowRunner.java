@@ -2,7 +2,7 @@ package SiM.monitor;
 
 import SiM.monitor.dag.DagGraphDrawingWindow;
 import SiM.monitor.trust.*;
-import _type.TtDrawingWindowLocation;
+import core.enums.TtDrawingWindowLocation;
 import SiM.monitor.routing.StateMachineDrawingWindow;
 import SiM.monitor.routing.TravelHistoryBarDrawingWindow;
 import SiM.monitor.routing.TravelStatsLinearDrawingWindow;

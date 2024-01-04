@@ -1,6 +1,6 @@
 package WSM.society.agent;
 
-import _type.TtBehaviorState;
+import core.enums.TtBehaviorState;
 import com.google.gson.annotations.Expose;
 import core.utils.Globals;
 import SGM.config.PopulationBunchHypocriteBehavior;

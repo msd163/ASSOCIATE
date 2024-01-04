@@ -1,7 +1,7 @@
 package core.utils;
 
-import _type.TtOutLogMethodSection;
-import _type.TtOutLogStatus;
+import core.enums.TtOutLogMethodSection;
+import core.enums.TtOutLogStatus;
 import WSM.society.environment.StateX;
 import WSM.society.agent.Agent;
 

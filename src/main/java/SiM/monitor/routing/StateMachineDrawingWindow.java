@@ -3,7 +3,7 @@ package SiM.monitor.routing;
 import SiM.monitor.DrawingWindow;
 import WSM.World;
 import WSM.society.agent.*;
-import _type.TtDiagramThemeMode;
+import core.enums.TtDiagramThemeMode;
 import WSM.society.environment.Environment;
 import WSM.society.environment.StateX;
 import WSM.society.environment.TransitionX;

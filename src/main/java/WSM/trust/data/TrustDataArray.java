@@ -1,6 +1,6 @@
 package WSM.trust.data;
 
-import _type.TtTrustReplaceMethod;
+import core.enums.TtTrustReplaceMethod;
 import WSM.society.agent.Agent;
 
 public class TrustDataArray {

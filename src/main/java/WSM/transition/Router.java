@@ -1,8 +1,8 @@
 package WSM.transition;
 
-import _type.TtOutLogMethodSection;
-import _type.TtOutLogStatus;
-import _type.TtTrustMethodology;
+import core.enums.TtOutLogMethodSection;
+import core.enums.TtOutLogStatus;
+import core.enums.TtTrustMethodology;
 import SiM.profiler.config.TrustConfigItem;
 import SiM.statistics.WorldStatistics;
 import WSM.society.agent.Agent;

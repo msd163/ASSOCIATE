@@ -1,7 +1,7 @@
 package SGM;
 
-import _type.TtOutLogMethodSection;
-import _type.TtOutLogStatus;
+import core.enums.TtOutLogMethodSection;
+import core.enums.TtOutLogStatus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import SGM.config.SocietyConfig;

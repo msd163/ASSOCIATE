@@ -1,7 +1,7 @@
 package SiM.profiler.config;
 
-import _type.TtTrustFormula;
-import _type.TtTrustMethodology;
+import core.enums.TtTrustFormula;
+import core.enums.TtTrustMethodology;
 
 public class TrustConfigItem {
     private int method;

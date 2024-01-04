@@ -1,6 +1,6 @@
 package SGM.config;
 
-import _type.TtTrustReplaceMethod;
+import core.enums.TtTrustReplaceMethod;
 import core.utils.DefParameter;
 
 public class PopulationBunch {

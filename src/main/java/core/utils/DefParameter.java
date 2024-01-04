@@ -1,6 +1,6 @@
 package core.utils;
 
-import _type.TtParamType;
+import core.enums.TtParamType;
 import static core.utils.Globals.RANDOM;
 
 public class DefParameter {

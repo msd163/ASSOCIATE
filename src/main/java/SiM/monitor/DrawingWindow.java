@@ -1,7 +1,7 @@
 package SiM.monitor;
 
-import _type.TtBehaviorState;
-import _type.TtDiagramThemeMode;
+import core.enums.TtBehaviorState;
+import core.enums.TtDiagramThemeMode;
 import WSM.society.agent.Agent;
 import WSM.World;
 import WSM.trust.data.TrustData;

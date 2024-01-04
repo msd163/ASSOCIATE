@@ -1,8 +1,8 @@
 package core.utils;
 
-import _type.TtCalendarItem;
-import _type.TtCompareResult;
-import _type.TtSort;
+import core.enums.TtCalendarItem;
+import core.enums.TtCompareResult;
+import core.enums.TtSort;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 

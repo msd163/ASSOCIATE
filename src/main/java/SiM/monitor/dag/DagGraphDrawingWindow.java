@@ -1,6 +1,6 @@
 package SiM.monitor.dag;
 
-import _type.TtDaGraContractStatus;
+import core.enums.TtDaGraContractStatus;
 import SiM.monitor.DrawingWindow;
 import WSM.society.agent.Agent;
 import WSM.World;

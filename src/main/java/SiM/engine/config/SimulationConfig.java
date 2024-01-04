@@ -1,6 +1,6 @@
 package SiM.engine.config;
 
-import _type.TtDiagramThemeMode;
+import core.enums.TtDiagramThemeMode;
 
 public class SimulationConfig {
 

@@ -1,6 +1,6 @@
 package SiM.monitor.trust;
 
-import _type.TtDiagramThemeMode;
+import core.enums.TtDiagramThemeMode;
 import SiM.monitor.DrawingWindow;
 import WSM.society.agent.Agent;
 import WSM.World;

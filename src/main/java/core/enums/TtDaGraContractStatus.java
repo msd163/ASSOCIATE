@@ -1,4 +1,4 @@
-package _type;
+package core.enums;
 
 public enum TtDaGraContractStatus {
     NoContract,             // There is no contract for agent in the DAG.

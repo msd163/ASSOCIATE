@@ -2,8 +2,8 @@ package WSM.society.agent;
 
 import WSM.World;
 import WSM.society.environment.TravelHistory;
-import _type.TtOutLogMethodSection;
-import _type.TtOutLogStatus;
+import core.enums.TtOutLogMethodSection;
+import core.enums.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
 import SGM.config.SocietyConfig;
 import WSM.society.environment.StateX;

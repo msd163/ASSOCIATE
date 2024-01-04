@@ -1,6 +1,6 @@
 package WSM.transition;
 
-import _type.TtIsValidatedInObservations;
+import core.enums.TtIsValidatedInObservations;
 import WSM.society.environment.StateX;
 import WSM.society.agent.Agent;
 

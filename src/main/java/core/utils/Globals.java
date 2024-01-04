@@ -1,7 +1,7 @@
 package core.utils;
 
-import _type.TtBehaviorState;
-import _type.TtDiagramThemeMode;
+import core.enums.TtBehaviorState;
+import core.enums.TtDiagramThemeMode;
 import SiM.report.StatsEnvGenerator;
 import SiM.report.StatsTrustGenerator;
 

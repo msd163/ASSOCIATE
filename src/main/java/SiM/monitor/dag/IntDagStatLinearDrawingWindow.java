@@ -1,6 +1,6 @@
 package SiM.monitor.dag;
 
-import _type.TtTrustMethodology;
+import core.enums.TtTrustMethodology;
 import SiM.monitor.DrawingWindow;
 import SiM.profiler.config.TrustConfig;
 import SiM.statistics.WorldStatistics;

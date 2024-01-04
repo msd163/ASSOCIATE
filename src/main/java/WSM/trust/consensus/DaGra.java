@@ -1,9 +1,9 @@
 package WSM.trust.consensus;
 
-import _type.TtBehaviorState;
-import _type.TtDaGraContractStatus;
-import _type.TtOutLogMethodSection;
-import _type.TtOutLogStatus;
+import core.enums.TtBehaviorState;
+import core.enums.TtDaGraContractStatus;
+import core.enums.TtOutLogMethodSection;
+import core.enums.TtOutLogStatus;
 import WSM.society.agent.Agent;
 import WSM.World;
 import core.utils.Globals;

@@ -1,7 +1,7 @@
 package core.utils;
 
-import _type.TtDiagramThemeMode;
-import _type.TtSimulationMode;
+import core.enums.TtDiagramThemeMode;
+import core.enums.TtSimulationMode;
 
 public class Config {
 

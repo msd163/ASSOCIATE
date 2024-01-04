@@ -1,7 +1,7 @@
 package SiM.monitor.routing;
 
 import SiM.monitor.DrawingWindow;
-import _type.TtDiagramThemeMode;
+import core.enums.TtDiagramThemeMode;
 import WSM.society.agent.Agent;
 import WSM.World;
 import core.utils.Config;

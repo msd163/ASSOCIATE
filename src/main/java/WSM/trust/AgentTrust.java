@@ -2,7 +2,7 @@ package WSM.trust;
 
 import WSM.trust.data.TrustAbstract;
 import WSM.trust.data.TrustDataArray;
-import _type.TtTrustReplaceMethod;
+import core.enums.TtTrustReplaceMethod;
 import com.google.gson.annotations.Expose;
 import WSM.society.agent.Agent;
 

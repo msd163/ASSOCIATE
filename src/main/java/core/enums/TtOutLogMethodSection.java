@@ -1,4 +1,4 @@
-package _type;
+package core.enums;
 
 public enum TtOutLogMethodSection {
     Main("MAIN"),

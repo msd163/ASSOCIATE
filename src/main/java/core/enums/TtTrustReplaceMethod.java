@@ -1,4 +1,4 @@
-package _type;
+package core.enums;
 
 public enum TtTrustReplaceMethod {
     Sequential_Circular,

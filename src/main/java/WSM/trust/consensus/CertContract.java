@@ -1,6 +1,6 @@
 package WSM.trust.consensus;
 
-import _type.TtDaGraContractStatus;
+import core.enums.TtDaGraContractStatus;
 import SiM.profiler.config.TrustConfigItem;
 import WSM.society.agent.Agent;
 import core.utils.Globals;
