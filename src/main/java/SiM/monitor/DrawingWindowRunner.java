@@ -6,7 +6,7 @@ import _type.TtDrawingWindowLocation;
 import SiM.monitor.routing.StateMachineDrawingWindow;
 import SiM.monitor.routing.TravelHistoryBarDrawingWindow;
 import SiM.monitor.routing.TravelStatsLinearDrawingWindow;
-import WSM.society.agent.World;
+import WSM.World;
 import WSM.trust.TrustMatrix;
 import core.utils.Config;
 import core.utils.Globals;

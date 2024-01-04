@@ -5,7 +5,7 @@ import _type.TtDaGraContractStatus;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.Globals;
 import core.utils.OutLog____;
 

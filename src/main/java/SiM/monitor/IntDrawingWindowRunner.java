@@ -3,7 +3,7 @@ package SiM.monitor;
 import SiM.monitor.dag.IntDagStatLinearDrawingWindow;
 import SiM.monitor.integrated.*;
 import SiM.profiler.config.TrustConfig;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.Config;
 import core.utils.Globals;
 

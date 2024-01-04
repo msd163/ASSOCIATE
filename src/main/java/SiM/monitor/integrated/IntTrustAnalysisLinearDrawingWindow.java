@@ -5,7 +5,7 @@ import _type.TtSimulationMode;
 import SiM.profiler.config.TrustConfig;
 import SiM.statistics.EpisodeStatistics;
 import SiM.statistics.WorldStatistics;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.Config;
 import core.utils.Globals;
 import core.utils.Point;

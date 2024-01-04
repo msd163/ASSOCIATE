@@ -1,5 +1,6 @@
 package WSM.society.agent;
 
+import WSM.World;
 import WSM.society.environment.TravelHistory;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;

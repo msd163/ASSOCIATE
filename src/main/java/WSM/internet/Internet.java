@@ -1,7 +1,7 @@
 package WSM.internet;
 
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 
 import java.util.ArrayList;
 import java.util.List;

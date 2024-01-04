@@ -2,7 +2,7 @@ package SiM.monitor.routing;
 
 import SiM.monitor.DrawingWindow;
 import SiM.statistics.WorldStatistics;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.Config;
 import core.utils.Point;
 

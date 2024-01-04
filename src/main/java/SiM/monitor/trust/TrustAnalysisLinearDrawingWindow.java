@@ -1,7 +1,7 @@
 package SiM.monitor.trust;
 
 import SiM.monitor.DrawingWindow;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.Globals;
 import core.utils.Point;
 import SiM.statistics.WorldStatistics;

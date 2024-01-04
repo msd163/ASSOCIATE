@@ -6,7 +6,7 @@ import SiM.report.ImageBuilder;
 import SGM.config.PopulationBunch;
 import SiM.profiler.config.TrustConfig;
 import SiM.statistics.WorldStatistics;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.*;
 
 import java.io.FileNotFoundException;

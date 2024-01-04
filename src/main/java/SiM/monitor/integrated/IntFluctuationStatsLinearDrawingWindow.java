@@ -4,7 +4,7 @@ import SiM.monitor.DrawingWindow;
 import SiM.profiler.config.TrustConfig;
 import SiM.statistics.WorldStatistics;
 import SiM.statistics.WorldStatisticsHypo;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.Config;
 import core.utils.Globals;
 import core.utils.Point;

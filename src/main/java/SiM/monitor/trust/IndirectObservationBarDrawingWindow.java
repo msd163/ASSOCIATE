@@ -2,7 +2,7 @@ package SiM.monitor.trust;
 
 import SiM.monitor.DrawingWindow;
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 
 import java.awt.*;
 import java.util.List;

@@ -3,7 +3,7 @@ package SiM.monitor;
 import _type.TtBehaviorState;
 import _type.TtDiagramThemeMode;
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 import WSM.trust.data.TrustData;
 import WSM.trust.data.TrustDataArray;
 import core.utils.Config;

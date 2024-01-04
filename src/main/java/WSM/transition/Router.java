@@ -8,7 +8,7 @@ import SiM.statistics.WorldStatistics;
 import WSM.society.agent.Agent;
 import WSM.society.agent.WatchedAgent;
 import WSM.society.agent.WatchedState;
-import WSM.society.agent.World;
+import WSM.World;
 import WSM.society.environment.StateX;
 import WSM.society.environment.TransitionX;
 import WSM.society.environment.TravelHistory;

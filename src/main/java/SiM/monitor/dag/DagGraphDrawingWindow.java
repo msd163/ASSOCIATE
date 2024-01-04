@@ -3,7 +3,7 @@ package SiM.monitor.dag;
 import _type.TtDaGraContractStatus;
 import SiM.monitor.DrawingWindow;
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 import WSM.trust.consensus.CertContract;
 import WSM.trust.consensus.CertSign;
 import WSM.trust.consensus.CertVerify;

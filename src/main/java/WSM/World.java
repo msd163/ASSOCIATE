@@ -1,6 +1,7 @@
-package WSM.society.agent;
+package WSM;
 
 import SiM.report.ImageBuilder;
+import WSM.society.agent.Agent;
 import _type.*;
 import SiM.monitor.DrawingWindowRunner;
 import WSM.internet.Internet;
@@ -16,9 +17,6 @@ import WSM.trust.TrustMatrix;
 import WSM.trust.consensus.CertContract;
 import WSM.trust.consensus.DaGra;
 import core.utils.*;
-import core.parellel.AgentObservationRunner;
-import core.parellel.AgentUpdaterRunner;
-import core.parellel.ShareObservationRunner;
 
 import java.util.ArrayList;
 import java.util.List;

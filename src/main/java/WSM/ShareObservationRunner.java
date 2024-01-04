@@ -1,4 +1,4 @@
-package core.parellel;
+package WSM;
 
 import WSM.society.agent.Agent;
 import WSM.society.agent.WatchedAgent;

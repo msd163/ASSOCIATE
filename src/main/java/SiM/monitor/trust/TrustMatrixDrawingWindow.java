@@ -3,7 +3,7 @@ package SiM.monitor.trust;
 import _type.TtDiagramThemeMode;
 import SiM.monitor.DrawingWindow;
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 import WSM.trust.TrustMatrix;
 import core.utils.Config;
 import core.utils.Globals;

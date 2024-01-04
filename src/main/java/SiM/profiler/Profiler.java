@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import SiM.engine.config.SimulationConfig;
 import SGM.config.SocietyConfig;
 import SiM.profiler.config.TrustConfig;
-import WSM.society.agent.World;
+import WSM.World;
 import WSM.society.environment.Environment;
 import core.utils.Config;
 import core.utils.Globals;

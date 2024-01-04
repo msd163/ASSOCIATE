@@ -1,7 +1,7 @@
 package WSM.society.environment;
 
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;

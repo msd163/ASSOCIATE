@@ -1,18 +1,18 @@
-package core.parellel;
+package WSM;
 
 import WSM.society.agent.Agent;
-import WSM.trust.TrustManager;
+import WSM.transition.Router;
 import core.utils.Config;
 import core.utils.Globals;
 
 import java.util.List;
 
-public class AgentObservationRunner extends Thread {
+public class AgentUpdaterRunner extends Thread {
 
-    private static AgentObservationRunner[] runners;
+    private static AgentUpdaterRunner[] runners;
 
     public static void execute() throws InterruptedException {
-        for (AgentObservationRunner ru : runners) {
+        for (AgentUpdaterRunner ru : runners) {
             ru.setWorldTime(Globals.WORLD_TIMER);
         }
 
@@ -20,7 +20,7 @@ public class AgentObservationRunner extends Thread {
         while (!isContinue) {
             Thread.sleep(50);
             isContinue = true;
-            for (AgentObservationRunner runner : runners) {
+            for (AgentUpdaterRunner runner : runners) {
                 if (!runner.isFinished()) {
                     isContinue = false;
                     break;
@@ -29,11 +29,11 @@ public class AgentObservationRunner extends Thread {
         }
     }
 
-    public static void init(List<Agent> agents, TrustManager trustManager) {
+    public static void init(List<Agent> agents, Router router) {
 
         int agentsCount = agents.size();
 
-        runners = new AgentObservationRunner[Config.RUNTIME_THREAD_COUNT];
+        runners = new AgentUpdaterRunner[Config.RUNTIME_THREAD_COUNT];
         int episodeAgentCount = (agentsCount + Config.RUNTIME_THREAD_COUNT - 1) / Config.RUNTIME_THREAD_COUNT;
         int oldIndex = 0;
         for (int j = 0, runnerLength = runners.length; j < runnerLength; j++) {
@@ -41,7 +41,7 @@ public class AgentObservationRunner extends Thread {
             if (index >= agentsCount) {
                 index = agentsCount;
             }
-            runners[j] = new AgentObservationRunner(j, agents, oldIndex, index, trustManager);
+            runners[j] = new AgentUpdaterRunner(j, agents, oldIndex, index, router);
             runners[j].start();
             oldIndex = index;
 
@@ -50,19 +50,18 @@ public class AgentObservationRunner extends Thread {
 
     //============================//============================//============================
 
-    public AgentObservationRunner(int identity, List<Agent> agents, int start, int end, TrustManager trustManager) {
+    public AgentUpdaterRunner(int identity, List<Agent> agents, int start, int end, Router router) {
         this.identity = identity;
 
         this.agents = agents;
         this.start = start;
         this.end = end;
-        this.trustManager = trustManager;
+        this.router = router;
         finished = false;
     }
 
     private int worldTime = -1;
     private int oldWorldTime = -1;
-    private int identity;
     private boolean finished;
 
 
@@ -76,26 +75,32 @@ public class AgentObservationRunner extends Thread {
                     e.printStackTrace();
                 }
             }
-            System.out.println(" " + identity + "  OBS) " + worldTime + ">   " + start + "  ++++ > " + end + "  started.");
+            System.out.println(" " + identity + "  UPD) " + worldTime + ">   " + start + "  ++++ > " + end + "  started.");
 
             finished = false;
             for (int i = start; i < end; i++) {
                 Agent agent = agents.get(i);
-                if (agent.getCapacity().getObservationCap() > 0) {
-                    trustManager.observe(agent);
-                }
+                // System.out.print("World: " + Globals.SIMULATION_TIMER + " Time: " + Globals.WORLD_TIMER + "  | " + i );
+                //todo: adding doing service capacity to agents as capacity param
+                // System.out.print(" | 1 > profile...");
+                agent.updateProfile();
+                // System.out.print(" | 2 > watchList...");
+                agent.updateWatchList();
+                // System.out.print(" | 3 > nextStep...");
+                router.updateNextSteps(agent);
             }
             oldWorldTime = worldTime;
             finished = true;
-            System.out.println(" " + identity + "  OBS) " + worldTime + "]   " + start + " ---- > " + end + "  finished.");
+            System.out.println(" " + identity + "  UPD) " + worldTime + "]   " + start + " ---- > " + end + "  finished.");
 
         }
     }
 
+    private int identity;
     private final List<Agent> agents;
     private final int start;
     private final int end;
-    private final TrustManager trustManager;
+    private final Router router;
 
 
     public boolean isFinished() {

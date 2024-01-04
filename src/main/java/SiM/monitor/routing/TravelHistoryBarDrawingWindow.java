@@ -3,7 +3,7 @@ package SiM.monitor.routing;
 import SiM.monitor.DrawingWindow;
 import _type.TtDiagramThemeMode;
 import WSM.society.agent.Agent;
-import WSM.society.agent.World;
+import WSM.World;
 import core.utils.Config;
 import core.utils.Globals;
 
