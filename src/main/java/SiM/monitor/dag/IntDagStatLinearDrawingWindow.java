@@ -2,7 +2,7 @@ package SiM.monitor.dag;
 
 import _type.TtTrustMethodology;
 import SiM.monitor.DrawingWindow;
-import core.config.trust.TrustConfig;
+import SiM.profiler.config.TrustConfig;
 import SiM.statistics.WorldStatistics;
 import SiM.statistics.WorldStatisticsDagra;
 import WSM.society.agent.World;

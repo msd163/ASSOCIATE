@@ -1,4 +1,4 @@
-package core.runner;
+package core.parellel;
 
 import WSM.society.agent.Agent;
 import WSM.transition.Router;

@@ -1,4 +1,4 @@
-package core.config.society;
+package SGM.config;
 
 import core.utils.DefParameter;
 import core.utils.Globals;

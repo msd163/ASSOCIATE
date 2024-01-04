@@ -3,7 +3,7 @@ package WSM.transition;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import _type.TtTrustMethodology;
-import core.config.trust.TrustConfigItem;
+import SiM.profiler.config.TrustConfigItem;
 import SiM.statistics.WorldStatistics;
 import WSM.society.agent.Agent;
 import WSM.society.agent.WatchedAgent;

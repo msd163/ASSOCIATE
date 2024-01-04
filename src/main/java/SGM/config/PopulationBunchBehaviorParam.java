@@ -1,4 +1,4 @@
-package core.config.society;
+package SGM.config;
 
 public class PopulationBunchBehaviorParam {
 

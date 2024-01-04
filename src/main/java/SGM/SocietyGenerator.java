@@ -4,7 +4,7 @@ import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import core.config.society.SocietyConfig;
+import SGM.config.SocietyConfig;
 import WSM.society.agent.Agent;
 import WSM.society.environment.Environment;
 import WSM.society.environment.StateX;

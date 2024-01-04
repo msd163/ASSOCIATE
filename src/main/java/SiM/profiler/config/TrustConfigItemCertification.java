@@ -1,4 +1,4 @@
-package core.config.trust;
+package SiM.profiler.config;
 
 public class TrustConfigItemCertification {
 

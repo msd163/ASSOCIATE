@@ -4,7 +4,7 @@ import WSM.society.environment.TravelHistory;
 import _type.TtOutLogMethodSection;
 import _type.TtOutLogStatus;
 import com.google.gson.annotations.Expose;
-import core.config.society.SocietyConfig;
+import SGM.config.SocietyConfig;
 import WSM.society.environment.StateX;
 import WSM.trust.AgentTrust;
 import WSM.trust.consensus.DaGra;

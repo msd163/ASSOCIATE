@@ -15,7 +15,6 @@ public class SocietyGeneratorLauncher {
         System.out.print("\n");
         System.out.print("\n");
 
-
         SocietyGenerator.generate();
 
         System.out.print("\n");

@@ -1,9 +1,10 @@
-package SiM;
+package SiM.profiler;
 
+import SiM.engine.Engine;
 import com.google.gson.Gson;
-import core.config.simulation.SimulationConfig;
-import core.config.society.SocietyConfig;
-import core.config.trust.TrustConfig;
+import SiM.engine.config.SimulationConfig;
+import SGM.config.SocietyConfig;
+import SiM.profiler.config.TrustConfig;
 import WSM.society.agent.World;
 import WSM.society.environment.Environment;
 import core.utils.Config;
@@ -25,9 +26,9 @@ public class Profiler {
 
     private final Engine engine;
 
-    protected Environment loadedSocietyFromJson;
+    private Environment loadedSocietyFromJson;
 
-    protected SocietyConfig loadedSocietyProfileFromJson;
+    private SocietyConfig loadedSocietyProfileFromJson;
     private TrustConfig trustConfig;
     private SimulationConfig simulationConfig;
 
@@ -40,7 +41,7 @@ public class Profiler {
         return trustConfig;
     }
 
-    protected void reloadEnvironmentFromFile() throws FileNotFoundException {
+    public void reloadEnvironmentFromFile() throws FileNotFoundException {
 
         fileReader = new FileReader(Globals.SocietyDataFilePath);
         loadedSocietyFromJson = gson.fromJson(fileReader, Environment.class);
@@ -54,7 +55,7 @@ public class Profiler {
         System.out.println("> Environment reloaded from file. simulationTimer");
     }
 
-    protected void init() throws Exception {
+    public void init() throws Exception {
         //============================//============================ Loading Environment from file
         fileReader = new FileReader(Globals.SocietyDataFilePath);
         loadedSocietyFromJson = gson.fromJson(fileReader, Environment.class);
@@ -97,10 +98,10 @@ public class Profiler {
 
         //============================//============================ Initializing worlds
         Globals.SIMULATION_ROUND = trustConfig.getValidConfigCount();
-        engine.worlds = new World[Globals.SIMULATION_ROUND];
+        engine.setWorlds(new World[Globals.SIMULATION_ROUND]);
 
-        for (int i = 0, worldsLength = engine.worlds.length; i < worldsLength; i++) {
-            engine.worlds[i] = new World(i, engine, trustConfig.getNextConfig());
+        for (int i = 0, worldsLength = engine.getWorlds().length; i < worldsLength; i++) {
+            engine.getWorlds()[i] = new World(i, engine, trustConfig.getNextConfig());
         }
 
         //============================//============================ Initializing statistics report file
@@ -135,7 +136,6 @@ public class Profiler {
         }
 
     }
-
 
     private void updateSimulationConfig() {
         Config.WORLD_LIFE_TIME = simulationConfig.getWorldLifeTime();
@@ -213,4 +213,11 @@ public class Profiler {
     }
 
 
+    public Environment getLoadedSocietyFromJson() {
+        return loadedSocietyFromJson;
+    }
+
+    public SocietyConfig getLoadedSocietyProfileFromJson() {
+        return loadedSocietyProfileFromJson;
+    }
 }

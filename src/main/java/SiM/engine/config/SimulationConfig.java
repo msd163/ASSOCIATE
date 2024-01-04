@@ -1,4 +1,4 @@
-package core.config.simulation;
+package SiM.engine.config;
 
 import _type.TtDiagramThemeMode;
 

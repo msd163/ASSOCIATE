@@ -2,7 +2,7 @@ package SiM.monitor.integrated;
 
 import SiM.monitor.DrawingWindow;
 import _type.TtSimulationMode;
-import core.config.trust.TrustConfig;
+import SiM.profiler.config.TrustConfig;
 import SiM.statistics.EpisodeStatistics;
 import SiM.statistics.WorldStatistics;
 import WSM.society.agent.World;

@@ -1,7 +1,7 @@
 package SiM.monitor.integrated;
 
 import SiM.monitor.DrawingWindow;
-import core.config.trust.TrustConfig;
+import SiM.profiler.config.TrustConfig;
 import SiM.statistics.WorldStatistics;
 import WSM.society.agent.World;
 import core.utils.Config;

@@ -1,9 +1,10 @@
-package SiM;
+package SiM.engine;
 
 import SiM.monitor.IntDrawingWindowRunner;
+import SiM.profiler.Profiler;
 import SiM.report.ImageBuilder;
-import core.config.society.PopulationBunch;
-import core.config.trust.TrustConfig;
+import SGM.config.PopulationBunch;
+import SiM.profiler.config.TrustConfig;
 import SiM.statistics.WorldStatistics;
 import WSM.society.agent.World;
 import core.utils.*;
@@ -20,7 +21,15 @@ public class Engine {
 
     Profiler profiler = new Profiler(this);
 
-    protected World[] worlds;
+    private World[] worlds;
+
+    public World[] getWorlds() {
+        return worlds;
+    }
+
+    public void setWorlds(World[] worlds) {
+        this.worlds = worlds;
+    }
 
     public TrustConfig getTrustConfigBunch() {
         return profiler.getTrustConfig();
@@ -63,7 +72,7 @@ public class Engine {
                 profiler.reloadEnvironmentFromFile();
             }
             Globals.reset();
-            world.init(profiler.loadedSocietyFromJson);
+            world.init(profiler.getLoadedSocietyFromJson());
             world.run();
             Globals.SIMULATION_TIMER++;
             if (Globals.SIMULATION_ROUND <= Globals.SIMULATION_TIMER) {
@@ -244,7 +253,7 @@ public class Engine {
 
         System.out.println("\n ------------------------------------");
 
-        ArrayList<PopulationBunch> bunches = profiler.loadedSocietyProfileFromJson.getBunches();
+        ArrayList<PopulationBunch> bunches = profiler.getLoadedSocietyProfileFromJson().getBunches();
 
         for (PopulationBunch bunch : bunches) {
             System.out.print(bunch.getBehavior().getHonestPercent() + ",");

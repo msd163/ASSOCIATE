@@ -3,8 +3,8 @@ package WSM.society.agent;
 import _type.TtBehaviorState;
 import com.google.gson.annotations.Expose;
 import core.utils.Globals;
-import core.config.society.PopulationBunchHypocriteBehavior;
-import core.config.society.PopulationBunchBehaviorParam;
+import SGM.config.PopulationBunchHypocriteBehavior;
+import SGM.config.PopulationBunchBehaviorParam;
 
 public class AgentBehavior {
 

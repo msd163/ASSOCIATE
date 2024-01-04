@@ -1,4 +1,4 @@
-package core.config.society;
+package SGM.config;
 
 import _type.TtTrustReplaceMethod;
 import core.utils.DefParameter;

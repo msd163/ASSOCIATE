@@ -1,7 +1,7 @@
 package WSM.society.agent;
 
 import com.google.gson.annotations.Expose;
-import core.config.society.SocietyConfig;
+import SGM.config.SocietyConfig;
 import core.utils.Globals;
 
 public class AgentCapacity {
